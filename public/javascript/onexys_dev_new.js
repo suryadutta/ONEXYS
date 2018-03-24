@@ -1,6 +1,6 @@
 var canvasURL = 'https://yale.instructure.com';
 var externalHomePageRedirects = {
-  10184:3602,
+  10184:3617,
   38082:3613
 };
 
