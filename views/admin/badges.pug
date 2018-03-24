@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+
+    a(href='/admin') Back to Home Page
+
+    h1 Edit ONEXYS Badges
+    
+    table(class="admin_table")
+        tr 
+            th ID
+            th Title
+            th Points
+            th Portrait
+            th Description
+
+        each badge in badges
+            tr 
+                td=badge._id
+                td=badge.Title
+                td=badge.Points
+                td=badge.Portrait
+                td=badge.Description
+                td
+                    form(method='GET' action='badges/edit/'+badge._id)
+                        button(type='submit') Edit
+                //
+                    td 
+                        form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
+                            button(type='submit') Delete

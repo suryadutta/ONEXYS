@@ -1,0 +1,52 @@
+{
+  "name": "onexys-app",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "NODE_ENV=development nodemon start.js"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "bird": "^0.7.0",
+    "bluebird": "^3.5.1",
+    "body-parser": "~1.17.1",
+    "canvas-api": "^3.5.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "dotenv": "^5.0.1",
+    "express": "~4.15.2",
+    "express-session": "^1.15.6",
+    "ims-lti": "^3.0.2",
+    "mime-types": "^2.1.17",
+    "mongodb": "^2.0.0",
+    "morgan": "~1.8.1",
+    "npm": "^5.7.1",
+    "pg-promise": "^5.7.1",
+    "pug": "~2.0.0-beta11",
+    "query-json": "^2.0.1",
+    "redis": "^2.8.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "serve-favicon": "~2.4.2",
+    "simple-oauth2": "^2.0.1",
+    "underscore": "^1.8.3"
+  },
+  "description": "Second version of ONEXYS app, with new API and admin interface",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrdutta27/ONEXYSapp.git"
+  },
+  "keywords": [
+    "ONEXYS",
+    "Yale"
+  ],
+  "author": "Surya Dutta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrdutta27/ONEXYSapp/issues"
+  },
+  "homepage": "https://github.com/mrdutta27/ONEXYSapp#readme"
+}

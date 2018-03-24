@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+
+    a(href='/admin/badges') Back to Badges
+
+    h1='Edit ONEXYS Badge '+badge._id
+
+    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+
+        div.form-group
+        label(for='title') Title: 
+        input#title.form-control(type='text', value=badge.Title, name='title')
+        br
+        br
+        
+        div.form-group
+        label(for='badge_points') Points: 
+        input#badge_points.form-control(type='numeric', value=badge.Points, name='badge_points')
+        br
+        br
+
+        div.form-group
+        label(for='portrait') Portrait: 
+        input#portrait.form-control(type='text', value=badge.Portrait, name='portrait')
+        br
+        br
+
+        div.form-group
+        label(for='description') Description: 
+        br
+        textarea(rows=3)#description.form-control(name='description')=badge.Description
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Save Changes

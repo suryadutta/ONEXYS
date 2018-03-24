@@ -1,0 +1,45 @@
+extends layout
+
+block content
+
+  .onexys_styling
+    .standard_title_box.badge_title.title_mod.left
+      p All my sweet
+      h1 Badges
+    .badge_title_text.left
+      p
+        strong Badges are awarded for excellent work throughout the course.
+      p
+        | Collect them all to earn points for your team and to see some wacky pix of Yale’s faculty!
+    #what_are
+      p So, what are badges?
+      #badgeline
+    .clear
+    #badge_display
+
+      each badge, index in badges
+
+        if badge.Awarded
+          div(class='onexys_badge badge'+(index+1)+' completed')
+            .badge_descriptor.badge_box
+              h3
+              p=badge.Title
+            .badge_points.badge_box
+              p=badge.Points
+            .badge_portrait
+            .badge_label.badge_box
+              h3=badge.Portrait
+              p=badge.Description        
+        
+        else
+          div(class='onexys_badge badge'+(index+1))
+            .badge_descriptor.badge_box
+              h3
+              p=badge.Title
+            .badge_points.badge_box
+              p=badge.Points
+            .badge_portrait
+            .badge_label.badge_box
+              h3=badge.Portrait
+              p=badge.Description
+      

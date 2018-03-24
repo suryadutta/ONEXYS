@@ -1,0 +1,141 @@
+extends ../layout
+
+block content
+
+    script(type='text/javascript', src='/javascript/nic-edit.js')
+    script(type='text/javascript').
+        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+
+    a(href='/admin/modules') Back to Modules
+
+    h1='Edit ONEXYS Module '+module._id
+
+    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+
+        div.form-group
+        label(for='primary_title') Primary Title: 
+        input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
+        br
+        br
+        
+        div.form-group
+        label(for='secondary_title') Secondary Title: 
+        input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
+        br
+        br
+
+        div.form-group
+        label(for='practice_link') Practice Assignment ID: 
+        input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
+        br
+        br
+
+        div.form-group
+        label(for='practice_cutoff') Practice Assignment Cutoff Score (out of 100): 
+        input#practice_cutoff.form-control(type='numeric', value=module.practice_cutoff, name='practice_cutoff')
+        br
+        br
+
+        div.form-group
+        label(for='quiz_link') Quiz Assignment ID: 
+        input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
+        br
+        br
+
+        div.form-group
+        label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100): 
+        input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff')
+        br
+        br
+
+        div.form-group
+        label(for='reflection_link') Reflections Assignment ID: 
+        input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
+        br
+        br
+        
+        div.form-group
+        label Module Open?
+        br
+        label(for='open_true') Yes  
+        input#open_true.form-control(type='radio', value='true', checked=module.open=='true', name='open')
+        br
+        label(for='open_false') No  
+        input#open_false.form-control(type='radio', value='false', checked=module.open=='false', name='open')
+        br
+        br
+
+        div.form-group
+        label(for='background_image') Background Image Path: 
+        input#background_image.form-control(type='text', value=module.background_image, name='background_image')
+        br
+        br
+
+        div.form-group
+        label(for='background_name') Background Name: 
+        input#background_name.form-control(type='text', value=module.background_name, name='background_name')
+        br
+        br
+
+        div.form-group
+        label(for='background_desc') Background Description: 
+        br
+        textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
+        br
+        br
+
+        div.form-group
+        label(for='overview') Overview: 
+        br
+        textarea#overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
+        br
+        br
+
+        div.form-group
+        label(for='apply_description') Apply Description: 
+        br
+        textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
+        br
+        br
+
+        div.form-group
+        label(for='apply_read_src') Apply Read Source: 
+        input#apply_read_src.form-control(type='text', value=module.apply_read_src, name='apply_read_src')
+        br
+        br
+        div.form-group
+        label(for='explore') Explore Text: 
+        br
+        textarea#explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Save Changes
+    br
+    hr
+    br
+    
+    form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
+
+    h2='Edit ONEXYS Module '+module._id+ ' Videos'
+
+    form(method='GET',action='videos/add',target="_blank")
+                        button(type='submit') Add Video
+
+    table
+        for video in module.videos
+            tr 
+                td
+                    div.watch_video.left
+                        div.onexys_video
+                            a.colorbox.cboxElement(href=video.video_src)
+                            img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
+                            img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
+                        p
+                            span(style='font-size: 12pt;')
+                            strong!=video.video_desc
+                            span!=video.video_desc_helper
+                    br
+                td 
+                    form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                        button(type='submit') Delete

@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+
+    h1='Add Video to ONEXYS Module ' + moduleID
+
+    form(method='POST' action='')
+
+        div.form-group
+        label(for='video_desc') Video Description: 
+        input#video_desc.form-control(type='text', name='video_desc', required)
+        br
+        br
+        
+        div.form-group
+        label(for='video_src') Video Source: 
+        input#video_src.form-control(type='text', name='video_src', required)
+        br
+        br
+
+        div.form-group
+        label(for='video_image_src') Video Image Path: 
+        input#video_image_src.form-control(type='text', name='video_image_src', required)
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Add Video

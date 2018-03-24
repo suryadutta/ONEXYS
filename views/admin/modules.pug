@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+
+    a(href='/admin') Back to Home Page
+
+    h1 Edit ONEXYS Modules
+    table(class="admin_table")
+        tr 
+            th ID
+            th Primary Title
+            th Secondary Title
+            th Open?
+            th Practice Link
+            th Quiz Link
+            th Reflections Link
+        each module in modules
+            tr 
+                td=module._id
+                td=module.primary_title
+                td=module.secondary_title
+                td=module.open
+                td=module.practice_link
+                td=module.quiz_link
+                td=module.reflection_link
+                td
+                    form(method='GET' action='modules/'+module._id+'/edit')
+                        button(type='submit') Edit
+                //
+                    td 
+                        form(method='POST' action='modules/delete/'+module._id onsubmit="return confirm('Do you really want to delete this module?');")
+                            button(type='submit') Delete
+                    

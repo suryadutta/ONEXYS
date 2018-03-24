@@ -1,0 +1,212 @@
+extends layout
+
+block content
+  .user_content(style='margin-top: 0px !important;')
+  .onexys_styling.o_hompage
+    .left(style='width: 360px; margin-top: -10px;')
+      #points.standard_box.left
+        h2 My Points
+        p#point_count= score
+        #flag.blue
+          a(title='Quiz List', href='https://yale.instructure.com/courses/9659/quizzes', target='', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/quizzes', data-api-returntype='[Quiz]')
+            img(src='https://onexys.herokuapp.com/images/homepage/DY_Flag_2017.svg')
+      #leaderboard.standard_home_box.left
+        h2 Leaderboard
+        table
+          thead
+            tr
+              th Place
+              th Team
+              th Score
+          tbody
+            tr.leader_1
+              td 1
+              td= leaderboard[0].Name
+              td= leaderboard[0].Score
+            tr.leader_2
+              td 2
+              td= leaderboard[1].Name
+              td= leaderboard[1].Score
+            tr.leader_3
+              td 3
+              td= leaderboard[2].Name
+              td= leaderboard[2].Score
+            tr.leader_me
+              td
+                #myteam_head MY TEAM
+              td= my_team.Name
+              td= my_team.Score
+      #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
+        h2 Recent Badges
+        #recent_badge1.onexys_badge.badge1.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
+          .badge_descriptor.badge_box
+            h3
+            p  
+          .badge_points.badge_box
+            p  
+          .badge_portrait(style='width: 80px; height: 100px;')
+          .badge_label.badge_box
+            h3
+            p  
+        #recent_badge2.onexys_badge.badge11.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
+          .badge_descriptor.badge_box
+            h3
+            p  
+          .badge_points.badge_box
+            p  
+          .badge_portrait(style='width: 80px; height: 100px;')
+          .badge_label.badge_box
+            h3
+            p  
+        #recent_badge3.onexys_badge.badge32.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
+          .badge_descriptor.badge_box
+            h3
+            p  
+          .badge_points.badge_box
+            p  
+          .badge_portrait(style='width: 80px; height: 100px;')
+          .badge_label.badge_box
+            h3
+            p  
+        br
+        .clear
+        p#badges_link_sentence
+          a(id='', title='info_Badges', href='https://yale.instructure.com/courses/9659/pages/final-badges', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/pages/final-badges', data-api-returntype='Page') Click here to see all your badges.
+      #progress.standard_home_box.left(style='width: 324px;')
+        h2 My Progress So Far
+
+        .module_0.module_background_0
+          a.progress_box.single_line.completed(style='width: 187.5px !important;')  Pre-Test
+        #progress_labels(style='margin-left: 15px !important;')
+          p Pract.
+          p Apply
+        br
+        .clear
+
+        each module, index in module_progress
+
+          div(class='module_'+(index+1)+' module_background_'+(index+1))
+
+            if module.open == 'true'
+              if module.practice_progress && module.quiz_progress
+                a.progress_box.completed(style='width: 187.5px !important;', href= '/modules/'+module._id)
+                  span= module.primary_title
+                  br
+                  span= module.secondary_title
+              else
+                a.progress_box.available(style='width: 187.5px !important;', href= '/modules/'+module._id)
+                  span= module.primary_title
+                  br
+                  span= module.secondary_title
+
+            else
+              a.progress_box(style='width: 187.5px !important;')
+                span= module.primary_title
+                br
+                span= module.secondary_title
+
+            if module.practice_progress
+              div(class='onexys_checkbox aleks_checkbox completed' style='margin-left: 14px !important;')
+            else
+              div(class='onexys_checkbox aleks_checkbox' style='margin-left: 14px !important;')
+
+            if module.quiz_progress
+              div(class='onexys_checkbox quiz_checkbox completed')
+            else
+              div(class='onexys_checkbox quiz_checkbox')
+
+          br
+          .clear
+
+        .module_11.module_background_00
+          a.progress_box.single_line(style='width: 187.5px !important;', href='https://yale.instructure.com/courses/10623')  Post-Test
+    .left(style='width: 500px !important; margin-top: -10px;')
+      .lucky_bulldog
+        img(src='', alt='Lucky Bulldog')
+        .lucky_bulldog_text +500pts!
+      br
+      .clear
+      #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+        h2 Updates
+        .entry.clear
+          p.entry_header
+            strong
+              | Crossing the
+              br
+              | Finish Line
+          p.entry_text
+            | Deadline is 
+            em Sunday at 11:59 pm
+            | . Let's finish strong!
+            br
+            br
+            em Check out Seamus' and Maddy's Life @ Yale video below
+            |  about the shuttle system. You won't be disappointed.
+        .entry.clear
+          p.entry_header Post-Test
+          p.entry_text
+            | To complete ONEXYS, you will need to take the post-test. This will give you a sense of how far you have come this summer. Click on the "Post Test" button on progress bar for further directions.
+        .entry.clear
+          p.entry_header
+            | Completing
+            br
+            | ONEXYS
+          p.entry_text
+            | To complete ONEXYS, you need to meet 90% proficiency on all ALEKS objectives, attempt 100% of the applications and complete the post-test, which we will make available at the end of next week.
+            br
+            br
+            |  If you complete ONEXYS, you will get an invite to a very nice dinner in mid-September where you will get to rub shoulders with the Dean of Yale College and others. So finish strong!
+      #featured.standard_home_box.left(style='width: 458px !important;')
+        h2 Life @ Yale Videos
+        p
+          a(href='https://yale.instructure.com/courses/9659/pages/final-life-at-yale-videos', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/pages/final-life-at-yale-videos', data-api-returntype='Page') Click here to see all Life at Yale videos
+        .onexys_video
+          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=42610838-23de-456c-877c-75d3ac0311b6&autoplay=true')
+            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+        p
+          span(style='font-size: 12pt;')
+            strong Maddy O'Neil and Seamus Houlihan
+            |  talks about
+            em | shuttle system on campus
+            |  vs walking to class in 6 feet of snow, uphill, both ways...
+        .onexys_video
+          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=82adb8eb-7acd-446f-b3f8-04878a1c8ce0&autoplay=true')
+            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+        p
+          span(style='font-size: 12pt;')
+            strong Dr. Karin Gosselink
+            |  talks about
+            em good study habits
+            | .
+        .onexys_video
+          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=5ac86cdf-d7c4-4aa9-b618-95deb6557c59&autoplay=true')
+            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+        p
+          span(style='font-size: 12pt;')
+            strong Andrew Sparkman
+            |  talks about the eternally important
+            em religious life at Yale
+            | .
+        .onexys_video
+          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=e634227b-2a53-4bf7-af87-2a0030781942&autoplay=true')
+            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+        p
+          span(style='font-size: 12pt;')
+            strong Benjamin Waldman (with an assist from Elizabeth Li)
+            |  give us an overview
+            em of the residential college system
+            | .
+        .onexys_video
+          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=22ed594d-c6e6-4798-b54a-427fa0437ef3&autoplay=true')
+            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+        p
+          span(style='font-size: 12pt;')
+            strong Sarah Healey and Caroline Beakes
+            |  lead us on a tour of
+            em fitness and Payne-Whitney gym
+            | .

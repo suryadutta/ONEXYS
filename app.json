@@ -1,0 +1,37 @@
+{
+    "name": "ONEXYS Canvas Application",
+    "description": "An external tool for the ONEXYS program on the Canvas LMS",
+    "repository": "https://github.com/suryadutta/ONEXYSappcom/",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Yale_University_logo.svg/2000px-Yale_University_logo.svg.png",
+    "keywords": ["ONEXYS", "LTI", "LMS","Yale","Node.JS"],
+    "addons": [
+        {
+          "plan": "heroku-redis:hobby-dev"
+        }
+      ],
+    "env":{
+        "SESSION_SECRET":{
+            "description": "A random string used to secure cookies on the site",
+            "generator": "secret"
+        },
+        "CANVAS_URL":{
+            "description": "The base URL for your deployment of Canvas",
+            "value": "https://yale.instructure.com/"
+        },
+        "CANVAS_KEY":{
+            "description": "A secret key to use when linking this app to your course.",
+            "value": "onexys-key"
+        },
+        "CANVAS_SECRET":{
+            "description": "A secret password to use when linking this app to your course.",
+            "generator": "secret"
+        },
+        "CANVAS_ADMIN_AUTH_TOKEN":{
+            "description": "A generated Authentication token for a user with admin priviledges to the course."
+        },
+        "CANVAS_PAGE_RESULTS":{
+            "description": "Default number of results to return from Canvas API. Needs to be larger than # of students in course",
+            "value": "70"
+        }
+    }
+}
