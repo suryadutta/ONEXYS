@@ -6,13 +6,13 @@ var queries = require('../models/queries')
 var redis = require('../bin/redis');
 
 router.use('/', function(req, res, next) {
-
+  
+  var courseID = auth.provider.body.custom_canvas_course_id;
   if (courseID==10184){
     var userID = 58644
-    var courseID = 9659
+    courseID = 9659
   } else {
     var userID = auth.provider.body.custom_canvas_user_id;
-    var courseID = auth.provider.body.custom_canvas_course_id;
   }
 
   console.log(userID);
