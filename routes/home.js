@@ -14,11 +14,21 @@ router.use('/', function(req, res, next) {
     userID = 58644
     courseID = 9659
   }
-  
-  console.log(userID);
-  console.log(courseID);
 
   queries.homepageQuery(userID,courseID,function(module_progress, score, badges, leaderboard, my_team){
+
+    function orderBadges(a,b) {
+      if (a.Points < b.Points)
+        return 1;
+      if (a.Points > b.Points)
+        return -1;
+      return 0;
+    }
+
+    var awarded_badges = badges.filter(badge => badge.awarded == 'true').sort(orderBadges);
+
+    console.log(awarded_badges);
+
     res.render('home', {
       title: 'Home | ONEXYS',
       module_progress: module_progress,
