@@ -5,6 +5,10 @@ var canvas = require('./canvas');
 var mongo = require('./mongo');
 
 function homepageQuery(studentID,courseID,callback){
+
+  console.log(userID);
+  console.log(courseID);
+
   asyncStuff.parallel([
     function(callback) {
         canvas.getStudentProgress(studentID, courseID, callback);
@@ -20,6 +24,7 @@ function homepageQuery(studentID,courseID,callback){
     }
   ],
   function(err, data) {
+    console.log(err);
     console.log(data);
     var badges =  data[1][1];
     function orderBadges(a,b) {
