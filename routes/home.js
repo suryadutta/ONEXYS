@@ -15,28 +15,12 @@ router.use('/', function(req, res, next) {
     courseID = 9659
   }
 
-  queries.homepageQuery(userID,courseID,function(module_progress, score, badges, leaderboard, my_team){
-
-    function orderBadges(a,b) {
-      if (a.Points < b.Points)
-        return 1;
-      if (a.Points > b.Points)
-        return -1;
-      return 0;
-    }
-
-    var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    var awarded_badge_ids = awarded_badges.map(badge => badge._id);
-
-    if (awarded_badge_ids.length>3){
-      awarded_badge_ids = awarded_badge_ids.slice(0,3);
-    }
+  queries.homepageQuery(userID,courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team){
 
     res.render('home', {
       title: 'Home | ONEXYS',
       module_progress: module_progress,
       score: score,
-      badges: badges, 
       awarded_badge_ids: awarded_badge_ids,
       leaderboard: leaderboard,
       my_team: my_team,

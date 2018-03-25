@@ -16,7 +16,23 @@ function homepageQuery(studentID,courseID,callback){
     }
   ],
   function(err, data) {
-    callback(data[0],data[1][0], data[1][1], data[2][0], data[2][1]);
+
+    var badges =  data[1][1];
+    function orderBadges(a,b) {
+      if (a.Points < b.Points)
+        return 1;
+      if (a.Points > b.Points)
+        return -1;
+      return 0;
+    }
+    var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
+    var awarded_badge_ids = awarded_badges.map(badge => badge._id);
+    if (awarded_badge_ids.length>3){
+      awarded_badge_ids = awarded_badge_ids.slice(0,3);
+    }
+
+    callback(data[0],data[1][0], awarded_badge_ids, data[2][0], data[2][1]);
+    
   });
 }
 
