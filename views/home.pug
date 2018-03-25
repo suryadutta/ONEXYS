@@ -38,36 +38,20 @@ block content
               td= my_team.Score
       #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
         h2 Recent Badges
-        #recent_badge1.onexys_badge.badge1.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
-          .badge_descriptor.badge_box
-            h3
-            p  
-          .badge_points.badge_box
-            p  
-          .badge_portrait(style='width: 80px; height: 100px;')
-          .badge_label.badge_box
-            h3
-            p  
-        #recent_badge2.onexys_badge.badge11.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
-          .badge_descriptor.badge_box
-            h3
-            p  
-          .badge_points.badge_box
-            p  
-          .badge_portrait(style='width: 80px; height: 100px;')
-          .badge_label.badge_box
-            h3
-            p  
-        #recent_badge3.onexys_badge.badge32.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
-          .badge_descriptor.badge_box
-            h3
-            p  
-          .badge_points.badge_box
-            p  
-          .badge_portrait(style='width: 80px; height: 100px;')
-          .badge_label.badge_box
-            h3
-            p  
+
+        each badgeID in awarded_badge_ids
+
+          #recent_badge1.onexys_badge.completed(class='badge'+badgeID,style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
+            .badge_descriptor.badge_box
+              h3
+              p  
+            .badge_points.badge_box
+              p  
+            .badge_portrait(style='width: 80px; height: 100px;')
+            .badge_label.badge_box
+              h3
+              p  
+
         br
         .clear
         p#badges_link_sentence

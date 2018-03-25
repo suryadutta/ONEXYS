@@ -29,16 +29,15 @@ router.use('/', function(req, res, next) {
     var awarded_badge_ids = awarded_badges.map(badge => badge._id);
 
     if (awarded_badge_ids.length>3){
-      awarded_badge_ids = awarded_badge_ids.slice(0,2);
+      awarded_badge_ids = awarded_badge_ids.slice(0,3);
     }
-
-    console.log(awarded_badge_ids);
 
     res.render('home', {
       title: 'Home | ONEXYS',
       module_progress: module_progress,
       score: score,
       badges: badges, 
+      awarded_badge_ids: awarded_badge_ids,
       leaderboard: leaderboard,
       my_team: my_team,
      });
