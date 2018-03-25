@@ -27,7 +27,7 @@ router.use('/', function(req, res, next) {
       return 0;
     }
 
-    var awarded_badges = badges.filter(badge => badge.awarded == true);
+    var awarded_badges = badges.filter(badge => badge.Awarded == true);
 
     console.log(awarded_badges);
     
