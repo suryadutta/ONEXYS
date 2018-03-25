@@ -7,13 +7,16 @@ var redis = require('../bin/redis');
 
 router.use('/', function(req, res, next) {
 
-  var userID = auth.provider.body.custom_canvas_user_id;
-  var courseID = auth.provider.body.custom_canvas_course_id;
-
   if (courseID==10184){
-    userID = 58644
-    courseID = 9659
+    var userID = 58644
+    var courseID = 9659
+  } else {
+    var userID = auth.provider.body.custom_canvas_user_id;
+    var courseID = auth.provider.body.custom_canvas_course_id;
   }
+
+  console.log(userID);
+  console.log(courseID);
 
   queries.homepageQuery(userID,courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates){
 

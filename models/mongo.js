@@ -36,8 +36,8 @@ function updateData(collection_name,update_index,update_data, callback){
 
 function getHomeUpdates(callback){
     getData('info',function(err,data){
-        console.log(data);
         home_updates = data.find(document => document.name == 'Home Updates');
+        console.log(home_updates);
         callback(home_updates);
       });
 }
