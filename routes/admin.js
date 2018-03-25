@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 //Get Home Page Updates 
 router.get('/home', function(req, res, next) {
-  mongo.getHomeUpdates(function(home_updates){
+  mongo.getHomeUpdates(function(err,home_updates){
     res.render('admin/home',{
       title: 'home',
       home_updates: home_updates,
