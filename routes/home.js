@@ -26,8 +26,11 @@ router.use('/', function(req, res, next) {
     }
 
     var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    
     var awarded_badge_ids = awarded_badges.map(badge => badge._id);
+
+    if (awarded_badge_ids.length>3){
+      awarded_badge_ids = awarded_badge_ids.slice(0,2);
+    }
 
     console.log(awarded_badge_ids);
 
