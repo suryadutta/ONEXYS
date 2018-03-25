@@ -17,8 +17,6 @@ router.use('/', function(req, res, next) {
 
   queries.homepageQuery(userID,courseID,function(module_progress, score, badges, leaderboard, my_team){
 
-    console.log(badges);
-    
     function orderBadges(a,b) {
       if (a.Points < b.Points)
         return 1;
@@ -27,13 +25,11 @@ router.use('/', function(req, res, next) {
       return 0;
     }
 
-    var awarded_badges = badges.filter(badge => badge.Awarded == true);
-
-    console.log(awarded_badges);
+    var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
     
-    var sorted_badges = awarded_badges.sort(orderBadges);
+    var awarded_badge_ids = awarded_badges.map(badge => badge._id);
 
-    console.log(sorted_badges);
+    console.log(awarded_badge_ids);
 
     res.render('home', {
       title: 'Home | ONEXYS',
