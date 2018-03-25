@@ -11,6 +11,23 @@ router.get('/', function(req, res, next) {
   res.render('admin', { title: 'Express' });
 });
 
+//Get Home Page Updates 
+router.get('/home', function(req, res, next) {
+  mongo.getHomeUpdates(function(home_updates){
+    res.render('admin/home',{
+      title: 'home',
+      home_updates: home_updates,
+    });
+  });
+});
+
+//Get Home Page Updates 
+router.post('/home', function(req, res, next) {
+  mongo.updateData('info',{'name':'Home Updates'},req.body,function(err,result){
+    res.redirect('/admin');
+  })
+});
+
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get('/modules', function(req, res, next) {
   mongo.getData('modules',function(err,modulesInfo){

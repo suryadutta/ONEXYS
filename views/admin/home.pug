@@ -2,6 +2,62 @@ extends ../layout
 
 block content
 
-    a(href='/admin') Back to Home Page
+    script(type='text/javascript', src='/javascript/nic-edit.js')
+    script(type='text/javascript').
+        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 
-    h1 Edit ONEXYS Home Page
+    a(href='/admin') Back to Admin Page
+
+    h1='Edit ONEXYS Home Page'
+    br
+    hr
+    br
+    h2='Home Page Updates'
+
+    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+
+        div.form-group
+        label(for='main_header') Main Header: 
+        input#main_header.form-control(type='text', value=home_updates.main_header, name='main_header')
+        br
+        br
+
+        div.form-group
+        label(for='main_text') Main Text: 
+        br
+        textarea#main_text.form-control(rows=3, name='main_text',style="width: 750px;")=home_updates.main_text
+        br
+        br
+
+        div.form-group
+        label(for='header2') Header 2: 
+        input#header2.form-control(type='text', value=home_updates.header2, name='header2')
+        br
+        br
+
+        div.form-group
+        label(for='text2') Text 2: 
+        br
+        textarea#text2.form-control(rows=3, name='text2',style="width: 750px;")=home_updates.text2
+        br
+        br
+
+        div.form-group
+        label(for='header3') Header 3: 
+        input#header3.form-control(type='text', value=home_updates.header3, name='header3')
+        br
+        br
+
+        div.form-group
+        label(for='text3') Text 3: 
+        br
+        textarea#text3.form-control(rows=3, name='text3',style="width: 750px;")=home_updates.text3
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Save Changes
+    br
+    hr
+    br
+    
+    

@@ -8,7 +8,7 @@ block content
         h2 My Points
         p#point_count= score
         #flag.blue
-          a(title='Quiz List', href='https://yale.instructure.com/courses/9659/quizzes', target='', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/quizzes', data-api-returntype='[Quiz]')
+          a(title='Quiz List', href='https://yale.instructure.com/courses/'+courseID+'/quizzes')
             img(src='https://onexys.herokuapp.com/images/homepage/DY_Flag_2017.svg')
       #leaderboard.standard_home_box.left
         h2 Leaderboard
@@ -55,7 +55,7 @@ block content
         br
         .clear
         p#badges_link_sentence
-          a(id='', title='info_Badges', href='https://yale.instructure.com/courses/9659/pages/final-badges', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/pages/final-badges', data-api-returntype='Page') Click here to see all your badges.
+          a(id='', title='info_Badges', href='') Click here to see all your badges.
       #progress.standard_home_box.left(style='width: 324px;')
         h2 My Progress So Far
 
@@ -103,7 +103,7 @@ block content
           .clear
 
         .module_11.module_background_00
-          a.progress_box.single_line(style='width: 187.5px !important;', href='https://yale.instructure.com/courses/10623')  Post-Test
+          a.progress_box.single_line(style='width: 187.5px !important;', href='https://yale.instructure.com/courses/'+courseID)  Post-Test
     .left(style='width: 500px !important; margin-top: -10px;')
       .lucky_bulldog
         img(src='', alt='Lucky Bulldog')
@@ -114,32 +114,14 @@ block content
         h2 Updates
         .entry.clear
           p.entry_header
-            strong
-              | Crossing the
-              br
-              | Finish Line
-          p.entry_text
-            | Deadline is 
-            em Sunday at 11:59 pm
-            | . Let's finish strong!
-            br
-            br
-            em Check out Seamus' and Maddy's Life @ Yale video below
-            |  about the shuttle system. You won't be disappointed.
+            strong=home_updates.main_header
+          p.entry_text=home_updates.main_text
         .entry.clear
-          p.entry_header Post-Test
-          p.entry_text
-            | To complete ONEXYS, you will need to take the post-test. This will give you a sense of how far you have come this summer. Click on the "Post Test" button on progress bar for further directions.
+          p.entry_header=home_updates.header2
+          p.entry_text=home_updates.text2
         .entry.clear
-          p.entry_header
-            | Completing
-            br
-            | ONEXYS
-          p.entry_text
-            | To complete ONEXYS, you need to meet 90% proficiency on all ALEKS objectives, attempt 100% of the applications and complete the post-test, which we will make available at the end of next week.
-            br
-            br
-            |  If you complete ONEXYS, you will get an invite to a very nice dinner in mid-September where you will get to rub shoulders with the Dean of Yale College and others. So finish strong!
+          p.entry_header=home_updates.header3
+          p.entry_text=home_updates.text3
       #featured.standard_home_box.left(style='width: 458px !important;')
         h2 Life @ Yale Videos
         p

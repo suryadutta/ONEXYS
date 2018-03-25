@@ -8,7 +8,7 @@ var connectionURL = config.mongoURLs[process.env.TEST_COURSE_NUMBER];
 
 function getData(collection_name, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id];
+    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -22,7 +22,7 @@ function getData(collection_name, callback){
 
 function updateData(collection_name,update_index,update_data, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id];
+    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -34,9 +34,17 @@ function updateData(collection_name,update_index,update_data, callback){
     });   
 }
 
+function getHomeUpdates(callback){
+    getData('info',function(err,data){
+        console.log(data);
+        home_updates = data.find(document => document.name == 'Home Updates');
+        callback(home_updates);
+      });
+}
+
 function getModule(moduleID, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id];
+    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -58,7 +66,7 @@ function getModule(moduleID, callback){
 
 function addVideo(moduleID, videoData, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id];
+    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -90,6 +98,7 @@ module.exports = {
     getData,
     getAllData,
     updateData,
+    getHomeUpdates,
     getModule,
     addVideo,
 }
