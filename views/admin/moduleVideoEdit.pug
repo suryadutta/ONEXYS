@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+
+    h1='Edit Video in ONEXYS Module ' + moduleID
+
+    div.watch_video.left
+        div.onexys_video
+            a.colorbox.cboxElement(href=video.video_src)
+            img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
+            img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
+        p
+            span(style='font-size: 12pt;')
+            strong!=video.video_desc
+            span!=video.video_desc_helper
+
+    br
+
+    form(method='POST' action='')
+
+        div.form-group
+        label(for='video_desc') Video Description: 
+        input#video_desc.form-control(type='text', name='video_desc', value=video.video_desc, required)
+        br
+        br
+
+        div.form-group
+        label(for='video_desc_helper') Video Description Helper (Optional): 
+        input#video_desc_helper.form-control(type='text', name='video_desc_helper', value=video.video_desc_helper)
+        br
+        br
+        
+        div.form-group
+        label(for='video_src') Video Source: 
+        input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
+        br
+        br
+
+        div.form-group
+        label(for='video_image_src') Video Image Path: 
+        input#video_image_src.form-control(type='text', name='video_image_src',value=video.video_image_src, required)
+        br
+        br
+
+        button(type='submit') Edit Video

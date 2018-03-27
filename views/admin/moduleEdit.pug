@@ -119,6 +119,7 @@ block content
 
     h2='Edit ONEXYS Module '+module._id+ ' Videos'
 
+
     form(method='GET',action='videos/add',target="_blank")
                         button(type='submit') Add Video
 
@@ -137,5 +138,7 @@ block content
                             span!=video.video_desc_helper
                     br
                 td 
+                    form(method='GET' action='videos/edit/'+video._id, target="_blank")
+                        button(type='submit') Edit
                     form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                         button(type='submit') Delete

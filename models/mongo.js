@@ -93,20 +93,6 @@ function getModule(moduleID, callback){
     });   
 }
 
-function addModuleVideo(moduleID, videoData, callback){
-    // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    console.log('Connecting to: ');
-    console.log(connectionURL);
-    MongoClient.connect(connectionURL, function(err, db) {
-        db.collection('modules').updateOne({_id:parseInt(moduleID)}, {$push: {videos:videoData}},
-            function(err, result) {
-                callback(err,result);
-                db.close();
-          });  
-    });   
-}
-
 function getAllData(callback_main){
     asyncStuff.parallel({
         'modules': function(callback) {
@@ -131,5 +117,4 @@ module.exports = {
     deleteData,
     getHomeContent,
     getModule,
-    addModuleVideo,
 }

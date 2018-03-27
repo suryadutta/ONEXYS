@@ -20,6 +20,12 @@ router.get('/', function(req, res, next) {
   res.render('admin', { title: 'Express' });
 });
 
+/* POST home page. */
+router.post('/', function(req, res, next) { 
+  res.render('admin', { title: 'Express' });
+});
+
+
 //Get Home Page Updates 
 router.get('/home', function(req, res, next) {
   mongo.getHomeContent(function(err,home_updates,home_vids){
@@ -29,6 +35,13 @@ router.get('/home', function(req, res, next) {
       home_vids: home_vids,
     });
   });
+});
+
+//Get Home Page Updates 
+router.post('/home', function(req, res, next) {
+  mongo.updateData('home',{"type":"updates"},req.body,function(err,result){
+    res.redirect('/admin')
+  })
 });
 
 //add home video
@@ -78,12 +91,8 @@ router.post('/home/videos/delete/:id', function(req, res, next) {
   })
 });
 
-//Get Home Page Updates 
-router.post('/home', function(req, res, next) {
-  mongo.updateData('home',{"type":"updates"},req.body,function(err,result){
-    res.redirect('/admin')
-  })
-});
+
+
 
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get('/modules', function(req, res, next) {
@@ -113,11 +122,6 @@ router.post('/modules/:id/edit', function(req, res, next) {
   })
 });
 
-//router.post('/modules/delete/:id', function(req, res, next) {
-//  console.log(req.body);
-//  res.redirect('/admin/modules');
-//});
-
 //GET page to add video to module
 router.get('/modules/:id/videos/add', function(req,res){
   res.render('admin/moduleVideoAdd', {
@@ -128,22 +132,57 @@ router.get('/modules/:id/videos/add', function(req,res){
 //POST handler to add video to module
 router.post('/modules/:id/videos/add', function(req,res){
   vidObject = req.body
-  
   vidObject._id = makeid()
-
-  mongo.getModule(req.params.id,function(err,modulesInfo){
+  mongo.getModule(req.params.id,function(err,moduleInfo){
     //set position of new video to 1+(POSITION OF LAST VIDEO)
-    vidObject.position = modulesInfo.videos[modulesInfo.videos.length-1].position+1;
-    mongo.addModuleVideo(req.params.id, vidObject, function(err,result){
+    vidObject.position = moduleInfo.videos[moduleInfo.videos.length-1].position+1;
+    moduleInfo.videos.push(vidObject);
+    mongo.updateData('modules',{_id:parseInt(req.params.id)},moduleInfo,
+    function(err,result){
       res.redirect('/admin/modules/'+req.params.id+'/edit');
     });
   });
 })
 
+//GET page to edit video from module
+router.get('/modules/:module_id/videos/edit/:video_id', function(req,res){
+  mongo.getModule(req.params.module_id,function(err,moduleInfo){
+    vidObject = moduleInfo.videos.find(video => video._id == req.params.video_id);
+    res.render('admin/moduleVideoEdit',{
+      title: 'Edit Module Video',
+      moduleID: req.params.module_id,
+      video: vidObject,
+    });
+  });
+})
+
+//POST handler to edit video from module
+router.post('/modules/:module_id/videos/edit/:video_id', function(req,res){
+  mongo.getModule(req.params.module_id,function(err,moduleInfo){
+    vid_index = moduleInfo.videos.findIndex(video => video._id == req.params.video_id);
+    vidObject = req.body;
+    vidObject._id = req.params.video_id;
+    vidObject.position = moduleInfo.videos[vid_index].position;
+    moduleInfo.videos[vid_index]=vidObject
+    mongo.updateData('modules',{_id:parseInt(req.params.module_id)},moduleInfo,
+    function(err,result){
+      res.redirect('/admin/modules/'+req.params.module_id+'/edit');
+    });
+  });
+})
+
 //POST handler to delete video from module
-router.post('/modules/:module_id/edit/videos/delete/:video_id', function(req,res){
-  console.log(req.body);
-  res.redirect('/admin/modules/edit/'+req.params.id);
+router.post('/modules/:module_id/videos/delete/:video_id', function(req,res){
+  mongo.getModule(req.params.module_id,function(err,moduleInfo){
+    vid_index = moduleInfo.videos.findIndex(video => video._id == req.params.video_id);
+    if (vid_index > -1) {
+      moduleInfo.videos.splice(vid_index, 1);
+    }
+    mongo.updateData('modules',{_id:parseInt(req.params.module_id)},moduleInfo,
+    function(err,result){
+      res.redirect('/admin/modules/'+req.params.module_id+'/edit');
+    });
+  });
 })
 
 router.get('/badges',function(req,res,next){
@@ -176,14 +215,6 @@ router.post('/badges/edit/:id',function(req,res,next){
     res.redirect('/admin/badges')
   })
 })
-
-router.get('/:adminRoute', function(req, res, next) {
-  res.render('admin/'+req.params.adminRoute, { title: 'Express' });
-});
-
-router.post('/', function(req, res, next) { 
-  res.render('admin', { title: 'Express' });
-});
 
 
 module.exports = router;
