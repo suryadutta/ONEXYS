@@ -26,8 +26,4 @@ block content
                 td
                     form(method='GET' action='modules/'+module._id+'/edit')
                         button(type='submit') Edit
-                //
-                    td 
-                        form(method='POST' action='modules/delete/'+module._id onsubmit="return confirm('Do you really want to delete this module?');")
-                            button(type='submit') Delete
                     

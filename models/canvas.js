@@ -326,6 +326,9 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
   function fetchGroupIDs(callback2) {
     getRequest(groups_url(studentID, courseID), function(err, groups) {
+      console.log('HI!!');
+      console.log(groups);
+      console.log('BYEE!!');
       callback2(null, groups.map(group => group.id), groups.map(group => group.name))
     })
   }
