@@ -54,10 +54,32 @@ block content
         textarea#text3.form-control(rows=3, name='text3',style="width: 750px;")=home_updates.text3
         br
         br
-
         button.btn.btn-primary(type='submit') Save Changes
-    br
     hr
     br
-    
-    
+    br
+    h2='Home Page Videos'
+    br
+
+    form(method='GET',action='home/videos/add',target="_blank")
+                        button(type='submit') Add Video
+    br 
+    br
+    table
+        for video in home_vids
+            tr 
+                td
+                    .onexys_video
+                    a.colorbox(href=video.video_src)
+                        img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+                        img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+                    p
+                    span(style='font-size: 12pt;')
+                        strong!=video.video_desc
+                    br
+                td 
+                    form(method='GET' action='home/videos/edit/'+video._id)
+                        button(type='submit') Edit
+                    form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                        button(type='submit') Delete
+        

@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+
+    script(type='text/javascript', src='/javascript/nic-edit.js')
+    script(type='text/javascript').
+        bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+
+    h1='Edit Home Page Video'+video_id
+
+    form(method='POST' action='')
+
+        div.form-group
+        label(for='video_src') Video Source: 
+        input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
+        br
+        br
+
+        div.form-group
+        label(for='video_desc') Video Description: 
+        br
+        textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Edit Video

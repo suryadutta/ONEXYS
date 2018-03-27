@@ -126,53 +126,11 @@ block content
         h2 Life @ Yale Videos
         p
           a(href='https://yale.instructure.com/courses/9659/pages/final-life-at-yale-videos', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/pages/final-life-at-yale-videos', data-api-returntype='Page') Click here to see all Life at Yale videos
-        .onexys_video
-          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=42610838-23de-456c-877c-75d3ac0311b6&autoplay=true')
-            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
-        p
-          span(style='font-size: 12pt;')
-            strong Maddy O'Neil and Seamus Houlihan
-            |  talks about
-            em | shuttle system on campus
-            |  vs walking to class in 6 feet of snow, uphill, both ways...
-        .onexys_video
-          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=82adb8eb-7acd-446f-b3f8-04878a1c8ce0&autoplay=true')
-            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
-        p
-          span(style='font-size: 12pt;')
-            strong Dr. Karin Gosselink
-            |  talks about
-            em good study habits
-            | .
-        .onexys_video
-          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=5ac86cdf-d7c4-4aa9-b618-95deb6557c59&autoplay=true')
-            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
-        p
-          span(style='font-size: 12pt;')
-            strong Andrew Sparkman
-            |  talks about the eternally important
-            em religious life at Yale
-            | .
-        .onexys_video
-          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=e634227b-2a53-4bf7-af87-2a0030781942&autoplay=true')
-            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
-        p
-          span(style='font-size: 12pt;')
-            strong Benjamin Waldman (with an assist from Elizabeth Li)
-            |  give us an overview
-            em of the residential college system
-            | .
-        .onexys_video
-          a.colorbox(href='https://yale.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=22ed594d-c6e6-4798-b54a-427fa0437ef3&autoplay=true')
-            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
-        p
-          span(style='font-size: 12pt;')
-            strong Sarah Healey and Caroline Beakes
-            |  lead us on a tour of
-            em fitness and Payne-Whitney gym
-            | .
+        each video in home_vids
+          .onexys_video
+            a.colorbox(href=video.video_src)
+              img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+              img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+          p
+            span(style='font-size: 12pt;')
+              strong!=video.video_desc

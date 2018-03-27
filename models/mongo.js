@@ -20,6 +20,20 @@ function getData(collection_name, callback){
     });   
 }
 
+function insertData(collection_name, data, callback){
+    // Use connect method to connect to the server
+    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    console.log('Connecting to: ');
+    console.log(connectionURL);
+    MongoClient.connect(connectionURL, function(err, db) {
+        db.collection(collection_name).insertOne(data,
+            function(err, result) {
+                callback(err,result);
+                db.close();
+          });  
+    });   
+}
+
 function updateData(collection_name,update_index,update_data, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
@@ -34,10 +48,26 @@ function updateData(collection_name,update_index,update_data, callback){
     });   
 }
 
-function getHomeUpdates(callback){
-    getData('info',function(err,data){
-        home_updates = data.find(document => document.name == 'Home Updates');
-        callback(err,home_updates);
+function deleteData(collection_name,delete_index,callback){
+    // Use connect method to connect to the server
+    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    console.log('Connecting to: ');
+    console.log(connectionURL);
+    MongoClient.connect(connectionURL, function(err, db) {
+        db.collection(collection_name).deleteOne(delete_index,
+            function(err, result) {
+                callback(err,result);
+                db.close();
+          });  
+    });   
+}
+
+function getHomeContent(callback){
+    getData('home',function(err,data){
+        home_updates = data.find(document => document.type == 'updates');
+        home_videos = data.filter(document => document.type == 'video');
+        console.log(data);
+        callback(err,home_updates,home_videos);
       });
 }
 
@@ -63,7 +93,7 @@ function getModule(moduleID, callback){
     });   
 }
 
-function addVideo(moduleID, videoData, callback){
+function addModuleVideo(moduleID, videoData, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
@@ -96,8 +126,10 @@ function getAllData(callback_main){
 module.exports = {
     getData,
     getAllData,
+    insertData,
     updateData,
-    getHomeUpdates,
+    deleteData,
+    getHomeContent,
     getModule,
-    addVideo,
+    addModuleVideo,
 }

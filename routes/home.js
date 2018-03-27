@@ -15,7 +15,7 @@ router.use('/', function(req, res, next) {
     var userID = auth.provider.body.custom_canvas_user_id;
   }
 
-  queries.homepageQuery(userID,courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates){
+  queries.homepageQuery(userID,courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
 
     res.render('home', {
       title: 'Home | ONEXYS',
@@ -26,6 +26,7 @@ router.use('/', function(req, res, next) {
       leaderboard: leaderboard,
       my_team: my_team,
       home_updates: home_updates,
+      home_vids: home_vids,
      });
    });
    

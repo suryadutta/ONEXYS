@@ -6,6 +6,15 @@ var mongo = require('../models/mongo')
 var asyncStuff=require('async')
 var auth = require('../bin/auth')
 
+//generate ID for new video entries
+function makeid() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  for (var i = 0; i < 16; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('admin', { title: 'Express' });
@@ -13,18 +22,66 @@ router.get('/', function(req, res, next) {
 
 //Get Home Page Updates 
 router.get('/home', function(req, res, next) {
-  mongo.getHomeUpdates(function(err,home_updates){
+  mongo.getHomeContent(function(err,home_updates,home_vids){
     res.render('admin/home',{
       title: 'home',
       home_updates: home_updates,
+      home_vids: home_vids,
     });
   });
 });
 
+//add home video
+router.get('/home/videos/add', function(req, res, next) {
+  res.render('admin/homeVidAdd',{
+    title: 'Add Home Video',
+  }); 
+});
+
+//add home video
+router.post('/home/videos/add', function(req, res, next) {
+  vidData = req.body;
+  vidData._id = makeid();
+  vidData.type='video';
+  mongo.insertData('home',vidData,function(err,result){
+    res.redirect('/admin/home');
+  });
+});
+
+//edit home video
+router.get('/home/videos/edit/:id', function(req, res, next) {
+  mongo.getHomeContent(function(err,home_updates,home_vids){
+    home_vid = home_vids.find(video => video._id == req.params.id);
+    if(home_vid){
+      res.render('admin/homeVidEdit',{
+        title: 'Edit Home Video',
+        video: home_vid,
+      }); 
+    }
+    else{
+      res.send('ERROR: Video Not Found')
+    }
+  });
+});
+
+//POST handler to edit home video
+router.post('/home/videos/edit/:id', function(req, res, next) {
+  mongo.updateData('home',{_id:req.params.id},req.body,function(err,result){
+    res.redirect('/admin/home');
+  })
+});
+
+//delete home video
+router.post('/home/videos/delete/:id', function(req, res, next) {
+  mongo.deleteData('home',{_id:req.params.id},function(err,result){
+    res.redirect('/admin/home')
+  })
+});
+
 //Get Home Page Updates 
 router.post('/home', function(req, res, next) {
-  mongo.updateData('info',{'name':'Home Updates'},req.body,function(err,result){
-    res.redirect('/admin');
+  mongo.updateData('home',{"type":"updates"},req.body,function(err,result){
+    res.redirect('/admin')
   })
 });
 
@@ -71,20 +128,13 @@ router.get('/modules/:id/videos/add', function(req,res){
 //POST handler to add video to module
 router.post('/modules/:id/videos/add', function(req,res){
   vidObject = req.body
-  //generate ID for new video
-  function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    for (var i = 0; i < 16; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
-  }
+  
   vidObject._id = makeid()
 
   mongo.getModule(req.params.id,function(err,modulesInfo){
     //set position of new video to 1+(POSITION OF LAST VIDEO)
     vidObject.position = modulesInfo.videos[modulesInfo.videos.length-1].position+1;
-    mongo.addVideo(req.params.id, vidObject, function(err,result){
+    mongo.addModuleVideo(req.params.id, vidObject, function(err,result){
       res.redirect('/admin/modules/'+req.params.id+'/edit');
     });
   });
