@@ -128,8 +128,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         for (var i = 0; i < mongo_data.dailies.length; i++) {
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
           if (daily_object){
-            var daily_grade = daily_object.grade;
-            if (daily_grade == 100) {
+            var daily_grade = parseFloat(daily_object.grade);
+            if (daily_grade == parseFloat(100)) {
               daily_done += 1
             }
           }
@@ -161,8 +161,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             //practice objectives proficient
             var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
-              var practice_grade = practice_object.grade;
-              if (practice_grade > (mongo_data.modules[i]).practice_cutoff) {
+              var practice_grade = parseFloat(practice_object.grade);
+              if (practice_grade > parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                 practice_proficient += 1;
 
@@ -229,8 +229,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             //quizzes attempted
             var quiz_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).quiz_link);
             if (quiz_object){
-              var quiz_grade = quiz_object.grade;
-              if (quiz_grade > 0) {
+              var quiz_grade = parseFloat(quiz_object.grade);
+              if (quiz_grade > parseFloat(0)) {
                 quizzes_attempted += 1;
 
                 //Process Quiz Early Bird Badge                
@@ -298,8 +298,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             //number of reflections
             var reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
             if(reflection_object){
-              var reflection_grade = reflection_object.grade;
-              if (reflection_grade == 100) {
+              var reflection_grade = parseFloat(reflection_object.grade);
+              if (reflection_grade == parseFloat(100)) {
                 reflections_done += 1;
                 
                 //Process Reflection Early Bird Badge 
@@ -405,7 +405,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             //practice progress
             var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
             if(practice_object){
-              (moduleProgress[i]).practice_progress = practice_object.grade > module_object.practice_cutoff;
+              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) > parseFloat(module_object.practice_cutoff);
             } else {
               (moduleProgress[i]).practice_progress = false;
             }
@@ -413,9 +413,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             //quiz progress
             var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
             if(quiz_object){
-              console.log(quiz_object);
-              console.log(module_object.quiz_cutoff);
-              (moduleProgress[i]).quiz_progress = quiz_object.grade > module_object.quiz_cutoff;
+              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) > parseFloat(module_object.quiz_cutoff);
             } else {
               (moduleProgress[i]).quiz_progress = false;
             }
