@@ -61,8 +61,7 @@ var getAuthToken = function(callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
-  if(false){
-  //if (!provider.admin){
+  if (!provider.admin){
     res.redirect('/home')
   }else {
     next()
