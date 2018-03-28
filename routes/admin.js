@@ -225,9 +225,8 @@ router.get('/refreshAll/:courseID',function(req,res,next){
   canvas.getAdminRequest(studentsURL(req.params.courseID),function(err,data){
     studentIDs = data.map(student => student = student.id)
     for (var i = 0; i < studentIDs.length; i++) {
-      queries.homepageQuery(studentIDs[i],req.params.courseID,
-        function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
-          console.log(score);
+      canvas.computeScoreAndBadges(studentIDs[i],req.params.courseID,function(err, totalPoints, badges){
+        console.log(totalPoints);
       });
     }
   })

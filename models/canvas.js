@@ -168,7 +168,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                 //Process Practice Early Bird Badge
                 if(mongo_data.modules[i].leaderboard.practice_early_bird == ""){
-                  mongo_data.modules[i].leaderboard.practice_early_bird == studentID.toString();
+                  mongo_data.modules[i].leaderboard.practice_early_bird = studentID.toString();
                   awardBadge(26);
                   } else {
                   if (mongo_data.modules[i].leaderboard.practice_early_bird == studentID.toString()){
@@ -235,7 +235,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                 //Process Quiz Early Bird Badge                
                 if(mongo_data.modules[i].leaderboard.quiz_early_bird == ""){
-                  mongo_data.modules[i].leaderboard.quiz_early_bird == studentID.toString();
+                  mongo_data.modules[i].leaderboard.quiz_early_bird = studentID.toString();
                   awardBadge(24);
                   mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
                     function(err,result){});
@@ -304,7 +304,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 
                 //Process Reflection Early Bird Badge 
                 if(mongo_data.modules[i].leaderboard.reflection_early_bird == ""){
-                  mongo_data.modules[i].leaderboard.reflection_early_bird == studentID.toString();
+                  mongo_data.modules[i].leaderboard.reflection_early_bird = studentID.toString();
                   awardBadge(25);
                   mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
                     function(err,result){});
