@@ -111,6 +111,14 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
       badges[badges.indexOf(badge_info)].Awarded = true;
     }
 
+    function sortLeaderboardScores(a,b) {
+      if (a.score < b.score)
+        return 1;
+      if (a.score > b.score)
+        return -1;
+      return 0;
+    }
+
     getRequest(assignment_user_url(studentID, courseID), function(err, data) {
       if (data.length<1){
         callback(null, 0, badges);
@@ -129,33 +137,92 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         totalPoints += (daily_done * 50); //assign points for each daily
         //assign points for each badge earned
         if (daily_done >= 1) {
-          awardBadge(1)
+          awardBadge(1);
         }
         if (daily_done >= 5) {
-          awardBadge(2)
+          awardBadge(2);
         }
         if (daily_done >= 10) {
-          awardBadge(3)
+          awardBadge(3);
         }
         if (daily_done >= 15) {
-          awardBadge(4)
+          awardBadge(4);
         }
         if (daily_done >= 20) {
-          awardBadge(5)
+          awardBadge(5);
         }
         if (daily_done >= 25) {
-          awardBadge(6)
+          awardBadge(6);
         }
 
         for (var i = 0; i < mongo_data.modules.length; i++) {
           if (mongo_data.modules[i].open=='true'){
                     
-            //ALEKS objectives proficient
+            //practice objectives proficient
             var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
               var practice_grade = practice_object.grade;
               if (practice_grade > (mongo_data.modules[i]).practice_cutoff) {
+
                 practice_proficient += 1;
+
+                //Process Practice Early Bird Badge
+                if(mongo_data.modules[i].leaderboard.practice_early_bird == ""){
+                  mongo_data.modules[i].leaderboard.practice_early_bird == studentID.toString();
+                  awardBadge(26);
+                  } else {
+                  if (mongo_data.modules[i].leaderboard.practice_early_bird == studentID.toString()){
+                    awardBadge(26);
+                  }
+                }
+
+                //Process Practice Leaderboard
+
+                if(mongo_data.modules[i].leaderboard.practice_leaderboard.find(placement => placement.student_id==studentID)){
+                  //user is already on leaderboard
+                  awardBadge(20);
+                  user_index =  mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)
+                  mongo_data.modules[i].leaderboard.practice_leaderboard[user_index] = {
+                    'student_id': studentID.toString(),
+                    'score': practice_grade
+                  }
+                  mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
+                  if(mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
+                    //user is top on leaderboard
+                    awardBadge(21);
+                  }
+
+                } else {
+                  // Process leaderboard if not full - add user automatically
+                  if(mongo_data.modules[i].leaderboard.practice_leaderboard.length<10){
+                    mongo_data.modules[i].leaderboard.practice_leaderboard.push({
+                      'student_id': studentID.toString(),
+                      'score': practice_grade
+                    });
+                    awardBadge(20);
+                    mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
+                    if(mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
+                      //user is top on leaderboard
+                      awardBadge(21);
+                    }
+                  } else {
+                    //user not on full leaderboard - compare scores and update
+                    mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
+                    if (practice_grade > mongo_data.modules[i].leaderboard.practice_leaderboard[mongo_data.modules[i].leaderboard.practice_leaderboard.length-1].score){
+                      mongo_data.modules[i].leaderboard.practice_leaderboard.pop()
+                      mongo_data.modules[i].leaderboard.practice_leaderboard.push({
+                        'student_id': studentID.toString(),
+                        'score': practice_grade
+                      });
+                      awardBadge(20);
+                      mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
+                      if(mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
+                        //user is top on leaderboard
+                        awardBadge(21);
+                      }
+                    }
+                  }
+                }
               }
             }
 
@@ -165,6 +232,66 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
               var quiz_grade = quiz_object.grade;
               if (quiz_grade > 0) {
                 quizzes_attempted += 1;
+
+                //Process Quiz Early Bird Badge                
+                if(mongo_data.modules[i].leaderboard.quiz_early_bird == ""){
+                  mongo_data.modules[i].leaderboard.quiz_early_bird == studentID.toString();
+                  awardBadge(24);
+                  mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
+                    function(err,result){});
+                  } else {
+                  if (mongo_data.modules[i].leaderboard.quiz_early_bird == studentID.toString()){
+                    awardBadge(24);
+                  }
+                }
+
+                //Process Quiz Leaderboard
+
+                if(mongo_data.modules[i].leaderboard.quiz_leaderboard.find(placement => placement.student_id==studentID)){
+                  //user is already on leaderboard
+                  awardBadge(22);
+                  user_index =  mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)
+                  mongo_data.modules[i].leaderboard.quiz_leaderboard[user_index] = {
+                    'student_id': studentID.toString(),
+                    'score': quiz_grade
+                  }
+                  mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
+                  if(mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
+                    //user is top on leaderboard
+                    awardBadge(23);
+                  }
+
+                } else {
+                  // Process leaderboard if not full - add user automatically
+                  if(mongo_data.modules[i].leaderboard.quiz_leaderboard.length<10){
+                    mongo_data.modules[i].leaderboard.quiz_leaderboard.push({
+                      'student_id': studentID.toString(),
+                      'score': quiz_grade
+                    });
+                    awardBadge(22);
+                    mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
+                    if(mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
+                      //user is top on leaderboard
+                      awardBadge(23);
+                    }
+                  } else {
+                    //user not on full leaderboard - compare scores and update
+                    mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
+                    if (quiz_grade > mongo_data.modules[i].leaderboard.quiz_leaderboard[mongo_data.modules[i].leaderboard.quiz_leaderboard.length-1].score){
+                      mongo_data.modules[i].leaderboard.quiz_leaderboard.pop()
+                      mongo_data.modules[i].leaderboard.quiz_leaderboard.push({
+                        'student_id': studentID.toString(),
+                        'score': quiz_grade
+                      });
+                      awardBadge(22);
+                      mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
+                      if(mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
+                        //user is top on leaderboard
+                        awardBadge(23);
+                      }
+                    }
+                  }
+                }
               }
             }
 
@@ -174,9 +301,21 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
               var reflection_grade = reflection_object.grade;
               if (reflection_grade == 100) {
                 reflections_done += 1;
+                
+                //Process Reflection Early Bird Badge 
+                if(mongo_data.modules[i].leaderboard.reflection_early_bird == ""){
+                  mongo_data.modules[i].leaderboard.reflection_early_bird == studentID.toString();
+                  awardBadge(25);
+                  mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
+                    function(err,result){});
+                  } else {
+                  if (mongo_data.modules[i].leaderboard.reflection_early_bird == studentID.toString()){
+                    awardBadge(25);
+                  }
+                }
               }
             }
-
+            mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],function(err,result){});
           } 
         }
 
@@ -184,32 +323,32 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         totalPoints += (quizzes_attempted * 100); //assign points for each proficient ALEKS 
         //assign points for each badge earned
         if (practice_proficient >= 1) {
-          awardBadge(7)
+          awardBadge(7);
         }
         if (practice_proficient >= 3) {
-          awardBadge(8)
+          awardBadge(8);
         }
         if (practice_proficient >= 7) {
-          awardBadge(9)
+          awardBadge(9);
         }
         if (practice_proficient >= 10) {
-          awardBadge(10)
+          awardBadge(10);
         }
 
        
         totalPoints += (quizzes_attempted * 100); //assign points for each quiz
         //assign points for each badge earned
         if (quizzes_attempted >= 1) {
-          awardBadge(11)
+          awardBadge(11);
         }
         if (quizzes_attempted >= 3) {
-          awardBadge(12)
+          awardBadge(12);
         }
         if (quizzes_attempted >= 7) {
-          awardBadge(13)
+          awardBadge(13);
         }
         if (quizzes_attempted >= 10) {
-          awardBadge(14)
+          awardBadge(14);
         }
 
         totalPoints += (reflections_done * 100);
@@ -326,9 +465,6 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
   function fetchGroupIDs(callback2) {
     getRequest(groups_url(studentID, courseID), function(err, groups) {
-      console.log('HI!!');
-      console.log(groups);
-      console.log('BYEE!!');
       callback2(null, groups.map(group => group.id), groups.map(group => group.name))
     })
   }
@@ -372,6 +508,7 @@ module.exports = {
   getRequest,
   postRequest,
   putRequest,
+  getAdminRequest,
   getIndScoreAndBadges,
   getStudentProgress,
   getLeaderboardScores,

@@ -119,8 +119,8 @@ router.post('/modules/:id/edit', function(req, res, next) {
   mongo.updateData('modules',{_id:parseInt(req.params.id)},req.body,
    function(err,result){
     res.redirect('/admin/modules');
-  })
-});
+  });
+})
 
 //GET page to add video to module
 router.get('/modules/:id/videos/add', function(req,res){
@@ -213,6 +213,22 @@ router.post('/badges/edit/:id',function(req,res,next){
     Description: req.body.description
   }, function(err,result){
     res.redirect('/admin/badges')
+  })
+})
+
+router.get('/refreshAll/:courseID',function(req,res,next){
+
+  var studentsURL = (courseID) => {
+    return config.canvasURL + '/api/v1/courses/' + courseID + '/students';
+  }
+  canvas.getAdminRequest(studentsURL(req.params.courseID),function(err,data){
+    studentIDs = data.map(student => student = student.id)
+    for (var i = 0; i < studentIDs.length; i++) {
+      queries.homepageQuery(studentIDs[i],courseID,
+        function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
+          console.log(score);
+      });
+    }
   })
 })
 

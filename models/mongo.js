@@ -66,7 +66,6 @@ function getHomeContent(callback){
     getData('home',function(err,data){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
-        console.log(data);
         callback(err,home_updates,home_videos);
       });
 }

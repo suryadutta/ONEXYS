@@ -7,7 +7,7 @@ var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js'
 var redis = require("redis"),
     redis_client = redis.createClient(config.redisURL);
 
-var store = new RedisNonceStore(config.client_id, redis.client);
+var store = new RedisNonceStore(config.client_id, redis_client);
 if (!provider) {
   var provider = new lti.Provider(config.client_id, config.client_secret);
 }
