@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var config = require('../bin/config');
 var canvas = require('../models/canvas')
+var queries = require('../models/queries')
 var mongo = require('../models/mongo')
 var asyncStuff=require('async')
 var auth = require('../bin/auth')
@@ -224,7 +225,7 @@ router.get('/refreshAll/:courseID',function(req,res,next){
   canvas.getAdminRequest(studentsURL(req.params.courseID),function(err,data){
     studentIDs = data.map(student => student = student.id)
     for (var i = 0; i < studentIDs.length; i++) {
-      queries.homepageQuery(studentIDs[i],courseID,
+      queries.homepageQuery(studentIDs[i],req.params.courseID,
         function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
           console.log(score);
       });
