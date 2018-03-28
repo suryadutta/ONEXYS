@@ -413,6 +413,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             //quiz progress
             var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
             if(quiz_object){
+              console.log(quiz_object);
+              console.log(module_object.quiz_cutoff);
               (moduleProgress[i]).quiz_progress = quiz_object.grade > module_object.quiz_cutoff;
             } else {
               (moduleProgress[i]).quiz_progress = false;
