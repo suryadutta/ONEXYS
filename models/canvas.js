@@ -486,6 +486,14 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
   }
 
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
+    
+    console.log('Student IDs:');
+    console.log(studentIdsArrays);
+    console.log('Group Names:');
+    console.log(groupNames);
+    console.log('Student Index:');
+    console.log(studentIndex);
+
     var points_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/?per_page=100'
     getAdminRequest(points_url, function(err, pointsInfo) {
 

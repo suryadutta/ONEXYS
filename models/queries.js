@@ -7,14 +7,14 @@ var mongo = require('./mongo');
 function homepageQuery(studentID,courseID,callback){
 
   asyncStuff.parallel([
+    function(callback){
+      canvas.getLeaderboardScores(studentID, courseID, callback);
+    },
     function(callback) {
         canvas.getStudentProgress(studentID, courseID, callback);
     },
     function(callback){
         canvas.getIndScoreAndBadges(studentID, courseID, callback);
-    },
-    function(callback){
-        canvas.getLeaderboardScores(studentID, courseID, callback);
     },
     function(callback){
         mongo.getHomeContent(callback);

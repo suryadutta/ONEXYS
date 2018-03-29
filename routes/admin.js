@@ -217,20 +217,5 @@ router.post('/badges/edit/:id',function(req,res,next){
   })
 })
 
-router.get('/refreshAll/:courseID',function(req,res,next){
-
-  var studentsURL = (courseID) => {
-    return config.canvasURL + '/api/v1/courses/' + courseID + '/students';
-  }
-  canvas.getAdminRequest(studentsURL(req.params.courseID),function(err,data){
-    studentIDs = data.map(student => student = student.id)
-    for (var i = 0; i < studentIDs.length; i++) {
-      canvas.getIndScoreAndBadges(studentIDs[i],req.params.courseID,function(err, totalPoints, badges){
-        console.log(totalPoints);
-      });
-    }
-  })
-})
-
 
 module.exports = router;
