@@ -12,13 +12,9 @@ var update_url = (studentID, courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/' + studentID;
 }
 
-var groups_url = (studentID, courseID) => {
-  return config.canvasURL + '/api/v1/courses/' + courseID + '/groups'
+var sections_url = (courseID) => {
+  return config.canvasURL + '/api/v1/courses/' + courseID + '/sections?include=students';
 }
-
-var group_info_url = (id) => {
-  return config.canvasURL + '/api/v1/groups/' + id + '/users'
-};
 
 function getRequest(url, callback) {
   auth.getAuthToken(function(auth_token){
@@ -443,16 +439,8 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     return combinedArray
   }
 
-  /**
-  Process to calculate total scores for all teams:
-  1. Get all group names and ids for courses (returns array of groups ids and array of group names)
-  2. For each group, fetch the corresponding (returns nested array of student ids and array of group names)
-  3. Get points for all students from Canvas custom column, map each student id to it's point value, then sum each group array to it's sum (returns array of group scores)
-  **/
-
   asyncStuff.waterfall([
-    fetchGroupIDs,
-    fetchStudentIDs,
+    getSections,
     getTotalScores,
   ], function(err, scores, groupNames, studentIndex) {
     function compare(a, b) {
@@ -463,40 +451,28 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[studentIndex]);
   });
 
-  function fetchGroupIDs(callback2) {
-    getRequest(groups_url(studentID, courseID), function(err, groups) {
-      callback2(null, groups.map(group => group.id), groups.map(group => group.name))
-    })
-  }
-
-  function fetchStudentIDs(groupIDs, groupNames, callback2) {
-    asyncStuff.map(groupIDs.map(groupID => group_info_url(groupID)), getAdminRequest, function(err, groupStudentInfo) {
-      function findIndexOfUser(studentIdsArrays) {
-        for (var i = 0; i < studentIdsArrays.length; i++) {
-          var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-          if (index > -1) {
-            return i
-          }
+  function getSections(callback){
+    function findIndexOfUser(studentIdsArrays) {
+      for (var i = 0; i < studentIdsArrays.length; i++) {
+        var index = studentIdsArrays[i].indexOf(parseInt(studentID));
+        if (index > -1) {
+          return i
         }
       }
-      var studentIdsArrays = groupStudentInfo.map(students => (students.map(student => student.id)));
-      var studentIndex = findIndexOfUser(studentIdsArrays)
-      callback2(null, studentIdsArrays, groupNames, studentIndex)
+    }
+
+    getAdminRequest(sections_url(courseID),function(err,data){
+      groupNames = data.map(section => section.name);
+      studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
+      studentIndex = findIndexOfUser(studentIdsArrays);
+      callback(null, studentIdsArrays, groupNames, studentIndex)
     });
   }
 
+  
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
-    
-    console.log('Student IDs:');
-    console.log(studentIdsArrays);
-    console.log('Group Names:');
-    console.log(groupNames);
-    console.log('Student Index:');
-    console.log(studentIndex);
-
     var points_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/?per_page=100'
     getAdminRequest(points_url, function(err, pointsInfo) {
-
       function getPointValue(studentID) {
         try {
           return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);
@@ -504,10 +480,8 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
           return 0;
         }
       }
-
       var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
       callback2(null, studentPoints, groupNames, studentIndex);
-
     });
   }
 }
