@@ -7,9 +7,6 @@ var mongo = require('./mongo');
 function homepageQuery(studentID,courseID,callback){
 
   asyncStuff.parallel([
-    function(callback){
-      canvas.getLeaderboardScores(studentID, courseID, callback);
-    },
     function(callback) {
         canvas.getStudentProgress(studentID, courseID, callback);
     },
@@ -17,11 +14,13 @@ function homepageQuery(studentID,courseID,callback){
         canvas.getIndScoreAndBadges(studentID, courseID, callback);
     },
     function(callback){
+      canvas.getLeaderboardScores(studentID, courseID, callback);
+    },
+    function(callback){
         mongo.getHomeContent(callback);
     }
   ],
   function(err, data) {
-    console.log(data);
     var badges =  data[1][1];
     console.log("Badges: ")
     console.log(badges);
