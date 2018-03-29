@@ -21,7 +21,10 @@ function homepageQuery(studentID,courseID,callback){
     }
   ],
   function(err, data) {
+    console.log(data);
     var badges =  data[1][1];
+    console.log("Badges: ")
+    console.log(badges);
     function orderBadges(a,b) {
       if (a.Points < b.Points)
         return 1;
