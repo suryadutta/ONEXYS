@@ -8,22 +8,21 @@ function homepageQuery(studentID,courseID,callback){
 
   asyncStuff.parallel([
     function(callback) {
-        canvas.getStudentProgress(studentID, courseID, callback);
+      canvas.getStudentProgress(studentID, courseID, callback);
     },
     function(callback){
-        canvas.getIndScoreAndBadges(studentID, courseID, callback);
+      canvas.getIndScoreAndBadges(studentID, courseID, callback);
     },
     function(callback){
       canvas.getLeaderboardScores(studentID, courseID, callback);
     },
     function(callback){
-        mongo.getHomeContent(callback);
+      mongo.getHomeContent(callback);
     }
   ],
+  
   function(err, data) {
     var badges =  data[1][1];
-    console.log("Badges: ")
-    console.log(badges);
     function orderBadges(a,b) {
       if (a.Points < b.Points)
         return 1;
@@ -41,12 +40,7 @@ function homepageQuery(studentID,courseID,callback){
 }
 
 function badgesQuery(studentID,courseID,callback){
-  asyncStuff.series([
-    function(callback){
-        canvas.getIndScoreAndBadges(studentID, courseID, callback);
-    }
-  ],
-  function(err, data) {
+  canvas.getIndScoreAndBadges(studentID, courseID, function(err, data) {
     callback(data[0][1]);
   });
 }

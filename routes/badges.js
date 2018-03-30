@@ -4,15 +4,14 @@ var config = require('../bin/config');
 var canvas = require('../models/canvas')
 var queries = require('../models/queries')
 
-router.get('/', function(req, res, next) {
+router.use('/', function(req, res, next) {
 
-
-  var userID = auth.provider.body.custom_canvas_user_id;
   var courseID = auth.provider.body.custom_canvas_course_id;
-
   if (courseID==10184){
-    userID = 58644
+    var userID = 58644
     courseID = 9659
+  } else {
+    var userID = auth.provider.body.custom_canvas_user_id;
   }
 
   queries.badgesQuery(userID, courseID, function(badges){
