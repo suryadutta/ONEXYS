@@ -3,7 +3,6 @@ var router = express.Router();
 var config = require('../bin/config');
 var auth = require('../bin/auth')
 var queries = require('../models/queries')
-var redis = require('../bin/redis');
 
 router.use('/', function(req, res, next) {
   

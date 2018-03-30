@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var config = require('../bin/config');
-var canvas = require('../models/canvas')
+var auth = require('../bin/auth')
 var queries = require('../models/queries')
 
 router.use('/', function(req, res, next) {
