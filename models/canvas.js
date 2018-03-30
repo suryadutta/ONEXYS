@@ -316,7 +316,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         }
 
 
-        totalPoints += (quizzes_attempted * 100); //assign points for each proficient ALEKS 
+        totalPoints += (practice_proficient * 100); //assign points for each proficient ALEKS 
         //assign points for each badge earned
         if (practice_proficient >= 1) {
           awardBadge(7);

@@ -9,7 +9,6 @@
   "dependencies": {
     "async": "^2.6.0",
     "bird": "^0.7.0",
-    "bluebird": "^3.5.1",
     "body-parser": "~1.17.1",
     "canvas-api": "^3.5.0",
     "cookie-parser": "~1.4.3",
@@ -22,7 +21,6 @@
     "mongodb": "^2.0.0",
     "morgan": "~1.8.1",
     "npm": "^5.7.1",
-    "pg-promise": "^5.7.1",
     "pug": "~2.0.0-beta11",
     "query-json": "^2.0.1",
     "redis": "^2.8.0",
