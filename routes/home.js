@@ -14,6 +14,12 @@ router.use('/', function(req, res, next) {
     var userID = auth.provider.body.custom_canvas_user_id;
   }
 
+  console.log('User ID: ');
+  console.log(userID);
+
+  console.log('Course ID: ');
+  console.log(courseID);
+
   queries.homepageQuery(userID,courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
 
     res.render('home', {

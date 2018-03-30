@@ -116,10 +116,13 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
     }
 
     getRequest(assignment_user_url(studentID, courseID), function(err, data) {
-      if (data.length<1){
+      if (err){
+        console.log(err);
+        callback(null, 0, badges);
+      } else if (data.length<1) {
+        console.log('No Assignment Data Recorded');
         callback(null, 0, badges);
       } else {
-
         //Daily Yalie questions
         for (var i = 0; i < mongo_data.dailies.length; i++) {
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
@@ -390,8 +393,12 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
   mongo.getAllData(function(mongo_data){
     getRequest(assignment_user_url(studentID, courseID), function(err, user_assigments) {
       moduleProgress = mongo_data.modules;
-      if (user_assigments.length<1) {
-        callback(null, moduleProgress)
+      if (err){
+        console.log(err);
+        callback(null, moduleProgress);
+      } else if (user_assigments.length<1) {
+        console.log('No User Assignments recorded');
+        callback(null, moduleProgress);
       } else {
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
