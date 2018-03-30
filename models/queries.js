@@ -40,8 +40,9 @@ function homepageQuery(studentID,courseID,callback){
 }
 
 function badgesQuery(studentID,courseID,callback){
-  canvas.getIndScoreAndBadges(studentID, courseID, function(err, data) {
-    callback(data[0][1]);
+  canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
+    console.log(badges);
+    callback(badges);
   });
 }
 
