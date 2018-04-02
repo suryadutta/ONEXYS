@@ -400,11 +400,13 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         console.log('No User Assignments recorded');
         callback(null, moduleProgress);
       } else {
+        
+        console.log(user_assigments);
+
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
           if(module_object.open=='true'){
-
             //practice progress
             var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
             if(practice_object){
