@@ -506,6 +506,7 @@ module.exports = {
   postRequest,
   putRequest,
   getAdminRequest,
+  putAdminRequest,
   getIndScoreAndBadges,
   getStudentProgress,
   getLeaderboardScores,

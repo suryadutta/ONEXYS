@@ -9,8 +9,8 @@ var connectionURL = config.mongoURLs[process.env.TEST_COURSE_NUMBER];
 function getData(collection_name, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    console.log('Connecting to: ');
-    console.log(connectionURL);
+    //console.log('Connecting to: ');
+    //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
@@ -23,8 +23,8 @@ function getData(collection_name, callback){
 function insertData(collection_name, data, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    console.log('Connecting to: ');
-    console.log(connectionURL);
+    //console.log('Connecting to: ');
+    //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         db.collection(collection_name).insertOne(data,
             function(err, result) {
@@ -37,8 +37,8 @@ function insertData(collection_name, data, callback){
 function updateData(collection_name,update_index,update_data, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    console.log('Connecting to: ');
-    console.log(connectionURL);
+    //console.log('Connecting to: ');
+    //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         db.collection(collection_name).updateOne(update_index, {$set: update_data},
             function(err, result) {
@@ -51,8 +51,8 @@ function updateData(collection_name,update_index,update_data, callback){
 function deleteData(collection_name,delete_index,callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    console.log('Connecting to: ');
-    console.log(connectionURL);
+    //console.log('Connecting to: ');
+    //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         db.collection(collection_name).deleteOne(delete_index,
             function(err, result) {
@@ -73,8 +73,8 @@ function getHomeContent(callback){
 function getModule(moduleID, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    console.log('Connecting to: ');
-    console.log(connectionURL);
+    //console.log('Connecting to: ');
+    //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
         db.collection('modules').findOne({"_id":parseInt(moduleID)},function(err, data) {

@@ -42,7 +42,7 @@ router.get('/home', function(req, res, next) {
 router.post('/home', function(req, res, next) {
   mongo.updateData('home',{"type":"updates"},req.body,function(err,result){
     res.redirect('/admin')
-  })
+  });
 });
 
 //add home video
