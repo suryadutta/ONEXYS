@@ -407,8 +407,6 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         callback(null, moduleProgress);
       } else {
 
-        console.log(user_assigments);
-
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
