@@ -124,7 +124,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
       } else if (data.status == "unauthorized"){
         console.log('User unauthorized');
         callback(null, 0, moduleProgress);
-      } else if (data.error.length>0){
+      } else if (data.error){
         console.log(data.error);
         callback(null, 0, moduleProgress);
       } else if (data.length<1) {
@@ -409,7 +409,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
       } else if (user_assigments.status == "unauthorized"){
         console.log('User unauthorized');
         callback(null, moduleProgress);
-      } else if (data.error.length>0){
+      } else if (data.error>0){
         console.log(data.error);
         callback(null, 0, moduleProgress);
       } else if (user_assigments.length<1) {
