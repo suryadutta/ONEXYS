@@ -37,7 +37,8 @@ var getAuthToken = function(callback){
       token_obj = JSON.parse(token_string);
       let accessToken = await oauth2.accessToken.create(token_obj.token);
       // Check if the token is expired. If expired it is refreshed.
-      if (accessToken.expired()) {
+      //if (accessToken.expired()) {
+      if(true){
         try {
           // save refresh token to add later
           let refresh_token = accessToken.token.refresh_token;

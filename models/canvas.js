@@ -18,6 +18,8 @@ var sections_url = (courseID) => {
 
 function getRequest(url, callback) {
   auth.getAuthToken(function(auth_token){
+    console.log('Auth Token Used: ');
+    console.log(auth_token);
     request.get({
       url: url,
       headers: {
