@@ -126,7 +126,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         console.log('No Assignment Data Recorded');
         callback(null, 0, badges);
       } else {
-        console.log('Data:');
+        console.log('Data: ');
         console.log(data);
         //Daily Yalie questions
         for (var i = 0; i < mongo_data.dailies.length; i++) {
@@ -408,7 +408,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         console.log('No User Assignments recorded');
         callback(null, moduleProgress);
       } else {
-        console.log('Assignments:');
+        console.log('Assignments: ');
         console.log(user_assigments);
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
