@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "async": "^2.6.0",
+    "better-queue": "^3.8.6",
     "bird": "^0.7.0",
     "body-parser": "~1.17.1",
     "canvas-api": "^3.5.0",

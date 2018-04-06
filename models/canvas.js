@@ -17,7 +17,7 @@ var sections_url = (courseID) => {
 }
 
 function getRequest(url, callback) {
-  auth.getAuthToken(function(auth_token){
+  auth.authTokenQueue.push('user',function(auth_token){
     console.log('Auth Token Used: ');
     console.log(auth_token);
     request.get({
@@ -32,11 +32,11 @@ function getRequest(url, callback) {
 } //user GET request
 
 function postRequest(url, parameters, callback) {
-  auth.getAuthToken(function(auth_token){
+  auth.authTokenQueue.push('user',function(auth_token){
     request.post({
       url: url,
       headers: {
-        "Authorization": " Bearer " + config.canvasAdminAuthToken
+        "Authorization": " Bearer " + auth_token,
       },
       form: parameters,
     }, function(error, response, body) {
@@ -46,11 +46,11 @@ function postRequest(url, parameters, callback) {
 } //user POST request
 
 function putRequest(url, parameters, callback) {
-  auth.getAuthToken(function(auth_token){
+  auth.authTokenQueue.push('user',function(auth_token){
     request.put({
       url: url,
       headers: {
-        "Authorization": " Bearer " + config.canvasAdminAuthToken
+        "Authorization": " Bearer " + auth_token,
       },
       form: parameters,
     }, function(error, response, body) {

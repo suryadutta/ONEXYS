@@ -1,6 +1,7 @@
 var express = require('express');
 var config = require('./config');
 var request = require('request');
+var Queue = require('better-queue');
 
 var lti = require ('ims-lti');
 var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
@@ -27,8 +28,8 @@ let credentials = {
 
 let oauth2 = require('simple-oauth2').create(credentials);
 
-//function to callback Auth Token
-var getAuthToken = function(callback){
+//queue to callback Auth Token (prevents multiple calls)
+var authTokenQueue = new Queue(function(arg,callback){
   redis_client.get('token_'+provider.body.custom_canvas_user_id, async function(err, token_string) {
     if (err){
       console.log(err);
@@ -57,7 +58,7 @@ var getAuthToken = function(callback){
       }
     }
   });
-}
+});
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
@@ -119,7 +120,7 @@ var oath2_callback = async function(req, res, next){
 module.exports = {
     oath2_callback,
     provider,
-    getAuthToken,
+    authTokenQueue,
     checkUser,
     checkAdmin
 };
