@@ -10,10 +10,10 @@
         }
       ],
     "env":{
-        "SESSION_SECRET":{
-            "description": "A random string used to secure cookies on the site",
-            "generator": "secret"
-        },
+        "HEROKU_APP_NAME": {
+            "required": true,
+            "description": "Enter your application name here"
+          },
         "CANVAS_URL":{
             "description": "The base URL for your deployment of Canvas",
             "value": "https://yale.instructure.com/"
@@ -22,7 +22,7 @@
             "description": "A secret key to use when linking this app to your course.",
             "value": "onexys-key"
         },
-        "CANVAS_SECRET":{
+        "DEVELOPER_TOKEN":{
             "description": "A secret password to use when linking this app to your course.",
             "generator": "secret"
         },
@@ -31,7 +31,13 @@
         },
         "CANVAS_PAGE_RESULTS":{
             "description": "Default number of results to return from Canvas API. Needs to be larger than # of students in course",
-            "value": "70"
+            "value": "100"
+        },
+        "MONGO_USERNAME":{
+            "description": "Username for all Mongo connections"
+        },
+        "MONGO_PASSWORD":{
+            "description": "Password for all Mongo connections"
         }
     }
 }

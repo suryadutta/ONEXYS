@@ -4,13 +4,9 @@ var asyncStuff = require('async');
 var config = require('../bin/config');
 var auth = require('../bin/auth');
 
-var connectionURL = config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-
 function getData(collection_name, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    //console.log('Connecting to: ');
-    //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {

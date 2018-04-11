@@ -1,14 +1,12 @@
+#!/usr/bin/env node
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load('../');
 }
-
 var config = require('./config');
 var request = require('request');
 var asyncStuff = require('async');
 var mongo = require('../models/mongo');
 var canvas = require('../models/canvas');
-
-courseID = 9659;
 
 var assignment_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=all&grouped=true&per_page=100'
@@ -16,9 +14,7 @@ var assignment_url = (courseID) => {
 
 function computeScoreAndBadges(studentID, data, callback){ // Return score and badges
   mongo.getAllData(function(mongo_data){
-
-    console.log('Working on Student '+studentID.toString());
-
+    console.log(mongo_data);
     var badges = mongo_data.badges;
     var totalPoints = 0;
     var practice_proficient = 0;
@@ -293,42 +289,33 @@ function computeScoreAndBadges(studentID, data, callback){ // Return score and b
   });
 }
 
-/** 
-
-canvas.getRequest(assignment_url(courseID), function(err, users) {
-  for (let i = 0; i < users.length; i++) {
-    setTimeout(function getInfo() {
-      var studentID = users[i].user_id;
-      computeScoreAndBadges(users[i].submissions, function(points, badges) {
-        var update_url = config.canvasURL + 'api/v1/courses/' + courseID + '/custom_gradebook_columns/' + database.points_id + '/data/' + studentID;
-        canvas.putRequest(update_url, {
-          column_data: {
-            content: points.toString()
-          }
-        }, function(err, body) {
-          //console.log(body);
+var updateAllStudentData = function(courseID){
+  canvas.getAdminRequest(assignment_url(courseID), function(err, users) {
+    for (let i = 0; i < users.length; i++) {
+      setTimeout(function () {
+        computeScoreAndBadges(users[i].user_id, users[i].submissions, function(err, points, badges) {
+          var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/' + users[i].user_id;
+            canvas.putAdminRequest(update_url, {
+              column_data: {
+                content: points.toString()
+              }
+            }, function(err, body) {
+              if(err){
+                console.log(err);
+              } else {
+                console.log('Canvas Info Updated for Student ID: ' + users[i].user_id.toString());
+              }
+            });
         });
-      });
-    }, i * 1000)
-  }
-});
-**/
+      }, i * 1000);
+    }
+  });
+}
 
-canvas.getAdminRequest(assignment_url(courseID), function(err, users) {
-  for (let i = 0; i < users.length; i++) {
-    computeScoreAndBadges(users[i].user_id, users[i].submissions, function(err, points, badges) {
-      var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/' + users[i].user_id;
-        canvas.putAdminRequest(update_url, {
-          column_data: {
-            content: points.toString()
-          }
-        }, function(err, body) {
-          if(err){
-            console.log(err);
-          } else {
-            console.log('Canvas Info Updated for Student ID: ' + users[i].user_id.toString());
-          }
-        });
-    });
-  }
-});
+courses_array = [9659]
+
+for (var a = 0; a < courses_array.length; a++) {
+  setTimeout(function () {
+    updateAllStudentData(courses_array[a]);
+  }, a * 100000);
+}

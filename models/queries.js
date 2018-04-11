@@ -22,7 +22,15 @@ function homepageQuery(studentID,courseID,callback){
   ],
   
   function(err, data) {
-    var badges =  data[1][1];
+    
+    var module_progress = data[0],
+        score = data[1][0],
+        badges =  data[1][1],
+        leaderboard = data[2][0],
+        my_team = data[2][1],
+        home_updates = data[3][0],
+        home_vids = data[3][1];
+
     function orderBadges(a,b) {
       if (a.Points < b.Points)
         return 1;
@@ -30,12 +38,14 @@ function homepageQuery(studentID,courseID,callback){
         return -1;
       return 0;
     }
+
     var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
     var awarded_badge_ids = awarded_badges.map(badge => badge._id);
     if (awarded_badge_ids.length>3){
       awarded_badge_ids = awarded_badge_ids.slice(0,3);
     }
-    callback(data[0],data[1][0], awarded_badge_ids, data[2][0], data[2][1], data[3][0],data[3][1]);
+    
+    callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids);
   });
 }
 

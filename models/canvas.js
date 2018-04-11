@@ -18,8 +18,6 @@ var sections_url = (courseID) => {
 
 function getRequest(url, callback) {
   auth.authTokenQueue.push('user',function(auth_token){
-    console.log('Auth Token Used: ');
-    console.log(auth_token);
     request.get({
       url: url,
       headers: {
@@ -120,19 +118,17 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
     getRequest(assignment_user_url(studentID, courseID), function(err, data) {
       if (err){
         console.log(err);
-        callback(null, 0, badges);
+        callback(err, 0, badges);
       } else if (data.status == "unauthorized"){
         console.log('User unauthorized');
-        callback(null, 0, moduleProgress);
+        callback('User unauthorized', 0, moduleProgress);
       } else if (data.error){
         console.log(data.error);
-        callback(null, 0, moduleProgress);
+        callback(data.error, 0, moduleProgress);
       } else if (data.length<1) {
         console.log('No Assignment Data Recorded');
         callback(null, 0, badges);
       } else {
-        console.log('Data: ');
-        console.log(data);
         //Daily Yalie questions
         for (var i = 0; i < mongo_data.dailies.length; i++) {
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
@@ -416,8 +412,6 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         console.log('No User Assignments recorded');
         callback(null, moduleProgress);
       } else {
-        console.log('Assignments: ');
-        console.log(user_assigments);
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
