@@ -49,6 +49,33 @@ function homepageQuery(studentID,courseID,callback){
   });
 }
 
+function homepageAdminQuery(callback){
+
+  asyncStuff.parallel([
+    function(callback) {
+      mongo.getAllData(function(mongo_data){
+        callback(null, mongo_data.modules)
+      });
+    },
+    function(callback){
+      canvas.getAdminLeaderboardScores(callback);
+    },
+    function(callback){
+      mongo.getHomeContent(callback);
+    }
+  ],
+  
+  function(err, data) {
+    
+    var module_progress = data[0],
+        leaderboard = data[1],
+        home_updates = data[2][0],
+        home_vids = data[2][1];
+    
+    callback(module_progress, leaderboard, home_updates, home_vids);
+  });
+}
+
 function badgesQuery(studentID,courseID,callback){
   canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
     callback(badges);
@@ -57,5 +84,6 @@ function badgesQuery(studentID,courseID,callback){
 
 module.exports = {
   homepageQuery,
+  homepageAdminQuery,
   badgesQuery,
 }

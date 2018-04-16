@@ -504,6 +504,58 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
   }
 }
 
+function getAdminLeaderboardScores(callback){
+  function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
+    var combinedArray = []
+    for (var i = 0; i < groupNames.length; i++) {
+      combinedArray.push({
+        'Name': groupNames[i],
+        'Score': scores[i]
+      })
+    }
+    if (groupNames.length < 3){
+      fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+      combinedArray = combinedArray.concat(fillerArray);
+    }
+    return combinedArray
+  }
+
+  asyncStuff.waterfall([
+    getSections,
+    getTotalScores,
+  ], function(err, scores, groupNames) {
+    function compare(a, b) {
+      if (a.Score < b.Score) return 1;
+      if (a.Score > b.Score) return -1;
+      return 0;
+    }
+    callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare));
+  });
+
+  function getSections(callback){
+    getAdminRequest(sections_url(courseID),function(err,data){
+      groupNames = data.map(section => section.name);
+      studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
+      callback(null, studentIdsArrays, groupNames)
+    });
+  }
+  
+  function getTotalScores(studentIdsArrays, groupNames, callback2) {
+    var points_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/?per_page=100'
+    getAdminRequest(points_url, function(err, pointsInfo) {
+      function getPointValue(studentID) {
+        try {
+          return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);
+        } catch (e) {
+          return 0;
+        }
+      }
+      var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+      callback2(null, studentPoints, groupNames);
+    });
+  }
+}
+
 module.exports = {
   getRequest,
   postRequest,
@@ -513,4 +565,5 @@ module.exports = {
   getIndScoreAndBadges,
   getStudentProgress,
   getLeaderboardScores,
+  getAdminLeaderboardScores,
 }
