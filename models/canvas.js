@@ -480,6 +480,14 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     }
 
     getAdminRequest(sections_url(courseID),function(err,data){
+
+      // remove section with all students
+      for (var i = 0; i < data.length; i++) {
+        if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2017 - Blue" ){ // Dev Testing
+          data.splice(i, 1);
+        }
+      }
+      
       groupNames = data.map(section => section.name);
       studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
       studentIndex = findIndexOfUser(studentIdsArrays);
@@ -538,8 +546,6 @@ function getAdminLeaderboardScores(courseID, callback){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
         if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2017 - Blue" ){ // Dev Testing
-          console.log('All Student Info: ');
-          console.log(data[i]);
           data.splice(i, 1);
         }
       }
