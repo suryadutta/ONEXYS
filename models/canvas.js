@@ -13,7 +13,7 @@ var update_url = (studentID, courseID) => {
 }
 
 var sections_url = (courseID) => {
-  return config.canvasURL + '/api/v1/courses/' + courseID + '/sections?include=students';
+  return config.canvasURL + '/api/v1/courses/' + courseID + '/sections?include=students&per_page=100';
 }
 
 function getRequest(url, callback) {
@@ -534,6 +534,16 @@ function getAdminLeaderboardScores(courseID, callback){
 
   function getSections(callback){
     getAdminRequest(sections_url(courseID),function(err,data){
+
+      // remove section with all students
+      for (var i = 0; i < data.length; i++) {
+        if(data[i].name==auth.provider.context_title){
+          console.log('All Student Info: ');
+          console.log(data[i]);
+          data.splice(i, 1);
+        }
+      }
+
       groupNames = data.map(section => section.name);
       studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
       callback(null, studentIdsArrays, groupNames)
