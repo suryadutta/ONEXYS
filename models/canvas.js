@@ -504,7 +504,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
   }
 }
 
-function getAdminLeaderboardScores(callback){
+function getAdminLeaderboardScores(courseID, callback){
   function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
     var combinedArray = []
     for (var i = 0; i < groupNames.length; i++) {

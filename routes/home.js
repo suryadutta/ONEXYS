@@ -16,7 +16,7 @@ router.use('/', function(req, res, next) {
   console.log(courseID);
 
   if (auth.provider.admin){
-    queries.homepageAdminQuery(function(module_progress, leaderboard, home_updates, home_vids){
+    queries.homepageAdminQuery(courseID, function(module_progress, leaderboard, home_updates, home_vids){
       res.render('home', {
         title: 'Home | ONEXYS',
         courseID: courseID,

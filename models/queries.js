@@ -49,7 +49,7 @@ function homepageQuery(studentID,courseID,callback){
   });
 }
 
-function homepageAdminQuery(callback){
+function homepageAdminQuery(courseID, callback){
 
   asyncStuff.parallel([
     function(callback) {
@@ -58,7 +58,7 @@ function homepageAdminQuery(callback){
       });
     },
     function(callback){
-      canvas.getAdminLeaderboardScores(callback);
+      canvas.getAdminLeaderboardScores(courseID, callback);
     },
     function(callback){
       mongo.getHomeContent(callback);
