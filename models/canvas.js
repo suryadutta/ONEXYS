@@ -537,7 +537,7 @@ function getAdminLeaderboardScores(courseID, callback){
 
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title){
+        if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2017 - Blue" ){ // Dev Testing
           console.log('All Student Info: ');
           console.log(data[i]);
           data.splice(i, 1);
