@@ -1,6 +1,7 @@
 var canvasURL = 'https://yale.instructure.com';
 var externalHomePageRedirects = {
   10184:3617,
+  38082:3671
 };
 
 var homeRegex = new RegExp('^/courses/([0-9]+)/?$');
