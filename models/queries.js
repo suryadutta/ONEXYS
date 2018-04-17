@@ -82,8 +82,15 @@ function badgesQuery(studentID,courseID,callback){
   });
 }
 
+function badgesAdminQuery(callback){
+  mongo.getAllData(function(mongo_data){
+    callback(mongo_data.badges);
+  })
+}
+
 module.exports = {
   homepageQuery,
   homepageAdminQuery,
   badgesQuery,
+  badgesAdminQuery
 }
