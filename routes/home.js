@@ -21,6 +21,8 @@ router.use('/', function(req, res, next) {
 
   if (auth.provider.admin){
     if (req.query.masquerade){
+      console.log("Masquerade as User:");
+      console.log(req.query.masquerade);
       queries.homepageQuery(parseInt(req.query.masquerade),courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
         res.render('home', {
           title: 'Home | ONEXYS',
