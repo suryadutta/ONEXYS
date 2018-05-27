@@ -209,9 +209,10 @@ router.post('/badges/edit/:id',function(req,res,next){
   //update badges info
   mongo.updateData('badges',{_id:parseInt(req.params.id)},{
     Title: req.body.title,
+    Description: req.body.description,
     Points: req.body.badge_points,
     Portrait: req.body.portrait,
-    Description: req.body.description
+    PortraitDescription: req.body.portraitdescription
   }, function(err,result){
     res.redirect('/admin/badges')
   })
