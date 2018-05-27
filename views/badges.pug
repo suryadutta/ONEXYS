@@ -22,24 +22,24 @@ block content
         if badge.Awarded
           div(class='onexys_badge badge'+(index+1)+' completed')
             .badge_descriptor.badge_box
-              h3
-              p=badge.Title
+              h3=badge.Title
+              p=badge.Description
             .badge_points.badge_box
               p=badge.Points
             .badge_portrait
             .badge_label.badge_box
               h3=badge.Portrait
-              p=badge.Description        
+              p=badge.PortraitDescription      
         
         else
           div(class='onexys_badge badge'+(index+1))
             .badge_descriptor.badge_box
-              h3
-              p=badge.Title
+              h3=badge.Title
+              p=badge.Description
             .badge_points.badge_box
               p=badge.Points
             .badge_portrait
             .badge_label.badge_box
               h3=badge.Portrait
-              p=badge.Description
+              p=badge.PortraitDescription
       
