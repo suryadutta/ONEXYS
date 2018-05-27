@@ -13,6 +13,13 @@ block content
         input#title.form-control(type='text', value=badge.Title, name='title')
         br
         br
+
+        div.form-group
+        label(for='description') Description: 
+        br
+        textarea(rows=3)#description.form-control(name='description')=badge.Description
+        br
+        br
         
         div.form-group
         label(for='badge_points') Points: 
@@ -27,9 +34,9 @@ block content
         br
 
         div.form-group
-        label(for='description') Description: 
+        label(for='portraitdescription') Portrait Description: 
         br
-        textarea(rows=3)#description.form-control(name='description')=badge.Description
+        textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
         br
         br
 

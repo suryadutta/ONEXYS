@@ -10,17 +10,19 @@ block content
         tr 
             th ID
             th Title
+            th Description
             th Points
             th Portrait
-            th Description
+            th Portrait Description
 
         each badge in badges
             tr 
                 td=badge._id
                 td=badge.Title
+                td=badge.Description
                 td=badge.Points
                 td=badge.Portrait
-                td=badge.Description
+                td=badge.PortraitDescription
                 td
                     form(method='GET' action='badges/edit/'+badge._id)
                         button(type='submit') Edit
