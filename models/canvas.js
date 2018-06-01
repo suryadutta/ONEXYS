@@ -549,10 +549,14 @@ function getAdminLeaderboardScores(courseID, callback){
           data.splice(i, 1);
         }
       }
-
-      groupNames = data.map(section => section.name);
-      studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
-      callback(null, studentIdsArrays, groupNames)
+      if (data.length<1){
+        callback(null,[],[]);
+      } else {
+        groupNames = data.map(section => section.name);
+        studentsArray = data.map(section => section.students);
+        studentIdsArrays = studentsArray.map(studentInfo => studentInfo.id);
+        callback(null, studentIdsArrays, groupNames);
+      }
     });
   }
   
