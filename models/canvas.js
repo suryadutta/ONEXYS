@@ -470,6 +470,15 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
   });
 
   function getSections(callback){
+    function findIndexOfUser(studentIdsArrays) {
+      for (var i = 0; i < studentIdsArrays.length; i++) {
+        var index = studentIdsArrays[i].indexOf(parseInt(studentID));
+        if (index > -1) {
+          return i
+        }
+      }
+    }
+
     getAdminRequest(sections_url(courseID),function(err,data){
 
       // remove section with all students
@@ -478,13 +487,15 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
           data.splice(i, 1);
         }
       }
+
       if (data.length<1){
-        callback(null,[],[]);
+        callback(null,[],[],0);
       } else {
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
         studentIdsArrays = studentsArray.map(studentInfo => studentInfo.id);
-        callback(null, studentIdsArrays, groupNames);
+        studentIndex = findIndexOfUser(studentIdsArrays);
+        callback(null, studentIdsArrays, groupNames, studentIndex)
       }
     });
   }
