@@ -480,7 +480,6 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     }
 
     getAdminRequest(sections_url(courseID),function(err,data){
-
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
         if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2017 - Blue" ){ // Dev Testing
@@ -492,13 +491,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
         callback(null,[],[],0);
       } else {
         groupNames = data.map(section => section.name);
-        studentsArray = data.map(section => section.students);
-        studentIdsArrays = studentsArray.map(studentInfo => studentInfo.id);
-        console.log('HI');
-        console.log(data);
-        console.log(groupNames);
-        console.log(studentsArray);
-        console.log(studentIdsArrays);
+        studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
         studentIndex = findIndexOfUser(studentIdsArrays);
         callback(null, studentIdsArrays, groupNames, studentIndex)
       }
@@ -564,12 +557,7 @@ function getAdminLeaderboardScores(courseID, callback){
       } else {
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
-        studentIdsArrays = studentsArray.map(studentInfo => studentInfo.id);
-        console.log('HI');
-        console.log(data);
-        console.log(groupNames);
-        console.log(studentsArray);
-        console.log(studentIdsArrays);
+        studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
         callback(null, studentIdsArrays, groupNames);
       }
     });
