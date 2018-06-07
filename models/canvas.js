@@ -565,6 +565,11 @@ function getAdminLeaderboardScores(courseID, callback){
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
         studentIdsArrays = studentsArray.map(studentInfo => studentInfo.id);
+        console.log('HI');
+        console.log(data);
+        console.log(groupNames);
+        console.log(studentsArray);
+        console.log(studentIdsArrays);
         callback(null, studentIdsArrays, groupNames);
       }
     });
