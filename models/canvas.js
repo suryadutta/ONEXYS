@@ -494,6 +494,11 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
         studentIdsArrays = studentsArray.map(studentInfo => studentInfo.id);
+        console.log('HI');
+        console.log(data);
+        console.log(groupNames);
+        console.log(studentsArray);
+        console.log(studentIdsArrays);
         studentIndex = findIndexOfUser(studentIdsArrays);
         callback(null, studentIdsArrays, groupNames, studentIndex)
       }
