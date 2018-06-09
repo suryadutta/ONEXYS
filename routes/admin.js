@@ -95,8 +95,6 @@ router.post('/home/videos/delete/:id', function (req, res, next) {
 });
 
 
-
-
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get('/modules', function (req, res, next) {
   mongo.getData('modules', function (err, modulesInfo) {
