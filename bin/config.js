@@ -22,6 +22,9 @@ config.local_mongo_database = 'mongodb://localhost:27017/oneyxs_dev'
 config.mongoURLs = {
     '38082': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds121189.mlab.com:21189/onexys_blue' || config.local_mongo_database,
     '10184': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds223509.mlab.com:23509/onexys_dev' || config.local_mongo_database,
+    '38080': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds121189.mlab.com:21189/onexys_gray' || config.local_mongo_database,
+    '38083': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds015924.mlab.com:21189/onexys_physics' || config.local_mongo_database,
+    '38081': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds0157614.mlab.com:21189/onexys_white' || config.local_mongo_database
 }
 
 config.cookieduration = 1000 * 60 * 60 * 24; //one hour

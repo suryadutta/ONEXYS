@@ -41,7 +41,7 @@ router.get('/home', function (req, res, next) {
 
 //Get Home Page Updates 
 router.post('/home', function (req, res, next) {
-  console.log("Hi! admin.js router.get('/home)");
+  console.log("Hi! admin.js router.post('/home)");
   mongo.updateData('home', { "type": "updates" }, req.body, function (err, result) {
     res.redirect('/admin')
   });
