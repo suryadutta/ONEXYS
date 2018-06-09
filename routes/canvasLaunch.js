@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+  console.log("Hi! canvasLaunch.js");
   if (req.body.oauth_consumer_key) {
 
     var consumer_key_valid = 'qwertyuiop' 
@@ -30,7 +31,7 @@ var linkRel = {
     '(Linear) Functions (Blue)' : 1,
     'Functions and Fitting Data (Blue)' : 2,
     'Function Transformations (Blue)' : 3,
-    'Quadratic Functions (Blue)' : 4,
+    ' Functions (Blue)' : 4,
     'Exponential Functions (Blue)' : 5,
     'Compound Interest and the Number e (Blue)' : 6,
     'Logarithmic Functions (Blue)' : 7,
