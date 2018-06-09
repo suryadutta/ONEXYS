@@ -3,11 +3,13 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log("Hi! canvasLaunch.js router.get");
+
   res.render('launch', { title: 'Canvas Launch', body : 'Launch Test' });
 });
 
 router.post('/', function(req, res, next) {
-  console.log("Hi! canvasLaunch.js");
+  console.log("Hi! canvasLaunch.js router.post");
   if (req.body.oauth_consumer_key) {
 
     var consumer_key_valid = 'qwertyuiop' 
@@ -15,6 +17,7 @@ router.post('/', function(req, res, next) {
 
     if (consumer_key_valid === consumer_key_req) {
       var moduleName = req.body.custom_canvas_assignment_title;
+      console.log("Hi! req.body.custom_canvas_assignment_title : ", req.body.custom_canvas_assignment_title);
       if (moduleName) {
         var moduleID = linkRel[moduleName];
         res.redirect('/modules/' + moduleID);

@@ -7,14 +7,17 @@ var asyncStuff = require('async');
 
 /* GET module page. */
 
-router.get('/:id', function(req, res, next) {
-    mongo.getModule(req.params.id,function(err,moduleData){
+router.get('/:id', function (req, res, next) {
+    console.log("Hi! modules.js");
+
+    mongo.getModule(req.params.id, function (err, moduleData) {
+
         res.render('module', {
             data: moduleData,
             course_number: auth.provider.body.custom_canvas_course_id || '38082',
             canvas_url: config.canvasURL,
         });
-        
+
     });
 });
 
