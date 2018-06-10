@@ -69,8 +69,8 @@ function getHomeContent(callback){
 function getModule(moduleID, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
-    //console.log('Connecting to: ');
-    //console.log(connectionURL);
+    console.log('Connecting to: ');
+    console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
         db.collection('modules').findOne({"_id":parseInt(moduleID)},function(err, data) {
