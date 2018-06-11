@@ -101,6 +101,24 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
     var daily_done = 0;
     var reflections_done = 0;
 
+    //lucky bulldog
+    lucky_bulldog_points = 100;
+    var d = new Date();
+
+    if (mongo_data.lucky_bulldogs.length>0){
+      for (lucky_bulldog in mongo_data.lucky_bulldogs){
+        //student already was awarded lucky bulldog
+        if (lucky_bulldog.awarded_ids.includes(studentID)){
+          totalPoints += lucky_bulldog_points;
+        //student is now awarded lucky bulldog
+        } else if ((d.getTime() - lucky_bulldog.getTime())/(1000*60)<1){
+          totalPoints += lucky_bulldog_points;
+          lucky_bulldog.awarded_ids.push(studentID);
+          mongo.updateData('lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
+        }
+      }
+    }
+    
     function awardBadge(badgeID) {
       badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
       totalPoints += badge_info.Points;

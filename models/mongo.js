@@ -100,6 +100,9 @@ function getAllData(callback_main){
         'dailies': function(callback) {
             getData('dailies',callback)
         },
+        'lucky_bulldogs': function(callback) {
+            getData('lucky_bulldogs',callback)
+        },
     }, function(err, results) {
         callback_main(results);
     });

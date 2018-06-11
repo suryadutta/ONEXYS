@@ -265,6 +265,7 @@ router.post('/lucky/add', function (req, res, next) {
     mongo.insertData('lucky_bulldogs', {
       _id: new_id,
       time: req.body.date_time,
+      awarded_ids: [],
     }, function(err,result){
       res.redirect('/admin/lucky');
     })
