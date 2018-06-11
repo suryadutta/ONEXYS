@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+
+    a(href='/admin/lucky') Back to Lucky Page
+
+    h1='Add Lucky Bulldog Time'
+
+    form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
+
+        div.form-group
+            label(for='badge_points') Date and Time of Lucky Bulldog: 
+            input#badge_points.form-control(type='datetime-local', name='date_time')
+            br
+            br
+
+        button.btn.btn-primary(type='submit') Save Changes

@@ -218,5 +218,58 @@ router.post('/badges/edit/:id', function (req, res, next) {
   })
 })
 
+router.get('/lucky', function (req, res, next) {
+  mongo.getData('lucky_bulldogs', function (err, lucky_data) {
+    res.render('admin/lucky', {
+      title: 'Lucky Bulldog',
+      lucky_data: lucky_data,
+    });
+  });
+})
+
+router.get('/lucky/edit/:id', function (req, res, next) {
+  mongo.getData('lucky_bulldogs', function (err, lucky_data) {
+    lucky_bulldog = lucky_data.find(x => x._id == req.params.id)
+    res.render('admin/luckyEdit', {
+      title: 'Lucky Bulldog',
+      lucky_bulldog: lucky_bulldog,
+    });
+  });
+})
+
+router.post('/lucky/edit/:id', function (req, res, next) {
+  mongo.updateData('lucky_bulldogs',{ _id: parseInt(req.params.id) },{time: req.body.date_time}, function(err,result){
+    res.redirect('/admin/lucky');
+  });
+})
+
+router.post('/lucky/delete/:id', function (req, res, next) {
+  mongo.deleteData('lucky_bulldogs', { _id: parseInt(req.params.id) }, function (err, result) {
+    res.redirect('/admin/lucky');
+  })
+})
+
+router.get('/lucky/add', function (req, res, next) {
+  res.render('admin/luckyAdd', {
+    title: 'Lucky Bulldog'
+  });
+})
+
+router.post('/lucky/add', function (req, res, next) {
+  mongo.getData('lucky_bulldogs', function(err, lucky_data){
+    if (lucky_data.length>0){
+      new_id = Math.max(lucky_data.map(data => data._id))+1;
+    } else{
+      new_id=1;
+    }
+    mongo.insertData('lucky_bulldogs', {
+      _id: new_id,
+      time: req.body.date_time,
+    }, function(err,result){
+      res.redirect('/admin/lucky');
+    })
+  })
+})
+
 
 module.exports = router;
