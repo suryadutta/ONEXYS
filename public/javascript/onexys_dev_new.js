@@ -3,7 +3,8 @@ var externalHomePageRedirects = {
   10184:3673,
   38082:3671,
   38081:3817,
-  38080:3819
+  38080:3819,
+  38083:3820
   //add all ids after adding apps
 };
 

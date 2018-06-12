@@ -82,7 +82,9 @@ function getModule(moduleID, callback){
                   return 1;
                 return 0;
               }
-            data.videos = data.videos.sort(orderVids)
+            if (data.videos){
+                data.videos = data.videos.sort(orderVids)
+            }
             callback(err,data);
             db.close();
         });        

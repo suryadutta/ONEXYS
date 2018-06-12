@@ -8,7 +8,7 @@ var asyncStuff = require('async');
 /* GET module page. */
 
 router.get('/:id', function (req, res, next) {
-    console.log("Hi! modules.js");
+    console.log("Viewing Module "+req.params.id);
 
     mongo.getModule(req.params.id, function (err, moduleData) {
 
