@@ -4,12 +4,12 @@ var config = require('../bin/config');
 var auth = require('../bin/auth')
 var queries = require('../models/queries')
 
-router.use('/', function(req, res, next) {
-  
+router.use('/', function (req, res, next) {
+
   var courseID = auth.provider.body.custom_canvas_course_id;
   var userID = auth.provider.body.custom_canvas_user_id;
 
-  if (courseID == 10184){
+  if (courseID == 10184) {
     courseID = 9659;
   }
 
@@ -19,11 +19,11 @@ router.use('/', function(req, res, next) {
   console.log('Course ID: ');
   console.log(courseID);
 
-  if (auth.provider.admin){
-    if (req.query.masquerade){
+  if (auth.provider.admin) {
+    if (req.query.masquerade) {
       console.log("Masquerade as User:");
       console.log(req.query.masquerade);
-      queries.homepageQuery(parseInt(req.query.masquerade),courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
+      queries.homepageQuery(parseInt(req.query.masquerade), courseID, function (module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids) {
         res.render('home', {
           title: 'Home | ONEXYS',
           courseID: courseID,
@@ -31,15 +31,18 @@ router.use('/', function(req, res, next) {
           score: score,
           awarded_badge_ids: awarded_badge_ids,
           leaderboard: leaderboard,
-          my_team: my_team,
+          my_team: my_team ? my_team : {
+            Name: "dd655",
+            Score: 0
+          },
           home_updates: home_updates,
           home_vids: home_vids,
           admin: auth.provider.admin,
           masquerade: true,
-         });
-       });
-    } else{
-      queries.homepageAdminQuery(courseID, function(module_progress, leaderboard, home_updates, home_vids){
+        });
+      });
+    } else {
+      queries.homepageAdminQuery(courseID, function (module_progress, leaderboard, home_updates, home_vids) {
         res.render('home', {
           title: 'Home | ONEXYS',
           courseID: courseID,
@@ -55,13 +58,13 @@ router.use('/', function(req, res, next) {
           home_vids: home_vids,
           admin: auth.provider.admin,
           masquerade: false,
-         });
+        });
       });
     }
   }
 
   else {
-    queries.homepageQuery(userID,courseID,function(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids){
+    queries.homepageQuery(userID, courseID, function (module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids) {
       res.render('home', {
         title: 'Home | ONEXYS',
         courseID: courseID,
@@ -73,8 +76,8 @@ router.use('/', function(req, res, next) {
         home_updates: home_updates,
         home_vids: home_vids,
         admin: auth.provider.admin
-       });
-     });
+      });
+    });
   }
 });
 
