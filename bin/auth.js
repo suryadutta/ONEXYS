@@ -79,6 +79,7 @@ var checkUser = function(req, res, next) {
     provider.valid_request(req, function(err, is_valid) {
       if (!is_valid) {
         console.log('Unverified User:');
+        console.log(provider.valid_request);
         console.log(provider);
         res.send('Unverified User');
       } else {         
