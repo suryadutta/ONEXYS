@@ -77,8 +77,11 @@ var checkUser = function(req, res, next) {
   } else {
      //launch LTI instance
     provider.valid_request(req, function(err, is_valid) {
-      if (!is_valid) res.send('Unverified User');
-      else {         
+      if (!is_valid) {
+        console.log('Unverified User:');
+        console.log(provider);
+        res.send('Unverified User');
+      } else {         
         //check if auth token already exists in Redis 
         redis_client.exists('token_'+provider.body.custom_canvas_user_id, function(err, token_exists) {
           if (token_exists==0){
