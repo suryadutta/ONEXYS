@@ -21,8 +21,6 @@ router.use('/', function (req, res, next) {
 
   if (auth.provider.admin) {
     if (req.query.masquerade) {
-      console.log("Masquerade as User:");
-      console.log(req.query.masquerade);
       queries.homepageQuery(parseInt(req.query.masquerade), courseID, function (module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids) {
         res.render('home', {
           title: 'Home | ONEXYS',
@@ -31,10 +29,7 @@ router.use('/', function (req, res, next) {
           score: score,
           awarded_badge_ids: awarded_badge_ids,
           leaderboard: leaderboard,
-          my_team: my_team ? my_team : {
-            Name: "dd655",
-            Score: 0
-          },
+          my_team: my_team,
           home_updates: home_updates,
           home_vids: home_vids,
           admin: auth.provider.admin,
@@ -42,7 +37,11 @@ router.use('/', function (req, res, next) {
         });
       });
     } else {
-      queries.homepageAdminQuery(courseID, function (module_progress, leaderboard, home_updates, home_vids) {
+      queries.homepageAdminQuery(courseID, function (module_progress, leaderboard, home_updates, home_vids, student_names,student_ids) {
+        console.log('Names:')
+        console.log(student_names);
+        console.log('IDs:');
+        console.log(student_ids);
         res.render('home', {
           title: 'Home | ONEXYS',
           courseID: courseID,

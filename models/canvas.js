@@ -16,6 +16,10 @@ var sections_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/sections?include=students&per_page=100';
 }
 
+var student_url = (courseID) => {
+  return config.canvasURL + '/api/v1/courses/' + courseID + '/students?per_page=200'
+}
+
 function getRequest(url, callback) {
   auth.authTokenQueue.push('user',function(auth_token){
     request.get({
@@ -597,6 +601,18 @@ function getAdminLeaderboardScores(courseID, callback){
   }
 }
 
+function listStudents(courseID, callback){
+  getRequest(student_url(courseID),function(student_data){
+    if (student_data.length>0){
+      student_names = student_data.map(objects => objects.sortable_name)
+      student_ids = student_data.map(objects => objects.id)
+      callback(null,student_names,student_ids)
+    } else {
+      callback(null,[],[])
+    }
+  })
+}
+
 module.exports = {
   getRequest,
   postRequest,
@@ -607,4 +623,5 @@ module.exports = {
   getStudentProgress,
   getLeaderboardScores,
   getAdminLeaderboardScores,
+  listStudents,
 }
