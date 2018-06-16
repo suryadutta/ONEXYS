@@ -602,7 +602,14 @@ function getAdminLeaderboardScores(courseID, callback){
 }
 
 function getStudents(courseID, callback){
-  getRequest(student_url(courseID),callback);
+  getRequest(student_url(courseID),function(err,student_data){
+    var student_data_sorted = student_data.sort(function(a, b) {
+      var textA = a.sortable_name.toUpperCase();
+      var textB = b.sortable_name.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+    callback(err,student_data_sorted);
+  });
 }
 
 module.exports = {
