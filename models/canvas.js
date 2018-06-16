@@ -570,7 +570,7 @@ function getAdminLeaderboardScores(courseID, callback){
 
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2018 - Blue" ){ // Dev Testing
+        if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
           data.splice(i, 1);
         }
       }
