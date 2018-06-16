@@ -8,8 +8,17 @@ var assignment_user_url = (studentID, courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID + '&per_page=' + String(config.canvasPageResults);
 }
 
-var update_url = (studentID, courseID) => {
-  return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/' + studentID;
+var notes_column_url = (courseID) => {
+  return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/';
+}
+
+var update_url = (studentID, courseID) => {    
+  getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
+    points_id = custom_columns.find(column => column.title='Notes').id;
+    console.log('Points Id:')
+    console.log(points_id);
+    return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/' + studentID;
+  });
 }
 
 var sections_url = (courseID) => {
@@ -488,8 +497,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
       if (a.Score > b.Score) return -1;
       return 0;
     }
-    console.log(studentIndex)
-    console.log(mergeLeaderboardArrays(groupNames, scores).sort(compare))
+
     callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[parseInt(studentIndex)]);
   });
 
@@ -523,8 +531,8 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
   
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
-    var points_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/?per_page=100'
-    getAdminRequest(points_url, function(err, pointsInfo) {
+
+    getAdminRequest(update_url(studentID,courseID), function(err, pointsInfo) {
       function getPointValue(studentID) {
         try {
           return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);

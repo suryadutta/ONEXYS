@@ -10,7 +10,6 @@ config.redirectURL = process.env.REDIRECT_URL;
 
 config.canvasAdminAuthToken= process.env.CANVAS_ADMIN_AUTH_TOKEN;
 config.canvasPageResults = process.env.CANVAS_PAGE_RESULTS || "100";
-config.points_id = process.env.POINTS_ID || '190';
 
 config.redisURL = process.env.REDIS_URL || '';
 
