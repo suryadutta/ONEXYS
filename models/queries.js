@@ -74,10 +74,9 @@ function homepageAdminQuery(courseID, callback){
         leaderboard = data[1],
         home_updates = data[2][0],
         home_vids = data[2][1],
-        student_names = data[3][0],
-        student_ids = data[3][1];
+        students = data[3];
     
-    callback(module_progress, leaderboard, home_updates, home_vids, student_names,student_ids);
+    callback(module_progress, leaderboard, home_updates, home_vids, students);
   });
 }
 

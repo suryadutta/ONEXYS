@@ -601,13 +601,7 @@ function getAdminLeaderboardScores(courseID, callback){
   }
 }
 
-function listStudents(courseID, callback){
-  getRequest(student_url(courseID),function(err,student_data){
-    student_names = student_data.map(objects => objects.sortable_name)
-    student_ids = student_data.map(objects => objects.id)
-    callback(err,student_names,student_ids)
-  })
-}
+function getStudents(courseID, callback){getRequest(student_url(courseID),callback)}
 
 module.exports = {
   getRequest,
@@ -619,5 +613,5 @@ module.exports = {
   getStudentProgress,
   getLeaderboardScores,
   getAdminLeaderboardScores,
-  listStudents,
+  getStudents,
 }
