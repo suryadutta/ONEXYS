@@ -17,7 +17,7 @@ var sections_url = (courseID) => {
 }
 
 var student_url = (courseID) => {
-  return config.canvasURL + '/api/v1/courses/' + courseID + '/students?per_page=200'
+  return config.canvasURL + '/api/v1/courses/' + courseID + '/students?per_page=200';
 }
 
 function getRequest(url, callback) {
@@ -603,13 +603,10 @@ function getAdminLeaderboardScores(courseID, callback){
 
 function listStudents(courseID, callback){
   getRequest(student_url(courseID),function(student_data){
-    if (student_data.length>0){
-      student_names = student_data.map(objects => objects.sortable_name)
-      student_ids = student_data.map(objects => objects.id)
-      callback(null,student_names,student_ids)
-    } else {
-      callback(null,[],[])
-    }
+    console.log(student_data);
+    student_names = student_data.map(objects => objects.sortable_name)
+    student_ids = student_data.map(objects => objects.id)
+    callback(null,student_names,student_ids)
   })
 }
 
