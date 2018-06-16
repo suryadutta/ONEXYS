@@ -488,7 +488,9 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
       if (a.Score > b.Score) return -1;
       return 0;
     }
-    callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[studentIndex]);
+    console.log(studentIndex)
+    console.log(mergeLeaderboardArrays(groupNames, scores).sort(compare))
+    callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[parseInt(studentIndex)]);
   });
 
   function getSections(callback){
@@ -514,9 +516,6 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
         groupNames = data.map(section => section.name);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
         studentIndex = findIndexOfUser(studentIdsArrays);
-        console.log(studentIdsArrays)
-        console.log(groupNames)
-        console.log(studentIndex)
         callback(null, studentIdsArrays, groupNames, studentIndex)
       }
     });
