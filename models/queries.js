@@ -64,7 +64,7 @@ function homepageAdminQuery(courseID, callback){
       mongo.getHomeContent(callback);
     },
     function(callback){
-      canvas.listStudents(couseID,callback);
+      canvas.listStudents(courseID,callback);
     }
   ],
   
