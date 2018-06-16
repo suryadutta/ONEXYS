@@ -20,9 +20,9 @@ router.use('/', function (req, res, next) {
   console.log(courseID);
 
   if (auth.provider.admin) {
-    console.log(req.query);
     if (req.query.masquerade) {
       queries.homepageQuery(parseInt(req.query.masquerade), courseID, function (module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids) {
+        console.log(module_progress);
         res.render('home', {
           title: 'Home | ONEXYS',
           courseID: courseID,

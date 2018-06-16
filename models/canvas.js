@@ -504,17 +504,19 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2017 - Blue" ){ // Dev Testing
+        if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
           data.splice(i, 1);
         }
       }
-
       if (data.length<1){
         callback(null,[],[],0);
       } else {
         groupNames = data.map(section => section.name);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
         studentIndex = findIndexOfUser(studentIdsArrays);
+        console.log(studentIdsArrays)
+        console.log(groupNames)
+        console.log(studentIndex)
         callback(null, studentIdsArrays, groupNames, studentIndex)
       }
     });
