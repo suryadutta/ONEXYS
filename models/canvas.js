@@ -570,7 +570,7 @@ function getAdminLeaderboardScores(courseID, callback){
 
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2017 - Blue" ){ // Dev Testing
+        if(data[i].name==auth.provider.context_title || data[i].name=="ONEXYS 2018 - Blue" ){ // Dev Testing
           data.splice(i, 1);
         }
       }
@@ -603,7 +603,6 @@ function getAdminLeaderboardScores(courseID, callback){
 
 function listStudents(courseID, callback){
   getRequest(student_url(courseID),function(err,student_data){
-    console.log(student_data);
     student_names = student_data.map(objects => objects.sortable_name)
     student_ids = student_data.map(objects => objects.id)
     callback(err,student_names,student_ids)
