@@ -601,7 +601,9 @@ function getAdminLeaderboardScores(courseID, callback){
   }
 }
 
-function getStudents(courseID, callback){getRequest(student_url(courseID),callback)}
+function getStudents(courseID, callback){
+  getRequest(student_url(courseID),callback);
+}
 
 module.exports = {
   getRequest,
