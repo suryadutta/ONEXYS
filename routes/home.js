@@ -10,7 +10,7 @@ router.use('/', function (req, res, next) {
   var userID = auth.provider.body.custom_canvas_user_id;
 
   if (courseID == 10184) {
-    courseID = 9659;
+    courseID = 38082;
   }
 
   console.log('User ID: ');

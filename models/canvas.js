@@ -602,11 +602,11 @@ function getAdminLeaderboardScores(courseID, callback){
 }
 
 function listStudents(courseID, callback){
-  getRequest(student_url(courseID),function(student_data){
+  getRequest(student_url(courseID),function(err,student_data){
     console.log(student_data);
     student_names = student_data.map(objects => objects.sortable_name)
     student_ids = student_data.map(objects => objects.id)
-    callback(null,student_names,student_ids)
+    callback(err,student_names,student_ids)
   })
 }
 
