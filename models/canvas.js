@@ -596,7 +596,7 @@ function getAdminLeaderboardScores(courseID, callback){
       }
     });
   }
-  
+
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
     get_update_url(courseID, function(update_url){
       getAdminRequest(update_url, function(err, pointsInfo) {
@@ -608,7 +608,7 @@ function getAdminLeaderboardScores(courseID, callback){
           }
         }
         var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-        callback2(null, studentPoints, groupNames, studentIndex);
+        callback2(null, studentPoints, groupNames);
       });
     })
   }
