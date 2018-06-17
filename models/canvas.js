@@ -597,7 +597,7 @@ function getAdminLeaderboardScores(courseID, callback){
     });
   }
 
-  function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
+  function getTotalScores(studentIdsArrays, groupNames, callback2) {
     get_update_url(courseID, function(update_url){
       getAdminRequest(update_url, function(err, pointsInfo) {
         function getPointValue(studentID) {
