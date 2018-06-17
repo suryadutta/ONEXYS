@@ -18,7 +18,9 @@ var get_update_url = (studentID, courseID, callback) => {
     var points_id = custom_columns.find(column => column.title='Notes').id;
     console.log('Points Id:')
     console.log(points_id);
-    callback(config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/' + studentID);
+    var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/' + studentID;
+    console.log(update_url);
+    callback(update_url);
   });
 }
 
