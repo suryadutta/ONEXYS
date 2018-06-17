@@ -12,14 +12,10 @@ var notes_column_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/';
 }
 
-var get_update_url = (studentID, courseID, callback) => {    
+var get_update_url = (courseID, callback) => {    
   getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
-    console.log(custom_columns)
     var points_id = custom_columns.find(column => column.title='Notes').id;
-    console.log('Points Id:')
-    console.log(points_id);
-    var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/' + studentID;
-    console.log(update_url);
+    var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/';
     callback(update_url);
   });
 }
@@ -414,7 +410,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 }
 
 function updateCanvas(studentID, courseID, totalPoints, badges, callback) { // Update Canvas custom points column
-  get_update_url(studentID, courseID, function(update_url){
+  get_update_url(courseID, function(update_url){
+    update_url = update_url + '/' + studentID;
     putAdminRequest(update_url, {
       column_data: {
         content: totalPoints.toString()
@@ -536,7 +533,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
   
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
-    get_update_url(studentID, courseID, function(update_url){
+    get_update_url(courseID, function(update_url){
       getAdminRequest(update_url, function(err, pointsInfo) {
         function getPointValue(studentID) {
           try {
