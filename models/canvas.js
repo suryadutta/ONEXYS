@@ -597,19 +597,20 @@ function getAdminLeaderboardScores(courseID, callback){
     });
   }
   
-  function getTotalScores(studentIdsArrays, groupNames, callback2) {
-    var points_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + config.points_id + '/data/?per_page=100'
-    getAdminRequest(points_url, function(err, pointsInfo) {
-      function getPointValue(studentID) {
-        try {
-          return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);
-        } catch (e) {
-          return 0;
+  function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
+    get_update_url(courseID, function(update_url){
+      getAdminRequest(update_url, function(err, pointsInfo) {
+        function getPointValue(studentID) {
+          try {
+            return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);
+          } catch (e) {
+            return 0;
+          }
         }
-      }
-      var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-      callback2(null, studentPoints, groupNames);
-    });
+        var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+        callback2(null, studentPoints, groupNames, studentIndex);
+      });
+    })
   }
 }
 

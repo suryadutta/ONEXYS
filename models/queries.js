@@ -6,7 +6,7 @@ var mongo = require('./mongo');
 
 function homepageQuery(studentID,courseID,callback){
 
-  asyncStuff.series([
+  asyncStuff.parallel([
     function(callback) {
       canvas.getStudentProgress(studentID, courseID, callback);
     },
