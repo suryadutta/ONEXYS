@@ -12,13 +12,13 @@ var notes_column_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/';
 }
 
-var update_url = (studentID, courseID) => {    
+var get_update_url = (studentID, courseID, callback) => {    
   getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
     console.log(custom_columns)
     var points_id = custom_columns.find(column => column.title='Notes').id;
     console.log('Points Id:')
     console.log(points_id);
-    return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/' + studentID;
+    callback(config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/' + studentID);
   });
 }
 
@@ -412,12 +412,14 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 }
 
 function updateCanvas(studentID, courseID, totalPoints, badges, callback) { // Update Canvas custom points column
-  putAdminRequest(update_url(studentID, courseID), {
-    column_data: {
-      content: totalPoints.toString()
-    }
-  }, function(err, body) {
-    callback(null, totalPoints, badges);
+  get_update_url(studentID, courseID, function(update_url){
+    putAdminRequest(update_url, {
+      column_data: {
+        content: totalPoints.toString()
+      }
+    }, function(err, body) {
+      callback(null, totalPoints, badges);
+    });
   });
 }
 
@@ -532,18 +534,19 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
   
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
-
-    getAdminRequest(update_url(studentID,courseID), function(err, pointsInfo) {
-      function getPointValue(studentID) {
-        try {
-          return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);
-        } catch (e) {
-          return 0;
+    get_update_url(studentID, courseID, function(update_url){
+      getAdminRequest(update_url, function(err, pointsInfo) {
+        function getPointValue(studentID) {
+          try {
+            return parseInt((pointsInfo.find(studentInfo => studentInfo.user_id == studentID)).content);
+          } catch (e) {
+            return 0;
+          }
         }
-      }
-      var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-      callback2(null, studentPoints, groupNames, studentIndex);
-    });
+        var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+        callback2(null, studentPoints, groupNames, studentIndex);
+      });
+    })
   }
 }
 
