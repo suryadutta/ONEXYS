@@ -112,7 +112,7 @@ block content
           //- br
           //- .clear
 
-          if module.button_background_image
+          if module.button_background_image != ''
             div(class='module_'+(index+1)+' '+module.button_background_image)
 
             if module.open == 'true'
@@ -142,7 +142,7 @@ block content
               div(class='onexys_checkbox quiz_checkbox completed')
             else
               div(class='onexys_checkbox quiz_checkbox')
-              
+
           else
             div(class='module_'+(index+1)+' module_background_'+(index+1))
 
