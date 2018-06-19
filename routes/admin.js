@@ -2,65 +2,65 @@ const router = require("express").Router();
 const mongo = require("../models/mongo");
 
 //generate ID for new video entries
-function makeid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  for (var i = 0; i < 16; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
+const makeid = () => {
+  const POSSIBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const TEXTLENGTH = 16;
+  let text = "";
+  let i = 0;
+  while (i < TEXTLENGTH) {
+    text += possible.charAt(Math.floor(Math.random() * POSSIBLE.length));
+  }
   return text;
-}
+};
 
 /* GET home page. */
-router.get("/", function(req, res, next) {
+router.get("/", (req, res, next) => {
   res.render("admin", { title: "Express" });
 });
 
 /* POST home page. */
-router.post("/", function(req, res, next) {
+router.post("/", (req, res, next) => {
   res.render("admin", { title: "Express" });
 });
 
 //Get Home Page Updates
-router.get("/home", function(req, res, next) {
-  mongo.getHomeContent(function(err, home_updates, home_vids) {
+router.get("/home", (req, res, next) => {
+  mongo.getHomeContent((err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      home_updates: home_updates,
-      home_vids: home_vids
+      home_updates,
+      home_vids
     });
   });
 });
 
 //Get Home Page Updates
-router.post("/home", function(req, res, next) {
-  mongo.updateData("home", { type: "updates" }, req.body, function(
-    err,
-    result
-  ) {
+router.post("/home", (req, res, next) => {
+  mongo.updateData("home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
 });
 
 //add home video
-router.get("/home/videos/add", function(req, res, next) {
+router.get("/home/videos/add", (req, res, next) => {
   res.render("admin/homeVidAdd", {
     title: "Add Home Video"
   });
 });
 
 //add home video
-router.post("/home/videos/add", function(req, res, next) {
+router.post("/home/videos/add", (req, res, next) => {
   vidData = req.body;
   vidData._id = makeid();
   vidData.type = "video";
-  mongo.insertData("home", vidData, function(err, result) {
+  mongo.insertData("home", vidData, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //edit home video
-router.get("/home/videos/edit/:id", function(req, res, next) {
-  mongo.getHomeContent(function(err, home_updates, home_vids) {
+router.get("/home/videos/edit/:id", (req, res, next) => {
+  mongo.getHomeContent((err, home_updates, home_vids) => {
     home_vid = home_vids.find(video => video._id == req.params.id);
     if (home_vid) {
       res.render("admin/homeVidEdit", {
@@ -74,25 +74,22 @@ router.get("/home/videos/edit/:id", function(req, res, next) {
 });
 
 //POST handler to edit home video
-router.post("/home/videos/edit/:id", function(req, res, next) {
-  mongo.updateData("home", { _id: req.params.id }, req.body, function(
-    err,
-    result
-  ) {
+router.post("/home/videos/edit/:id", (req, res, next) => {
+  mongo.updateData("home", { _id: req.params.id }, req.body, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //delete home video
-router.post("/home/videos/delete/:id", function(req, res, next) {
-  mongo.deleteData("home", { _id: req.params.id }, function(err, result) {
+router.post("/home/videos/delete/:id", (req, res, next) => {
+  mongo.deleteData("home", { _id: req.params.id }, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //Get Modules Home Page (Table of all modules + edit buttons)
-router.get("/modules", function(req, res, next) {
-  mongo.getData("modules", function(err, modulesInfo) {
+router.get("/modules", (req, res, next) => {
+  mongo.getData("modules", (err, modulesInfo) => {
     res.render("admin/modules", {
       title: "Modules",
       modules: modulesInfo
@@ -101,8 +98,8 @@ router.get("/modules", function(req, res, next) {
 });
 
 //Get Page to Edit Module Content
-router.get("/modules/:id/edit", function(req, res, next) {
-  mongo.getModule(req.params.id, function(err, moduleInfo) {
+router.get("/modules/:id/edit", (req, res, next) => {
+  mongo.getModule(req.params.id, (err, moduleInfo) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
       module: moduleInfo
@@ -111,29 +108,29 @@ router.get("/modules/:id/edit", function(req, res, next) {
 });
 
 //POST handler for Module Edits
-router.post("/modules/:id/edit", function(req, res, next) {
+router.post("/modules/:id/edit", (req, res, next) => {
   mongo.updateData(
     "modules",
     { _id: parseInt(req.params.id) },
     req.body,
-    function(err, result) {
+    (err, result) => {
       res.redirect("/admin/modules");
     }
   );
 });
 
 //GET page to add video to module
-router.get("/modules/:id/videos/add", function(req, res) {
+router.get("/modules/:id/videos/add", (req, res, next) => {
   res.render("admin/moduleVideoAdd", {
     moduleID: req.params.id
   });
 });
 
 //POST handler to add video to module
-router.post("/modules/:id/videos/add", function(req, res) {
+router.post("/modules/:id/videos/add", (req, res, next) => {
   vidObject = req.body;
   vidObject._id = makeid();
-  mongo.getModule(req.params.id, function(err, moduleInfo) {
+  mongo.getModule(req.params.id, (err, moduleInfo) => {
     //set position of new video to 1+(POSITION OF LAST VIDEO)
     vidObject.position =
       moduleInfo.videos[moduleInfo.videos.length - 1].position + 1;
@@ -142,7 +139,7 @@ router.post("/modules/:id/videos/add", function(req, res) {
       "modules",
       { _id: parseInt(req.params.id) },
       moduleInfo,
-      function(err, result) {
+      (err, result) => {
         res.redirect("/admin/modules/" + req.params.id + "/edit");
       }
     );
@@ -150,8 +147,8 @@ router.post("/modules/:id/videos/add", function(req, res) {
 });
 
 //GET page to edit video from module
-router.get("/modules/:module_id/videos/edit/:video_id", function(req, res) {
-  mongo.getModule(req.params.module_id, function(err, moduleInfo) {
+router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
+  mongo.getModule(req.params.module_id, (err, moduleInfo) => {
     vidObject = moduleInfo.videos.find(
       video => video._id == req.params.video_id
     );
@@ -164,8 +161,8 @@ router.get("/modules/:module_id/videos/edit/:video_id", function(req, res) {
 });
 
 //POST handler to edit video from module
-router.post("/modules/:module_id/videos/edit/:video_id", function(req, res) {
-  mongo.getModule(req.params.module_id, function(err, moduleInfo) {
+router.post("/modules/:module_id/videos/edit/:video_id", (req, res) => {
+  mongo.getModule(req.params.module_id, (err, moduleInfo) => {
     vid_index = moduleInfo.videos.findIndex(
       video => video._id == req.params.video_id
     );
@@ -177,7 +174,7 @@ router.post("/modules/:module_id/videos/edit/:video_id", function(req, res) {
       "modules",
       { _id: parseInt(req.params.module_id) },
       moduleInfo,
-      function(err, result) {
+      (err, result) => {
         res.redirect("/admin/modules/" + req.params.module_id + "/edit");
       }
     );
@@ -185,8 +182,8 @@ router.post("/modules/:module_id/videos/edit/:video_id", function(req, res) {
 });
 
 //POST handler to delete video from module
-router.post("/modules/:module_id/videos/delete/:video_id", function(req, res) {
-  mongo.getModule(req.params.module_id, function(err, moduleInfo) {
+router.post("/modules/:module_id/videos/delete/:video_id", (req, res) => {
+  mongo.getModule(req.params.module_id, (err, moduleInfo) => {
     vid_index = moduleInfo.videos.findIndex(
       video => video._id == req.params.video_id
     );
@@ -197,15 +194,15 @@ router.post("/modules/:module_id/videos/delete/:video_id", function(req, res) {
       "modules",
       { _id: parseInt(req.params.module_id) },
       moduleInfo,
-      function(err, result) {
+      (err, result) => {
         res.redirect("/admin/modules/" + req.params.module_id + "/edit");
       }
     );
   });
 });
 
-router.get("/badges", function(req, res, next) {
-  mongo.getData("badges", function(err, badges_data) {
+router.get("/badges", (req, res, next) => {
+  mongo.getData("badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
       badges: badges_data
@@ -213,8 +210,8 @@ router.get("/badges", function(req, res, next) {
   });
 });
 
-router.get("/badges/edit/:id", function(req, res, next) {
-  mongo.getData("badges", function(err, badges_data) {
+router.get("/badges/edit/:id", (req, res, next) => {
+  mongo.getData("badges", (err, badges_data) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
     res.render("admin/badgeEdit", {
       title: "Badges",
@@ -223,7 +220,7 @@ router.get("/badges/edit/:id", function(req, res, next) {
   });
 });
 
-router.post("/badges/edit/:id", function(req, res, next) {
+router.post("/badges/edit/:id", (req, res, next) => {
   //update badges info
   mongo.updateData(
     "badges",
@@ -235,14 +232,14 @@ router.post("/badges/edit/:id", function(req, res, next) {
       Portrait: req.body.portrait,
       PortraitDescription: req.body.portraitdescription
     },
-    function(err, result) {
+    (err, result) => {
       res.redirect("/admin/badges");
     }
   );
 });
 
-router.get("/lucky", function(req, res, next) {
-  mongo.getData("lucky_bulldogs", function(err, lucky_data) {
+router.get("/lucky", (req, res, next) => {
+  mongo.getData("lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
       lucky_data: lucky_data
@@ -250,8 +247,8 @@ router.get("/lucky", function(req, res, next) {
   });
 });
 
-router.get("/lucky/edit/:id", function(req, res, next) {
-  mongo.getData("lucky_bulldogs", function(err, lucky_data) {
+router.get("/lucky/edit/:id", (req, res, next) => {
+  mongo.getData("lucky_bulldogs", (err, lucky_data) => {
     lucky_bulldog = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
       title: "Lucky Bulldog",
@@ -260,34 +257,35 @@ router.get("/lucky/edit/:id", function(req, res, next) {
   });
 });
 
-router.post("/lucky/edit/:id", function(req, res, next) {
+router.post("/lucky/edit/:id", (req, res, next) => {
   mongo.updateData(
     "lucky_bulldogs",
     { _id: parseInt(req.params.id) },
     { time: req.body.date_time },
-    function(err, result) {
+    (err, result) => {
       res.redirect("/admin/lucky");
     }
   );
 });
 
-router.post("/lucky/delete/:id", function(req, res, next) {
-  mongo.deleteData("lucky_bulldogs", { _id: parseInt(req.params.id) }, function(
-    err,
-    result
-  ) {
-    res.redirect("/admin/lucky");
-  });
+router.post("/lucky/delete/:id", (req, res, next) => {
+  mongo.deleteData(
+    "lucky_bulldogs",
+    { _id: parseInt(req.params.id) },
+    (err, result) => {
+      res.redirect("/admin/lucky");
+    }
+  );
 });
 
-router.get("/lucky/add", function(req, res, next) {
+router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
     title: "Lucky Bulldog"
   });
 });
 
-router.post("/lucky/add", function(req, res, next) {
-  mongo.getData("lucky_bulldogs", function(err, lucky_data) {
+router.post("/lucky/add", (req, res, next) => {
+  mongo.getData("lucky_bulldogs", (err, lucky_data) => {
     if (lucky_data.length > 0) {
       new_id = Math.max(lucky_data.map(data => data._id)) + 1;
     } else {
@@ -300,7 +298,7 @@ router.post("/lucky/add", function(req, res, next) {
         time: req.body.date_time,
         awarded_ids: []
       },
-      function(err, result) {
+      (err, result) => {
         res.redirect("/admin/lucky");
       }
     );
