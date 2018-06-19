@@ -80,9 +80,9 @@ block content
         each module, index in module_progress
 
           //- div(class='module_'+(index+1)+' module_background_'+(index+1))
-          //- if module.button_background_image != ''
-          //-   div(class='module_'+(index+1)+' '+module.button_background_image)
-          //- else
+          if module.button_background_image != ''
+          div(class='module_'+(index+1)+' '+module.button_background_image)
+          else
           div(class='module_'+(index+1)+' module_background_'+(index+1))
 
             if module.open == 'true'
