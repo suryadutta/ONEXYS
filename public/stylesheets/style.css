@@ -597,9 +597,9 @@
 .module_background_17 .progress_box.completed { background-image: url('https://onexys.herokuapp.com/images/progress_bar/saybrook_1.png'); }
 .module_background_18 .progress_box.completed { background-image: url('https://onexys.herokuapp.com/images/progress_bar/yuag_1.png'); }
 
-.battel               .progress_box  { background-image: url('https://onexys.herokuapp.com/images/progress_bar/battell_2.png'); }
-.battel               .progress_box.available  { background-image: url('https://onexys.herokuapp.com/images/progress_bar/battell_0.png'); }
-.battel               .progress_box.completed  { background-image: url('https://onexys.herokuapp.com/images/progress_bar/battell_1.png'); }
+.button_background_battel               .progress_box  { background-image: url('https://onexys.herokuapp.com/images/progress_bar/battell_2.png'); }
+.button_background_battel               .progress_box.available  { background-image: url('https://onexys.herokuapp.com/images/progress_bar/battell_0.png'); }
+.button_background_battel               .progress_box.completed  { background-image: url('https://onexys.herokuapp.com/images/progress_bar/battell_1.png'); }
 
 
 /****
