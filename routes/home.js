@@ -4,7 +4,7 @@ const config = require('../bin/config');
 const auth = require('../bin/auth')
 const queries = require('../models/queries')
 
-router.use('/', function (req, res, next) {
+router.use('/', (req, res, next) => {
 
   const courseID = auth.provider.body.custom_canvas_course_id;
   const userID = auth.provider.body.custom_canvas_user_id;
@@ -13,9 +13,7 @@ router.use('/', function (req, res, next) {
     courseID = 38082;
   }
 
-  console.log('User ID: ', userID);
-
-  console.log('Course ID: ', courseID);
+  console.log('User ID: ', userID, '  Course ID: ', courseID);
 
   if (auth.provider.admin) {
     if (req.query.masquerade) {
