@@ -117,6 +117,7 @@ router.get('/modules/:id/edit', function (req, res, next) {
 
 //POST handler for Module Edits
 router.post('/modules/:id/edit', function (req, res, next) {
+  console.log("router.post /modules/:id/edit req.body", req.body);
   mongo.updateData('modules', { _id: parseInt(req.params.id) }, req.body,
     function (err, result) {
       res.redirect('/admin/modules');
@@ -238,7 +239,7 @@ router.get('/lucky/edit/:id', function (req, res, next) {
 })
 
 router.post('/lucky/edit/:id', function (req, res, next) {
-  mongo.updateData('lucky_bulldogs',{ _id: parseInt(req.params.id) },{time: req.body.date_time}, function(err,result){
+  mongo.updateData('lucky_bulldogs', { _id: parseInt(req.params.id) }, { time: req.body.date_time }, function (err, result) {
     res.redirect('/admin/lucky');
   });
 })
@@ -256,17 +257,17 @@ router.get('/lucky/add', function (req, res, next) {
 })
 
 router.post('/lucky/add', function (req, res, next) {
-  mongo.getData('lucky_bulldogs', function(err, lucky_data){
-    if (lucky_data.length>0){
-      new_id = Math.max(lucky_data.map(data => data._id))+1;
-    } else{
-      new_id=1;
+  mongo.getData('lucky_bulldogs', function (err, lucky_data) {
+    if (lucky_data.length > 0) {
+      new_id = Math.max(lucky_data.map(data => data._id)) + 1;
+    } else {
+      new_id = 1;
     }
     mongo.insertData('lucky_bulldogs', {
       _id: new_id,
       time: req.body.date_time,
       awarded_ids: [],
-    }, function(err,result){
+    }, function (err, result) {
       res.redirect('/admin/lucky');
     })
   })
