@@ -79,8 +79,8 @@ block content
 
         each module, index in module_progress
         
-          div(class='module_'+(index+1)+' module_background_'+(index+1))
-
+          //- div(class='module_'+(index+1)+' module_background_'+(index+1))
+          div(class='module_background_'+(index+1))
             if module.open == 'true'
               if module.practice_progress && module.quiz_progress
                 a.progress_box.completed(style='width: 187.5px !important;', href= '/modules/'+module._id)
