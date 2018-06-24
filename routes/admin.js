@@ -34,8 +34,9 @@ router.get("/home", (req, res, next) => {
   });
 });
 
-//Get Home Page Updates
+//Push Home Page Updates
 router.post("/home", (req, res, next) => {
+  console.log(req.body)
   mongo.updateData("home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
