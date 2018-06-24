@@ -20,7 +20,8 @@ block content
           p.entry_header!=home_updates.header3
           p.entry_text!=home_updates.text3
       
-    button.btn.btn-primary(href='/admin/home') Save Changes
+  form(method='get', action='/admin/home')
+    button(type='submit') Back to Edits
 
   form(method='POST' action='/admin/home/confirmUpdates')
 
