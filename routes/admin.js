@@ -109,6 +109,7 @@ router.get("/modules/:id/edit", (req, res, next) => {
 
 //POST handler for Module Edits
 router.post("/modules/:id/edit", (req, res, next) => {
+  console.log("Updating Module Edits ", req.body);
   mongo.updateData(
     "modules",
     { _id: parseInt(req.params.id) },
