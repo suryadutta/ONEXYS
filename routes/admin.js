@@ -42,7 +42,7 @@ router.post("/home", (req, res, next) => {
   })
 });
 
-router.post("/home/confirm", (req, res, next) => {
+router.post("/home/confirmUpdates", (req, res, next) => {
   console.log(req.body)
   mongo.updateData("home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");

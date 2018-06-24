@@ -19,8 +19,10 @@ block content
         .entry.clear
           p.entry_header!=home_updates.header3
           p.entry_text!=home_updates.text3
+      
+    button.btn.btn-primary(href='/admin/home') Save Changes
 
-  form(method='POST' action='/confirm')
+  form(method='POST' action='/admin/home/confirmUpdates')
 
     input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
     input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
