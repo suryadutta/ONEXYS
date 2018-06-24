@@ -1,0 +1,63 @@
+extends layout
+
+block content
+  
+  h1 Do you want to submit these changes?
+
+  .user_content(style='margin-top: 0px !important;')
+  .onexys_styling.o_hompage        
+    .left(style='width: 500px !important; margin-top: -10px;')
+      #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+        h2 Updates
+        .entry.clear
+          p.entry_header
+            strong!=home_updates.main_header
+          p.entry_text!=home_updates.main_text
+        .entry.clear
+          p.entry_header!=home_updates.header2
+          p.entry_text!=home_updates.text2
+        .entry.clear
+          p.entry_header!=home_updates.header3
+          p.entry_text!=home_updates.text3
+
+  form(method='POST' action='/confirm')
+
+        div.form-group
+        label(for='main_header') Main Header: 
+        input#main_header.form-control(type='text', value=home_updates.main_header, name='main_header', type='hidden')
+        br
+        br
+
+        div.form-group
+        label(for='main_text') Main Text: 
+        br
+        textarea#main_text.form-control(rows=3, name='main_text',style="width: 750px;", type='hidden')=home_updates.main_text
+        br
+        br
+
+        div.form-group
+        label(for='header2') Header 2: 
+        input#header2.form-control(type='text', value=home_updates.header2, name='header2', type='hidden')
+        br
+        br
+
+        div.form-group
+        label(for='text2') Text 2: 
+        br
+        textarea#text2.form-control(rows=3, name='text2',style="width: 750px;", type='hidden')=home_updates.text2
+        br
+        br
+
+        div.form-group
+        label(for='header3') Header 3: 
+        input#header3.form-control(type='text', value=home_updates.header3, name='header3', type='hidden')
+        br
+        br
+
+        div.form-group
+        label(for='text3') Text 3: 
+        br
+        textarea#text3.form-control(rows=3, name='text3',style="width: 750px;", type='hidden')=home_updates.text3
+        br
+        br
+        button.btn.btn-primary(type='submit') Save Changes

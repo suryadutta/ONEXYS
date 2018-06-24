@@ -37,6 +37,13 @@ router.get("/home", (req, res, next) => {
 //Push Home Page Updates
 router.post("/home", (req, res, next) => {
   console.log(req.body)
+  res.render('admin/homeConfirmUpdates', {
+    home_updates = req.body
+  })
+});
+
+router.post("/home/confirm", (req, res, next) => {
+  console.log(req.body)
   mongo.updateData("home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
