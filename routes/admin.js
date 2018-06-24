@@ -38,7 +38,7 @@ router.get("/home", (req, res, next) => {
 router.post("/home", (req, res, next) => {
   console.log(req.body)
   res.render('admin/homeConfirmUpdates', {
-    home_updates = req.body
+    home_updates: req.body
   })
 });
 
