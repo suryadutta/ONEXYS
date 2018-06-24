@@ -34,16 +34,25 @@ router.get("/home", (req, res, next) => {
   });
 });
 
-//Push Home Page Updates
+//Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
-  console.log(req.body)
+  mongo.getHomeContent((err, home_updates, home_vids) => {
+    res.render("admin/home", {
+      title: "home",
+      home_updates: req.body,
+      home_vids
+    });
+  });
+});
+
+//Push Home Page Updates
+router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
     home_updates: req.body
   })
 });
 
 router.post("/home/confirmUpdates", (req, res, next) => {
-  console.log(req.body)
   mongo.updateData("home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
