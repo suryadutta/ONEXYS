@@ -10,7 +10,7 @@ block content
 
     h1='Edit ONEXYS Module '+module._id
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+    form(method='POST' action='preview')
 
         div.form-group
         label(for='primary_title') Primary Title: 
@@ -90,7 +90,7 @@ block content
 
         div.form-group
         label(for='button_background_image') Button Background Image (e.g., button_background_battel, button_background_sterling): 
-        input#background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
+        input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
         br
         br
 
@@ -133,7 +133,7 @@ block content
         br
         br
 
-        button.btn.btn-primary(type='submit') Save Changes
+        button.btn.btn-primary(type='submit') Preview Changes
     br
     hr
     br

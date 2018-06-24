@@ -45,13 +45,14 @@ router.post("/home", (req, res, next) => {
   });
 });
 
-//Push Home Page Updates
+//Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
     home_updates: req.body
   })
 });
 
+//Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
   mongo.updateData("home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
@@ -124,8 +125,31 @@ router.get("/modules/:id/edit", (req, res, next) => {
   });
 });
 
-//POST handler for Module Edits
 router.post("/modules/:id/edit", (req, res, next) => {
+  var bodyInfo = req.body;
+  mongo.getModule(req.params.id, (err, moduleInfo) => {
+    merged_data = Object.assign(moduleInfo,bodyInfo)
+    res.render('admin/moduleEdit', {
+      title: "Edit Module",
+      module: merged_data,
+    });
+  });
+});
+
+//POST handler for Previewing Module Edits
+router.post("/modules/:id/preview", (req, res, next) => {
+  var bodyInfo = req.body;
+  mongo.getModule(req.params.id, (err, moduleInfo) => {
+    merged_data = Object.assign(moduleInfo,bodyInfo)
+    res.set('X-XSS-Protection', 0);
+    res.render('admin/moduleConfirmUpdate', {
+      data: merged_data,
+    });
+  });
+});
+
+//POST handler for Module Edits
+router.post("/modules/:id/confirmUpdates", (req, res, next) => {
   console.log("Updating Module Edits ", req.body);
   mongo.updateData(
     "modules",
