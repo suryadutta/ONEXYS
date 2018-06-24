@@ -54,7 +54,7 @@ html
           p Practice, practice, practice! We would like you to keep working until you reach 90% proficiency for this module in ALEKS.
           //- a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.practice_link, target="_blank")
             div.onexys_button Practice Now
-          if data.practice_id_bool
+          if data.practice_id_bool == 'false'
             a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.practice_link, target="_blank")
               div.onexys_button Practice Now
           else
