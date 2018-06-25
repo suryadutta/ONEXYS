@@ -98,6 +98,18 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
   });
 });
 
+router.post('/home/videos/preview/:id', (req,res,next) => {
+  console.log(req.body)
+  res.send('hi');
+});
+
+//POST handler to edit home video
+router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
+  mongo.updateData("home", { _id: req.params.id }, req.body, (err, result) => {
+    res.redirect("/admin/home");
+  });
+});
+
 //delete home video
 router.post("/home/videos/delete/:id", (req, res, next) => {
   mongo.deleteData("home", { _id: req.params.id }, (err, result) => {

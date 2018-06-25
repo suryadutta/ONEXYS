@@ -6,9 +6,9 @@ block content
     //script(type='text/javascript').
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 
-    h1='Edit Home Page Video'+video_id
+    h1='Edit Home Page Video '+video._id
 
-    form(method='POST' action='')
+    form(method='POST' action='home/videos/preview/'+video._id)
 
         div.form-group
         label(for='video_src') Video Source: 
@@ -23,4 +23,4 @@ block content
         br
         br
 
-        button.btn.btn-primary(type='submit') Save Changes
+        button.btn.btn-primary(type='submit') Preview Changes

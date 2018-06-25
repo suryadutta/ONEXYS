@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .user_content(style='margin-top: 10px !important;')
+  .onexys_styling.o_hompage
+    .left(style='width: 500px !important; margin-top: -10px;')
+      #featured.standard_home_box.left(style='width: 458px !important;')
+        h2 Life @ Yale Videos
+        p
+          a(href='https://yale.instructure.com/courses/9659/pages/final-life-at-yale-videos', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/pages/final-life-at-yale-videos', data-api-returntype='Page') Click here to see all Life at Yale videos
+        .onexys_video
+          a.colorbox(href=video.video_src)
+            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+        p
+          span(style='font-size: 12pt;')
+            strong!=video.video_desc
