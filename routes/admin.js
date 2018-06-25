@@ -147,8 +147,11 @@ router.get("/modules/:id/edit", (req, res, next) => {
 
 router.post("/modules/:id/edit", (req, res, next) => {
   var bodyInfo = req.body;
+  console.log(bodyInfo)
   mongo.getModule(req.params.id, (err, moduleInfo) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
+    console.log(moduleInfo);
+    console.log(merged_data);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
       module: merged_data,
@@ -161,6 +164,7 @@ router.post("/modules/:id/preview", (req, res, next) => {
   var bodyInfo = req.body;
   mongo.getModule(req.params.id, (err, moduleInfo) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
+    console.log(merged_data);
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
       data: merged_data,

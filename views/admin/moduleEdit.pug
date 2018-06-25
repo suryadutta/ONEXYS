@@ -31,19 +31,19 @@ block content
         br
 
         div.form-group
-        label(for='practice_link') Practice URL: 
-        input#practice_link.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
+        label(for='practice_url_redirect') Practice URL: 
+        input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
         br
         br
 
         div.form-group
         label Practice Assignment ID or Practice URL?
         br
-        label(for='open_true') Practice Assignment ID  
-        input#open_true.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
+        label(for='practice_id_bool') Practice Assignment ID  
+        input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
         br
         label(for='open_false') Practice URL  
-        input#open_false.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
+        input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
         br
         br
 
