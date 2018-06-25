@@ -1,13 +1,14 @@
-extends layout
+extends ../layout
 
 block content
+
+  h1 Do you want to submit these changes?
+
   .user_content(style='margin-top: 10px !important;')
   .onexys_styling.o_hompage
     .left(style='width: 500px !important; margin-top: -10px;')
       #featured.standard_home_box.left(style='width: 458px !important;')
         h2 Life @ Yale Videos
-        p
-          a(href='https://yale.instructure.com/courses/9659/pages/final-life-at-yale-videos', data-api-endpoint='https://yale.instructure.com/api/v1/courses/9659/pages/final-life-at-yale-videos', data-api-returntype='Page') Click here to see all Life at Yale videos
         .onexys_video
           a.colorbox(href=video.video_src)
             img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
@@ -15,3 +16,17 @@ block content
         p
           span(style='font-size: 12pt;')
             strong!=video.video_desc
+
+  form(method='POST', action='/admin/home/videos/edit/'+video_id)
+
+    input#video_src(type='hidden', value=video.video_src, name='video_src')
+    input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
+
+    button(type='submit') Back to Edits
+
+  form(method='POST' action='/admin/home/videos/confirmUpdates/'+video_id)
+
+    input#video_src(type='hidden', value=video.video_src, name='video_src')
+    input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
+
+    button(type='submit') Submit Changes

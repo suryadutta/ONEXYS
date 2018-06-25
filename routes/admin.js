@@ -93,17 +93,25 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
 
 //POST handler to edit home video
 router.post("/home/videos/edit/:id", (req, res, next) => {
-  mongo.updateData("home", { _id: req.params.id }, req.body, (err, result) => {
-    res.redirect("/admin/home");
+  home_vid = req.body
+  home_vid._id = req.params.id 
+  res.render("admin/homeVidEdit", {
+    title: "Edit Home Video",
+    video: home_vid
   });
 });
 
+//POST handler to preview video changes
 router.post('/home/videos/preview/:id', (req,res,next) => {
   console.log(req.body)
-  res.send('hi');
+  res.render("admin/homeConfirmVideos", {
+    title: "Edit Home Video",
+    video: req.body,
+    video_id: req.params.id
+  });
 });
 
-//POST handler to edit home video
+//POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
   mongo.updateData("home", { _id: req.params.id }, req.body, (err, result) => {
     res.redirect("/admin/home");
