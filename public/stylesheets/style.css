@@ -1599,7 +1599,16 @@
 }
 
 
+/*
 
+Admin Portal
+
+*/
+
+textarea .form-control{
+	resize: both;
+	overflow: auto;
+}
 
 
 /*
