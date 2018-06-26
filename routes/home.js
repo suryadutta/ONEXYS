@@ -39,6 +39,7 @@ router.use('/', (req, res, next) => {
             my_team,
             home_updates,
             home_vids,
+            home_links,
             admin: auth.provider.admin,
             masquerade: true,
           });

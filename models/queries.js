@@ -29,7 +29,8 @@ function homepageQuery(studentID,courseID,callback){
         leaderboard = data[2][0],
         my_team = data[2][1],
         home_updates = data[3][0],
-        home_vids = data[3][1];
+        home_vids = data[3][1],
+        home_links = data[3][2];
 
     function orderBadges(a,b) {
       if (a.Points < b.Points)
@@ -45,7 +46,7 @@ function homepageQuery(studentID,courseID,callback){
       awarded_badge_ids = awarded_badge_ids.slice(0,3);
     }
     
-    callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids);
+    callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids, home_links);
   });
 }
 
@@ -74,9 +75,10 @@ function homepageAdminQuery(courseID, callback){
         leaderboard = data[1],
         home_updates = data[2][0],
         home_vids = data[2][1],
+        home_links = data[2][2],
         students = data[3];
     
-    callback(module_progress, leaderboard, home_updates, home_vids, students);
+    callback(module_progress, leaderboard, home_updates, home_vids, home_links, students);
   });
 }
 
