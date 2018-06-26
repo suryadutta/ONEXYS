@@ -29,7 +29,7 @@
 
 	min-width: 900px;
 	max-width: 900px;
-}	
+}
 .onexys_styling a {
 	color: rgb(37, 63, 142);
 	text-decoration: none;
@@ -70,7 +70,7 @@
 
 .onexys_button {
 	display: inline-block;
-	padding: 10px 20px; 
+	padding: 10px 20px;
 
 	background-color: rgb(34, 92, 203);
 	border: 2px solid rgb(198, 234, 250);
@@ -160,7 +160,7 @@
 #progress a{
 	display: inline-block;
   vertical-align: middle;
-  line-height: normal; 
+  line-height: normal;
 }
 #progress h2{
 	margin-top: 2px !important;
@@ -181,18 +181,18 @@
 	border-radius: 5px;
 
 	background-size: cover;
-	
+
 	/*filter: grayscale(90%);
 	-webkit-filter: grayscale(90%);
 	background-color: #bbb;*/
-	
+
 	/* http://codepen.io/anon/pen/lbfeC */
 
 	/*
-	background: 
+	background:
     /* top, transparent red, faked with gradient /
     linear-gradient(
-      rgba(255, 0, 0, 0.45), 
+      rgba(255, 0, 0, 0.45),
       rgba(255, 0, 0, 0.45)
     ),
     /* bottom, image /
@@ -231,7 +231,7 @@
 	color: white;
 	display: inline-block;
   vertical-align: middle;
-  line-height: normal; 
+  line-height: normal;
 	float: left;
 	margin-left: 6px;
 	margin-right: 5px;
@@ -255,16 +255,16 @@
 }
 
 .aleks_checkbox {
-	background-image: url('https://onexys.me/2016images/checkmarks/check_blue_no.png'); 
+	background-image: url('https://onexys.me/2016images/checkmarks/check_blue_no.png');
 }
 .aleks_checkbox.completed{
-	background-image: url('https://onexys.me/2016images/checkmarks/check_blue_yes.png'); 
+	background-image: url('https://onexys.me/2016images/checkmarks/check_blue_yes.png');
 }
 .quiz_checkbox {
-	background-image: url('https://onexys.me/2016images/checkmarks/check_white_no.png'); 
+	background-image: url('https://onexys.me/2016images/checkmarks/check_white_no.png');
 }
 .quiz_checkbox.completed{
-	background-image: url('https://onexys.me/2016images/checkmarks/check_white_yes.png'); 
+	background-image: url('https://onexys.me/2016images/checkmarks/check_white_yes.png');
 }
 
 #points {
@@ -295,7 +295,7 @@
 	box-sizing: border-box;
 	font-size: 50px;
 	letter-spacing: -1.5px;
-	font-weight: bold; 
+	font-weight: bold;
 	color: rgb(254, 202, 10);
 	margin-top: 18.0px;
 	text-align: center;
@@ -335,7 +335,7 @@
 	font-weight: bold;
 	color: white;
 	background-color: rgb(34, 92, 203);
-	border-radius: 0px 8px 0px 0px; 
+	border-radius: 0px 8px 0px 0px;
 	cursor: pointer;
 }
 
@@ -394,7 +394,7 @@
   margin-top: -8px;
   margin-left: 1px !important;
   margin-right: 1px !important;
-  
+
   border-collapse: collapse;
   text-align: center;
   color: rgb(34, 92, 203);
@@ -406,17 +406,17 @@
   border-radius: 5px;
 }
 #leaderboard tbody:hover tr:hover td {
-  background: rgb(213, 224, 230); 
+  background: rgb(213, 224, 230);
 }
 #leaderboard th {
   padding-left: 18px;
-  
+
 
   font-weight: normal;
 }
 #leaderboard td {
   padding-left: 18px;
-  
+
 }
 #leaderboard thead th:nth-of-type(1) {
   width: 50px;
@@ -429,7 +429,7 @@
   border-right: none !important;
 }
 #leaderboard tr:nth-child(odd) td {
-  background: rgb(233, 244, 250);  
+  background: rgb(233, 244, 250);
 }
 
 #recent_badges {
@@ -458,7 +458,7 @@
 	height: 90px;
 
 	border: 2px solid rgb(254, 202, 10);
-	border-radius: 5px; 
+	border-radius: 5px;
 }
 
 #updates {
@@ -481,12 +481,12 @@
 	width: 260px;
 	padding-left: 5px;
 	padding-right: 7px;
-	padding-bottom:0px; 
+	padding-bottom:0px;
 }
 #featured p{
-	
+
 	padding-left: 5px;
-	margin-top: -5px; 
+	margin-top: -5px;
 }
 #featured h2{
 	padding-left: 8px;
@@ -858,7 +858,7 @@
 	margin-left: -8px;
 	padding: 0;
 	letter-spacing: -1px;
-	font-weight: bold; 
+	font-weight: bold;
 	color: rgb(254, 202, 10);
 	text-transform: none;
 	line-height: 65px;
@@ -1009,7 +1009,7 @@
 	margin-left: -8px;
 	padding: 0;
 	letter-spacing: -1px;
-	font-weight: bold; 
+	font-weight: bold;
 	color: rgb(254, 202, 10);
 	text-transform: none;
 	line-height: 65px;
@@ -1200,7 +1200,7 @@
 	left: 17px;
 	width: 200px;
 	height: 250px;
-	border-radius: 10px; 
+	border-radius: 10px;
 	border: 3px solid rgb(34,92,203);
 	background-color: rgb(35,130,240);
 
@@ -1212,7 +1212,7 @@
 	background: #fff;
 	border: 4px solid rgb(34,92,203);
 	border-radius: 10px;
-	color: rgb(34,92,203); 
+	color: rgb(34,92,203);
 	margin: 0px;
 	line-height: normal !important;
 }
@@ -1473,34 +1473,34 @@
 /* Moving tabs to right side */
 /* Copied from http://keith-wood.name/uitabs.html#tabs-to-right */
 #tabs-right {
-    position: relative; 
+    position: relative;
     padding-right: 6.5em;
-} 
-#tabs-right .ui-tabs-nav { 
-    position: absolute; 
-    right: 0.25em; 
-    top: 0.25em; 
-    bottom: 0.25em; 
-    width: 6em; 
-    padding: 0.2em 0.2em 0.2em 0em; 
+}
+#tabs-right .ui-tabs-nav {
+    position: absolute;
+    right: 0.25em;
+    top: 0.25em;
+    bottom: 0.25em;
+    width: 6em;
+    padding: 0.2em 0.2em 0.2em 0em;
 
     background: none;
     border: none;
-} 
-#tabs-right .ui-tabs-nav li { 
-    width: 100%; 
-    border-left: none; 
-    border-bottom-width: 1px !important; 
-    -moz-border-radius: 0px 4px 4px 0px; 
-    -webkit-border-radius: 0px 4px 4px 0px; 
-    border-radius: 0px 4px 4px 0px; 
-    overflow: hidden; 
-} 
-#tabs-right .ui-tabs-nav li a { 
-    width: 100%; 
-} 
-#tabs-right .ui-tabs-panel { 
-    min-height: 500px; 
+}
+#tabs-right .ui-tabs-nav li {
+    width: 100%;
+    border-left: none;
+    border-bottom-width: 1px !important;
+    -moz-border-radius: 0px 4px 4px 0px;
+    -webkit-border-radius: 0px 4px 4px 0px;
+    border-radius: 0px 4px 4px 0px;
+    overflow: hidden;
+}
+#tabs-right .ui-tabs-nav li a {
+    width: 100%;
+}
+#tabs-right .ui-tabs-panel {
+    min-height: 500px;
 }
 
 /* Tabs Customizations */
@@ -1512,19 +1512,19 @@
 
     background: none;
 }
-#tabs-right .ui-tabs-nav li { 
+#tabs-right .ui-tabs-nav li {
 	background: rgb(0, 174, 239);
 	border: 1px solid #efefef;
 	border-left: none;
 	margin-top: 5px;
 }
-#tabs-right .ui-tabs-nav li.ui-tabs-selected, 
-#tabs-right .ui-tabs-nav li.ui-state-active { 
+#tabs-right .ui-tabs-nav li.ui-tabs-selected,
+#tabs-right .ui-tabs-nav li.ui-state-active {
 	background: #fff;
 	border: 1px solid rgb(0, 174, 239);
 	border-left: none;
-} 
-#tabs-right .ui-tabs-panel { 
+}
+#tabs-right .ui-tabs-panel {
 	background: #fff;
 
     border: 2px solid rgb(34, 92, 203);
@@ -1578,7 +1578,7 @@
 .cboxIframe{width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
 
-/* 
+/*
     User Style:
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
@@ -1605,7 +1605,7 @@
 
         /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
         #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
-        
+
         /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
         #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
 
@@ -1631,4 +1631,22 @@
 .cboxIE #cboxMiddleLeft,
 .cboxIE #cboxMiddleRight {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
-} 
+}
+
+/*
+  Added by Abhi Nayar on 06/26/2018
+  --
+  (1) Fixing the height on the iframe housing module video pages
+  (2) Fixing the <h4> header font size(s)
+
+  Questions: anayar2@gmail.com OR github.com/abhinayar
+ */
+#tool_content {
+  height: 100% !important;
+}
+
+h4 {
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  padding-left: 3px !important;
+}
