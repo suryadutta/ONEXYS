@@ -26,7 +26,8 @@ router.use('/', (req, res, next) => {
           leaderboard,
           my_team,
           home_updates,
-          home_vids
+          home_vids,
+          home_links
         ) => {
           console.log("______home.js module_progress :", module_progress, "______")
           res.render('home', {
@@ -52,6 +53,7 @@ router.use('/', (req, res, next) => {
           leaderboard,
           home_updates,
           home_vids,
+          home_links,
           students
         ) => {
           console.log("______home.js module_progress :", module_progress, "______")
@@ -68,6 +70,7 @@ router.use('/', (req, res, next) => {
             },
             home_updates,
             home_vids,
+            home_links,
             admin: auth.provider.admin,
             masquerade: false,
             students
@@ -87,7 +90,8 @@ router.use('/', (req, res, next) => {
         leaderboard,
         my_team,
         home_updates,
-        home_vids
+        home_vids,
+        home_links
       ) => {
         console.log("______home.js module_progress :", module_progress, "______")
         res.render('home', {
@@ -100,6 +104,7 @@ router.use('/', (req, res, next) => {
           my_team,
           home_updates,
           home_vids,
+          home_links,
           admin: auth.provider.admin
         });
       });
