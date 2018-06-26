@@ -63,7 +63,7 @@ function getHomeContent(callback){
     getData('home',function(err,data){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
-        home_links = data.filter(document => document.type == 'link');
+        home_links = data.filter(document => document.type == 'links');
         callback(err,home_updates,home_videos,home_links);
       });
 }
