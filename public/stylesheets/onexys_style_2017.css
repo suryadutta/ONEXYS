@@ -1,5 +1,5 @@
-::-webkit-scrollbar { 
-    display: none !important; 
+::-webkit-scrollbar {
+    display: none !important;
 }
 
 @@ -0,0 +1,1633 @@
@@ -1645,4 +1645,22 @@
 .cboxIE #cboxMiddleLeft,
 .cboxIE #cboxMiddleRight {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
-} 
+}
+
+/*
+  Added by Abhi Nayar on 06/26/2018
+  --
+  (1) Fixing the height on the iframe housing module video pages
+  (2) Fixing the <h4> header font size(s)
+
+  Questions: anayar2@gmail.com OR github.com/abhinayar
+ */
+#tool_content {
+  height: 100% !important;
+}
+
+h4 {
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  padding-left: 3px !important;
+}
