@@ -17,6 +17,23 @@ block content
         br
 
         div.form-group
+        label Default Video Image?
+        br
+        label(for='open_true') Yes  
+        input#open_true.form-control(type='radio', value='true', checked=video.default_video_img=='true', name='open')
+        br
+        label(for='open_false') No  
+        input#open_false.form-control(type='radio', value='false', checked=video.default_video_img=='false', name='open')
+        br
+        br
+
+        div.form-group
+        label(for='video_src') Video Image: 
+        input#video_src.form-control(type='text', name='video_img', value=video.video_img, required)
+        br
+        br
+
+        div.form-group
         label(for='video_desc') Video Description: 
         br
         textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
