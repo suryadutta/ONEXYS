@@ -29,7 +29,6 @@ router.use('/', (req, res, next) => {
           home_vids,
           home_links
         ) => {
-          console.log("______home.js module_progress :", module_progress, "______")
           res.render('home', {
             title: 'Home | ONEXYS',
             courseID,
@@ -56,7 +55,7 @@ router.use('/', (req, res, next) => {
           home_links,
           students
         ) => {
-          console.log("______home.js module_progress :", module_progress, "______")
+          console.log(home_links);
           res.render('home', {
             title: 'Home | ONEXYS',
             courseID,
@@ -93,7 +92,6 @@ router.use('/', (req, res, next) => {
         home_vids,
         home_links
       ) => {
-        console.log("______home.js module_progress :", module_progress, "______")
         res.render('home', {
           title: 'Home | ONEXYS',
           courseID,
