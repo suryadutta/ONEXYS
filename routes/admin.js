@@ -9,7 +9,7 @@ const makeid = () => {
   let text = "";
   let i = 0;
   while (i < TEXTLENGTH) {
-    text += possible.charAt(Math.floor(Math.random() * POSSIBLE.length));
+    text += POSSIBLE.charAt(Math.floor(Math.random() * POSSIBLE.length));
   }
   return text;
 };

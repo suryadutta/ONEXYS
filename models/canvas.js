@@ -589,8 +589,6 @@ function getAdminLeaderboardScores(courseID, callback){
       if (data.length<100){ // disable leaderboard until sections are made
         callback(null,[],[]);
       } else {
-        console.log('Hey! Data is HERE');
-        console.log(data);
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
