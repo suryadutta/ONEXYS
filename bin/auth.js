@@ -30,7 +30,7 @@ let oauth2 = require('simple-oauth2').create(credentials);
 
 //queue to callback Auth Token (prevents multiple calls)
 var authTokenQueue = new Queue(function(arg,callback){
-  redis_client.get('token_'+provider.body.custom_canvas_user_id, async function(err, token_string) {
+  redis_client.get('token_'+provider.user_id, async function(err, token_string) {
     if (err){
       console.log(err);
       callback(false);
@@ -47,7 +47,7 @@ var authTokenQueue = new Queue(function(arg,callback){
           // add back the previous refresh token to use again
           accessToken.token.refresh_token = refresh_token;
           // save new access token to Redis store
-          redis_client.set('token_'+provider.body.custom_canvas_user_id, JSON.stringify(accessToken));
+          redis_client.set('token_'+provider.user_id, JSON.stringify(accessToken));
           callback(accessToken.token.access_token)
         } catch (error) {
           console.log('Error refreshing access token: ', error.message);
@@ -84,12 +84,12 @@ var checkUser = function(req, res, next) {
         res.send('Unverified User');
       } else {         
         //check if auth token already exists in Redis 
-        redis_client.exists('token_'+provider.body.custom_canvas_user_id, function(err, token_exists) {
+        redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
           if (token_exists==0){
             // generate auth token
             let authorizationUri = oauth2.authorizationCode.authorizeURL({
               redirect_uri: config.redirectURL,
-              state: provider.body.custom_canvas_user_id,
+              state: provider.user_id,
             });
             res.redirect(authorizationUri);
           } else {
@@ -113,7 +113,7 @@ var oath2_callback = async function(req, res, next){
     let result = await oauth2.authorizationCode.getToken(options);
     let accessToken = await oauth2.accessToken.create(result);
     // save access token to Redis
-    redis_client.set('token_'+provider.body.custom_canvas_user_id, JSON.stringify(accessToken));
+    redis_client.set('token_'+provider.user_id, JSON.stringify(accessToken));
     return res.redirect('/home?login_success=1')
   } catch(error) {
     console.error('Access Token Error', error.message);
