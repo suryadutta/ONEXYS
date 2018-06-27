@@ -1,30 +1,30 @@
-var config = require('../bin/config');
-var auth = require('../bin/auth');
-var request = require('request');
-var asyncStuff = require('async');
-var mongo = require('./mongo');
+let config = require('../bin/config');
+let auth = require('../bin/auth');
+let request = require('request');
+let asyncStuff = require('async');
+let mongo = require('./mongo');
 
-var assignment_user_url = (studentID, courseID) => {
+let assignment_user_url = (studentID, courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID + '&per_page=' + String(config.canvasPageResults);
 }
 
-var notes_column_url = (courseID) => {
+let notes_column_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/';
 }
 
-var get_update_url = (courseID, callback) => {    
+let get_update_url = (courseID, callback) => {    
   getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
-    var points_id = custom_columns.find(column => column.title='Notes').id;
-    var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/';
+    let points_id = custom_columns.find(column => column.title='Notes').id;
+    let update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/';
     callback(update_url);
   });
 }
 
-var sections_url = (courseID) => {
+let sections_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/sections?include=students&per_page=100';
 }
 
-var student_url = (courseID) => {
+let student_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/students?per_page=200';
 }
 
@@ -106,16 +106,16 @@ function putAdminRequest(url, parameters, callback) {
 
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
   mongo.getAllData(function(mongo_data){
-    var badges = mongo_data.badges;
-    var totalPoints = 0;
-    var practice_proficient = 0;
-    var quizzes_attempted = 0;
-    var daily_done = 0;
-    var reflections_done = 0;
+    let badges = mongo_data.badges;
+    let totalPoints = 0;
+    let practice_proficient = 0;
+    let quizzes_attempted = 0;
+    let daily_done = 0;
+    let reflections_done = 0;
 
     //lucky bulldog
     lucky_bulldog_points = 100;
-    var d = new Date();
+    let d = new Date();
 
     if (mongo_data.lucky_bulldogs.length>0){
       for (lucky_bulldog in mongo_data.lucky_bulldogs){
@@ -160,10 +160,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         callback(null, 0, badges);
       } else {
         //Daily Yalie questions
-        for (var i = 0; i < mongo_data.dailies.length; i++) {
-          var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
+        for (let i = 0; i < mongo_data.dailies.length; i++) {
+          let daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
           if (daily_object){
-            var daily_grade = parseFloat(daily_object.grade);
+            let daily_grade = parseFloat(daily_object.grade);
             if (daily_grade == parseFloat(100)) {
               daily_done += 1
             }
@@ -190,13 +190,13 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
           awardBadge(6);
         }
 
-        for (var i = 0; i < mongo_data.modules.length; i++) {
+        for (let i = 0; i < mongo_data.modules.length; i++) {
           if (mongo_data.modules[i].open=='true'){
                     
             //practice objectives proficient
-            var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
+            let practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
-              var practice_grade = parseFloat(practice_object.grade);
+              let practice_grade = parseFloat(practice_object.grade);
               if (practice_grade > parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                 practice_proficient += 1;
@@ -262,9 +262,9 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             }
 
             //quizzes attempted
-            var quiz_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).quiz_link);
+            let quiz_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).quiz_link);
             if (quiz_object){
-              var quiz_grade = parseFloat(quiz_object.grade);
+              let quiz_grade = parseFloat(quiz_object.grade);
               if (quiz_grade > parseFloat(0)) {
                 quizzes_attempted += 1;
 
@@ -331,9 +331,9 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             }
 
             //number of reflections
-            var reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
+            let reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
             if(reflection_object){
-              var reflection_grade = parseFloat(reflection_object.grade);
+              let reflection_grade = parseFloat(reflection_object.grade);
               if (reflection_grade == parseFloat(100)) {
                 reflections_done += 1;
                 
@@ -446,11 +446,11 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         callback(null, moduleProgress);
       } else {
         //get quiz and aleks progress
-        for (var i = 0; i < moduleProgress.length; i++) {
-          var module_object = mongo_data.modules.find(module => module._id == i + 1);
+        for (let i = 0; i < moduleProgress.length; i++) {
+          let module_object = mongo_data.modules.find(module => module._id == i + 1);
           if(module_object.open=='true'){
             //practice progress
-            var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+            let practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
             if(practice_object){
               (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) > parseFloat(module_object.practice_cutoff);
             } else {
@@ -458,7 +458,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             }
 
             //quiz progress
-            var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
+            let quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
             if(quiz_object){
               (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) > parseFloat(module_object.quiz_cutoff);
             } else {
@@ -476,8 +476,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
 function getLeaderboardScores(studentID, courseID, callback) { // get all leaderboard scores
 
   function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
-    var combinedArray = []
-    for (var i = 0; i < groupNames.length; i++) {
+    let combinedArray = []
+    for (let i = 0; i < groupNames.length; i++) {
       combinedArray.push({
         'Name': groupNames[i],
         'Score': scores[i]
@@ -505,8 +505,8 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
   function getSections(callback){
     function findIndexOfUser(studentIdsArrays) {
-      for (var i = 0; i < studentIdsArrays.length; i++) {
-        var index = studentIdsArrays[i].indexOf(parseInt(studentID));
+      for (let i = 0; i < studentIdsArrays.length; i++) {
+        let index = studentIdsArrays[i].indexOf(parseInt(studentID));
         if (index > -1) {
           return i
         }
@@ -515,7 +515,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
     getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
-      for (var i = 0; i < data.length; i++) {
+      for (let i = 0; i < data.length; i++) {
         if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
           data.splice(i, 1);
         }
@@ -542,7 +542,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
             return 0;
           }
         }
-        var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+        let studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
         callback2(null, studentPoints, groupNames, studentIndex);
       });
     })
@@ -551,8 +551,8 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
 function getAdminLeaderboardScores(courseID, callback){
   function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
-    var combinedArray = []
-    for (var i = 0; i < groupNames.length; i++) {
+    let combinedArray = []
+    for (let i = 0; i < groupNames.length; i++) {
       combinedArray.push({
         'Name': groupNames[i],
         'Score': scores[i]
@@ -581,7 +581,7 @@ function getAdminLeaderboardScores(courseID, callback){
     getAdminRequest(sections_url(courseID),function(err,data){
 
       // remove section with all students
-      for (var i = 0; i < data.length; i++) {
+      for (let i = 0; i < data.length; i++) {
         if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
           data.splice(i, 1);
         }
@@ -589,6 +589,7 @@ function getAdminLeaderboardScores(courseID, callback){
       if (data.length<1){
         callback(null,[],[]);
       } else {
+        console.log('Hey the data is HERE');
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
@@ -607,7 +608,7 @@ function getAdminLeaderboardScores(courseID, callback){
             return 0;
           }
         }
-        var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+        let studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
         callback2(null, studentPoints, groupNames);
       });
     })
@@ -616,9 +617,9 @@ function getAdminLeaderboardScores(courseID, callback){
 
 function getStudents(courseID, callback){
   getRequest(student_url(courseID),function(err,student_data){
-    var student_data_sorted = student_data.sort(function(a, b) {
-      var textA = a.sortable_name.toUpperCase();
-      var textB = b.sortable_name.toUpperCase();
+    let student_data_sorted = student_data.sort(function(a, b) {
+      let textA = a.sortable_name.toUpperCase();
+      let textB = b.sortable_name.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
     callback(err,student_data_sorted);

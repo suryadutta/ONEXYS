@@ -15,7 +15,7 @@ router.use('/', (req, res, next) => {
 
   console.log('User ID: ', userID, '  Course ID: ', courseID);
 
-  console.log(auth.provider.body);
+  console.log(auth.provider);
 
   if (auth.provider.admin) {
     if (req.query.masquerade) {

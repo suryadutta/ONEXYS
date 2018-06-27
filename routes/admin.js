@@ -18,13 +18,15 @@ const makeid = () => {
 router.get("/", (req, res, next) => {
   res.render("admin", { 
     title: "Express",
+    course: auth.provider.body.context_title,
   });
 });
 
 /* POST home page. */
 router.post("/", (req, res, next) => {
   res.render("admin", {
-    title: "Express"
+    title: "Express",
+    course: auth.provider.body.context_title,
   });
 });
 
@@ -33,6 +35,7 @@ router.get("/home", (req, res, next) => {
   mongo.getHomeContent((err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
+      course: auth.provider.body.context_title,
       home_updates,
       home_vids
     });
@@ -44,6 +47,7 @@ router.post("/home", (req, res, next) => {
   mongo.getHomeContent((err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
+      course: auth.provider.body.context_title,
       home_updates: req.body,
       home_vids
     });
@@ -53,6 +57,7 @@ router.post("/home", (req, res, next) => {
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
+    course: auth.provider.body.context_title,
     home_updates: req.body
   })
 });
@@ -67,7 +72,8 @@ router.post("/home/confirmUpdates", (req, res, next) => {
 //add home video
 router.get("/home/videos/add", (req, res, next) => {
   res.render("admin/homeVidAdd", {
-    title: "Add Home Video"
+    title: "Add Home Video",
+    course: auth.provider.body.context_title,
   });
 });
 
@@ -88,6 +94,7 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
     if (home_vid) {
       res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
+        course: auth.provider.body.context_title,
         video: home_vid
       });
     } else {
@@ -102,6 +109,7 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
   home_vid._id = req.params.id 
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
+    course: auth.provider.body.context_title,
     video: home_vid
   });
 });
@@ -110,6 +118,7 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
 router.post('/home/videos/preview/:id', (req,res,next) => {
   res.render("admin/homeConfirmVideos", {
     title: "Edit Home Video",
+    course: auth.provider.body.context_title,
     video: req.body,
     video_id: req.params.id
   });
@@ -134,6 +143,7 @@ router.get("/modules", (req, res, next) => {
   mongo.getData("modules", (err, modulesInfo) => {
     res.render("admin/modules", {
       title: "Modules",
+      course: auth.provider.body.context_title,
       modules: modulesInfo
     });
   });
@@ -144,6 +154,7 @@ router.get("/modules/:id/edit", (req, res, next) => {
   mongo.getModule(req.params.id, (err, moduleInfo) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
+      course: auth.provider.body.context_title,
       module: moduleInfo
     });
   });
@@ -155,6 +166,7 @@ router.post("/modules/:id/edit", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
+      course: auth.provider.body.context_title,
       module: merged_data,
     });
   });
@@ -167,6 +179,7 @@ router.post("/modules/:id/preview", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
+      course: auth.provider.body.context_title,
       data: merged_data,
     });
   });
@@ -187,6 +200,7 @@ router.post("/modules/:id/confirmUpdates", (req, res, next) => {
 //GET page to add video to module
 router.get("/modules/:id/videos/add", (req, res, next) => {
   res.render("admin/moduleVideoAdd", {
+    course: auth.provider.body.context_title,
     moduleID: req.params.id
   });
 });
@@ -219,6 +233,7 @@ router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
     );
     res.render("admin/moduleVideoEdit", {
       title: "Edit Module Video",
+      course: auth.provider.body.context_title,
       moduleID: req.params.module_id,
       video: vidObject
     });
@@ -270,6 +285,7 @@ router.get("/badges", (req, res, next) => {
   mongo.getData("badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
+      course: auth.provider.body.context_title,
       badges: badges_data
     });
   });
@@ -280,6 +296,7 @@ router.get("/badges/edit/:id", (req, res, next) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
     res.render("admin/badgeEdit", {
       title: "Badges",
+      course: auth.provider.body.context_title,
       badge: badge_data
     });
   });
@@ -307,6 +324,7 @@ router.get("/dailies", (req, res, next) => {
   mongo.getData("dailies", (err, dailies_data) => {
     res.render("admin/dailies", {
       title: "Dailies",
+      course: auth.provider.body.context_title,
       dailies: dailies_data
     });
   });
@@ -317,6 +335,7 @@ router.get("/dailies/edit/:id", (req, res, next) => {
     daily_data = dailies_data.find(element => element._id == req.params.id);
     res.render("admin/dailyEdit", {
       title: "Dailies",
+      course: auth.provider.body.context_title,
       daily: daily_data
     });
   });
@@ -340,6 +359,7 @@ router.get("/lucky", (req, res, next) => {
   mongo.getData("lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
+      course: auth.provider.body.context_title,
       lucky_data: lucky_data
     });
   });
@@ -350,6 +370,7 @@ router.get("/lucky/edit/:id", (req, res, next) => {
     lucky_bulldog = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
       title: "Lucky Bulldog",
+      course: auth.provider.body.context_title,
       lucky_bulldog: lucky_bulldog
     });
   });
@@ -378,7 +399,8 @@ router.post("/lucky/delete/:id", (req, res, next) => {
 
 router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
-    title: "Lucky Bulldog"
+    title: "Lucky Bulldog",
+    course: auth.provider.body.context_title,
   });
 });
 
