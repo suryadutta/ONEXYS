@@ -25,7 +25,7 @@ var sections_url = (courseID) => {
 }
 
 var student_url = (courseID) => {
-  return config.canvasURL + '/api/v1/courses/' + courseID + '/students?per_page=200';
+  return config.canvasURL + '/api/v1/courses/' + courseID + '/users?enrollment_type=student&per_page=200';
 }
 
 function getRequest(url, callback) {
@@ -625,6 +625,24 @@ function getStudents(courseID, callback){
   });
 }
 
+function getDailyYalie(courseID, callback){
+  getAdminRequest('https://yale.instructure.com/api/v1/courses/38082/assignments?search_term=Daily&per_page=50', function(err,dailies_data){
+    dailies_due_dates = dailies_data.map(daily => daily.due_at)
+    console.log(dailies_due_dates)
+
+    var now = new Date();
+    var closest = Infinity;
+
+    dailies_due_dates.forEach(function(d) {
+      var date = new Date(d);
+      if (date >= now && date < closest) {
+          closest = d;
+      }
+    });
+    callback(null,dailies_due_dates);
+  })
+}
+
 module.exports = {
   getRequest,
   postRequest,
@@ -636,4 +654,5 @@ module.exports = {
   getLeaderboardScores,
   getAdminLeaderboardScores,
   getStudents,
+  getDailyYalie,
 }

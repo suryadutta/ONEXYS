@@ -55,8 +55,11 @@ router.use('/', (req, res, next) => {
           home_updates,
           home_vids,
           home_links,
-          students
+          students,
+          daily_yalie
         ) => {
+          console.log('Daily Yalie:');
+          console.log(daily_yalie);
           res.render('home', {
             title: 'Home | ONEXYS',
             courseID,

@@ -66,6 +66,9 @@ function homepageAdminQuery(courseID, callback){
     },
     function(callback){
       canvas.getStudents(courseID,callback);
+    },
+    function(callback){
+      canvas.getDailyYalie(courseID, callback);
     }
   ],
   
@@ -76,9 +79,10 @@ function homepageAdminQuery(courseID, callback){
         home_updates = data[2][0],
         home_vids = data[2][1],
         home_links = data[2][2],
-        students = data[3];
+        students = data[3],
+        daily_yalie=data[4];
     
-    callback(module_progress, leaderboard, home_updates, home_vids, home_links, students);
+    callback(module_progress, leaderboard, home_updates, home_vids, home_links, students,daily_yalie);
   });
 }
 
