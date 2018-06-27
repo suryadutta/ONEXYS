@@ -639,8 +639,10 @@ function getDailyYalie(courseID, callback){
           closest = d;
       }
     });
-    
-    callback(null,closest);
+
+    current_daily = dailies_data.find(daily => new Date(daily.due_at)==closest)
+
+    callback(null,current_daily);
   })
 }
 
