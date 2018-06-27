@@ -520,7 +520,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
           data.splice(i, 1);
         }
       }
-      if (data.length<1){
+      if (data.length<100){ //disable leaderboard until sections are made
         callback(null,[],[],0);
       } else {
         groupNames = data.map(section => section.name);
@@ -586,7 +586,7 @@ function getAdminLeaderboardScores(courseID, callback){
           data.splice(i, 1);
         }
       }
-      if (data.length<1){
+      if (data.length<100){ // disable leaderboard until sections are made
         callback(null,[],[]);
       } else {
         console.log('Hey! Data is HERE');
