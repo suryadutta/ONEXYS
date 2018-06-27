@@ -7,7 +7,9 @@ html
     mixin space()
       | !{' '}
 
+    h3=course
     h1 Do you want to save these changes?
+    
     form(method='POST' action='confirmUpdates')
       input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
       input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
