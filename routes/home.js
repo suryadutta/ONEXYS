@@ -29,7 +29,8 @@ router.use('/', (req, res, next) => {
           my_team,
           home_updates,
           home_vids,
-          home_links
+          home_links,
+          daily_yalie
         ) => {
           res.render('home', {
             title: 'Home | ONEXYS',
@@ -42,6 +43,7 @@ router.use('/', (req, res, next) => {
             home_updates,
             home_vids,
             home_links,
+            daily_yalie,
             admin: auth.provider.admin,
             masquerade: true,
           });
@@ -58,8 +60,6 @@ router.use('/', (req, res, next) => {
           students,
           daily_yalie
         ) => {
-          console.log('Daily Yalie:');
-          console.log(daily_yalie);
           res.render('home', {
             title: 'Home | ONEXYS',
             courseID,
@@ -74,6 +74,7 @@ router.use('/', (req, res, next) => {
             home_updates,
             home_vids,
             home_links,
+            daily_yalie,
             admin: auth.provider.admin,
             masquerade: false,
             students
@@ -94,7 +95,8 @@ router.use('/', (req, res, next) => {
         my_team,
         home_updates,
         home_vids,
-        home_links
+        home_links,
+        daily_yalie
       ) => {
         res.render('home', {
           title: 'Home | ONEXYS',
@@ -107,6 +109,7 @@ router.use('/', (req, res, next) => {
           home_updates,
           home_vids,
           home_links,
+          daily_yalie,
           admin: auth.provider.admin
         });
       });
