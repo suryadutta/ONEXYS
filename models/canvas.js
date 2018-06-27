@@ -628,14 +628,10 @@ function getStudents(courseID, callback){
 function getDailyYalie(courseID, callback){
   getAdminRequest('https://yale.instructure.com/api/v1/courses/38082/assignments?search_term=Daily&per_page=50', function(err,dailies_data){
 
-    var now = new Date();
-    var closest = {}
+    var closest = Infinity;
 
     dailies_data.forEach(function(daily) {
-      console.log(daily);
-      var date = new Date(daily.due_at);
-      console.log(date);
-      if (date >= now && date < closest) {
+      if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
           closest = daily;
           console.log('date updated')
       }
