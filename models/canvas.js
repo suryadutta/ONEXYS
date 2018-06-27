@@ -625,6 +625,12 @@ function getStudents(courseID, callback){
   });
 }
 
+function getCurrentDailyYalie(courseID, callback){
+  mongo.getData('dailies',function(err,dailies_data){
+
+  });
+}
+
 module.exports = {
   getRequest,
   postRequest,

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
+const auth = require('../bin/auth')
 
 //generate ID for new video entries
 const makeid = () => {
@@ -15,12 +16,16 @@ const makeid = () => {
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
-  res.render("admin", { title: "Express" });
+  res.render("admin", { 
+    title: "Express",
+  });
 });
 
 /* POST home page. */
 router.post("/", (req, res, next) => {
-  res.render("admin", { title: "Express" });
+  res.render("admin", {
+    title: "Express"
+  });
 });
 
 //Get Home Page Updates
@@ -103,7 +108,6 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
 
 //POST handler to preview video changes
 router.post('/home/videos/preview/:id', (req,res,next) => {
-  console.log(req.body)
   res.render("admin/homeConfirmVideos", {
     title: "Edit Home Video",
     video: req.body,
@@ -147,11 +151,8 @@ router.get("/modules/:id/edit", (req, res, next) => {
 
 router.post("/modules/:id/edit", (req, res, next) => {
   var bodyInfo = req.body;
-  console.log(bodyInfo)
   mongo.getModule(req.params.id, (err, moduleInfo) => {
-    merged_data = Object.assign(moduleInfo,bodyInfo)
-    console.log(moduleInfo);
-    console.log(merged_data);
+    merged_data = Object.assign(moduleInfo,bodyInfo);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
       module: merged_data,
@@ -164,7 +165,6 @@ router.post("/modules/:id/preview", (req, res, next) => {
   var bodyInfo = req.body;
   mongo.getModule(req.params.id, (err, moduleInfo) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
-    console.log(merged_data);
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
       data: merged_data,
@@ -174,7 +174,6 @@ router.post("/modules/:id/preview", (req, res, next) => {
 
 //POST handler for Module Edits
 router.post("/modules/:id/confirmUpdates", (req, res, next) => {
-  console.log("Updating Module Edits ", req.body);
   mongo.updateData(
     "modules",
     { _id: parseInt(req.params.id) },

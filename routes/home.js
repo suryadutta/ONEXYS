@@ -15,6 +15,8 @@ router.use('/', (req, res, next) => {
 
   console.log('User ID: ', userID, '  Course ID: ', courseID);
 
+  console.log(auth.provider.body);
+
   if (auth.provider.admin) {
     if (req.query.masquerade) {
       queries.homepageQuery(parseInt(req.query.masquerade),
@@ -55,7 +57,6 @@ router.use('/', (req, res, next) => {
           home_links,
           students
         ) => {
-          console.log(home_links);
           res.render('home', {
             title: 'Home | ONEXYS',
             courseID,
