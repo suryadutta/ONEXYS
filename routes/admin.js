@@ -304,6 +304,39 @@ router.post("/badges/edit/:id", (req, res, next) => {
   );
 });
 
+router.get("/dailies", (req, res, next) => {
+  mongo.getData("dailies", (err, dailies_data) => {
+    res.render("admin/dailies", {
+      title: "Dailies",
+      dailies: dailies_data
+    });
+  });
+});
+
+router.get("/dailies/edit/:id", (req, res, next) => {
+  mongo.getData("dailies", (err, dailies_data) => {
+    daily_data = dailies_data.find(element => element._id == req.params.id);
+    res.render("admin/dailyEdit", {
+      title: "Dailies",
+      daily: daily_data
+    });
+  });
+});
+
+router.post("/dailies/edit/:id", (req, res, next) => {
+  //update badges info
+  mongo.updateData(
+    "badges",
+    { _id: parseInt(req.params.id) },
+    {
+      assignment_id: req.body.assignment_id,
+    },
+    (err, result) => {
+      res.redirect("/admin/dailies");
+    }
+  );
+});
+
 router.get("/lucky", (req, res, next) => {
   mongo.getData("lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {

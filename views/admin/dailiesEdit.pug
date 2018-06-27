@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+
+    a(href='/admin/dailies') Back to Dailies
+
+    h1='Edit ONEXYS Daily '+daily._id
+
+    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+        
+        div.form-group
+        label(for='assignment_id') Assignment ID: 
+        input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Save Changes
