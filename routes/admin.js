@@ -2,18 +2,6 @@ const router = require("express").Router();
 const mongo = require("../models/mongo");
 const auth = require('../bin/auth')
 
-//generate ID for new video entries
-const makeid = () => {
-  const POSSIBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const TEXTLENGTH = 16;
-  let text = "";
-  let i = 0;
-  while (i < TEXTLENGTH) {
-    text += POSSIBLE.charAt(Math.floor(Math.random() * POSSIBLE.length));
-  }
-  return text;
-};
-
 /* GET home page. */
 router.get("/", (req, res, next) => {
   res.render("admin", { 
@@ -190,6 +178,19 @@ router.get("/modules/:id/videos/add", (req, res, next) => {
     moduleID: req.params.id
   });
 });
+
+
+//generate ID for new video entries
+const makeid = () => {
+  const POSSIBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const TEXTLENGTH = 16;
+  let text = "";
+  let i = 0;
+  for (i = 0; i < TEXTLENGTH; i++) { 
+    text += POSSIBLE.charAt(Math.floor(Math.random() * POSSIBLE.length));
+  }
+  return text;
+};
 
 //POST handler to add video to module
 router.post("/modules/:id/videos/add", (req, res, next) => {
