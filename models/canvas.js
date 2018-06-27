@@ -639,7 +639,8 @@ function getDailyYalie(courseID, callback){
           closest = d;
       }
     });
-    callback(null,dailies_due_dates);
+    
+    callback(null,closest);
   })
 }
 
