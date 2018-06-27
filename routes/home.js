@@ -11,6 +11,9 @@ router.use('/', (req, res, next) => {
 
   var is_physics = Boolean(courseID == 38083);
 
+  console.log('Is Physics?');
+  console.log(is_physics);
+
   if (courseID == 10184) {
     courseID = 38082;
   }
