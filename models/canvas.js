@@ -627,21 +627,18 @@ function getStudents(courseID, callback){
 
 function getDailyYalie(courseID, callback){
   getAdminRequest('https://yale.instructure.com/api/v1/courses/38082/assignments?search_term=Daily&per_page=50', function(err,dailies_data){
-    dailies_due_dates = dailies_data.map(daily => daily.due_at)
 
     var now = new Date();
-    var closest = Infinity;
+    var closest = {}
 
-    dailies_due_dates.forEach(function(d) {
-      var date = new Date(d);
+    dailies_data.forEach(function(daily) {
+      var date = new Date(daily.due_at);
       if (date >= now && date < closest) {
-          closest = d;
+          closest = daily;
       }
     });
 
-    current_daily = dailies_data.find(daily => new Date(daily.due_at)==closest)
-
-    callback(null,current_daily);
+    callback(null,closest);
   })
 }
 
