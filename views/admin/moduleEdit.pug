@@ -161,7 +161,7 @@ block content
                             span!=video.video_desc_helper
                     br
                 td 
-                    form(method='GET' action='videos/edit/'+video._id, target="_blank")
+                    form(method='GET' action='videos/edit/'+video._id)
                         button(type='submit') Edit
                     form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                         button(type='submit') Delete
