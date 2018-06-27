@@ -326,7 +326,7 @@ router.get("/dailies/edit/:id", (req, res, next) => {
 router.post("/dailies/edit/:id", (req, res, next) => {
   //update badges info
   mongo.updateData(
-    "badges",
+    "dailies",
     { _id: parseInt(req.params.id) },
     {
       assignment_id: req.body.assignment_id,
