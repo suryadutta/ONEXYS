@@ -632,9 +632,12 @@ function getDailyYalie(courseID, callback){
     var closest = {}
 
     dailies_data.forEach(function(daily) {
+      console.log(daily);
       var date = new Date(daily.due_at);
+      console.log(date);
       if (date >= now && date < closest) {
           closest = daily;
+          console.log('date updated')
       }
     });
 
