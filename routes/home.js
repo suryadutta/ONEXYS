@@ -9,6 +9,8 @@ router.use('/', (req, res, next) => {
   const courseID = auth.provider.body.custom_canvas_course_id;
   const userID = auth.provider.body.custom_canvas_user_id;
 
+  var is_physics = Boolean(courseID == 38083);
+
   if (courseID == 10184) {
     courseID = 38082;
   }
@@ -44,6 +46,7 @@ router.use('/', (req, res, next) => {
             home_vids,
             home_links,
             daily_yalie,
+            is_physics,
             admin: auth.provider.admin,
             masquerade: true,
           });
@@ -75,6 +78,7 @@ router.use('/', (req, res, next) => {
             home_vids,
             home_links,
             daily_yalie,
+            is_physics,
             admin: auth.provider.admin,
             masquerade: false,
             students
@@ -110,6 +114,7 @@ router.use('/', (req, res, next) => {
           home_vids,
           home_links,
           daily_yalie,
+          is_physics,
           admin: auth.provider.admin
         });
       });
