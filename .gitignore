@@ -47,5 +47,5 @@ bin/localcn.js
 bin/herokucn.js
 *.env
 
-#Temporary Files for Testing
+#Temporary Files for Testint
 tmp/

@@ -1,16 +1,16 @@
-let express = require('express');
-let config = require('./config');
-let request = require('request');
-let Queue = require('better-queue');
+var express = require('express');
+var config = require('./config');
+var request = require('request');
+var Queue = require('better-queue');
 
-let lti = require ('ims-lti');
-let RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
-let redis = require("redis"),
+var lti = require ('ims-lti');
+var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
+var redis = require("redis"),
     redis_client = redis.createClient(config.redisURL);
 
-let store = new RedisNonceStore(config.client_id, redis_client);
+var store = new RedisNonceStore(config.client_id, redis_client);
 if (!provider) {
-  let provider = new lti.Provider(config.client_id, config.client_secret);
+  var provider = new lti.Provider(config.client_id, config.client_secret);
 }
 
 // Set the configuration settings
@@ -29,7 +29,7 @@ let credentials = {
 let oauth2 = require('simple-oauth2').create(credentials);
 
 //queue to callback Auth Token (prevents multiple calls)
-let authTokenQueue = new Queue(function(arg,callback){
+var authTokenQueue = new Queue(function(arg,callback){
   redis_client.get('token_'+provider.body.custom_canvas_user_id, async function(err, token_string) {
     if (err){
       console.log(err);
@@ -61,7 +61,7 @@ let authTokenQueue = new Queue(function(arg,callback){
 });
 
 //middleware to check if admin
-let checkAdmin = function(req,res,next) {
+var checkAdmin = function(req,res,next) {
   if (!provider.admin){
     res.redirect('/home')
   }else {
@@ -70,7 +70,7 @@ let checkAdmin = function(req,res,next) {
 }
 
 //middleware to check user and launch lti
-let checkUser = function(req, res, next) { 
+var checkUser = function(req, res, next) { 
   req.connection.encrypted = true;
   if (req.query.login_success=='1'){
     next()
@@ -103,7 +103,7 @@ let checkUser = function(req, res, next) {
 }
 
 //path for oauth2 callback from Canvas server
-let oath2_callback = async function(req, res, next){
+var oath2_callback = async function(req, res, next){
   let code = req.query.code;
   let options = {
     code,
