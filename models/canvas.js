@@ -589,6 +589,8 @@ function getAdminLeaderboardScores(courseID, callback){
       if (data.length<1){
         callback(null,[],[]);
       } else {
+        console.log('Hey! Data is HERE');
+        console.log(data);
         groupNames = data.map(section => section.name);
         studentsArray = data.map(section => section.students);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
@@ -622,12 +624,6 @@ function getStudents(courseID, callback){
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
     callback(err,student_data_sorted);
-  });
-}
-
-function getCurrentDailyYalie(courseID, callback){
-  mongo.getData('dailies',function(err,dailies_data){
-
   });
 }
 
