@@ -80,12 +80,15 @@ var updateProvider = function(req,res,next){
     res.cookie('course_title',req.body.context_title);
     res.cookie('user_id', req.body.custom_canvas_user_id);
     res.cookie('admin',req.body.roles.includes('Instructor'));
-  } 
-  next();
+    next();
+  } else {
+    next();
+  }
 };
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
+  console.log(req.cookies);
   req.connection.encrypted = true;
   if (req.query.login_success=='1'){
     next()

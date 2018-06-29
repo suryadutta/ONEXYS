@@ -9,7 +9,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
 
 var config = require('./bin/config');
 var auth = require('./bin/auth')
