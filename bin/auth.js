@@ -9,8 +9,10 @@ var redis = require("redis"),
     redis_client = redis.createClient(config.redisURL);
 
 var store = new RedisNonceStore(config.client_id, redis_client);
-if (!provider) {
+
+if (provider==null) {
   var provider = new lti.Provider(config.client_id, config.client_secret);
+  console.log('Generating new provider...')
 }
 
 // Set the configuration settings
@@ -62,7 +64,9 @@ var authTokenQueue = new Queue(function(arg,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
-  if (!provider.admin){
+  if (provider.admin==null){
+    console.log('Err authenticating admin')
+    console.log('provider')
     res.redirect('/home')
   }else {
     next()
@@ -77,7 +81,7 @@ var checkUser = function(req, res, next) {
   } else {
      //launch LTI instance
     provider.valid_request(req, function(err, is_valid) {
-      if (!is_valid) {
+      if (typeof provider.admin == 'undefined' && !provider.admin) {
         console.log('Unverified User:');
         console.log(provider.valid_request);
         console.log(provider);

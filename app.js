@@ -43,7 +43,6 @@ app.use('/home',auth.checkUser,home)
 app.use('/badges',auth.checkUser,badges)
 app.use('/admin',auth.checkAdmin,admin)
 
-
 app.use('/modules', modules)
 
 app.use('/launch',launch)
