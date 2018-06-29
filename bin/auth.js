@@ -87,7 +87,6 @@ var updateProvider = function(req,res,next){
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
   req.connection.encrypted = true;
-  console.log(req.cookies);
   if (req.query.login_success=='1'){
     next()
   } else {      
@@ -119,6 +118,7 @@ var checkUser = function(req, res, next) {
 
 //path for oauth2 callback from Canvas server
 var oath2_callback = async function(req, res, next){
+  console.log(req.cookies.user_id);
   let code = req.query.code;
   let options = {
     code,
@@ -128,7 +128,7 @@ var oath2_callback = async function(req, res, next){
     let result = await oauth2.authorizationCode.getToken(options);
     let accessToken = await oauth2.accessToken.create(result);
     // save access token to Redis
-    redis_client.set('token_'+req.cookies.user_id, JSON.stringify(accessToken));
+    redis_client.set('token_'+String(req.cookies.user_id), JSON.stringify(accessToken));
     return res.redirect('/home?login_success=1')
   } catch(error) {
     console.error('Access Token Error', error.message);
