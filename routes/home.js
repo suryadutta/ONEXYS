@@ -6,10 +6,10 @@ var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
 
-  console.log(res.cookie)
+  console.log(req.cookie)
 
-  var courseID = res.cookie.course_id
-  var userID = res.cookie.user_id
+  var courseID = req.cookie.course_id
+  var userID = req.cookie.user_id
 
   var is_physics = Boolean(courseID == 38083);
 
