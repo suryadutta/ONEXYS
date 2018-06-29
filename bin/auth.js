@@ -74,9 +74,8 @@ var checkAdmin = function(req,res,next) {
 
 //middleware to update course information
 var updateProvider = function(req,res,next){
-  console.log(req.body);
   if (req.body.custom_canvas_course_id){
-    print('hi');
+    console.log('hi');
     res.cookie('course_id',req.body.custom_canvas_course_id);
     res.cookie('course_title',req.body.context_title);
     res.cookie('user_id', req.body.custom_canvas_user_id);
