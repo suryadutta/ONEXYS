@@ -80,6 +80,7 @@ var updateProvider = function(req,res,next){
     res.cookie('user_id', req.body.custom_canvas_user_id,{httpOnly: false});
     res.cookie('admin',req.body.roles.includes('Instructor'),{httpOnly: false});
     res.send('hi')
+  };
 };
 
 //middleware to check user and launch lti
