@@ -11,7 +11,7 @@ var redis = require("redis"),
 var store = new RedisNonceStore(config.client_id, redis_client);
 
 if (provider==null) {
-  var provider = new lti.Provider(config.client_id, config.client_secret);
+  provider = new lti.Provider(config.client_id, config.client_secret);
   console.log('Generating new provider...')
 }
 
@@ -64,6 +64,11 @@ var authTokenQueue = new Queue(function(arg,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
+
+  console.log('POST Launch Info');
+
+  console.log(req.body);
+
   if (typeof provider.admin == 'undefined' && !provider.admin) {
     console.log('Err authenticating admin')
     console.log(provider)

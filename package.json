@@ -16,7 +16,6 @@
     "debug": "~2.6.3",
     "dotenv": "^5.0.1",
     "express": "~4.15.2",
-    "express-session": "^1.15.6",
     "ims-lti": "^3.0.2",
     "mime-types": "^2.1.17",
     "mongodb": "^2.0.0",
