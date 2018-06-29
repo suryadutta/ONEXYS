@@ -1,13 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const config = require('../bin/config');
-const auth = require('../bin/auth')
-const queries = require('../models/queries')
+var express = require('express');
+var router = express.Router();
+var config = require('../bin/config');
+var auth = require('../bin/auth')
+var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
 
-  const courseID = auth.provider.body.custom_canvas_course_id;
-  const userID = auth.provider.body.custom_canvas_user_id;
+  var courseID = auth.provider.body.custom_canvas_course_id;
+  var userID = auth.provider.body.custom_canvas_user_id;
 
   var is_physics = Boolean(courseID == 38083);
 
