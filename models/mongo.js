@@ -4,9 +4,9 @@ var asyncStuff = require('async');
 var config = require('../bin/config');
 var auth = require('../bin/auth');
 
-function getData(collection_name, callback){
+function getData(courseID, collection_name, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
@@ -17,9 +17,9 @@ function getData(collection_name, callback){
     });   
 }
 
-function insertData(collection_name, data, callback){
+function insertData(courseID, collection_name, data, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
     //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -31,9 +31,9 @@ function insertData(collection_name, data, callback){
     });   
 }
 
-function updateData(collection_name,update_index,update_data, callback){
+function updateData(courseID, collection_name,update_index,update_data, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
     //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -45,9 +45,9 @@ function updateData(collection_name,update_index,update_data, callback){
     });   
 }
 
-function deleteData(collection_name,delete_index,callback){
+function deleteData(courseID, collection_name,delete_index,callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
     //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -59,8 +59,8 @@ function deleteData(collection_name,delete_index,callback){
     });   
 }
 
-function getHomeContent(callback){
-    getData('home',function(err,data){
+function getHomeContent(courseID,callback){
+    getData(courseID, 'home',function(err,data){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
@@ -68,9 +68,9 @@ function getHomeContent(callback){
       });
 }
 
-function getModule(moduleID, callback){
+function getModule(courseID, moduleID, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[auth.provider.body.custom_canvas_course_id]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
@@ -92,19 +92,19 @@ function getModule(moduleID, callback){
     });   
 }
 
-function getAllData(callback_main){
+function getAllData(courseID, callback_main){
     asyncStuff.parallel({
         'modules': function(callback) {
-            getData('modules',callback)
+            getData(courseID, 'modules',callback)
         },
         'badges': function(callback) {
-            getData('badges',callback)
+            getData(courseID, 'badges',callback)
         },
         'dailies': function(callback) {
-            getData('dailies',callback)
+            getData(courseID, 'dailies',callback)
         },
         'lucky_bulldogs': function(callback) {
-            getData('lucky_bulldogs',callback)
+            getData(courseID,'lucky_bulldogs',callback)
         },
     }, function(err, results) {
         callback_main(results);

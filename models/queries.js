@@ -17,7 +17,7 @@ function homepageQuery(studentID,courseID,callback){
       canvas.getLeaderboardScores(studentID, courseID, callback);
     },
     function(callback){
-      mongo.getHomeContent(callback);
+      mongo.getHomeContent(courseID, callback);
     },
     function(callback){
       canvas.getNextDailyYalie(courseID, callback);
@@ -58,7 +58,7 @@ function homepageAdminQuery(courseID, callback){
 
   asyncStuff.parallel([
     function(callback) {
-      mongo.getAllData(function(mongo_data){
+      mongo.getAllData(courseID, function(mongo_data){
         callback(null, mongo_data.modules)
       });
     },
@@ -66,7 +66,7 @@ function homepageAdminQuery(courseID, callback){
       canvas.getAdminLeaderboardScores(courseID, callback);
     },
     function(callback){
-      mongo.getHomeContent(callback);
+      mongo.getHomeContent(courseID, callback);
     },
     function(callback){
       canvas.getStudents(courseID,callback);
@@ -96,8 +96,8 @@ function badgesQuery(studentID,courseID,callback){
   });
 }
 
-function badgesAdminQuery(callback){
-  mongo.getAllData(function(mongo_data){
+function badgesAdminQuery(courseID, callback){
+  mongo.getAllData(courseID, function(mongo_data){
     callback(mongo_data.badges);
   })
 }

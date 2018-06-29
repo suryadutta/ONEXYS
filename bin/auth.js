@@ -31,8 +31,8 @@ let credentials = {
 let oauth2 = require('simple-oauth2').create(credentials);
 
 //queue to callback Auth Token (prevents multiple calls)
-var authTokenQueue = new Queue(function(arg,callback){
-  redis_client.get('token_'+req.cookies.user_id, async function(err, token_string) {
+var authTokenQueue = new Queue(function(user_id,callback){
+  redis_client.get('token_'+String(user_id), async function(err, token_string) {
     if (err){
       console.log(err);
       callback(false);
@@ -121,7 +121,7 @@ var checkUser = function(req, res, next) {
 var oath2_callback = async function(req, res, next){
   
   console.log(req.query.scope);
-  
+
   let code = req.query.code;
   let options = {
     code,
@@ -130,6 +130,7 @@ var oath2_callback = async function(req, res, next){
     // create new access token from Canvas API
     let result = await oauth2.authorizationCode.getToken(options);
     let accessToken = await oauth2.accessToken.create(result);
+    console.log(accessToken);
     // save access token to Redis
     redis_client.set('token_'+req.query.scope, JSON.stringify(accessToken));
     return res.redirect('/home?login_success=1')

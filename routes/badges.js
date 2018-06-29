@@ -14,7 +14,7 @@ router.use('/', function(req, res, next) {
   }
 
   if (auth.provider.admin){
-    queries.badgesAdminQuery(function(badges){
+    queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
         title: 'Badges | ONEXYS',
         badges: badges,

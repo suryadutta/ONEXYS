@@ -32,8 +32,8 @@ var daily_yalie_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Daily&per_page=50';
 }
 
-function getRequest(url, callback) {
-  auth.authTokenQueue.push('user',function(auth_token){
+function getRequest(url, userID, callback) {
+  auth.authTokenQueue.push(userID,function(auth_token){
     request.get({
       url: url,
       headers: {
@@ -45,8 +45,8 @@ function getRequest(url, callback) {
   });
 } //user GET request
 
-function postRequest(url, parameters, callback) {
-  auth.authTokenQueue.push('user',function(auth_token){
+function postRequest(url, userID, parameters, callback) {
+  auth.authTokenQueue.push(userID,function(auth_token){
     request.post({
       url: url,
       headers: {
@@ -59,8 +59,8 @@ function postRequest(url, parameters, callback) {
   });
 } //user POST request
 
-function putRequest(url, parameters, callback) {
-  auth.authTokenQueue.push('user',function(auth_token){
+function putRequest(url, userID, parameters, callback) {
+  auth.authTokenQueue.push(userID,function(auth_token){
     request.put({
       url: url,
       headers: {
@@ -149,7 +149,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
       return 0;
     }
 
-    getRequest(assignment_user_url(studentID, courseID), function(err, data) {
+    getRequest(assignment_user_url(studentID, courseID),studentID, function(err, data) {
       if (err){
         console.log(err);
         callback(err, 0, badges);
@@ -434,7 +434,7 @@ function getIndScoreAndBadges(studentID, courseID, callback){ // Get score and b
 
 function getStudentProgress(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
   mongo.getAllData(function(mongo_data){
-    getRequest(assignment_user_url(studentID, courseID), function(err, user_assigments) {
+    getRequest(assignment_user_url(studentID, courseID), studentID, function(err, user_assigments) {
       moduleProgress = mongo_data.modules;
       if (err){
         console.log(err);
@@ -619,7 +619,7 @@ function getAdminLeaderboardScores(courseID, callback){
 }
 
 function getStudents(courseID, callback){
-  getRequest(student_url(courseID),function(err,student_data){
+  getAdminRequest(student_url(courseID),function(err,student_data){
     var student_data_sorted = student_data.sort(function(a, b) {
       var textA = a.sortable_name.toUpperCase();
       var textB = b.sortable_name.toUpperCase();
@@ -646,6 +646,7 @@ module.exports = {
   postRequest,
   putRequest,
   getAdminRequest,
+  postAdminRequest,
   putAdminRequest,
   getIndScoreAndBadges,
   getStudentProgress,
