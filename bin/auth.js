@@ -88,7 +88,11 @@ var checkUser = function(req, res, next) {
   if (req.query.login_success=='1'){
     next()
   } else {
-     //launch LTI instance
+
+    if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
+      provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
+    }
+    
     provider.valid_request(req, function(err, is_valid) {
       if (!is_valid) {
         console.log('Unverified User:');
