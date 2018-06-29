@@ -64,9 +64,9 @@ var authTokenQueue = new Queue(function(arg,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
-  if (provider.admin==null){
+  if (typeof provider.admin == 'undefined' && !provider.admin) {
     console.log('Err authenticating admin')
-    console.log('provider')
+    console.log(provider)
     res.redirect('/home')
   }else {
     next()
@@ -81,7 +81,7 @@ var checkUser = function(req, res, next) {
   } else {
      //launch LTI instance
     provider.valid_request(req, function(err, is_valid) {
-      if (typeof provider.admin == 'undefined' && !provider.admin) {
+      if (!is_valid) {
         console.log('Unverified User:');
         console.log(provider.valid_request);
         console.log(provider);
