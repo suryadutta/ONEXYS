@@ -67,6 +67,7 @@ var checkAdmin = function(req,res,next) {
 
   if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
     provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
+    provider.body.context_title = req.body.context_title;
     console.log('Changed Course ID');
     console.log(provider.body);
     if (typeof provider.admin == 'undefined' && !provider.admin) {
