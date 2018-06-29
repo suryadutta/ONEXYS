@@ -64,13 +64,12 @@ var authTokenQueue = new Queue(function(arg,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
-  
+
   console.log(req.body);
   console.log(provider.body);
 
   if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
-    provider = new lti.Provider(config.client_id, config.client_secret);
-    console.log('Generating new provider...');
+    provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
   }
 
   if (typeof provider.admin == 'undefined' && !provider.admin) {
