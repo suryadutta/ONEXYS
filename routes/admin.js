@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
-const auth = require('../bin/auth')
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
