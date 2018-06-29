@@ -80,7 +80,6 @@ var updateProvider = function(req,res,next){
     res.cookie('user_id', req.body.custom_canvas_user_id);
     res.cookie('admin',req.body.roles.includes('Instructor'));
   } 
-
   next();
 };
 

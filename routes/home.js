@@ -7,14 +7,19 @@ router.use('/', (req, res, next) => {
 
   console.log(req.cookies)
 
-  var courseID = req.cookies.course_id
-  var userID = req.cookies.user_id
+  var courseID = parseInt(req.cookies.course_id)
+  var userID = parseInt(req.cookies.user_id)
 
-  var is_physics = Boolean(courseID == 38083);
+  console.log('Course and User IDs')
 
-  if (courseID == 10184) {
+  console.log(courseID)
+  console.log(userID)
+
+  if (courseID == 10184){
     courseID = 38082;
   }
+
+  var is_physics = Boolean(courseID == 38083);
 
   if (req.cookies.admin) {
     if (req.query.masquerade) {

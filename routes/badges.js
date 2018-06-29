@@ -5,11 +5,16 @@ var queries = require('../models/queries')
 
 router.use('/', function(req, res, next) {
 
-  var courseID = req.cookies.course_id
-  var userID = req.cookies.user_id
+  var courseID = parseInt(req.cookies.course_id)
+  var userID = parseInt(req.cookies.user_id)
+
+  console.log('Course and User IDs')
+
+  console.log(courseID)
+  console.log(userID)
 
   if (courseID == 10184){
-    courseID = 9659;
+    courseID = 38082;
   }
 
   if (req.cookies.admin){
