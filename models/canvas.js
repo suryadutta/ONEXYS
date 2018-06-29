@@ -155,10 +155,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         callback(err, 0, badges);
       } else if (data.status == "unauthorized"){
         console.log('User unauthorized');
-        callback('User unauthorized', 0, moduleProgress);
+        callback('User unauthorized', 0, badges);
       } else if (data.error){
         console.log(data.error);
-        callback(data.error, 0, moduleProgress);
+        callback(data.error, 0, badges);
       } else if (data.length<1) {
         console.log('No Assignment Data Recorded');
         callback(null, 0, badges);
