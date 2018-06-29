@@ -81,10 +81,6 @@ var updateProvider = function(req,res,next){
     res.cookie('admin',req.body.roles.includes('Instructor'));
   } 
 
-  if(!res.cookie.user_id){
-    res.send('Need Cookie');
-  }
-
   next();
 };
 
