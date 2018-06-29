@@ -10,16 +10,8 @@ var redis = require("redis"),
 
 var store = new RedisNonceStore(config.client_id, redis_client);
 
-var delay = ( function() {
-    var timer = 0;
-    return function(callback, ms) {
-        clearTimeout (timer);
-        timer = setTimeout(callback, ms);
-    };
-})();
-
 if (!provider) {
-  var provider = new lti.Provider(config.client_id, config.client_secret, store);
+  var provider = new lti.Provider(config.client_id, config.client_secret);
   console.log('Generating new provider...')
 }
 
@@ -72,32 +64,23 @@ var authTokenQueue = new Queue(function(arg,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
+  
+  console.log(req.body);
+  console.log(provider.body);
 
   if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
     provider = new lti.Provider(config.client_id, config.client_secret);
     console.log('Generating new provider...');
-
-    delay(function(){
-      if (typeof provider.admin == 'undefined' && !provider.admin) {
-        console.log('Err authenticating admin')
-        console.log(provider)
-        res.redirect('/home')
-      } else {
-        next()
-      }
-    }, 5000 ); // end delay
-
-    
-
-  } else {
-    if (typeof provider.admin == 'undefined' && !provider.admin) {
-      console.log('Err authenticating admin')
-      console.log(provider)
-      res.redirect('/home')
-    } else {
-      next()
-    }
   }
+
+  if (typeof provider.admin == 'undefined' && !provider.admin) {
+    console.log('Err authenticating admin')
+    console.log(provider)
+    res.redirect('/home')
+  } else {
+    next()
+  }
+
 }
 
 //middleware to check user and launch lti
@@ -106,63 +89,30 @@ var checkUser = function(req, res, next) {
   if (req.query.login_success=='1'){
     next()
   } else {
-    if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
-
-      provider = new lti.Provider(config.client_id, config.client_secret);
-      console.log('Generating new provider...');
-
-      delay(function(){
-        provider.valid_request(req, function(err, is_valid) {
-          if (!is_valid) {
-            console.log('Unverified User:');
-            console.log(provider.valid_request);
-            console.log(provider);
-            res.send('Unverified User');
-          } else {         
-            //check if auth token already exists in Redis 
-            redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
-              if (token_exists==0){
-                // generate auth token
-                let authorizationUri = oauth2.authorizationCode.authorizeURL({
-                  redirect_uri: config.redirectURL,
-                  state: provider.user_id,
-                });
-                res.redirect(authorizationUri);
-              } else {
-                // auth token exists
-                next();
-              }
+     //launch LTI instance
+    provider.valid_request(req, function(err, is_valid) {
+      if (!is_valid) {
+        console.log('Unverified User:');
+        console.log(provider.valid_request);
+        console.log(provider);
+        res.send('Unverified User');
+      } else {         
+        //check if auth token already exists in Redis 
+        redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
+          if (token_exists==0){
+            // generate auth token
+            let authorizationUri = oauth2.authorizationCode.authorizeURL({
+              redirect_uri: config.redirectURL,
+              state: provider.user_id,
             });
-          } 
+            res.redirect(authorizationUri);
+          } else {
+            // auth token exists
+            next();
+          }
         });
-      }, 5000 ); // end delay
-
-    } else {
-      //launch LTI instance
-      provider.valid_request(req, function(err, is_valid) {
-        if (!is_valid) {
-          console.log('Unverified User:');
-          console.log(provider.valid_request);
-          console.log(provider);
-          res.send('Unverified User');
-        } else {         
-          //check if auth token already exists in Redis 
-          redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
-            if (token_exists==0){
-              // generate auth token
-              let authorizationUri = oauth2.authorizationCode.authorizeURL({
-                redirect_uri: config.redirectURL,
-                state: provider.user_id,
-              });
-              res.redirect(authorizationUri);
-            } else {
-              // auth token exists
-              next();
-            }
-          });
-        } 
-      });
-    }
+      }
+    });
   }
 }
 
