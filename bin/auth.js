@@ -105,7 +105,6 @@ var checkUser = function(req, res, next) {
             let authorizationUri = oauth2.authorizationCode.authorizeURL({
               redirect_uri: config.redirectURL,
               state: String(req.cookies.user_id),
-              scope: String(req.cookies.user_id),
             });
             res.redirect(authorizationUri);
           } else {
@@ -120,11 +119,9 @@ var checkUser = function(req, res, next) {
 
 //path for oauth2 callback from Canvas server
 var oath2_callback = async function(req, res, next){
+
   console.log('Query');
   console.log(req.query);
-
-  console.log('OAuth2 Scope');
-  console.log(req.query.scope);
 
   let code = req.query.code;
   let options = {
@@ -136,7 +133,7 @@ var oath2_callback = async function(req, res, next){
     let accessToken = await oauth2.accessToken.create(result);
     console.log(accessToken);
     // save access token to Redis
-    redis_client.set('token_'+req.query.scope, JSON.stringify(accessToken));
+    redis_client.set('token_'+req.query.state, JSON.stringify(accessToken));
     return res.redirect('/home?login_success=1')
   } catch(error) {
     console.error('Access Token Error', error.message);
