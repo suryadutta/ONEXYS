@@ -6,8 +6,8 @@ var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
 
-  var courseID = req.body.custom_canvas_course_id;
-  var userID = req.body.custom_canvas_user_id;
+  var courseID = auth.provider.custom_canvas_course_id;
+  var userID = auth.provider.custom_canvas_user_id;
 
   console.log('User ID: ', userID, '  Course ID: ', courseID);
 
