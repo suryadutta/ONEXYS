@@ -19,7 +19,7 @@ var delay = ( function() {
 })();
 
 if (!provider) {
-  var provider = new lti.Provider(config.client_id, config.client_secret);
+  var provider = new lti.Provider(config.client_id, config.client_secret, store);
   console.log('Generating new provider...')
 }
 
@@ -85,7 +85,7 @@ var checkAdmin = function(req,res,next) {
       } else {
         next()
       }
-    }, 1000 ); // end delay
+    }, 5000 ); // end delay
 
     
 
@@ -135,7 +135,8 @@ var checkUser = function(req, res, next) {
             });
           } 
         });
-      }, 1000 ); // end delay
+      }, 5000 ); // end delay
+
     } else {
       //launch LTI instance
       provider.valid_request(req, function(err, is_valid) {
