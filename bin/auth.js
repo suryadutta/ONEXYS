@@ -85,8 +85,8 @@ var updateProvider = function(req,res,next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
-  console.log('Session');
-  console.log(req.session);
+  console.log('Session Test: Course-ID');
+  console.log(req.session.course_id);
   req.connection.encrypted = true;
   if (req.query.login_success=='1'){
     next();
