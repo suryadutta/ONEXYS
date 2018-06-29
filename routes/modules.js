@@ -9,12 +9,12 @@ var asyncStuff = require("async");
 router.get("/:id", function(req, res, next) {
   console.log("Viewing Module " + req.params.id);
 
-  mongo.getModule(req.cookies.course_id, req.params.id, function(err, moduleData) {
+  mongo.getModule(req.session.course_id, req.params.id, function(err, moduleData) {
     console.log("Viewing Module moduleData", moduleData);
 
     res.render("module", {
       data: moduleData,
-      course_number: req.cookies.course_id || "38082",
+      course_number: req.session.course_id || "38082",
       canvas_url: config.canvasURL
     });
   });

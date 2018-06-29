@@ -5,8 +5,8 @@ var queries = require('../models/queries')
 
 router.use('/', function(req, res, next) {
 
-  var courseID = parseInt(req.cookies.course_id)
-  var userID = parseInt(req.cookies.user_id)
+  var courseID = parseInt(req.session.course_id)
+  var userID = parseInt(req.session.user_id)
 
   console.log('Course and User IDs')
 
@@ -17,7 +17,7 @@ router.use('/', function(req, res, next) {
     courseID = 38082;
   }
 
-  if (req.cookies.admin){
+  if (req.session.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
         title: 'Badges | ONEXYS',

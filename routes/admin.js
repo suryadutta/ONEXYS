@@ -19,7 +19,7 @@ router.post("/", (req, res, next) => {
 
 //Get Home Page Updates
 router.get("/home", (req, res, next) => {
-  mongo.getHomeContent(req.cookies.course_id,(err, home_updates, home_vids) => {
+  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
       course: res.cookie.course_title,
@@ -31,7 +31,7 @@ router.get("/home", (req, res, next) => {
 
 //Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
-  mongo.getHomeContent(req.cookies.course_id,(err, home_updates, home_vids) => {
+  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
       course: res.cookie.course_title,
@@ -51,7 +51,7 @@ router.post("/home/preview", (req, res, next) => {
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
-  mongo.updateData(req.cookies.course_id,"home", { type: "updates" }, req.body, (err, result) => {
+  mongo.updateData(req.session.course_id,"home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
 });
@@ -69,14 +69,14 @@ router.post("/home/videos/add", (req, res, next) => {
   vidData = req.body;
   vidData._id = makeid();
   vidData.type = "video";
-  mongo.insertData(req.cookies.course_id,"home", vidData, (err, result) => {
+  mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //edit home video
 router.get("/home/videos/edit/:id", (req, res, next) => {
-  mongo.getHomeContent(req.cookies.course_id,(err, home_updates, home_vids) => {
+  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     home_vid = home_vids.find(video => video._id == req.params.id);
     if (home_vid) {
       res.render("admin/homeVidEdit", {
@@ -113,21 +113,21 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-  mongo.updateData(req.cookies.course_id,"home", { _id: req.params.id }, req.body, (err, result) => {
+  mongo.updateData(req.session.course_id,"home", { _id: req.params.id }, req.body, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //delete home video
 router.post("/home/videos/delete/:id", (req, res, next) => {
-  mongo.deleteData(req.cookies.course_id,"home", { _id: req.params.id }, (err, result) => {
+  mongo.deleteData(req.session.course_id,"home", { _id: req.params.id }, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get("/modules", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"modules", (err, modulesInfo) => {
+  mongo.getData(req.session.course_id,"modules", (err, modulesInfo) => {
     res.render("admin/modules", {
       title: "Modules",
       course: res.cookie.course_title,
@@ -138,7 +138,7 @@ router.get("/modules", (req, res, next) => {
 
 //Get Page to Edit Module Content
 router.get("/modules/:id/edit", (req, res, next) => {
-  mongo.getModule(req.cookies.course_id,req.params.id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
       course: res.cookie.course_title,
@@ -149,7 +149,7 @@ router.get("/modules/:id/edit", (req, res, next) => {
 
 router.post("/modules/:id/edit", (req, res, next) => {
   var bodyInfo = req.body;
-  mongo.getModule(req.cookies.course_id,req.params.id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     merged_data = Object.assign(moduleInfo,bodyInfo);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
@@ -162,7 +162,7 @@ router.post("/modules/:id/edit", (req, res, next) => {
 //POST handler for Previewing Module Edits
 router.post("/modules/:id/preview", (req, res, next) => {
   var bodyInfo = req.body;
-  mongo.getModule(req.cookies.course_id,req.params.id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
@@ -175,7 +175,7 @@ router.post("/modules/:id/preview", (req, res, next) => {
 //POST handler for Module Edits
 router.post("/modules/:id/confirmUpdates", (req, res, next) => {
   mongo.updateData(
-    req.cookies.course_id,
+    req.session.course_id,
     "modules",
     { _id: parseInt(req.params.id) },
     req.body,
@@ -210,7 +210,7 @@ const makeid = () => {
 router.post("/modules/:id/videos/add", (req, res, next) => {
   vidObject = req.body;
   vidObject._id = makeid();
-  mongo.getModule(req.cookies.course_id,req.params.id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     //set position of new video to 1+(POSITION OF LAST VIDEO)
     vidObject.position =
       moduleInfo.videos[moduleInfo.videos.length - 1].position + 1;
@@ -228,7 +228,7 @@ router.post("/modules/:id/videos/add", (req, res, next) => {
 
 //GET page to edit video from module
 router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
-  mongo.getModule(req.cookies.course_id,req.params.module_id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.module_id, (err, moduleInfo) => {
     vidObject = moduleInfo.videos.find(
       video => video._id == req.params.video_id
     );
@@ -243,7 +243,7 @@ router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
 
 //POST handler to edit video from module
 router.post("/modules/:module_id/videos/edit/:video_id", (req, res) => {
-  mongo.getModule(req.cookies.course_id,req.params.module_id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.module_id, (err, moduleInfo) => {
     vid_index = moduleInfo.videos.findIndex(
       video => video._id == req.params.video_id
     );
@@ -264,7 +264,7 @@ router.post("/modules/:module_id/videos/edit/:video_id", (req, res) => {
 
 //POST handler to delete video from module
 router.post("/modules/:module_id/videos/delete/:video_id", (req, res) => {
-  mongo.getModule(req.cookies.course_id,req.params.module_id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id,req.params.module_id, (err, moduleInfo) => {
     vid_index = moduleInfo.videos.findIndex(
       video => video._id == req.params.video_id
     );
@@ -283,7 +283,7 @@ router.post("/modules/:module_id/videos/delete/:video_id", (req, res) => {
 });
 
 router.get("/badges", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"badges", (err, badges_data) => {
+  mongo.getData(req.session.course_id,"badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
       course: res.cookie.course_title,
@@ -293,7 +293,7 @@ router.get("/badges", (req, res, next) => {
 });
 
 router.get("/badges/edit/:id", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"badges", (err, badges_data) => {
+  mongo.getData(req.session.course_id,"badges", (err, badges_data) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
     res.render("admin/badgeEdit", {
       title: "Badges",
@@ -306,7 +306,7 @@ router.get("/badges/edit/:id", (req, res, next) => {
 router.post("/badges/edit/:id", (req, res, next) => {
   //update badges info
   mongo.updateData(
-    req.cookies.course_id,
+    req.session.course_id,
     "badges",
     { _id: parseInt(req.params.id) },
     {
@@ -323,7 +323,7 @@ router.post("/badges/edit/:id", (req, res, next) => {
 });
 
 router.get("/dailies", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"dailies", (err, dailies_data) => {
+  mongo.getData(req.session.course_id,"dailies", (err, dailies_data) => {
     res.render("admin/dailies", {
       title: "Dailies",
       course: res.cookie.course_title,
@@ -333,7 +333,7 @@ router.get("/dailies", (req, res, next) => {
 });
 
 router.get("/dailies/edit/:id", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"dailies", (err, dailies_data) => {
+  mongo.getData(req.session.course_id,"dailies", (err, dailies_data) => {
     daily_data = dailies_data.find(element => element._id == req.params.id);
     res.render("admin/dailyEdit", {
       title: "Dailies",
@@ -346,7 +346,7 @@ router.get("/dailies/edit/:id", (req, res, next) => {
 router.post("/dailies/edit/:id", (req, res, next) => {
   //update badges info
   mongo.updateData(
-    req.cookies.course_id,
+    req.session.course_id,
     "dailies",
     { _id: parseInt(req.params.id) },
     {
@@ -360,7 +360,7 @@ router.post("/dailies/edit/:id", (req, res, next) => {
 
 router.get("/lucky", (req, res, next) => {
   mongo.getData(
-    req.cookies.course_id,
+    req.session.course_id,
     "lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
@@ -371,7 +371,7 @@ router.get("/lucky", (req, res, next) => {
 });
 
 router.get("/lucky/edit/:id", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"lucky_bulldogs", (err, lucky_data) => {
+  mongo.getData(req.session.course_id,"lucky_bulldogs", (err, lucky_data) => {
     lucky_bulldog = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
       title: "Lucky Bulldog",
@@ -383,7 +383,7 @@ router.get("/lucky/edit/:id", (req, res, next) => {
 
 router.post("/lucky/edit/:id", (req, res, next) => {
   mongo.updateData(
-    req.cookies.course_id,
+    req.session.course_id,
     "lucky_bulldogs",
     { _id: parseInt(req.params.id) },
     { time: req.body.date_time },
@@ -395,7 +395,7 @@ router.post("/lucky/edit/:id", (req, res, next) => {
 
 router.post("/lucky/delete/:id", (req, res, next) => {
   mongo.deleteData(
-    req.cookies.course_id,
+    req.session.course_id,
     "lucky_bulldogs",
     { _id: parseInt(req.params.id) },
     (err, result) => {
@@ -412,14 +412,14 @@ router.get("/lucky/add", (req, res, next) => {
 });
 
 router.post("/lucky/add", (req, res, next) => {
-  mongo.getData(req.cookies.course_id,"lucky_bulldogs", (err, lucky_data) => {
+  mongo.getData(req.session.course_id,"lucky_bulldogs", (err, lucky_data) => {
     if (lucky_data.length > 0) {
       new_id = Math.max(lucky_data.map(data => data._id)) + 1;
     } else {
       new_id = 1;
     }
     mongo.insertData(
-      req.cookies.course_id,
+      req.session.course_id,
       "lucky_bulldogs",
       {
         _id: new_id,

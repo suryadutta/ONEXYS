@@ -10,6 +10,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session')
+var cookieSession = require('cookie-session')
 
 var config = require('./bin/config');
 var auth = require('./bin/auth')
@@ -33,15 +34,15 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-  secret: 'keyboard cat',
-  saveUninitialized: true,
-  cookie: { secure: true }
-}));
-
+app.set('trust proxy', 1) // trust first proxy
+ 
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
 
 app.get('/callback',auth.oath2_callback);
 
