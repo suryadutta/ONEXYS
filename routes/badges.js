@@ -1,19 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var config = require('../bin/config');
-var auth = require('../bin/auth')
 var queries = require('../models/queries')
 
 router.use('/', function(req, res, next) {
 
-  var courseID = auth.provider.body.custom_canvas_course_id;
-  var userID = auth.provider.body.custom_canvas_user_id;
+  var courseID = req.cookie.course_id
+  var userID = req.cookie.user_id
 
   if (courseID == 10184){
     courseID = 9659;
   }
 
-  if (auth.provider.admin){
+  if (req.cookie.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
         title: 'Badges | ONEXYS',

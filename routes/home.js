@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var config = require('../bin/config');
-var auth = require('../bin/auth')
 var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
@@ -17,7 +16,7 @@ router.use('/', (req, res, next) => {
     courseID = 38082;
   }
 
-  if (auth.provider.admin) {
+  if (res.cookie.admin) {
     if (req.query.masquerade) {
       queries.homepageQuery(parseInt(req.query.masquerade),
         courseID,
@@ -45,7 +44,7 @@ router.use('/', (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            admin: auth.provider.admin,
+            admin: res.cookie.admin,
             masquerade: true,
           });
         });
@@ -77,7 +76,7 @@ router.use('/', (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            admin: auth.provider.admin,
+            admin: res.cookie.admin,
             masquerade: false,
             students
           });
@@ -113,7 +112,7 @@ router.use('/', (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
-          admin: auth.provider.admin
+          admin: res.cookie.admin
         });
       });
   }
