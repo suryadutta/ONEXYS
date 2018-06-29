@@ -109,7 +109,7 @@ function putAdminRequest(url, parameters, callback) {
 } //admin PUT request
 
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
-  mongo.getAllData(function(mongo_data){
+  mongo.getAllData(courseID,function(mongo_data){
     var badges = mongo_data.badges;
     var totalPoints = 0;
     var practice_proficient = 0;
@@ -433,7 +433,7 @@ function getIndScoreAndBadges(studentID, courseID, callback){ // Get score and b
 }
 
 function getStudentProgress(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
-  mongo.getAllData(function(mongo_data){
+  mongo.getAllData(courseID,function(mongo_data){
     getRequest(assignment_user_url(studentID, courseID), studentID, function(err, user_assigments) {
       moduleProgress = mongo_data.modules;
       if (err){
