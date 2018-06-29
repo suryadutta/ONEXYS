@@ -64,92 +64,60 @@ var authTokenQueue = new Queue(function(arg,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
+    if (typeof provider.admin == 'undefined' && !provider.admin) {
+      console.log('Err authenticating admin');
+      console.log(provider)
+      res.send('Err authenticating admin');
+    } else {
+      next()
+    }
+}
 
-  if (req.body.custom_canvas_course_id && (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id || req.body.custom_canvas_user_id != provider.body.custom_canvas_user_id )){
+//middleware to update course information
+var updateProvider = function(req,res,next){
+  if (req.body.custom_canvas_course_id){
+    console.log('Provider Update')
     provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
     provider.body.context_title = req.body.context_title;
     provider.body.custom_canvas_user_id = req.body.custom_canvas_user_id;
-    console.log('Changed Course ID');
-    console.log(provider.body);
-    console.log(req.body);
-    if (typeof provider.admin == 'undefined' && !provider.admin) {
-      console.log('Err authenticating admin');
-      console.log(provider)
-      res.send('Err authenticating admin');
-    } else {
-      next()
-    }
-  } else{
-    if (typeof provider.admin == 'undefined' && !provider.admin) {
-      console.log('Err authenticating admin');
-      console.log(provider)
-      res.send('Err authenticating admin');
-    } else {
-      next()
-    }
+    console.log(provider)
+    console.log(provider.parse_request(req))
+    next();
+  } else {
+    next()
   }
-}
+};
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
   req.connection.encrypted = true;
   if (req.query.login_success=='1'){
     next()
-  } else {
-
-    if (req.body.custom_canvas_course_id && (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id || req.body.custom_canvas_user_id != provider.body.custom_canvas_user_id )){
-      provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
-      provider.body.context_title = req.body.context_title;
-      provider.body.custom_canvas_user_id = req.body.custom_canvas_user_id;
-      provider.valid_request(req, function(err, is_valid) {
-        if (!is_valid) {
-          console.log('Unverified User:');
-          console.log(provider.valid_request);
-          console.log(provider);
-          res.send('Unverified User');
-        } else {         
-          //check if auth token already exists in Redis 
-          redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
-            if (token_exists==0){
-              // generate auth token
-              let authorizationUri = oauth2.authorizationCode.authorizeURL({
-                redirect_uri: config.redirectURL,
-                state: provider.user_id,
-              });
-              res.redirect(authorizationUri);
-            } else {
-              // auth token exists
-              next();
-            }
-          });
-        }
-      });
-    } else {
-      provider.valid_request(req, function(err, is_valid) {
-        if (!is_valid) {
-          console.log('Unverified User:');
-          console.log(provider.valid_request);
-          console.log(provider);
-          res.send('Unverified User');
-        } else {         
-          //check if auth token already exists in Redis 
-          redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
-            if (token_exists==0){
-              // generate auth token
-              let authorizationUri = oauth2.authorizationCode.authorizeURL({
-                redirect_uri: config.redirectURL,
-                state: provider.user_id,
-              });
-              res.redirect(authorizationUri);
-            } else {
-              // auth token exists
-              next();
-            }
-          });
-        }
-      });
-    }
-  }
+  } else {      
+    provider.valid_request(req, function(err, is_valid) {
+      if (!is_valid) {
+        console.log('Unverified User:');
+        console.log(provider.valid_request);
+        console.log(provider);
+        res.send('Unverified User');
+      } else {         
+        //check if auth token already exists in Redis 
+        redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
+          if (token_exists==0){
+            // generate auth token
+            let authorizationUri = oauth2.authorizationCode.authorizeURL({
+              redirect_uri: config.redirectURL,
+              state: provider.user_id,
+            });
+            res.redirect(authorizationUri);
+          } else {
+            // auth token exists
+            next();
+          }
+        });
+      }
+    });
+  } 
 }
 
 //path for oauth2 callback from Canvas server
@@ -174,6 +142,7 @@ var oath2_callback = async function(req, res, next){
 module.exports = {
     oath2_callback,
     provider,
+    updateProvider,
     authTokenQueue,
     checkUser,
     checkAdmin

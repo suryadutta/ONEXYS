@@ -39,9 +39,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/callback',auth.oath2_callback);
 
 app.get('/',index);
-app.use('/home',auth.checkUser,home)
-app.use('/badges',auth.checkUser,badges)
-app.use('/admin',auth.checkAdmin,admin)
+app.use('/home',[auth.updateProvider,auth.checkUser],home)
+app.use('/badges',[auth.updateProvider,auth.checkUser],badges)
+app.use('/admin',[auth.updateProvider,auth.checkAdmin],admin)
 
 app.use('/modules', modules)
 
