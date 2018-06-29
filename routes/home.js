@@ -5,10 +5,10 @@ var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
 
-  console.log(req.cookie)
+  console.log(req.cookies)
 
-  var courseID = req.cookie.course_id
-  var userID = req.cookie.user_id
+  var courseID = req.cookies.course_id
+  var userID = req.cookies.user_id
 
   var is_physics = Boolean(courseID == 38083);
 
@@ -16,7 +16,7 @@ router.use('/', (req, res, next) => {
     courseID = 38082;
   }
 
-  if (res.cookie.admin) {
+  if (req.cookies.admin) {
     if (req.query.masquerade) {
       queries.homepageQuery(parseInt(req.query.masquerade),
         courseID,
@@ -44,7 +44,7 @@ router.use('/', (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            admin: res.cookie.admin,
+            admin: req.cookies.admin,
             masquerade: true,
           });
         });
@@ -76,7 +76,7 @@ router.use('/', (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            admin: res.cookie.admin,
+            admin: req.cookies.admin,
             masquerade: false,
             students
           });
@@ -112,7 +112,7 @@ router.use('/', (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
-          admin: res.cookie.admin
+          admin: req.cookies.admin
         });
       });
   }

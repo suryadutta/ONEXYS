@@ -5,14 +5,14 @@ var queries = require('../models/queries')
 
 router.use('/', function(req, res, next) {
 
-  var courseID = req.cookie.course_id
-  var userID = req.cookie.user_id
+  var courseID = req.cookies.course_id
+  var userID = req.cookies.user_id
 
   if (courseID == 10184){
     courseID = 9659;
   }
 
-  if (req.cookie.admin){
+  if (req.cookies.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
         title: 'Badges | ONEXYS',
