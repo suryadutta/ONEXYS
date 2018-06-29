@@ -11,8 +11,8 @@ router.use('/', (req, res, next) => {
 
   var is_physics = Boolean(courseID == 38083);
 
-  console.log('Is Physics?');
-  console.log(is_physics);
+  console.log('Instructor:')
+  console.log(auth.provider.body.roles.includes('Instructor'))
 
   if (courseID == 10184) {
     courseID = 38082;
