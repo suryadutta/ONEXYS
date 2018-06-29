@@ -49,7 +49,7 @@ var authTokenQueue = new Queue(function(user_id,callback){
           // add back the previous refresh token to use again
           accessToken.token.refresh_token = refresh_token;
           // save new access token to Redis store
-          redis_client.set('token_'+req.cookies.user_id, JSON.stringify(accessToken));
+          redis_client.set('token_'+req.session.user_id, JSON.stringify(accessToken));
           callback(accessToken.token.access_token)
         } catch (error) {
           console.log('Error refreshing access token: ', error.message);
@@ -64,7 +64,7 @@ var authTokenQueue = new Queue(function(user_id,callback){
 
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
-    if (typeof req.cookies.admin == 'undefined' && !req.cookies.admin) {
+    if (typeof req.session.admin == 'undefined' && !req.session.admin) {
       console.log('Err authenticating admin');
       res.send('Err authenticating admin');
     } else {
@@ -75,21 +75,21 @@ var checkAdmin = function(req,res,next) {
 //middleware to update course information
 var updateProvider = function(req,res,next){
   if (req.body.custom_canvas_course_id){
-    res.cookie('course_id',req.body.custom_canvas_course_id,{httpOnly: false});
-    res.cookie('course_title',req.body.context_title,{httpOnly: false});
-    res.cookie('user_id', req.body.custom_canvas_user_id,{httpOnly: false});
-    res.cookie('admin',req.body.roles.includes('Instructor'),{httpOnly: false});
-    res.send('hi')
-  };
+    req.session.course_id = req.body.custom_canvas_course_id;
+    req.session.context_title = req.body.context_title;
+    req.session.user_id = req.body.custom_canvas_user_id;
+    req.session.admin = req.body.roles.includes('Instructor');
+  }
+  next();
 };
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
-  console.log('Cookies1');
-  console.log(req.cookies);
+  console.log('Session');
+  console.log(req.session);
   req.connection.encrypted = true;
   if (req.query.login_success=='1'){
-    next()
+    next();
   } else {      
     provider.valid_request(req, function(err, is_valid) {
       if (!is_valid) {
@@ -99,12 +99,12 @@ var checkUser = function(req, res, next) {
         res.send('Unverified User');
       } else {         
         //check if auth token already exists in Redis 
-        redis_client.exists('token_'+String(req.cookies.user_id), function(err, token_exists) {
+        redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {
           if (token_exists==0){
             // generate auth token
             let authorizationUri = oauth2.authorizationCode.authorizeURL({
               redirect_uri: config.redirectURL,
-              state: String(req.cookies.user_id),
+              state: String(req.session.user_id),
             });
             res.redirect(authorizationUri);
           } else {
