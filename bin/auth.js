@@ -75,10 +75,10 @@ var checkAdmin = function(req,res,next) {
 //middleware to update course information
 var updateProvider = function(req,res,next){
   if (req.body.custom_canvas_course_id){
-    res.cookie('course_id',req.body.custom_canvas_course_id);
-    res.cookie('course_title',req.body.context_title);
-    res.cookie('user_id', req.body.custom_canvas_user_id);
-    res.cookie('admin',req.body.roles.includes('Instructor'));
+    res.cookie('course_id',req.body.custom_canvas_course_id,{httpOnly: false});
+    res.cookie('course_title',req.body.context_title,{httpOnly: false});
+    res.cookie('user_id', req.body.custom_canvas_user_id,{httpOnly: false});
+    res.cookie('admin',req.body.roles.includes('Instructor'),{httpOnly: false});
   } 
   next();
 };
