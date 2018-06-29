@@ -10,8 +10,8 @@ var redis = require("redis"),
 
 var store = new RedisNonceStore(config.client_id, redis_client);
 
-if (provider==null) {
-  provider = new lti.Provider(config.client_id, config.client_secret);
+if (!provider) {
+  var provider = new lti.Provider(config.client_id, config.client_secret);
   console.log('Generating new provider...')
 }
 
