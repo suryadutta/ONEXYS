@@ -65,6 +65,11 @@ var authTokenQueue = new Queue(function(arg,callback){
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
 
+  console.log('Req Body')
+  console.log(req.body)
+  console.log('Provider')
+  console.log(provider)
+
   if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
     var provider = new lti.Provider(config.client_id, config.client_secret);
     console.log('Generating new provider...');
