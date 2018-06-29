@@ -65,21 +65,26 @@ var authTokenQueue = new Queue(function(arg,callback){
 //middleware to check if admin
 var checkAdmin = function(req,res,next) {
 
-  console.log(req.body);
-  console.log(provider.body);
-
   if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
     provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
+    console.log('Changed Course ID');
+    console.log(provider.body);
+    if (typeof provider.admin == 'undefined' && !provider.admin) {
+      console.log('Err authenticating admin');
+      console.log(provider)
+      res.send('Err authenticating admin');
+    } else {
+      next()
+    }
+  } else{
+    if (typeof provider.admin == 'undefined' && !provider.admin) {
+      console.log('Err authenticating admin');
+      console.log(provider)
+      res.send('Err authenticating admin');
+    } else {
+      next()
+    }
   }
-
-  if (typeof provider.admin == 'undefined' && !provider.admin) {
-    console.log('Err authenticating admin')
-    console.log(provider)
-    res.redirect('/home')
-  } else {
-    next()
-  }
-
 }
 
 //middleware to check user and launch lti

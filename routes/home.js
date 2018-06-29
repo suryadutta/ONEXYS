@@ -6,16 +6,12 @@ var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
 
-  var courseID = auth.provider.body.custom_canvas_course_id;
-  var userID = auth.provider.body.custom_canvas_user_id;
+  var courseID = req.body.custom_canvas_course_id;
+  var userID = req.body.custom_canvas_user_id;
 
   console.log('User ID: ', userID, '  Course ID: ', courseID);
-  console.log(auth.provider.body);
 
   var is_physics = Boolean(courseID == 38083);
-
-  console.log('Instructor:')
-  console.log(auth.provider.body.roles.includes('Instructor'))
 
   if (courseID == 10184) {
     courseID = 38082;
