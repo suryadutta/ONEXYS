@@ -70,18 +70,14 @@ var checkAdmin = function(req,res,next) {
   console.log('Provider')
   console.log(provider)
 
-  if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
-    var provider = new lti.Provider(config.client_id, config.client_secret);
-    console.log('Generating new provider...');
-  }
-
   if (typeof provider.admin == 'undefined' && !provider.admin) {
     console.log('Err authenticating admin')
     console.log(provider)
     res.redirect('/home')
-  }else {
+  } else {
     next()
   }
+
 }
 
 //middleware to check user and launch lti
