@@ -97,31 +97,55 @@ var checkUser = function(req, res, next) {
 
     if (req.body.custom_canvas_course_id != provider.body.custom_canvas_course_id){
       provider.body.custom_canvas_course_id = req.body.custom_canvas_course_id;
+      provider.body.context_title = req.body.context_title;
+      provider.valid_request(req, function(err, is_valid) {
+        if (!is_valid) {
+          console.log('Unverified User:');
+          console.log(provider.valid_request);
+          console.log(provider);
+          res.send('Unverified User');
+        } else {         
+          //check if auth token already exists in Redis 
+          redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
+            if (token_exists==0){
+              // generate auth token
+              let authorizationUri = oauth2.authorizationCode.authorizeURL({
+                redirect_uri: config.redirectURL,
+                state: provider.user_id,
+              });
+              res.redirect(authorizationUri);
+            } else {
+              // auth token exists
+              next();
+            }
+          });
+        }
+      });
+    } else {
+      provider.valid_request(req, function(err, is_valid) {
+        if (!is_valid) {
+          console.log('Unverified User:');
+          console.log(provider.valid_request);
+          console.log(provider);
+          res.send('Unverified User');
+        } else {         
+          //check if auth token already exists in Redis 
+          redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
+            if (token_exists==0){
+              // generate auth token
+              let authorizationUri = oauth2.authorizationCode.authorizeURL({
+                redirect_uri: config.redirectURL,
+                state: provider.user_id,
+              });
+              res.redirect(authorizationUri);
+            } else {
+              // auth token exists
+              next();
+            }
+          });
+        }
+      });
     }
-    
-    provider.valid_request(req, function(err, is_valid) {
-      if (!is_valid) {
-        console.log('Unverified User:');
-        console.log(provider.valid_request);
-        console.log(provider);
-        res.send('Unverified User');
-      } else {         
-        //check if auth token already exists in Redis 
-        redis_client.exists('token_'+provider.user_id, function(err, token_exists) {
-          if (token_exists==0){
-            // generate auth token
-            let authorizationUri = oauth2.authorizationCode.authorizeURL({
-              redirect_uri: config.redirectURL,
-              state: provider.user_id,
-            });
-            res.redirect(authorizationUri);
-          } else {
-            // auth token exists
-            next();
-          }
-        });
-      }
-    });
   }
 }
 
