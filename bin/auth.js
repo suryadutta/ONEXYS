@@ -85,6 +85,7 @@ var updateProvider = function(req,res,next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
+  console.log('Cookies1');
   console.log(req.cookies);
   req.connection.encrypted = true;
   if (req.query.login_success=='1'){
@@ -98,13 +99,13 @@ var checkUser = function(req, res, next) {
         res.send('Unverified User');
       } else {         
         //check if auth token already exists in Redis 
-        redis_client.exists('token_'+req.cookies.user_id, function(err, token_exists) {
+        redis_client.exists('token_'+String(req.cookies.user_id), function(err, token_exists) {
           if (token_exists==0){
             // generate auth token
             let authorizationUri = oauth2.authorizationCode.authorizeURL({
               redirect_uri: config.redirectURL,
-              state: req.cookies.user_id,
-              scope: req.cookies.user_id,
+              state: String(req.cookies.user_id),
+              scope: String(req.cookies.user_id),
             });
             res.redirect(authorizationUri);
           } else {
@@ -119,7 +120,10 @@ var checkUser = function(req, res, next) {
 
 //path for oauth2 callback from Canvas server
 var oath2_callback = async function(req, res, next){
-  
+  console.log('Query');
+  console.log(req.query);
+
+  console.log('OAuth2 Scope');
   console.log(req.query.scope);
 
   let code = req.query.code;
