@@ -520,7 +520,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
+        if(data[i].students==null){ 
           data.splice(i, 1);
         }
       }
@@ -586,7 +586,7 @@ function getAdminLeaderboardScores(courseID, callback){
 
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
+        if(data[i].students==null){ 
           data.splice(i, 1);
         }
       }
@@ -1053,7 +1053,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get
     getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].name==auth.provider.context_title || data[i].students==null ){ 
+        if(data[i].students==null){ 
           data.splice(i, 1);
         }
       }
