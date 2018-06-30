@@ -3,6 +3,9 @@ var config = require('./config');
 var request = require('request');
 var Queue = require('better-queue');
 
+var browser = require('browser-detect');
+console.log(browser());
+
 var lti = require ('ims-lti');
 var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
 var redis = require("redis"),
@@ -92,6 +95,7 @@ var checkUser = function(req, res, next) {
 
   if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
+    console.log(browser());
     res.send('Please refresh your browser');
   }
   console.log('Session Test: Course-ID');
