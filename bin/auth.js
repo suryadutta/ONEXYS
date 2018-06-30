@@ -76,7 +76,7 @@ var checkAdmin = function(req,res,next) {
 var updateProvider = function(req,res,next){
   if (req.body.custom_canvas_course_id){
     req.session.course_id = req.body.custom_canvas_course_id;
-    req.session.context_title = req.body.context_title;
+    req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
     req.session.admin = req.body.roles.includes('Instructor');
   }
