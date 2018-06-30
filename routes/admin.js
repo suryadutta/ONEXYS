@@ -216,6 +216,7 @@ router.post("/modules/:id/videos/add", (req, res, next) => {
       moduleInfo.videos[moduleInfo.videos.length - 1].position + 1;
     moduleInfo.videos.push(vidObject);
     mongo.updateData(
+      req.session.course_id,
       "modules",
       { _id: parseInt(req.params.id) },
       moduleInfo,
@@ -252,6 +253,7 @@ router.post("/modules/:module_id/videos/edit/:video_id", (req, res) => {
     vidObject.position = moduleInfo.videos[vid_index].position;
     moduleInfo.videos[vid_index] = vidObject;
     mongo.updateData(
+      req.session.course_id,
       "modules",
       { _id: parseInt(req.params.module_id) },
       moduleInfo,
@@ -272,6 +274,7 @@ router.post("/modules/:module_id/videos/delete/:video_id", (req, res) => {
       moduleInfo.videos.splice(vid_index, 1);
     }
     mongo.updateData(
+      req.session.course_id,
       "modules",
       { _id: parseInt(req.params.module_id) },
       moduleInfo,
