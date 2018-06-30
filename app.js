@@ -41,7 +41,7 @@ app.set('trust proxy', true);
 app.use(cookieParser(config.client_secret));
 
 app.use(session({
-  cookieName: 'onexys_session',
+  cookieName: 'session',
   secret: config.client_secret,
   duration: 24 * 60 * 60 * 1000,
   activeDuration: 1000 * 60 * 5,
