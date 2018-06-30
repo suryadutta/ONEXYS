@@ -89,6 +89,11 @@ var updateProvider = function(req,res,next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) { 
+
+  if (typeof(req.session.course_id)!='string'){
+    console.log('ERROR: COOKIES NOT SET');
+    res.send('Please refresh your browser');
+  }
   console.log('Session Test: Course-ID');
   console.log(req.session.course_id);
   req.connection.encrypted = true;
