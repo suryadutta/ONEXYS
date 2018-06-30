@@ -35,16 +35,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.set('trust proxy')
+app.set('trust proxy', true);
 
 app.use(session({
-  cookieName: 'session',
-  secret: 'eg[isfd-8yF9-7w2315df{}+Ijsli;;to8',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
-  httpOnly: true,
-  secure: true,
-  ephemeral: true
+  cookieName: 'onexys_session',
+  secret: config.client_secret,
+  duration: 24 * 60 * 60 * 1000,
+  activeDuration: 1000 * 60 * 5,
+  proxy: true,
+  cookie: {
+    httpOnly: true,
+    secureProxy: true
+  }
 }));
 
 app.get('/callback',auth.oath2_callback);
