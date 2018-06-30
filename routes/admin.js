@@ -5,7 +5,7 @@ const mongo = require("../models/mongo");
 router.get("/", (req, res, next) => {
   res.render("admin", { 
     title: "Express",
-    course: res.cookie.course_title,
+    course: req.session.course_title,
   });
 });
 
@@ -13,7 +13,7 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   res.render("admin", {
     title: "Express",
-    course: res.cookie.course_title,
+    course: req.session.course_title,
   });
 });
 
@@ -22,7 +22,7 @@ router.get("/home", (req, res, next) => {
   mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       home_updates,
       home_vids
     });
@@ -34,7 +34,7 @@ router.post("/home", (req, res, next) => {
   mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       home_updates: req.body,
       home_vids
     });
@@ -44,7 +44,7 @@ router.post("/home", (req, res, next) => {
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
-    course: res.cookie.course_title,
+    course: req.session.course_title,
     home_updates: req.body
   })
 });
@@ -60,7 +60,7 @@ router.post("/home/confirmUpdates", (req, res, next) => {
 router.get("/home/videos/add", (req, res, next) => {
   res.render("admin/homeVidAdd", {
     title: "Add Home Video",
-    course: res.cookie.course_title,
+    course: req.session.course_title,
   });
 });
 
@@ -81,7 +81,7 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
     if (home_vid) {
       res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
-        course: res.cookie.course_title,
+        course: req.session.course_title,
         video: home_vid
       });
     } else {
@@ -96,7 +96,7 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
   home_vid._id = req.params.id 
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
-    course: res.cookie.course_title,
+    course: req.session.course_title,
     video: home_vid
   });
 });
@@ -105,7 +105,7 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
 router.post('/home/videos/preview/:id', (req,res,next) => {
   res.render("admin/homeConfirmVideos", {
     title: "Edit Home Video",
-    course: res.cookie.course_title,
+    course: req.session.course_title,
     video: req.body,
     video_id: req.params.id
   });
@@ -130,7 +130,7 @@ router.get("/modules", (req, res, next) => {
   mongo.getData(req.session.course_id,"modules", (err, modulesInfo) => {
     res.render("admin/modules", {
       title: "Modules",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       modules: modulesInfo
     });
   });
@@ -141,7 +141,7 @@ router.get("/modules/:id/edit", (req, res, next) => {
   mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       module: moduleInfo
     });
   });
@@ -153,7 +153,7 @@ router.post("/modules/:id/edit", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       module: merged_data,
     });
   });
@@ -166,7 +166,7 @@ router.post("/modules/:id/preview", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       data: merged_data,
     });
   });
@@ -188,7 +188,7 @@ router.post("/modules/:id/confirmUpdates", (req, res, next) => {
 //GET page to add video to module
 router.get("/modules/:id/videos/add", (req, res, next) => {
   res.render("admin/moduleVideoAdd", {
-    course: res.cookie.course_title,
+    course: req.session.course_title,
     moduleID: req.params.id
   });
 });
@@ -234,7 +234,7 @@ router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
     );
     res.render("admin/moduleVideoEdit", {
       title: "Edit Module Video",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       moduleID: req.params.module_id,
       video: vidObject
     });
@@ -286,7 +286,7 @@ router.get("/badges", (req, res, next) => {
   mongo.getData(req.session.course_id,"badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       badges: badges_data
     });
   });
@@ -297,7 +297,7 @@ router.get("/badges/edit/:id", (req, res, next) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
     res.render("admin/badgeEdit", {
       title: "Badges",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       badge: badge_data
     });
   });
@@ -326,7 +326,7 @@ router.get("/dailies", (req, res, next) => {
   mongo.getData(req.session.course_id,"dailies", (err, dailies_data) => {
     res.render("admin/dailies", {
       title: "Dailies",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       dailies: dailies_data
     });
   });
@@ -337,7 +337,7 @@ router.get("/dailies/edit/:id", (req, res, next) => {
     daily_data = dailies_data.find(element => element._id == req.params.id);
     res.render("admin/dailyEdit", {
       title: "Dailies",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       daily: daily_data
     });
   });
@@ -364,7 +364,7 @@ router.get("/lucky", (req, res, next) => {
     "lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       lucky_data: lucky_data
     });
   });
@@ -375,7 +375,7 @@ router.get("/lucky/edit/:id", (req, res, next) => {
     lucky_bulldog = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
       title: "Lucky Bulldog",
-      course: res.cookie.course_title,
+      course: req.session.course_title,
       lucky_bulldog: lucky_bulldog
     });
   });
@@ -407,7 +407,7 @@ router.post("/lucky/delete/:id", (req, res, next) => {
 router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
     title: "Lucky Bulldog",
-    course: res.cookie.course_title,
+    course: req.session.course_title,
   });
 });
 
