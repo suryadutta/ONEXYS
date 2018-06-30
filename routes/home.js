@@ -23,7 +23,7 @@ router.use('/', (req, res, next) => {
 
   if (req.session.admin) {
     if (req.query.masquerade) {
-      queries.homepageQuery(parseInt(req.query.masquerade),
+      queries.homepageQueryMasquerade(parseInt(req.query.masquerade),
         courseID,
         (
           module_progress,
