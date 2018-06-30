@@ -10,6 +10,11 @@ var redis = require("redis"),
 
 var store = new RedisNonceStore(config.client_id, redis_client);
 
+if (!provider) {
+  var provider = new lti.Provider(config.client_id, config.client_secret);
+  console.log('Generating new provider...')
+}
+
 // Set the configuration settings
 let credentials = {
   client: {
@@ -71,11 +76,6 @@ var checkAdmin = function(req,res,next) {
 
 //middleware to update course information
 var updateProvider = function(req,res,next){
-
-  if (!provider) {
-    var provider = new lti.Provider(config.client_id, config.client_secret);
-    console.log('Generating new provider...')
-  }
 
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
