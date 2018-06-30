@@ -130,7 +130,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         } else if ((d.getTime() - lucky_bulldog.getTime())/(1000*60)<1){
           totalPoints += lucky_bulldog_points;
           lucky_bulldog.awarded_ids.push(studentID);
-          mongo.updateData('lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
+          mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
         }
       }
     }
@@ -276,7 +276,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 if(mongo_data.modules[i].leaderboard.quiz_early_bird == ""){
                   mongo_data.modules[i].leaderboard.quiz_early_bird = studentID.toString();
                   awardBadge(24);
-                  mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
+                  mongo.updateData(courseID,'modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
                     function(err,result){});
                   } else {
                   if (mongo_data.modules[i].leaderboard.quiz_early_bird == studentID.toString()){
@@ -345,7 +345,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 if(mongo_data.modules[i].leaderboard.reflection_early_bird == ""){
                   mongo_data.modules[i].leaderboard.reflection_early_bird = studentID.toString();
                   awardBadge(25);
-                  mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
+                  mongo.updateData(courseID,'modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],
                     function(err,result){});
                   } else {
                   if (mongo_data.modules[i].leaderboard.reflection_early_bird == studentID.toString()){
@@ -354,7 +354,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 }
               }
             }
-            mongo.updateData('modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],function(err,result){});
+            mongo.updateData(courseID,'modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],function(err,result){});
           } 
         }
 

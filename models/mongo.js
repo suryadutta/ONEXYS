@@ -31,7 +31,7 @@ function insertData(courseID, collection_name, data, callback){
     });   
 }
 
-function updateData(courseID, collection_name,update_index,update_data, callback){
+function updateData(courseID,collection_name,update_index,update_data, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
