@@ -41,7 +41,8 @@ app.set('trust proxy', 1) // trust first proxy
  
 app.use(cookieSession({
   name: 'session',
-  keys: ['key1', 'key2']
+  secret: config.client_secret,
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
 app.get('/callback',auth.oath2_callback);

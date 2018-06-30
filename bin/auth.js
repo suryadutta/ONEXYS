@@ -32,6 +32,8 @@ let oauth2 = require('simple-oauth2').create(credentials);
 
 //queue to callback Auth Token (prevents multiple calls)
 var authTokenQueue = new Queue(function(user_id,callback){
+  console.log('Redis Key');
+  console.log('token_'+String(user_id));
   redis_client.get('token_'+String(user_id), async function(err, token_string) {
     if (err){
       console.log(err);
@@ -74,7 +76,7 @@ var checkAdmin = function(req,res,next) {
 
 //middleware to update course information
 var updateProvider = function(req,res,next){
-  if (req.body.custom_canvas_course_id){
+  if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     req.session.course_id = req.body.custom_canvas_course_id;
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
@@ -99,6 +101,8 @@ var checkUser = function(req, res, next) {
         res.send('Unverified User');
       } else {         
         //check if auth token already exists in Redis 
+        console.log('Redis Key');
+        console.log('token_'+String(req.session.user_id));
         redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {
           if (token_exists==0){
             // generate auth token
