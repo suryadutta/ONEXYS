@@ -37,11 +37,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.set('trust proxy', 1) // trust first proxy
- 
+app.set('trust proxy')
+
 app.use(cookieSession({
   name: 'session',
   secret: config.client_secret,
+  signed:false,
+
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
