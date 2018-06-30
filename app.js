@@ -7,10 +7,8 @@ var path = require('path');
 var config = require('./bin/config');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session')
-var cookieSession = require('cookie-session')
+var session = require('client-sessions');
 
 var config = require('./bin/config');
 var auth = require('./bin/auth')
@@ -39,12 +37,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy')
 
-app.use(cookieSession({
-  name: 'onexys_session',
-  keys: ['key1', 'key2'],
-  maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  overwrite: true,
-}))
+app.use(session({
+  cookieName: 'session',
+  secret: 'eg[isfd-8yF9-7w2315df{}+Ijsli;;to8',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  httpOnly: true,
+  secure: true,
+  ephemeral: true
+}));
 
 app.get('/callback',auth.oath2_callback);
 
