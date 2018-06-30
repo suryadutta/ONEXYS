@@ -95,39 +95,40 @@ var checkUser = function(req, res, next) {
     console.log('ERROR: COOKIES NOT SET');
     console.log(browser());
     res.status(500).send('Please refresh your browser');
+  } else {
+    console.log('Session Test: Course-ID');
+    console.log(req.session.course_id);
+    req.connection.encrypted = true;
+    if (req.query.login_success=='1'){
+      next();
+    } else {      
+      provider.valid_request(req, function(err, is_valid) {
+        if (!is_valid) {
+          console.log('Unverified User:');
+          console.log(provider.valid_request);
+          console.log(provider);
+          res.send('Unverified User');
+        } else {         
+          //check if auth token already exists in Redis 
+          console.log('Redis Key (Check User)');
+          console.log('token_'+String(req.session.user_id));
+          redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {
+            if (token_exists==0){
+              // generate auth token
+              let authorizationUri = oauth2.authorizationCode.authorizeURL({
+                redirect_uri: config.redirectURL,
+                state: String(req.session.user_id),
+              });
+              res.redirect(authorizationUri);
+            } else {
+              // auth token exists
+              next();
+            }
+          });
+        }
+      });
+    }
   }
-  console.log('Session Test: Course-ID');
-  console.log(req.session.course_id);
-  req.connection.encrypted = true;
-  if (req.query.login_success=='1'){
-    next();
-  } else {      
-    provider.valid_request(req, function(err, is_valid) {
-      if (!is_valid) {
-        console.log('Unverified User:');
-        console.log(provider.valid_request);
-        console.log(provider);
-        res.send('Unverified User');
-      } else {         
-        //check if auth token already exists in Redis 
-        console.log('Redis Key (Check User)');
-        console.log('token_'+String(req.session.user_id));
-        redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {
-          if (token_exists==0){
-            // generate auth token
-            let authorizationUri = oauth2.authorizationCode.authorizeURL({
-              redirect_uri: config.redirectURL,
-              state: String(req.session.user_id),
-            });
-            res.redirect(authorizationUri);
-          } else {
-            // auth token exists
-            next();
-          }
-        });
-      }
-    });
-  } 
 }
 
 //path for oauth2 callback from Canvas server
