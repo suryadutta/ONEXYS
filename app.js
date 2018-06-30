@@ -8,6 +8,7 @@ var config = require('./bin/config');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var session = require('client-sessions');
 
 var config = require('./bin/config');
@@ -37,15 +38,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy', true);
 
+app.use(cookieParser(config.client_secret));
+
 app.use(session({
   cookieName: 'onexys_session',
   secret: config.client_secret,
   duration: 24 * 60 * 60 * 1000,
   activeDuration: 1000 * 60 * 5,
-  proxy: true,
   cookie: {
-    httpOnly: true,
-    secureProxy: true
+    path     : '/',
+    ephemeral: false,
+    httpOnly : true,
+    secure   : false
   }
 }));
 
