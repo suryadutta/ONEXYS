@@ -54,6 +54,56 @@ function homepageQuery(studentID,courseID,callback){
   });
 }
 
+function homepageQueryMasquerade(studentID,courseID,callback){
+
+  asyncStuff.parallel([
+    function(callback) {
+      canvas.getStudentProgress_masquerade(studentID, courseID, callback);
+    },
+    function(callback){
+      canvas.getIndScoreAndBadges_masquerade(studentID, courseID, callback);
+    },
+    function(callback){
+      canvas.getLeaderboardScores_masquerade(studentID, courseID, callback);
+    },
+    function(callback){
+      mongo.getHomeContent(courseID, callback);
+    },
+    function(callback){
+      canvas.getNextDailyYalie(courseID, callback);
+    }
+  ],
+  
+  function(err, data) {
+    
+    var module_progress = data[0],
+        score = data[1][0],
+        badges =  data[1][1],
+        leaderboard = data[2][0],
+        my_team = data[2][1],
+        home_updates = data[3][0],
+        home_vids = data[3][1],
+        home_links = data[3][2],
+        daily_yalie = data[4];
+
+    function orderBadges(a,b) {
+      if (a.Points < b.Points)
+        return 1;
+      if (a.Points > b.Points)
+        return -1;
+      return 0;
+    }
+
+    var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
+    var awarded_badge_ids = awarded_badges.map(badge => badge._id);
+    if (awarded_badge_ids.length>3){
+      awarded_badge_ids = awarded_badge_ids.slice(0,3);
+    }
+    
+    callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+  });
+}
+
 function homepageAdminQuery(courseID, callback){
 
   asyncStuff.parallel([
@@ -104,6 +154,7 @@ function badgesAdminQuery(courseID, callback){
 
 module.exports = {
   homepageQuery,
+  homepageQueryMasquerade,
   homepageAdminQuery,
   badgesQuery,
   badgesAdminQuery

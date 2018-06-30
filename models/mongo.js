@@ -2,7 +2,6 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 var asyncStuff = require('async');
 var config = require('../bin/config');
-var auth = require('../bin/auth');
 
 function getData(courseID, collection_name, callback){
     // Use connect method to connect to the server
