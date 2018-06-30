@@ -10,11 +10,6 @@ var redis = require("redis"),
 
 var store = new RedisNonceStore(config.client_id, redis_client);
 
-if (!provider) {
-  var provider = new lti.Provider(config.client_id, config.client_secret);
-  console.log('Generating new provider...')
-}
-
 // Set the configuration settings
 let credentials = {
   client: {
@@ -51,7 +46,7 @@ var authTokenQueue = new Queue(function(user_id,callback){
           // add back the previous refresh token to use again
           accessToken.token.refresh_token = refresh_token;
           // save new access token to Redis store
-          redis_client.set('token_'+req.session.user_id, JSON.stringify(accessToken));
+          redis_client.set('token_'+String(user_id), JSON.stringify(accessToken));
           callback(accessToken.token.access_token)
         } catch (error) {
           console.log('Error refreshing access token: ', error.message);
@@ -76,6 +71,12 @@ var checkAdmin = function(req,res,next) {
 
 //middleware to update course information
 var updateProvider = function(req,res,next){
+
+  if (!provider) {
+    var provider = new lti.Provider(config.client_id, config.client_secret);
+    console.log('Generating new provider...')
+  }
+
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     req.session.course_id = req.body.custom_canvas_course_id;
@@ -148,7 +149,6 @@ var oath2_callback = async function(req, res, next){
 
 module.exports = {
     oath2_callback,
-    provider,
     updateProvider,
     authTokenQueue,
     checkUser,
