@@ -40,10 +40,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('trust proxy')
 
 app.use(cookieSession({
-  name: 'session',
-  secret: config.client_secret,
-
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  name: 'onexys_session',
+  keys: ['key1', 'key2'],
+  maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  overwrite: true,
 }))
 
 app.get('/callback',auth.oath2_callback);
