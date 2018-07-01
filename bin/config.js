@@ -17,7 +17,7 @@ config.mongo_username = process.env.MONGO_USERNAME || 'localhost',
 config.mongo_password = process.env.MONGO_PASSWORD || '',
 config.local_mongo_database = 'mongodb://localhost:27017/oneyxs_dev'
 
-config.disableLeaderboard = process.env.DISABLE_LEADERBOARD || false;
+config.disableLeaderboard = process.env.DISABLE_LEADERBOARD.toLowerCase() == 'true' ? true : false || false;
 
 //configure MongoDB urls here - course ID to mongoDB URL
 config.mongoURLs = {
