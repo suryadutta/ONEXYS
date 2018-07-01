@@ -9,7 +9,7 @@ config.client_secret = process.env.DEVELOPER_TOKEN;
 config.redirectURL = process.env.REDIRECT_URL;
 
 config.canvasAdminAuthToken= process.env.CANVAS_ADMIN_AUTH_TOKEN;
-config.canvasPageResults = process.env.CANVAS_PAGE_RESULTS || "100";
+config.canvasPageResults = process.env.CANVAS_PAGE_RESULTS || "200";
 
 config.redisURL = process.env.REDIS_URL || '';
 
