@@ -17,6 +17,8 @@ config.mongo_username = process.env.MONGO_USERNAME || 'localhost',
 config.mongo_password = process.env.MONGO_PASSWORD || '',
 config.local_mongo_database = 'mongodb://localhost:27017/oneyxs_dev'
 
+config.disableLeaderboard = process.env.DISABLE_LEADERBOARD || false;
+
 //configure MongoDB urls here - course ID to mongoDB URL
 config.mongoURLs = {
     '38082': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds121189.mlab.com:21189/onexys_blue' || config.local_mongo_database,
@@ -26,6 +28,6 @@ config.mongoURLs = {
     '38081': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds157614.mlab.com:57614/onexys_white' || config.local_mongo_database
 }
 
-config.cookieduration = 1000 * 60 * 60 * 24; //one hour
+config.cookieduration = 1000 * 60 * 60 * 24;
 
 module.exports = config;
