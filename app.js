@@ -5,7 +5,6 @@ if (process.env.NODE_ENV !== 'production') {
 var express = require('express');
 var path = require('path');
 var config = require('./bin/config');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -13,7 +12,6 @@ var session = require('client-sessions');
 
 var config = require('./bin/config');
 var auth = require('./bin/auth')
-var request = require('request');
 
 var index = require('./routes/index');
 var home = require('./routes/home');
@@ -46,10 +44,10 @@ app.use(session({
   duration: 24 * 60 * 60 * 1000,
   activeDuration: 1000 * 60 * 5,
   cookie: {
-    path     : '/',
+    path: '/',
     ephemeral: false,
-    httpOnly : true,
-    secure   : false
+    httpOnly: true,
+    secure: false
   }
 }));
 
