@@ -139,10 +139,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
       for (lucky_bulldog in mongo_data.lucky_bulldogs){
         //student already was awarded lucky bulldog
         if (lucky_bulldog.awarded_ids.includes(studentID)){
-          totalPoints += lucky_bulldog_points;
+          totalPoints += parseInt(lucky_bulldog_points);
         //student is now awarded lucky bulldog
         } else if ((d.getTime() - lucky_bulldog.getTime())/(1000*60)<1){
-          totalPoints += lucky_bulldog_points;
+          totalPoints += parseInt(lucky_bulldog_points);
           lucky_bulldog.awarded_ids.push(studentID);
           mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
         }
@@ -151,7 +151,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
     
     function awardBadge(badgeID) {
       badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
-      totalPoints += badge_info.Points;
+      totalPoints += parseInt(badge_info.Points);
       badges[badges.indexOf(badge_info)].Awarded = true;
     }
 
@@ -187,7 +187,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             }
           }
         }
-        totalPoints += (daily_done * 50); //assign points for each daily
+        totalPoints += (parseInt(daily_done) * 50); //assign points for each daily
         //assign points for each badge earned
         if (daily_done >= 1) {
           awardBadge(1);
@@ -373,7 +373,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         }
 
 
-        totalPoints += (practice_proficient * 100); //assign points for each proficient ALEKS 
+        totalPoints += (parseInt(practice_proficient) * 100); //assign points for each proficient ALEKS 
         //assign points for each badge earned
         if (practice_proficient >= 1) {
           awardBadge(7);
@@ -389,7 +389,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         }
 
        
-        totalPoints += (quizzes_attempted * 100); //assign points for each quiz
+        totalPoints += (parseInt(quizzes_attempted) * 100); //assign points for each quiz
         //assign points for each badge earned
         if (quizzes_attempted >= 1) {
           awardBadge(11);
@@ -404,7 +404,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
           awardBadge(14);
         }
 
-        totalPoints += (reflections_done * 100);
+        totalPoints += (parseInt(reflections_done) * 100);
         //assign points for each badge earned
         if (reflections_done >= 1) {
           awardBadge(28);
@@ -672,10 +672,10 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
       for (lucky_bulldog in mongo_data.lucky_bulldogs){
         //student already was awarded lucky bulldog
         if (lucky_bulldog.awarded_ids.includes(studentID)){
-          totalPoints += lucky_bulldog_points;
+          totalPoints += parseInt(lucky_bulldog_points);
         //student is now awarded lucky bulldog
         } else if ((d.getTime() - lucky_bulldog.getTime())/(1000*60)<1){
-          totalPoints += lucky_bulldog_points;
+          totalPoints += parseInt(lucky_bulldog_points);
           lucky_bulldog.awarded_ids.push(studentID);
           mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
         }
@@ -684,7 +684,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
     
     function awardBadge(badgeID) {
       badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
-      totalPoints += badge_info.Points;
+      totalPoints += parseInt(badge_info.Points);
       badges[badges.indexOf(badge_info)].Awarded = true;
     }
 
@@ -720,7 +720,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
             }
           }
         }
-        totalPoints += (daily_done * 50); //assign points for each daily
+        totalPoints += (parseInt(daily_done) * 50); //assign points for each daily
         //assign points for each badge earned
         if (daily_done >= 1) {
           awardBadge(1);
@@ -906,7 +906,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
         }
 
 
-        totalPoints += (practice_proficient * 100); //assign points for each proficient ALEKS 
+        totalPoints += (parseInt(practice_proficient) * 100); //assign points for each proficient ALEKS 
         //assign points for each badge earned
         if (practice_proficient >= 1) {
           awardBadge(7);
@@ -922,7 +922,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
         }
 
        
-        totalPoints += (quizzes_attempted * 100); //assign points for each quiz
+        totalPoints += (parseInt(quizzes_attempted) * 100); //assign points for each quiz
         //assign points for each badge earned
         if (quizzes_attempted >= 1) {
           awardBadge(11);
@@ -937,7 +937,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
           awardBadge(14);
         }
 
-        totalPoints += (reflections_done * 100);
+        totalPoints += (parseInt(reflections_done) * 100);
         //assign points for each badge earned
         if (reflections_done >= 1) {
           awardBadge(28);
