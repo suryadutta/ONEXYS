@@ -54,11 +54,11 @@ app.use(session({
 app.get('/callback',auth.oath2_callback);
 
 app.get('/',index);
-app.use('/home',[auth.updateProvider,auth.checkUser],home)
-app.use('/badges',[auth.updateProvider,auth.checkUser],badges)
-app.use('/admin',[auth.updateProvider,auth.checkAdmin],admin)
+app.use('/home',[auth.updateCookies,auth.checkUser],home)
+app.use('/badges',[auth.updateCookies,auth.checkUser],badges)
+app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 
-app.use('/modules',auth.updateProvider,modules)
+app.use('/modules',auth.updateCookies,modules)
 
 app.use('/launch',launch)
 

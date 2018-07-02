@@ -2,7 +2,6 @@ var express = require('express');
 var config = require('./config');
 var request = require('request');
 var Queue = require('better-queue');
-var browser = require('browser-detect');
 
 var lti = require ('ims-lti');
 var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
@@ -76,7 +75,7 @@ var checkAdmin = function(req,res,next) {
 }
 
 //middleware to update course information
-var updateProvider = function(req,res,next){
+var updateCookies = function(req,res,next){
 
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
@@ -84,12 +83,13 @@ var updateProvider = function(req,res,next){
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
     req.session.admin = req.body.roles.includes('Instructor');
+    next();
   } else if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
-    console.log(browser());
     res.status(500).render('cookieError');
+  } else {
+    next();
   }
-  next();
 };
 
 //middleware to check user and launch lti
@@ -97,7 +97,6 @@ var checkUser = function(req, res, next) {
 
   if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
-    console.log(browser());
     res.status(500).render('cookieError');;
   } else {
     console.log('Session Test: Course-ID');
@@ -161,7 +160,7 @@ var oath2_callback = async function(req, res, next){
 
 module.exports = {
     oath2_callback,
-    updateProvider,
+    updateCookies,
     authTokenQueue,
     checkUser,
     checkAdmin
