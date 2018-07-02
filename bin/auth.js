@@ -84,6 +84,10 @@ var updateProvider = function(req,res,next){
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
     req.session.admin = req.body.roles.includes('Instructor');
+  } else if (typeof(req.session.course_id)!='string'){
+    console.log('ERROR: COOKIES NOT SET');
+    console.log(browser());
+    res.status(500).send('Error with setting cookies. Please try refreshing page, and/or using Google Chrome or Mozilla Firefox.');
   }
   next();
 };
@@ -94,7 +98,7 @@ var checkUser = function(req, res, next) {
   if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
     console.log(browser());
-    res.status(500).send('Please refresh your browser');
+    res.status(500).send('Error with setting cookies. Please try refreshing page, and/or using Google Chrome or Mozilla Firefox.');
   } else {
     console.log('Session Test: Course-ID');
     console.log(req.session.course_id);
