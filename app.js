@@ -58,7 +58,7 @@ app.use('/home',[auth.updateProvider,auth.checkUser],home)
 app.use('/badges',[auth.updateProvider,auth.checkUser],badges)
 app.use('/admin',[auth.updateProvider,auth.checkAdmin],admin)
 
-app.use('/modules', modules)
+app.use('/modules',auth.updateProvider,modules)
 
 app.use('/launch',launch)
 
