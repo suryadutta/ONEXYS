@@ -143,12 +143,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
           if (lucky_bulldog.awarded_ids.includes(studentID)){
             totalPoints += parseInt(lucky_bulldog_points);
           }
-          else if ((d.getTime() - lucky_bulldog.getTime())/(1000*60)<1){
+          else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
             totalPoints += parseInt(lucky_bulldog_points);
             lucky_bulldog.awarded_ids.push(studentID);
             mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});  
           }
-        } else if ((d.getTime() - lucky_bulldog.getTime())/(1000*60)<1){
+        } else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
           totalPoints += parseInt(lucky_bulldog_points);
           lucky_bulldog.awarded_ids.push(studentID);
           mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
