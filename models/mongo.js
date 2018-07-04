@@ -103,7 +103,7 @@ function getAllData(courseID, callback_main){
             getData(courseID, 'dailies',callback)
         },
         'lucky_bulldogs': function(callback) {
-            getData(courseID,'lucky_bulldogs',callback)
+            getData(courseID, 'lucky_bulldogs',callback)
         },
     }, function(err, results) {
         callback_main(results);
