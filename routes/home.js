@@ -1,29 +1,29 @@
 var express = require('express');
 var router = express.Router();
 var config = require('../bin/config');
-var auth = require('../bin/auth')
 var queries = require('../models/queries')
 
 router.use('/', (req, res, next) => {
 
-  var courseID = auth.provider.body.custom_canvas_course_id;
-  var userID = auth.provider.body.custom_canvas_user_id;
+  console.log(req.session)
 
-  console.log('User ID: ', userID, '  Course ID: ', courseID);
-  console.log(auth.provider.body);
+  var courseID = parseInt(req.session.course_id)
+  var userID = parseInt(req.session.user_id)
 
-  var is_physics = Boolean(courseID == 38083);
+  console.log('Course and User IDs')
 
-  console.log('Instructor:')
-  console.log(auth.provider.body.roles.includes('Instructor'))
+  console.log(courseID)
+  console.log(userID)
 
-  if (courseID == 10184) {
+  if (courseID == 10184){
     courseID = 38082;
   }
 
-  if (auth.provider.admin) {
+  var is_physics = Boolean(courseID == 38083);
+
+  if (req.session.admin) {
     if (req.query.masquerade) {
-      queries.homepageQuery(parseInt(req.query.masquerade),
+      queries.homepageQueryMasquerade(parseInt(req.query.masquerade),
         courseID,
         (
           module_progress,
@@ -49,7 +49,7 @@ router.use('/', (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            admin: auth.provider.admin,
+            admin: req.session.admin,
             masquerade: true,
           });
         });
@@ -81,7 +81,7 @@ router.use('/', (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            admin: auth.provider.admin,
+            admin: req.session.admin,
             masquerade: false,
             students
           });
@@ -117,7 +117,7 @@ router.use('/', (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
-          admin: auth.provider.admin
+          admin: req.session.admin
         });
       });
   }

@@ -5,14 +5,13 @@ if (process.env.NODE_ENV !== 'production') {
 var express = require('express');
 var path = require('path');
 var config = require('./bin/config');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('client-sessions');
 
 var config = require('./bin/config');
 var auth = require('./bin/auth')
-var request = require('request');
 
 var index = require('./routes/index');
 var home = require('./routes/home');
@@ -32,18 +31,34 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('trust proxy', true);
+
+app.use(cookieParser(config.client_secret));
+
+app.use(session({
+  cookieName: 'session',
+  secret: config.client_secret,
+  duration: 24 * 60 * 60 * 1000,
+  activeDuration: 1000 * 60 * 5,
+  cookie: {
+    path: '/',
+    ephemeral: false,
+    httpOnly: true,
+    secure: false
+  }
+}));
 
 app.get('/callback',auth.oath2_callback);
 
 app.get('/',index);
-app.use('/home',auth.checkUser,home)
-app.use('/badges',auth.checkUser,badges)
-app.use('/admin',auth.checkAdmin,admin)
+app.use('/home',[auth.updateCookies,auth.checkUser],home)
+app.use('/badges',[auth.updateCookies,auth.checkUser],badges)
+app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 
-app.use('/modules', modules)
+app.use('/modules',auth.updateCookies,modules)
 
 app.use('/launch',launch)
 

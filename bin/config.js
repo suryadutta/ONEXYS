@@ -9,13 +9,15 @@ config.client_secret = process.env.DEVELOPER_TOKEN;
 config.redirectURL = process.env.REDIRECT_URL;
 
 config.canvasAdminAuthToken= process.env.CANVAS_ADMIN_AUTH_TOKEN;
-config.canvasPageResults = process.env.CANVAS_PAGE_RESULTS || "100";
+config.canvasPageResults = process.env.CANVAS_PAGE_RESULTS || "200";
 
 config.redisURL = process.env.REDIS_URL || '';
 
 config.mongo_username = process.env.MONGO_USERNAME || 'localhost',
 config.mongo_password = process.env.MONGO_PASSWORD || '',
 config.local_mongo_database = 'mongodb://localhost:27017/oneyxs_dev'
+
+config.disableLeaderboard = process.env.DISABLE_LEADERBOARD.toLowerCase() == 'true' ? true : false || false;
 
 //configure MongoDB urls here - course ID to mongoDB URL
 config.mongoURLs = {
@@ -26,6 +28,6 @@ config.mongoURLs = {
     '38081': 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@ds157614.mlab.com:57614/onexys_white' || config.local_mongo_database
 }
 
-config.cookieduration = 1000 * 60 * 60 * 24; //one hour
+config.cookieduration = 1000 * 60 * 60 * 24;
 
 module.exports = config;

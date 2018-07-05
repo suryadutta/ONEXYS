@@ -137,8 +137,8 @@ block content
         each video in home_vids
           .onexys_video
             a.colorbox(href=video.video_src)
-              if is_physics
-                img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/introphysics2.png', alt='')
+              if video.video_img
+                img.onexys_thumbnail(src=video.video_img)
               else
                 img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
               img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
