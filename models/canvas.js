@@ -222,7 +222,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
               var practice_grade = parseFloat(practice_object.grade);
-              if (practice_grade > parseFloat(mongo_data.modules[i].practice_cutoff)) {
+              if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                 practice_proficient += 1;
 
@@ -477,7 +477,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             //practice progress
             var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
             if(practice_object){
-              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) > parseFloat(module_object.practice_cutoff);
+              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
             } else {
               (moduleProgress[i]).practice_progress = false;
             }
@@ -485,7 +485,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             //quiz progress
             var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
             if(quiz_object){
-              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) > parseFloat(module_object.quiz_cutoff);
+              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
             } else {
               (moduleProgress[i]).quiz_progress = false;
             }
@@ -753,7 +753,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
             var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
               var practice_grade = parseFloat(practice_object.grade);
-              if (practice_grade > parseFloat(mongo_data.modules[i].practice_cutoff)) {
+              if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                 practice_proficient += 1;
 
@@ -1008,7 +1008,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
             //practice progress
             var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
             if(practice_object){
-              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) > parseFloat(module_object.practice_cutoff);
+              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
             } else {
               (moduleProgress[i]).practice_progress = false;
             }
@@ -1016,7 +1016,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
             //quiz progress
             var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
             if(quiz_object){
-              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) > parseFloat(module_object.quiz_cutoff);
+              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
             } else {
               (moduleProgress[i]).quiz_progress = false;
             }
