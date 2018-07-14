@@ -106,23 +106,7 @@ router.use("/", (req, res, next) => {
       ) => {
         console.log(
           "module_progress: ",
-          module_progress,
-          "score: ",
-          score,
-          "awarded_badge_ids: ",
-          awarded_badge_ids,
-          "leaderboard: ",
-          leaderboard,
-          "my_team: ",
-          my_team,
-          "home_updates: ",
-          home_updates,
-          "home_vids: ",
-          home_vids,
-          "home_links: ",
-          home_links,
-          "daily_yalie: ",
-          daily_yalie
+          module_progress
         );
         res.render("home", {
           title: "Home | ONEXYS",
