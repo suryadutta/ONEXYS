@@ -725,6 +725,13 @@ function getStudentProgress(studentID, courseID, callback) {
           );
           if ((studentID = 4671)) {
             console.log("module_object", module_object);
+            var practice_object = user_assigments.find(
+              assignment =>
+                assignment.assignment_id == module_object.practice_link
+            );
+            if ((studentID = 4671)) {
+              console.log(" practice_object : ", practice_object);
+            }
           }
           if (module_object.open == "true") {
             //practice progress
@@ -732,13 +739,6 @@ function getStudentProgress(studentID, courseID, callback) {
               assignment =>
                 assignment.assignment_id == module_object.practice_link
             );
-
-            if ((studentID = 4671)) {
-              console.log(
-                " practice_object : ",
-                practice_object
-              );
-            }
 
             if (practice_object) {
               moduleProgress[i].practice_progress =
