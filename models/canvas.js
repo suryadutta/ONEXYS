@@ -723,6 +723,9 @@ function getStudentProgress(studentID, courseID, callback) {
           var module_object = mongo_data.modules.find(
             module => module._id == i + 1
           );
+          if ((studentID = 4671)) {
+            console.log("module_object", module_object);
+          }
           if (module_object.open == "true") {
             //practice progress
             var practice_object = user_assigments.find(
@@ -732,8 +735,6 @@ function getStudentProgress(studentID, courseID, callback) {
 
             if ((studentID = 4671)) {
               console.log(
-                "___________####### module: ",
-                module_object.primary_title,
                 " practice_object : ",
                 practice_object
               );
