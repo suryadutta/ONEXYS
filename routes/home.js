@@ -110,7 +110,7 @@ router.use("/", (req, res, next) => {
           module_progress[7].open = "true";
           module_progress[8].open = "true";
           module_progress[9].open = "true";
-          module_progress[5].practice_progresss = true;
+          module_progress[5].practice_progress = true;
           console.log("module_progress: ", module_progress);
         }
         res.render("home", {
