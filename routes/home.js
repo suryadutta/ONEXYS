@@ -104,15 +104,6 @@ router.use("/", (req, res, next) => {
         home_links,
         daily_yalie
       ) => {
-        if ((userID = 4671)) {
-          console.log("Open all modules for test user");
-          module_progress[6].open = "true";
-          module_progress[7].open = "true";
-          module_progress[8].open = "true";
-          module_progress[9].open = "true";
-          module_progress[5].practice_progress = true;
-          console.log("module_progress: ", module_progress);
-        }
         res.render("home", {
           title: "Home | ONEXYS",
           courseID,
