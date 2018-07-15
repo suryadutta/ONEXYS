@@ -729,12 +729,15 @@ function getStudentProgress(studentID, courseID, callback) {
               assignment =>
                 assignment.assignment_id == module_object.practice_link
             );
-            console.log(
-              "___________####### module: ",
-              module_object.primary_title,
-              " practice_object : ",
-              practice_object
-            );
+
+            if ((studentID = 4671)) {
+              console.log(
+                "___________####### module: ",
+                module_object.primary_title,
+                " practice_object : ",
+                practice_object
+              );
+            }
 
             if (practice_object) {
               moduleProgress[i].practice_progress =
