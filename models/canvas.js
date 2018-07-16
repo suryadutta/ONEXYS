@@ -489,7 +489,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                 (moduleProgress[i]).practice_progress = false;
               }
             } else {
-              const practice_objects = module_object.multiple_practice_links.map(link_id => user_assignments.find(assignment => assignment.assignment_id == link_id));
+              const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
               if(practice_objects
               .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
                 (moduleProgress[i]).practice_progress = true;
