@@ -474,9 +474,9 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-          if ((studentID = 4671)) {
-            module_object.open = 'true';
-          }
+          // if ((studentID = 4671)) {
+          //   module_object.open = 'true';
+          // }
 
           if(module_object.open=='true'){
             //practice progress
@@ -496,10 +496,10 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
               } else {
                 (moduleProgress[i]).practice_progress = false;
               }
-              if ((studentID = 4671)) {
-                console.log("module:", module_object);
-                console.log("practice_objects:", practice_objects);
-              }
+              // if ((studentID = 4671)) {
+              //   console.log("module:", module_object);
+              //   console.log("practice_objects:", practice_objects);
+              // }
             }
 
             //quiz progress
