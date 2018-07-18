@@ -474,34 +474,33 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-          if(module_object.open=='true'){
-            //practice progress
-            if (!module_object.multiple_practices) {
-              var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
-              if(practice_object){
-                (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
-              } else {
-                (moduleProgress[i]).practice_progress = false;
-              }
+          //practice progress
+          if (!module_object.multiple_practices) {
+            var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+            if(practice_object){
+              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
             } else {
-              const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
-              if(practice_objects
-              .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
-                (moduleProgress[i]).practice_progress = true;
-              } else {
-                (moduleProgress[i]).practice_progress = false;
-              }
+              (moduleProgress[i]).practice_progress = false;
             }
-
-            //quiz progress
-            var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
-            if(quiz_object){
-              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
+          } else {
+            const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
+            if(practice_objects
+            .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
+              (moduleProgress[i]).practice_progress = true;
             } else {
-              (moduleProgress[i]).quiz_progress = false;
+              (moduleProgress[i]).practice_progress = false;
             }
+          }
 
-          } 
+          //quiz progress
+          var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
+          if(quiz_object){
+            (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
+          } else {
+            (moduleProgress[i]).quiz_progress = false;
+          }
+
+        
         }
         callback(null, moduleProgress);
       }
@@ -1015,24 +1014,23 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
-          if(module_object.open=='true'){
-            //practice progress
-            var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
-            if(practice_object){
-              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
-            } else {
-              (moduleProgress[i]).practice_progress = false;
-            }
+          
+          //practice progress
+          var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+          if(practice_object){
+            (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
+          } else {
+            (moduleProgress[i]).practice_progress = false;
+          }
 
-            //quiz progress
-            var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
-            if(quiz_object){
-              (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
-            } else {
-              (moduleProgress[i]).quiz_progress = false;
-            }
+          //quiz progress
+          var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
+          if(quiz_object){
+            (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
+          } else {
+            (moduleProgress[i]).quiz_progress = false;
+          }
 
-          } 
         }
         callback(null, moduleProgress);
       }
