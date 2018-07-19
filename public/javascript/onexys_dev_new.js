@@ -18,6 +18,13 @@ if (homeRegex.test(window.location.pathname)) {
   }
 }
 
-$(document).ready(function () {
-  $("iframe").css('height','200%');
-});
+/*
+*
+  Removed by Abhi Nayar, 07/12/2018
+  The 200% height on iframe is making the black border around videos appear.
+  If this is a breaking change, simply uncomment.
+  
+  $(document).ready(function () {
+    $("iframe").css('height','200%');
+  });
+*/

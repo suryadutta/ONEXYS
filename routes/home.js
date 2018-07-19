@@ -1,21 +1,20 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var config = require('../bin/config');
-var queries = require('../models/queries')
+var config = require("../bin/config");
+var queries = require("../models/queries");
 
-router.use('/', (req, res, next) => {
+router.use("/", (req, res, next) => {
+  console.log(req.session);
 
-  console.log(req.session)
+  var courseID = parseInt(req.session.course_id);
+  var userID = parseInt(req.session.user_id);
 
-  var courseID = parseInt(req.session.course_id)
-  var userID = parseInt(req.session.user_id)
+  console.log("Course and User IDs");
 
-  console.log('Course and User IDs')
+  console.log(courseID);
+  console.log(userID);
 
-  console.log(courseID)
-  console.log(userID)
-
-  if (courseID == 10184){
+  if (courseID == 10184) {
     courseID = 38082;
   }
 
@@ -23,7 +22,8 @@ router.use('/', (req, res, next) => {
 
   if (req.session.admin) {
     if (req.query.masquerade) {
-      queries.homepageQueryMasquerade(parseInt(req.query.masquerade),
+      queries.homepageQueryMasquerade(
+        parseInt(req.query.masquerade),
         courseID,
         (
           module_progress,
@@ -36,8 +36,8 @@ router.use('/', (req, res, next) => {
           home_links,
           daily_yalie
         ) => {
-          res.render('home', {
-            title: 'Home | ONEXYS',
+          res.render("home", {
+            title: "Home | ONEXYS",
             courseID,
             module_progress,
             score,
@@ -50,9 +50,10 @@ router.use('/', (req, res, next) => {
             daily_yalie,
             is_physics,
             admin: req.session.admin,
-            masquerade: true,
+            masquerade: true
           });
-        });
+        }
+      );
     } else {
       queries.homepageAdminQuery(
         courseID,
@@ -65,8 +66,8 @@ router.use('/', (req, res, next) => {
           students,
           daily_yalie
         ) => {
-          res.render('home', {
-            title: 'Home | ONEXYS',
+          res.render("home", {
+            title: "Home | ONEXYS",
             courseID,
             module_progress,
             score: 0,
@@ -85,11 +86,10 @@ router.use('/', (req, res, next) => {
             masquerade: false,
             students
           });
-        });
+        }
+      );
     }
-  }
-
-  else {
+  } else {
     queries.homepageQuery(
       userID,
       courseID,
@@ -104,8 +104,8 @@ router.use('/', (req, res, next) => {
         home_links,
         daily_yalie
       ) => {
-        res.render('home', {
-          title: 'Home | ONEXYS',
+        res.render("home", {
+          title: "Home | ONEXYS",
           courseID,
           module_progress,
           score,
@@ -119,7 +119,8 @@ router.use('/', (req, res, next) => {
           is_physics,
           admin: req.session.admin
         });
-      });
+      }
+    );
   }
 });
 

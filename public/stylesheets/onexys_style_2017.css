@@ -1655,7 +1655,9 @@
 
   Questions: anayar2@gmail.com OR github.com/abhinayar
  */
-#tool_content {
+#tool_content,
+iframe#tool_content,
+iframe.tool_launch {
   height: 100% !important;
 }
 
@@ -1663,4 +1665,8 @@ h4 {
   font-size: 16px !important;
   font-weight: 900 !important;
   padding-left: 3px !important;
+}
+
+.onexys_styling a {
+  border-bottom: 1px solid rgb(36, 63, 142) !important;
 }
