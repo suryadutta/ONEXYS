@@ -476,6 +476,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
 
           if (module_object.new_practice_cutoff_format_true)
           {
+            console.log("module_object.new_practice_cutoff_format_true");
             const practiceId_cutoff_obj = (array =>
               array.reduce((obj, x) => {
                 obj[x.substring(0, x.indexOf(':'))] = parseInt(x.substring(x.indexOf(':')+1));
