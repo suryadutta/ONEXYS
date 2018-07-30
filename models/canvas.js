@@ -474,38 +474,39 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-          //practice progress
-          // if (!module_object.multiple_practices) {
-          //   var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
-          //   if(practice_object){
-          //     (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
-          //   } else {
-          //     (moduleProgress[i]).practice_progress = false;
-          //   }
-          // } else {
-          //   const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
-          //   if(practice_objects
-          //   .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
-          //     (moduleProgress[i]).practice_progress = true;
-          //   } else {
-          //     (moduleProgress[i]).practice_progress = false;
-          //   }
-          // }
+          if (module_object.new_practice_cutoff_format_true)
+          {
+            const practiceId_cutoff_obj = (array =>
+              array.reduce((obj, x) => {
+                obj[x.substring(0, x.indexOf(':'))] = parseInt(x.substring(x.indexOf(':')+1));
+                return obj
+              }, {}))(amodule_object.new_practice_cutoff.split(';'));
+              
+            const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
+            
+            // if(practice_objects
+            //   .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object]))){
+            //     (moduleProgress[i]).practice_progress = true;
+            //   } else {
+            //     (moduleProgress[i]).practice_progress = false;
+            //   }
 
-          if (!module_object.multiple_practices) {
-            var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
-            if(practice_object){
-              (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
+          } else{
+            if (!module_object.multiple_practices) {
+              const practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+              if(practice_object){
+                (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
+              } else {
+                (moduleProgress[i]).practice_progress = false;
+              }
             } else {
-              (moduleProgress[i]).practice_progress = false;
-            }
-          } else {
-            const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
-            if(practice_objects
-            .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
-              (moduleProgress[i]).practice_progress = true;
-            } else {
-              (moduleProgress[i]).practice_progress = false;
+              const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
+              if(practice_objects
+              .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
+                (moduleProgress[i]).practice_progress = true;
+              } else {
+                (moduleProgress[i]).practice_progress = false;
+              }
             }
           }
 
