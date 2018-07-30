@@ -474,7 +474,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-          if (module_object.new_practice_cutoff_format_true)
+          if (module_object.new_practice_cutoff_format_true == 'true')
           {
             console.log("module_object.new_practice_cutoff_format_true");
             const practiceId_cutoff_obj = (array =>
