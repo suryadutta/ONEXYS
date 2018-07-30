@@ -502,7 +502,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
               }
             } else {
               const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
-              console.log("practice_object", practice_object)
+              console.log("practice_object", practice_objects)
               if(practice_objects
               .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
                 (moduleProgress[i]).practice_progress = true;
