@@ -35,10 +35,6 @@ block content
         label(for='practice_link') Practice Assignment ID: 
         input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
         br
-        div.form-group
-        label(for='practice_cutoff') Practice Assignment Cutoff Score (out of 100): 
-        input#practice_cutoff.form-control(type='numeric', value=module.practice_cutoff, name='practice_cutoff')
-        br
         label(for='open_false') Practice URL  
         input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
         br
@@ -46,9 +42,24 @@ block content
         label(for='practice_url_redirect') Practice URL: 
         input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
         br
+        br
+
         div.form-group
-        label(for='practice_cutoffs') Practice Assignment Cutoff Scores (e.g., "73230:100;73231:90;73232:95;"): 
-        input#practice_cutoff.form-control(type='text', value=module.practice_cutoff, name='practice_cutoffs')
+        label New Practice Cutoffs Format?
+        br
+        label(for='new_practice_cutoff_format_true') Yes  
+        input#new_practice_cutoff_format_true.form-control(type='radio', value='true', checked=module.new_practice_cutoff_format_true==true, name='new_practice_cutoff_format_true')
+        br
+        div.form-group
+        label(for='new_practice_cutoff') Practice Assignment Cutoff Scores for Multiple Assignments (e.g., "73230:90", "73230:90;73231:100;73232:95;"): 
+        input#new_practice_cutoff.form-control(type='text', value=module.new_practice_cutoff, name='new_practice_cutoff')
+        br
+        label(for='new_practice_cutoff_format_false') No  
+        input#new_practice_cutoff_format_false.form-control(type='radio', value='false', checked=module.new_practice_cutoff_format_true==false, name='new_practice_cutoff_format_false')
+        br
+        div.form-group
+        label(for='practice_cutoff') Practice Assignment Cutoff Scores (outof 100): 
+        input#practice_cutoff.form-control(type='text', value=module.practice_cutoff, name='practice_cutoff')
         br
         br
 

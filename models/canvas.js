@@ -475,6 +475,23 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
           //practice progress
+          // if (!module_object.multiple_practices) {
+          //   var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+          //   if(practice_object){
+          //     (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
+          //   } else {
+          //     (moduleProgress[i]).practice_progress = false;
+          //   }
+          // } else {
+          //   const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
+          //   if(practice_objects
+          //   .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
+          //     (moduleProgress[i]).practice_progress = true;
+          //   } else {
+          //     (moduleProgress[i]).practice_progress = false;
+          //   }
+          // }
+
           if (!module_object.multiple_practices) {
             var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
             if(practice_object){
@@ -491,6 +508,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
               (moduleProgress[i]).practice_progress = false;
             }
           }
+
+
 
           //quiz progress
           var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
