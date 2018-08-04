@@ -56,6 +56,17 @@ block content
         br
         br
         button.btn.btn-primary(type='submit') Preview Changes
+        
+        div.form-group
+        label Module Open?
+        br
+        label(for='post_test_open_true') Yes  
+        input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
+        br
+        label(for='post_test_open_false') No  
+        input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
+        br
+        br
     hr
     br
     br

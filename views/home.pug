@@ -110,8 +110,12 @@ block content
           br
           .clear
 
-        .module_11.module_background_00
-          a.progress_box.single_line(style='width: 187.5px !important;', href='https://yale.instructure.com/courses/'+courseID)  Post-Test
+        if home_updates.post_test
+          .module_11.module_background_00
+            a.progress_box.available.single_line(style='width: 187.5px !important;', href=home_updates.post_test_link)  Post-Test
+        else
+          .module_11.module_background_00
+            a.progress_box.single_line(style='width: 187.5px !important;')  Post-Test
     .left(style='width: 500px !important; margin-top: -10px;')
       .lucky_bulldog
         img(src='', alt='Lucky Bulldog')
