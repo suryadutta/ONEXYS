@@ -60,10 +60,10 @@ block content
         label Post Test Open?
         br
         label(for='post_test_open_true') Yes  
-        input#post_test_open_true.form-control(type='radio', value=true, checked=home_updates.post_test==true, name='post_test')
+        input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
         br
         label(for='post_test_open_false') No  
-        input#post_test_open_false.form-control(type='radio', value=false, checked=home_updates.post_test==false, name='post_test')
+        input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
         br
         br
 
