@@ -55,10 +55,9 @@ block content
         textarea#text3.form-control(rows=3, name='text3',style="width: 750px;")=home_updates.text3
         br
         br
-        button.btn.btn-primary(type='submit') Preview Changes
-        
+
         div.form-group
-        label Module Open?
+        label Post Test Open?
         br
         label(for='post_test_open_true') Yes  
         input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
@@ -67,6 +66,16 @@ block content
         input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
         br
         br
+
+        div.form-group
+        label(for='post_test_link') Post Test URL: 
+        br
+        textarea#post_test_link.form-control(rows=3, name='post_test_link',style="width: 750px;")=home_updates.post_test_link
+        br
+        br
+
+        button.btn.btn-primary(type='submit') Preview Changes
+        
     hr
     br
     br
