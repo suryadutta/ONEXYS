@@ -535,6 +535,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           } else {
             (moduleProgress[i]).quiz_progress = false;
           }
+          
 
         
         }
