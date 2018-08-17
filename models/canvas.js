@@ -474,46 +474,59 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-          if (module_object.new_practice_cutoff_format_true == 'true')
-          {
-            console.log("module_object.new_practice_cutoff_format_true");
-            const practiceId_cutoff_obj = (array =>
-              array.reduce((obj, x) => {
-                obj[x.substring(0, x.indexOf(':')).trim()] = parseInt(x.substring(x.indexOf(':')+1));
-                return obj
-              }, {}))(module_object.new_practice_cutoff.split(';'));
+          // if (module_object.new_practice_cutoff_format_true == 'true')
+          // {
+          //   console.log("module_object.new_practice_cutoff_format_true");
+          //   const practiceId_cutoff_obj = (array =>
+          //     array.reduce((obj, x) => {
+          //       obj[x.substring(0, x.indexOf(':')).trim()] = parseInt(x.substring(x.indexOf(':')+1));
+          //       return obj
+          //     }, {}))(module_object.new_practice_cutoff.split(';'));
               
-            const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
+          //   const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
             
-            if(practice_objects
-              .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
-                (moduleProgress[i]).practice_progress = true;
-              } else {
-                (moduleProgress[i]).practice_progress = false;
-              }
+          //   if(practice_objects
+          //     .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
+          //       (moduleProgress[i]).practice_progress = true;
+          //     } else {
+          //       (moduleProgress[i]).practice_progress = false;
+          //     }
 
-          } else{
-            if (!module_object.multiple_practices) {
-              const practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
-              console.log("practice_object", practice_object)
-              if(practice_object){
-                (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
-              } else {
-                (moduleProgress[i]).practice_progress = false;
-              }
+          // } else{
+          //   if (!module_object.multiple_practices) {
+          //     const practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+          //     console.log("practice_object", practice_object)
+          //     if(practice_object){
+          //       (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
+          //     } else {
+          //       (moduleProgress[i]).practice_progress = false;
+          //     }
+          //   } else {
+          //     const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
+          //     console.log("practice_object", practice_objects)
+          //     if(practice_objects
+          //     .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
+          //       (moduleProgress[i]).practice_progress = true;
+          //     } else {
+          //       (moduleProgress[i]).practice_progress = false;
+          //     }
+          //   }
+          // }
+
+          const practiceId_cutoff_obj = (array =>
+            array.reduce((obj, x) => {
+              obj[x.substring(0, x.indexOf('_')).trim()] = parseInt(x.substring(x.indexOf('_')+1).trim());
+              return obj
+            }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
+            
+          const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
+            
+          if(practice_objects
+            .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
+              (moduleProgress[i]).practice_progress = true;
             } else {
-              const practice_objects = module_object.multiple_practice_links.map(link_id => user_assigments.find(assignment => assignment.assignment_id == link_id));
-              console.log("practice_object", practice_objects)
-              if(practice_objects
-              .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff))){
-                (moduleProgress[i]).practice_progress = true;
-              } else {
-                (moduleProgress[i]).practice_progress = false;
-              }
+              (moduleProgress[i]).practice_progress = false;
             }
-          }
-
-
 
           //quiz progress
           var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
