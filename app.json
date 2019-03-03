@@ -19,12 +19,10 @@
             "value": "https://yale.instructure.com/"
         },
         "CANVAS_KEY":{
-            "description": "A secret key to use when linking this app to your course.",
-            "value": "canvas-key"
+            "description": "A secret key to use when linking this app to your course (from school)."
         },
         "DEVELOPER_TOKEN":{
-            "description": "A secret password to use when linking this app to your course.",
-            "value": "developer-secret"
+            "description": "A secret password to use when linking this app to your course (from school)."
         },
         "CANVAS_ADMIN_AUTH_TOKEN":{
             "description": "A generated Authentication token for a user with admin priviledges to the course."
