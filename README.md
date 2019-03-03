@@ -59,12 +59,3 @@ https://<YOUR_HEROKU_APP_NAME_HERE>.herokuapp.com/callback
 ## Branding
 
 Most of the branded content takes place in the form of images and content in the `\public` directory. Changing this requires uploading new content to the repository, as well as updating the corresponding filenames in either the stylesheets or in the views themselves. 
-
-## Disclaimer
-
-The phrase "code is it's own documentation" holds painfully true in this codebase (thus far). Many pieces of code were written for a specific purpose/use during the previous program. Many pieces were for testing random things that were broken. And many pieces just should not have been written in the first place. My advice is this:    
-* parse through the codebase and try to get a high-level understanding of how everything works
-
-* spend the time to get your local development working for testing. it saves so much time in the end. this includes a working local Mongo database. skip the authentication stuff though - not worth the hassle
-
-* iterate and improve slowly
