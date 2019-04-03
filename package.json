@@ -23,7 +23,7 @@
     "express-session": "^1.15.6",
     "ims-lti": "^3.0.2",
     "mime-types": "^2.1.17",
-    "mongodb": "^3.1.13",
+    "mongodb": "^2.2.33",
     "morgan": "~1.9.1",
     "npm": "^6.8.0",
     "pug": "~2.0.0-beta11",
