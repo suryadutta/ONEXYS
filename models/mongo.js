@@ -7,8 +7,9 @@ function getData(courseID, collection_name, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log(connectionURL);
-    MongoClient.connect(connectionURL, function(err, db) {
+    MongoClient.connect(connectionURL, function(err, client) {
         assert.equal(null, err);
+        var db = client.db(collection_name);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
             callback(err,data);
             db.close();
@@ -21,7 +22,8 @@ function insertData(courseID, collection_name, data, callback){
     var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
     //console.log(connectionURL);
-    MongoClient.connect(connectionURL, function(err, db) {
+    MongoClient.connect(connectionURL, function(err, client) {
+        var db = client.db(collection_name);
         db.collection(collection_name).insertOne(data,
             function(err, result) {
                 callback(err,result);
@@ -35,7 +37,8 @@ function updateData(courseID,collection_name,update_index,update_data, callback)
     var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
     //console.log(connectionURL);
-    MongoClient.connect(connectionURL, function(err, db) {
+    MongoClient.connect(connectionURL, function(err, client) {
+        var db = client.db(collection_name);
         db.collection(collection_name).updateOne(update_index, {$set: update_data},
             function(err, result) {
                 callback(err,result);
@@ -49,7 +52,8 @@ function deleteData(courseID, collection_name,delete_index,callback){
     var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     //console.log('Connecting to: ');
     //console.log(connectionURL);
-    MongoClient.connect(connectionURL, function(err, db) {
+    MongoClient.connect(connectionURL, function(err, client) {
+        var db = client.db(collection_name);
         db.collection(collection_name).deleteOne(delete_index,
             function(err, result) {
                 callback(err,result);
@@ -72,8 +76,9 @@ function getModule(courseID, moduleID, callback){
     var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
     console.log('Connecting to: ');
     console.log(connectionURL);
-    MongoClient.connect(connectionURL, function(err, db) {
+    MongoClient.connect(connectionURL, function(err, client) {
         assert.equal(null, err);
+        var db = client.db(collection_name);
         db.collection('modules').findOne({"_id":parseInt(moduleID)},function(err, data) {
             function orderVids(a,b) {
                 if (a.position < b.position)
