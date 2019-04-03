@@ -12,7 +12,7 @@ function getData(courseID, collection_name, callback){
         var db = client.db(collection_name);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
             callback(err,data);
-            db.close();
+            client.close();
         });
     });
 }
@@ -27,7 +27,7 @@ function insertData(courseID, collection_name, data, callback){
         db.collection(collection_name).insertOne(data,
             function(err, result) {
                 callback(err,result);
-                db.close();
+                client.close();
           });
     });
 }
@@ -42,7 +42,7 @@ function updateData(courseID,collection_name,update_index,update_data, callback)
         db.collection(collection_name).updateOne(update_index, {$set: update_data},
             function(err, result) {
                 callback(err,result);
-                db.close();
+                client.close();
           });
     });
 }
@@ -57,7 +57,7 @@ function deleteData(courseID, collection_name,delete_index,callback){
         db.collection(collection_name).deleteOne(delete_index,
             function(err, result) {
                 callback(err,result);
-                db.close();
+                client.close();
           });
     });
 }
@@ -91,7 +91,7 @@ function getModule(courseID, moduleID, callback){
                 data.videos = data.videos.sort(orderVids)
             }
             callback(err,data);
-            db.close();
+            client.close();
         });
     });
 }
