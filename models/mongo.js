@@ -9,11 +9,12 @@ function getData(courseID, collection_name, callback){
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
+        var db = client.db(collection_name);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
             callback(err,data);
             db.close();
-        });        
-    });   
+        });
+    });
 }
 
 function insertData(courseID, collection_name, data, callback){
@@ -22,12 +23,13 @@ function insertData(courseID, collection_name, data, callback){
     //console.log('Connecting to: ');
     //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
+        var db = client.db(collection_name);
         db.collection(collection_name).insertOne(data,
             function(err, result) {
                 callback(err,result);
                 db.close();
-          });  
-    });   
+          });
+    });
 }
 
 function updateData(courseID,collection_name,update_index,update_data, callback){
@@ -36,12 +38,13 @@ function updateData(courseID,collection_name,update_index,update_data, callback)
     //console.log('Connecting to: ');
     //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
+        var db = client.db(collection_name);
         db.collection(collection_name).updateOne(update_index, {$set: update_data},
             function(err, result) {
                 callback(err,result);
                 db.close();
-          });  
-    });   
+          });
+    });
 }
 
 function deleteData(courseID, collection_name,delete_index,callback){
@@ -50,12 +53,13 @@ function deleteData(courseID, collection_name,delete_index,callback){
     //console.log('Connecting to: ');
     //console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
+        var db = client.db(collection_name);
         db.collection(collection_name).deleteOne(delete_index,
             function(err, result) {
                 callback(err,result);
                 db.close();
-          });  
-    });   
+          });
+    });
 }
 
 function getHomeContent(courseID,callback){
@@ -74,6 +78,7 @@ function getModule(courseID, moduleID, callback){
     console.log(connectionURL);
     MongoClient.connect(connectionURL, function(err, db) {
         assert.equal(null, err);
+        var db = client.db(collection_name);
         db.collection('modules').findOne({"_id":parseInt(moduleID)},function(err, data) {
             function orderVids(a,b) {
                 if (a.position < b.position)
@@ -87,8 +92,8 @@ function getModule(courseID, moduleID, callback){
             }
             callback(err,data);
             db.close();
-        });        
-    });   
+        });
+    });
 }
 
 function getAllData(courseID, callback_main){
