@@ -22,8 +22,8 @@ var notes_column_url = (courseID) => {
 
 var get_update_url = (courseID, callback) => {
   getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
-    var points_id = custom_columns.find(column => column.title='Practice Ace').id; // Chaned Note to Practice Ace for testing
-    console.log(points_id);
+    console.log(custom_columns);
+    var points_id = custom_columns.find(column => column.title='Note').id;
     var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data';
     callback(update_url);
   });
