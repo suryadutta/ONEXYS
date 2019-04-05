@@ -11,7 +11,7 @@ function getData(courseID, collection_name, callback){
         assert.equal(null, err);
         var db = client.db(collection_name);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
-            console.log("Collection: " + collection_name + ", Data: " + data + ", Error: " + err);
+            console.log("Collection: " + collection_name + ", Data: " + data.toString());
             callback(err,data);
             client.close();
         });
