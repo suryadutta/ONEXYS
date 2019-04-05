@@ -20,9 +20,10 @@ var notes_column_url = (courseID) => {
   return config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/';
 }
 
-var get_update_url = (courseID, callback) => {    
+var get_update_url = (courseID, callback) => {
   getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
-    var points_id = custom_columns.find(column => column.title='Notes').id;
+    var points_id = custom_columns.find(column => column.title='Practice Ace').id; // Chaned Note to Practice Ace for testing
+    console.log(points_id);
     var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data';
     callback(update_url);
   });
@@ -146,7 +147,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
           else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
             totalPoints += parseInt(lucky_bulldog_points);
             lucky_bulldog.awarded_ids.push(studentID);
-            mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});  
+            mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
           }
         } else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
           totalPoints += parseInt(lucky_bulldog_points);
@@ -155,7 +156,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         }
       }
     }
-    
+
     function awardBadge(badgeID) {
       badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
       totalPoints += parseInt(badge_info.Points);
@@ -217,7 +218,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
         for (var i = 0; i < mongo_data.modules.length; i++) {
           if (mongo_data.modules[i].open=='true'){
-                    
+
             //practice objectives proficient
             var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
@@ -293,7 +294,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
               if (quiz_grade > parseFloat(0)) {
                 quizzes_attempted += 1;
 
-                //Process Quiz Early Bird Badge                
+                //Process Quiz Early Bird Badge
                 if(mongo_data.modules[i].leaderboard.quiz_early_bird == ""){
                   mongo_data.modules[i].leaderboard.quiz_early_bird = studentID.toString();
                   awardBadge(24);
@@ -361,8 +362,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
               var reflection_grade = parseFloat(reflection_object.grade);
               if (reflection_grade == parseFloat(100)) {
                 reflections_done += 1;
-                
-                //Process Reflection Early Bird Badge 
+
+                //Process Reflection Early Bird Badge
                 if(mongo_data.modules[i].leaderboard.reflection_early_bird == ""){
                   mongo_data.modules[i].leaderboard.reflection_early_bird = studentID.toString();
                   awardBadge(25);
@@ -376,11 +377,11 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
               }
             }
             mongo.updateData(courseID,'modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],function(err,result){});
-          } 
+          }
         }
 
 
-        totalPoints += (parseInt(practice_proficient) * 100); //assign points for each proficient ALEKS 
+        totalPoints += (parseInt(practice_proficient) * 100); //assign points for each proficient ALEKS
         //assign points for each badge earned
         if (practice_proficient >= 1) {
           awardBadge(7);
@@ -395,7 +396,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
           awardBadge(10);
         }
 
-       
+
         totalPoints += (parseInt(quizzes_attempted) * 100); //assign points for each quiz
         //assign points for each badge earned
         if (quizzes_attempted >= 1) {
@@ -482,9 +483,9 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           //       obj[x.substring(0, x.indexOf(':')).trim()] = parseInt(x.substring(x.indexOf(':')+1));
           //       return obj
           //     }, {}))(module_object.new_practice_cutoff.split(';'));
-              
+
           //   const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
-            
+
           //   if(practice_objects
           //     .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
           //       (moduleProgress[i]).practice_progress = true;
@@ -518,9 +519,9 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
               obj[x.substring(0, x.indexOf('_')).trim()] = parseInt(x.substring(x.indexOf('_')+1).trim());
               return obj
             }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
-            
+
           const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
-            
+
           if(practice_objects
             .every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
               (moduleProgress[i]).practice_progress = true;
@@ -535,9 +536,9 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           } else {
             (moduleProgress[i]).quiz_progress = false;
           }
-          
 
-        
+
+
         }
         callback(null, moduleProgress);
       }
@@ -588,7 +589,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].students==null){ 
+        if(data[i].students==null){
           data.splice(i, 1);
         }
       }
@@ -603,7 +604,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     });
   }
 
-  
+
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
     get_update_url(courseID, function(update_url){
       getAdminRequest(update_url, function(err, pointsInfo) {
@@ -654,7 +655,7 @@ function getAdminLeaderboardScores(courseID, callback){
 
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].students==null){ 
+        if(data[i].students==null){
           data.splice(i, 1);
         }
       }
@@ -730,10 +731,10 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
           if (lucky_bulldog.awarded_ids.includes(studentID)){
             totalPoints += parseInt(lucky_bulldog_points);
           }
-        } 
+        }
       }
     }
-    
+
     function awardBadge(badgeID) {
       badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
       totalPoints += parseInt(badge_info.Points);
@@ -795,7 +796,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
         for (var i = 0; i < mongo_data.modules.length; i++) {
           if (mongo_data.modules[i].open=='true'){
-                    
+
             //practice objectives proficient
             var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
             if (practice_object){
@@ -871,7 +872,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
               if (quiz_grade > parseFloat(0)) {
                 quizzes_attempted += 1;
 
-                //Process Quiz Early Bird Badge                
+                //Process Quiz Early Bird Badge
                 if(mongo_data.modules[i].leaderboard.quiz_early_bird == ""){
                   mongo_data.modules[i].leaderboard.quiz_early_bird = studentID.toString();
                   awardBadge(24);
@@ -939,8 +940,8 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
               var reflection_grade = parseFloat(reflection_object.grade);
               if (reflection_grade == parseFloat(100)) {
                 reflections_done += 1;
-                
-                //Process Reflection Early Bird Badge 
+
+                //Process Reflection Early Bird Badge
                 if(mongo_data.modules[i].leaderboard.reflection_early_bird == ""){
                   mongo_data.modules[i].leaderboard.reflection_early_bird = studentID.toString();
                   awardBadge(25);
@@ -954,11 +955,11 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
               }
             }
             mongo.updateData(courseID,'modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],function(err,result){});
-          } 
+          }
         }
 
 
-        totalPoints += (parseInt(practice_proficient) * 100); //assign points for each proficient ALEKS 
+        totalPoints += (parseInt(practice_proficient) * 100); //assign points for each proficient ALEKS
         //assign points for each badge earned
         if (practice_proficient >= 1) {
           awardBadge(7);
@@ -973,7 +974,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
           awardBadge(10);
         }
 
-       
+
         totalPoints += (parseInt(quizzes_attempted) * 100); //assign points for each quiz
         //assign points for each badge earned
         if (quizzes_attempted >= 1) {
@@ -1051,7 +1052,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
-          
+
           //practice progress
           var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
           if(practice_object){
@@ -1118,7 +1119,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get
     getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
-        if(data[i].students==null){ 
+        if(data[i].students==null){
           data.splice(i, 1);
         }
       }
@@ -1133,7 +1134,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get
     });
   }
 
-  
+
   function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
     get_update_url(courseID, function(update_url){
       getAdminRequest(update_url, function(err, pointsInfo) {
