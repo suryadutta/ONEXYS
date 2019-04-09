@@ -11,7 +11,7 @@ function getData(courseID, collection_name, callback){
         assert.equal(null, err);
         var db = client.db(collection_name);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
-            console.log("Collection: " + collection_name + ", Data: " + data.toString());
+            console.log("Collection: " + collection_name + ", Data: " + data);
             callback(err,data);
             client.close();
         });
@@ -64,7 +64,7 @@ function deleteData(courseID, collection_name,delete_index,callback){
 }
 
 function getHomeContent(courseID,callback){
-    getData(courseID, 'home',function(err,data){
+    getData(courseID, 'home', function(err,data){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
