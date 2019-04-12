@@ -67,7 +67,7 @@ block content
         p#badges_link_sentence
           a(id='', title='info_Badges', href=home_links.badges, target='_blank') Click here to see all your badges.
       #progress.standard_home_box.left(style='width: 324px;')
-        h2 My Progress So Far 
+        h2 My Progress So Far
 
         .module_0.module_background_0
           a.progress_box.single_line.completed(style='width: 187.5px !important;')  Pre-Test
@@ -78,7 +78,7 @@ block content
         .clear
 
         each module, index in module_progress
-        
+
           div(class=module.button_background_image)
             if module.open == 'true'
               if module.practice_progress && module.quiz_progress

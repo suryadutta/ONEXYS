@@ -36,6 +36,7 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie
         ) => {
+          console.log("Masquerade branch, " + home_links)
           res.render("home", {
             title: "Home | ONEXYS",
             courseID,
@@ -66,6 +67,7 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("Admin branch, " + home_links)
           res.render("home", {
             title: "Home | ONEXYS",
             courseID,
