@@ -9,10 +9,10 @@ router.use("/", (req, res, next) => {
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
 
-  console.log("Course and User IDs");
+  //console.log("Course and User IDs");
 
-  console.log(courseID);
-  console.log(userID);
+  //console.log(courseID);
+  //console.log(userID);
 
   if (courseID == 10184) {
     courseID = 38082;
@@ -36,7 +36,6 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie
         ) => {
-          console.log("Masquerade branch, " + home_links)
           res.render("home", {
             title: "Home | ONEXYS",
             courseID,
@@ -67,7 +66,6 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
-          console.log("Admin branch, " + home_links)
           res.render("home", {
             title: "Home | ONEXYS",
             courseID,
