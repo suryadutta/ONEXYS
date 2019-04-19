@@ -22,6 +22,8 @@ config.disableLeaderboard = process.env.DISABLE_LEADERBOARD.toLowerCase() == 'tr
 //configure MongoDB urls here - course ID to mongoDB URL
 config.mongoURL = 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@onexys-shard-00-00-qkreu.mongodb.net:27017,onexys-shard-00-01-qkreu.mongodb.net:27017,onexys-shard-00-02-qkreu.mongodb.net:27017/uva-onexys?ssl=true&replicaSet=ONEXYS-shard-0&authSource=admin&retryWrites=true';
 
+//add to list if we create new courses
+//format is courseID: databaseName
 config.mongoDBs = {
   '2517': 'uva-onexys',
 }
