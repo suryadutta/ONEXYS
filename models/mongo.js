@@ -5,10 +5,10 @@ var config = require('../bin/config');
 
 function getData(courseID, collection_name, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
         assert.equal(null, err);
-        var db = client.db(config.mongo_db_name);
+        var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
             callback(err,data);
             client.close();
@@ -18,9 +18,9 @@ function getData(courseID, collection_name, callback){
 
 function insertData(courseID, collection_name, data, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
-        var db = client.db(config.mongo_db_name);
+        var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).insertOne(data,
             function(err, result) {
                 callback(err,result);
@@ -31,9 +31,9 @@ function insertData(courseID, collection_name, data, callback){
 
 function updateData(courseID,collection_name,update_index,update_data, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
-        var db = client.db(config.mongo_db_name);
+        var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).updateOne(update_index, {$set: update_data},
             function(err, result) {
                 callback(err,result);
@@ -42,34 +42,34 @@ function updateData(courseID,collection_name,update_index,update_data, callback)
     });
 }
 
-function deleteData(courseID, collection_name,delete_index,callback){
+function deleteData(courseID, collection_name, delete_index,callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
-        var db = client.db(config.mongo_db_name);
+        var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).deleteOne(delete_index,
             function(err, result) {
-                callback(err,result);
+                callback(err, result);
                 client.close();
           });
     });
 }
 
-function getHomeContent(courseID,callback){
-    getData(courseID, 'home', function(err,data){
+function getHomeContent(courseID, callback){
+    getData(courseID, 'home', function(err, data){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
-        callback(err,home_updates,home_videos,home_links);
+        callback(err, home_updates, home_videos, home_links);
       });
 }
 
 function getModule(courseID, moduleID, callback){
     // Use connect method to connect to the server
-    var connectionURL = config.mongoURLs[courseID]||config.mongoURLs[process.env.TEST_COURSE_NUMBER];
+    var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
         assert.equal(null, err);
-        var db = client.db(config.mongo_db_name);
+        var db = client.db(config.mongoDBs[courseID]);
         db.collection('modules').findOne({"_id":parseInt(moduleID)},function(err, data) {
             function orderVids(a,b) {
                 if (a.position < b.position)
@@ -90,16 +90,16 @@ function getModule(courseID, moduleID, callback){
 function getAllData(courseID, callback_main){
     asyncStuff.parallel({
         'modules': function(callback) {
-            getData(courseID, 'modules',callback)
+            getData(courseID, 'modules', callback)
         },
         'badges': function(callback) {
-            getData(courseID, 'badges',callback)
+            getData(courseID, 'badges', callback)
         },
         'dailies': function(callback) {
-            getData(courseID, 'dailies',callback)
+            getData(courseID, 'dailies', callback)
         },
         'lucky_bulldogs': function(callback) {
-            getData(courseID, 'lucky_bulldogs',callback)
+            getData(courseID, 'lucky_bulldogs', callback)
         },
     }, function(err, results) {
         callback_main(results);

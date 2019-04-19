@@ -9,11 +9,6 @@ router.use("/", (req, res, next) => {
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
 
-  //console.log("Course and User IDs");
-
-  //console.log(courseID);
-  //console.log(userID);
-
   if (courseID == 10184) {
     courseID = 38082;
   }
