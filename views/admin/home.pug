@@ -92,12 +92,12 @@ block content
             tr 
                 td
                     div.onexys_video
-                    a.colorbox(href=video.video_src)
-                        if video.video_img
-                            img.onexys_thumbnail(src=video.video_img)
-                        else
-                            img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-                        img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+                        a.colorbox(href=video.video_src)
+                            if video.video_img
+                                img.onexys_thumbnail(src=video.video_img)
+                            else
+                                img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+                            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
                     p
                     span(style='font-size: 12pt;')
                         strong!=video.video_desc
