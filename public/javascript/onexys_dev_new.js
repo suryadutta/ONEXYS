@@ -1,4 +1,4 @@
-var canvasURL = 'https://yale.instructure.com';
+var canvasURL = 'https://curryvirginia.instructure.com';
 var externalHomePageRedirects = {
   10184:3673,
   38082:3671,
