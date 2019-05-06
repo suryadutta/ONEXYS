@@ -20,7 +20,7 @@ config.local_mongo_database = 'mongodb://localhost:27017/oneyxs_dev'
 config.disableLeaderboard = process.env.DISABLE_LEADERBOARD.toLowerCase() == 'true' ? true : false || false;
 
 //configure MongoDB urls here - course ID to mongoDB URL
-config.mongoURL = 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@conexcluster-shard-00-00-bgeoe.mongodb.net:27017,conexcluster-shard-00-01-bgeoe.mongodb.net:27017,conexcluster-shard-00-02-bgeoe.mongodb.net:27017/conex?ssl=true&replicaSet=ONEXYS-shard-0&authSource=admin&retryWrites=true';
+config.mongoURL = 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@conexcluster-shard-00-00-bgeoe.mongodb.net:27017,conexcluster-shard-00-01-bgeoe.mongodb.net:27017,conexcluster-shard-00-02-bgeoe.mongodb.net:27017/test?ssl=true&replicaSet=ConexCluster-shard-0&authSource=admin&retryWrites=true';
 
 //add to list if we create new courses
 //format is courseID: databaseName
