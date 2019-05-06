@@ -16,6 +16,7 @@ block content
     h2='Home Page Updates'
 
     form(method='POST' action='home/preview')
+        button.btn.btn-primary(type='submit') Preview Changes
 
         div.form-group
         label(for='main_header') Main Header:
@@ -26,7 +27,7 @@ block content
         div.form-group
         label(for='main_text') Main Text:
         br
-        textarea#main_text.form-control(rows=3, name='main_text', style="width: 750px; height: 150px;")=home_updates.main_text
+        textarea#main_text.form-control(rows=15, name='main_text',style="width: 750px;")=home_updates.main_text
         br
         br
 
@@ -39,7 +40,7 @@ block content
         div.form-group
         label(for='text2') Text 2:
         br
-        textarea#text2.form-control(rows=3, name='text2', style="width: 750px; height: 150px;")=home_updates.text2
+        textarea#text2.form-control(rows=15, name='text2',style="width: 750px;")=home_updates.text2
         br
         br
 
@@ -52,7 +53,7 @@ block content
         div.form-group
         label(for='text3') Text 3:
         br
-        textarea#text3.form-control(rows=3, name='text3', style="width: 750px; height: 150px;")=home_updates.text3
+        textarea#text3.form-control(rows=15, name='text3',style="width: 750px;")=home_updates.text3
         br
         br
 
@@ -84,3 +85,25 @@ block content
 
     form(method='GET',action='home/videos/add',target="_blank")
                         button(type='submit') Add Video
+    br
+    br
+    table
+        for video in home_vids
+            tr
+                td
+                    div.onexys_video
+                        a.colorbox(href=video.video_src)
+                            if video.video_img
+                                img.onexys_thumbnail(src=video.video_img)
+                            else
+                                img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+                            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+                    p
+                    span(style='font-size: 12pt;')
+                        strong!=video.video_desc
+                    br
+                td
+                    form(method='GET' action='home/videos/edit/'+video._id)
+                        button(type='submit') Edit
+                    form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                        button(type='submit') Delete
