@@ -22,7 +22,6 @@ var notes_column_url = (courseID) => {
 
 var get_update_url = (courseID, callback) => {
   getAdminRequest(notes_column_url(courseID), function(err, custom_columns){
-    console.log("Custom Columns: " + custom_columns);
     var points_id = custom_columns.find(column => column.title='Notes').id;
     var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data';
     callback(update_url);
