@@ -13,10 +13,6 @@ router.use('/', function(req, res, next) {
   console.log(courseID)
   console.log(userID)
 
-  if (courseID == 10184){
-    courseID = 38082;
-  }
-
   if (req.session.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
@@ -25,7 +21,7 @@ router.use('/', function(req, res, next) {
        });
      });
   }
-  
+
   else{
     queries.badgesQuery(userID, courseID, function(badges){
       res.render('badges', {
