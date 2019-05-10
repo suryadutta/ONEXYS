@@ -21,7 +21,8 @@ var notes_column_url = (courseID) => {
 }
 
 var get_update_url = (courseID, callback) => {
-  getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
+  getAdminRequest(notes_column_url(courseID), function(err, custom_columns){
+    console.log("Custom Columns: " + custom_columns);
     var points_id = custom_columns.find(column => column.title='Notes').id;
     var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data';
     callback(update_url);
@@ -473,7 +474,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
         //get quiz and aleks progress
         for (var i = 0; i < moduleProgress.length; i++) {
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
-          
+
           const practiceId_cutoff_obj = (array =>
             array.reduce((obj, x) => {
               obj[x.substring(0, x.indexOf('_')).trim()] = parseInt(x.substring(x.indexOf('_')+1).trim());
