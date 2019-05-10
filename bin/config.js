@@ -25,7 +25,9 @@ config.mongoURL = 'mongodb://'+config.mongo_username+':'+config.mongo_password+'
 //add to list if we create new courses
 //format is courseID: databaseName
 config.mongoDBs = {
-  '2517': 'conex',
+  '2517': 'blue',
+  '3528': 'orange',
+  '3529': 'white',
 }
 
 //the name of the mongo db to connect to
