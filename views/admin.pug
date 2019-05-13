@@ -2,30 +2,23 @@ extends layout
 
 block content
 
-    
-    
+
+
     h1 CONEX Admin Portal
-    h3=course
-    
     br
-    
-    h2
-        a(href='/admin/home') Home Page
+    h3='Options for' + course
     br
-
     h2
-        a(href='/admin/modules') Modules
+        a(href='/admin/home', class='btn btn-primary', role='button') Home Page
     br
-    
     h2
-        a(href='/admin/badges') Badges
-
+        a(href='/admin/modules', class='btn btn-primary', role='button') Modules
     br
-
     h2
-        a(href='/admin/dailies') Hoo Knews?
-
+        a(href='/admin/badges', class='btn btn-primary', role='button') Badges
     br
-
     h2
-        a(href='/admin/lucky') Lucky Bulldog
+        a(href='/admin/dailies', class='btn btn-primary', role='button') Hoo Knews?
+    br
+    h2
+        a(href='/admin/lucky', class='btn btn-primary', role='button') Lucky Bulldog
