@@ -54,7 +54,7 @@ block content
                     label(for='post_test_link') Post Test URL:
                     textarea#post_test_link.form-control(rows=3, name='post_test_link',style="width: 750px;")=home_updates.post_test_link
 
-                button.btn.btn-dark(type='submit') Preview Changes
+                button.btn.btn-success(type='submit') Preview Changes
         hr
         div.row
             h2='Home Page Videos'
@@ -79,9 +79,9 @@ block content
                                 strong!=video.video_desc
                             br
                         td
-                            div.form
+                            div.form.form-inline
                                 form(method='GET' action='home/videos/edit/'+video._id)
                                     button.btn.btn-dark(type='submit') Edit
                                 form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                                     button.btn.btn-danger(type='submit') Delete
-                    hr
+                    br
