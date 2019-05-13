@@ -10,16 +10,14 @@ block content
     br
     div.container
         div.row
-            div.col-md-2
-                a.btn.btn-dark(href='/admin')
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                    Back
-            div.col-md-10
                 h2='Editing home page for ' + course
-            hr
+        hr
         div.row
             form(method='POST' action='home/preview')
-                button.btn.btn-dark(type='submit') Preview Changes
+                button.btn.btn-success(type='submit') Preview Changes
 
                 div.form-group
                     label(for='main_header') Main Header:
@@ -57,16 +55,13 @@ block content
                     textarea#post_test_link.form-control(rows=3, name='post_test_link',style="width: 750px;")=home_updates.post_test_link
 
                 button.btn.btn-dark(type='submit') Preview Changes
-        div.row
-            hr
-
+        hr
         div.row
             h2='Home Page Videos'
-
         div.row
             form(method='GET',action='home/videos/add',target="_blank")
                 button.btn.btn-dark(type='submit') Add Video
-
+        br
         div.row
             table
                 for video in home_vids
@@ -84,7 +79,9 @@ block content
                                 strong!=video.video_desc
                             br
                         td
-                            form(method='GET' action='home/videos/edit/'+video._id)
-                                button.btn.btn-dark(type='submit') Edit
-                            form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                                button.btn.btn-danger(type='submit') Delete
+                            div.form
+                                form(method='GET' action='home/videos/edit/'+video._id)
+                                    button.btn.btn-dark(type='submit') Edit
+                                form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                    button.btn.btn-danger(type='submit') Delete
+                    hr
