@@ -77,10 +77,10 @@ block content
                             span(style='font-size: 12pt;')
                                 strong!=video.video_desc
                             br
+                            br
                         td
                             div.form.form-inline
                                 form(method='GET' action='home/videos/edit/'+video._id)
                                     button.btn.btn-dark(type='submit') Edit
                                 form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                                     button.btn.btn-danger(type='submit') Delete
-                    br
