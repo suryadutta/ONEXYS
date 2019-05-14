@@ -11,16 +11,17 @@ var cookieParser = require('cookie-parser');
 var session = require('client-sessions');
 
 var config = require('./bin/config');
-var auth = require('./bin/auth')
+var auth = require('./bin/auth');
 
 var index = require('./routes/index');
 var home = require('./routes/home');
 var modules = require('./routes/modules');
 var badges = require('./routes/badges');
-var admin = require('./routes/admin')
+var admin = require('./routes/admin');
+var static = require('./routes/static');
 var app = express();
 
-var launch = require('./routes/canvasLaunch')
+var launch = require('./routes/canvasLaunch');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,6 +62,14 @@ app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 app.use('/modules',auth.updateCookies,modules)
 
 app.use('/launch',launch)
+
+// static file display
+
+app.get("/coach-information", (req, res, next) {
+  res.render("coach-information", {
+    title: "Coach Information",
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
