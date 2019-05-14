@@ -124,11 +124,12 @@ block content
     hr
     div.container
         div.row
-            form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
-            h2='Editing ' + course + ' Module ' + module._id + ' Videos'
-            form(method='GET',action='videos/add')
-                button.btn.btn-dark(type='submit') Add Video
-
+            div.col-md-9
+                form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
+                h2='Editing ' + course + ', Module ' + module._id + ' Videos'
+            div.col-md-3
+                form(method='GET',action='videos/add')
+                    button.btn.btn-dark(type='submit') Add Video
             table
                 for video in module.videos
                     tr
@@ -144,7 +145,8 @@ block content
                                     span!=video.video_desc_helper
                             br
                         td
-                            form(method='GET' action='videos/edit/'+video._id)
-                                button.btn.btn-dark(type='submit') Edit
-                            form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                                button.btn.btn-danger(type='submit') Delete
+                            div.form.form-inline
+                                form(method='GET' action='videos/edit/'+video._id)
+                                    button.btn.btn-dark(type='submit') Edit
+                                form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                    button.btn.btn-danger(type='submit') Delete
