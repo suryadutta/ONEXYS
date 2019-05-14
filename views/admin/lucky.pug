@@ -25,10 +25,12 @@ block content
                             h2="Lucky Bulldog "+(index+1)
                             h4=prettyDate(lucky_bulldog.time)
                         td
-                            form(method='GET' action='lucky/edit/'+lucky_bulldog._id)
-                                button.btn.btn-dark(type='submit') Edit
-                            form(method='POST' action='lucky/delete/'+lucky_bulldog._id, onsubmit="return confirm('Do you really want to delete this time?');")
-                                button.btn.btn-danger(type='submit') Delete
-            hr
+                            div.form.form-inline
+                                form(method='GET' action='lucky/edit/'+lucky_bulldog._id)
+                                    button.btn.btn-dark(type='submit') Edit
+                                form(method='POST' action='lucky/delete/'+lucky_bulldog._id, onsubmit="return confirm('Do you really want to delete this time?');")
+                                    button.btn.btn-danger(type='submit') Delete
+        hr
+        div.row
             form(method='GET' action='lucky/add')
                 button.btn.btn-dark(type='submit') Add New Time
