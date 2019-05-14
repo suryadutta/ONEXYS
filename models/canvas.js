@@ -123,7 +123,7 @@ function putAdminRequest(url, parameters, callback) {
 } //admin PUT request
 
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
-  mongo.getAllData(courseID, function(mongo_data){
+  mongo.getAllData(courseID,function(mongo_data){
     var badges = mongo_data.badges;
     var totalPoints = 0;
     var practice_proficient = 0;
@@ -170,7 +170,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
       return 0;
     }
 
-    getRequest(assignment_user_url(studentID, courseID), studentID, function(err, data) {
+    getRequest(assignment_user_url(studentID, courseID),studentID, function(err, data) {
       if (err){
         console.log(err);
         callback(err, 0, badges);
@@ -546,7 +546,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
       }
     }
 
-    getAdminRequest(sections_url(courseID), function(err,data){
+    getAdminRequest(sections_url(courseID),function(err,data){
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
         if(data[i].students==null){
@@ -611,7 +611,7 @@ function getAdminLeaderboardScores(courseID, callback){
   });
 
   function getSections(callback){
-    getAdminRequest(sections_url(courseID), function(err,data){
+    getAdminRequest(sections_url(courseID),function(err,data){
 
       // remove section with all students
       for (var i = 0; i < data.length; i++) {
