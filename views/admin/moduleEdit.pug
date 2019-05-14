@@ -6,159 +6,145 @@ block content
     //script(type='text/javascript').
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 
-    a(href='/admin/modules') Back to Modules
 
-    h1='Edit ONEXYS Module '+module._id
-    h3=course
-
-    form(method='POST' action='preview')
-
-        div.form-group
-        label(for='primary_title') Primary Title: 
-        input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
-        br
-        br
-        
-        div.form-group
-        label(for='secondary_title') Secondary Title: 
-        input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
-        br
-        br
-
-        div.form-group
-        label Practice Assignment ID or URL to custom page for multiple practice assignments?
-        br
-        label(for='practice_id_bool_true') Practice Assignment ID  
-        input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
-        br
-        div.form-group
-        label(for='practice_link') Practice Assignment ID: 
-        input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
-        br
-        label(for='practice_id_bool_false') Practice URL  
-        input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
-        br
-        div.form-group
-        label(for='practice_url_redirect') Practice URL: 
-        input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
-        br
-        br
-
-        //- new practice cutoff form
-        div.form-group
-        label(for='multiple_practice_cutoff') Practice Assignment Cutoff Scores Formatted in id_cutoff separated by commas (e.g., "73230_90", "73230_90,73231_100,73232_95"): 
-        input#multiple_practice_cutoff.form-control(type='text', value=module.multiple_practice_cutoff, name='multiple_practice_cutoff')
-        br
-
-        div.form-group
-        label(for='quiz_link') Quiz Assignment ID: 
-        input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
-        br
-        br
-
-        div.form-group
-        label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100): 
-        input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff')
-        br
-        br
-
-        div.form-group
-        label(for='reflection_link') Reflections Assignment ID: 
-        input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
-        br
-        br
-        
-        div.form-group
-        label Module Open?
-        br
-        label(for='open_true') Yes  
-        input#open_true.form-control(type='radio', value='true', checked=module.open=='true', name='open')
-        br
-        label(for='open_false') No  
-        input#open_false.form-control(type='radio', value='false', checked=module.open=='false', name='open')
-        br
-        br
-
-        div.form-group
-        label(for='background_image') Background Image Path: 
-        input#background_image.form-control(type='text', value=module.background_image, name='background_image')
-        br
-        br
-
-        div.form-group
-        label(for='button_background_image') Button Background Image (e.g., button_background_battel, button_background_sterling): 
-        input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
-        br
-        br
-
-        div.form-group
-        label(for='background_name') Background Name: 
-        input#background_name.form-control(type='text', value=module.background_name, name='background_name')
-        br
-        br
-
-        div.form-group
-        label(for='background_desc') Background Description: 
-        br
-        textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
-        br
-        br
-
-        div.form-group
-        label(for='module_overview') Overview: 
-        br
-        textarea#module_overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
-        br
-        br
-
-        div.form-group
-        label(for='apply_description') Apply Description: 
-        br
-        textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
-        br
-        br
-
-        div.form-group
-        label(for='apply_read_src') Apply Read Source: 
-        input#apply_read_src.form-control(type='text', value=module.apply_read_src, name='apply_read_src')
-        br
-        br
-        div.form-group
-        label(for='module_explore') Explore Text: 
-        br
-        textarea#module_explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
-        br
-        br
-
-        button.btn.btn-primary(type='submit') Preview Changes
     br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin/modules')
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course + ', Module ' + module._id
     hr
-    br
-    
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
+    div.container
+        div.row
+            form(method='POST' action='preview')
+                div.form-group
+                    label(for='primary_title') Primary Title:
+                    input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
+                br
 
-    h2='Edit ONEXYS Module '+module._id+' Videos'
+                div.form-group
+                    label(for='secondary_title') Secondary Title:
+                    input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
+                br
 
-
-    form(method='GET',action='videos/add')
-                        button(type='submit') Add Video
-
-    table
-        for video in module.videos
-            tr 
-                td
-                    div.watch_video.left
-                        div.onexys_video
-                            a.colorbox.cboxElement(href=video.video_src)
-                            img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
-                            img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
-                        p
-                            span(style='font-size: 12pt;')
-                            strong!=video.video_desc
-                            span!=video.video_desc_helper
+                div.form-group
+                    label Practice Assignment ID or URL to custom page for multiple practice assignments?
                     br
-                td 
-                    form(method='GET' action='videos/edit/'+video._id)
-                        button(type='submit') Edit
-                    form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                        button(type='submit') Delete
+                    label(for='practice_id_bool_true') Practice Assignment ID
+                    input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
+                br
+
+                div.form-group
+                    label(for='practice_link') Practice Assignment ID:
+                    input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
+                    br
+                    label(for='practice_id_bool_false') Practice URL
+                    input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
+                br
+
+                div.form-group
+                    label(for='practice_url_redirect') Practice URL:
+                    input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
+                br
+
+                //- new practice cutoff form
+                div.form-group
+                    label(for='multiple_practice_cutoff') Practice Assignment Cutoff Scores Formatted in id_cutoff separated by commas (e.g., "73230_90", "73230_90,73231_100,73232_95"):
+                    input#multiple_practice_cutoff.form-control(type='text', value=module.multiple_practice_cutoff, name='multiple_practice_cutoff')
+                br
+
+                div.form-group
+                    label(for='quiz_link') Quiz Assignment ID:
+                    input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
+                br
+
+                div.form-group
+                    label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100):
+                    input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff')
+                br
+
+                div.form-group
+                    label(for='reflection_link') Reflections Assignment ID:
+                    input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
+                br
+
+                div.form-group
+                    label Module Open?
+                    br
+                    label(for='open_true') Yes
+                    input#open_true.form-control(type='radio', value='true', checked=module.open=='true', name='open')
+                    br
+                    label(for='open_false') No
+                    input#open_false.form-control(type='radio', value='false', checked=module.open=='false', name='open')
+                br
+
+                div.form-group
+                    label(for='background_image') Background Image Path:
+                    input#background_image.form-control(type='text', value=module.background_image, name='background_image')
+                br
+
+                div.form-group
+                    label(for='button_background_image') Button Background Image (e.g., button_background_battel, button_background_sterling):
+                    input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
+                br
+
+                div.form-group
+                    label(for='background_name') Background Name:
+                    input#background_name.form-control(type='text', value=module.background_name, name='background_name')
+                br
+
+                div.form-group
+                    label(for='background_desc') Background Description:
+                    textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
+                br
+
+                div.form-group
+                    label(for='module_overview') Overview:
+                    textarea#module_overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
+                br
+
+                div.form-group
+                    label(for='apply_description') Apply Description:
+                    textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
+                br
+
+                div.form-group
+                    label(for='apply_read_src') Apply Read Source:
+                    input#apply_read_src.form-control(type='text', value=module.apply_read_src, name='apply_read_src')
+                br
+
+                div.form-group
+                    label(for='module_explore') Explore Text:
+                    textarea#module_explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
+                br
+
+                button.btn.btn-success(type='submit') Preview Changes
+            br
+    hr
+    div.container
+        div.row
+            form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
+            h2='Editing ' + course + ' Module ' + module._id + ' Videos'
+            form(method='GET',action='videos/add')
+                button.btn.btn-dark(type='submit') Add Video
+
+            table
+                for video in module.videos
+                    tr
+                        td
+                            div.watch_video.left
+                                div.onexys_video
+                                    a.colorbox.cboxElement(href=video.video_src)
+                                    img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
+                                    img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
+                                p
+                                    span(style='font-size: 12pt;')
+                                    strong!=video.video_desc
+                                    span!=video.video_desc_helper
+                            br
+                        td
+                            form(method='GET' action='videos/edit/'+video._id)
+                                button.btn.btn-dark(type='submit') Edit
+                            form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                button.btn.btn-danger(type='submit') Delete
