@@ -65,10 +65,8 @@ app.use('/launch',launch)
 
 // static file display
 
-app.get("/coach-information", (req, res, next) {
-  res.render("coach-information", {
-    title: "Coach Information",
-  });
+app.get("/coach-information", function(req, res) {
+  res.render("coach-information");
 });
 
 // catch 404 and forward to error handler
