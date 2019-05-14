@@ -32,6 +32,14 @@ let oauth2 = require('simple-oauth2').create(credentials);
 
 //queue to callback Auth Token (prevents multiple calls)
 var authTokenQueue = new Queue(function(user_id,callback){
+
+  //ADDDED FROM UPDATE COOKIES
+  req.session.course_id = req.body.custom_canvas_course_id;
+  req.session.course_title = req.body.context_title;
+  req.session.user_id = req.body.custom_canvas_user_id;
+  req.session.admin = req.body.roles.includes('Instructor');
+
+
   console.log('Redis Key');
   console.log('token_'+String(user_id));
   redis_client.get('token_'+String(user_id), async function(err, token_string) {
@@ -93,7 +101,7 @@ var updateCookies = function(req,res,next){
 };
 
 //middleware to check user and launch lti
-var checkUser = function(req, res, next) { 
+var checkUser = function(req, res, next) {
 
   if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
@@ -104,15 +112,15 @@ var checkUser = function(req, res, next) {
     req.connection.encrypted = true;
     if (req.query.login_success=='1'){
       next();
-    } else {      
+    } else {
       provider.valid_request(req, function(err, is_valid) {
         if (!is_valid) {
           console.log('Unverified User:');
           console.log(provider.valid_request);
           console.log(provider);
           res.send('Unverified User');
-        } else {         
-          //check if auth token already exists in Redis 
+        } else {
+          //check if auth token already exists in Redis
           console.log('Redis Key (Check User)');
           console.log('token_'+String(req.session.user_id));
           redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {

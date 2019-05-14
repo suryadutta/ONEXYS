@@ -6,7 +6,6 @@ var config = require('../bin/config');
 function getData(courseID, collection_name, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURL;
-    console.log("Get CourseID: " + courseID);
     MongoClient.connect(connectionURL, function(err, client) {
         assert.equal(null, err);
         var db = client.db(config.mongoDBs[courseID]);
@@ -33,7 +32,6 @@ function insertData(courseID, collection_name, data, callback){
 function updateData(courseID, collection_name, update_index, update_data, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURL;
-    console.log("Update CourseID: " + courseID);
     MongoClient.connect(connectionURL, function(err, client) {
         var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).updateOne(update_index, {$set: update_data},
