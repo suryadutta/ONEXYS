@@ -79,6 +79,7 @@ var updateCookies = function(req,res,next){
 
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
+    console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
     req.session.course_id = req.body.custom_canvas_course_id;
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
@@ -97,7 +98,7 @@ var checkUser = function(req, res, next) {
 
   if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
-    res.status(500).render('cookieError');;
+    res.status(500).render('cookieError');
   } else {
     console.log('Session Test: Course-ID');
     console.log(req.session.course_id);
