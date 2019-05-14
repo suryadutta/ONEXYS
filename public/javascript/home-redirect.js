@@ -11,6 +11,7 @@ var externalHomePageRedirects = {
 };
 
 var homeRegex = new RegExp('^/courses/([0-9]+)/?$');
+console.log("path: " + window.location.pathname);
 if (homeRegex.test(window.location.pathname)) {
     console.log("Successful regex")
     // On the course homepage
