@@ -2,20 +2,25 @@ extends ../layout
 
 block content
 
-    a(href='/admin') Back to Home Page
-
-    h1 Edit ONEXYS Dailies
-    h3=course
-    
-    table(class="admin_table")
-        tr 
-            th ID
-            th Assignment ID
-
-        each daily in dailies
-            tr 
-                td=daily._id
-                td=daily.assignment_id
-                td
-                    form(method='GET' action='dailies/edit/'+daily._id)
-                        button(type='submit') Edit
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course + ' Hoo Knews'
+    hr
+    div.container
+        div.row
+            table(class="admin_table")
+                tr
+                    th ID
+                    th Assignment ID
+                    th Edit Item
+                each daily in dailies
+                    tr
+                        td=daily._id
+                        td=daily.assignment_id
+                        td
+                            form(method='GET' action='dailies/edit/'+daily._id)
+                                button.btn.btn-dark(type='submit') Edit
