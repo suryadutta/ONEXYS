@@ -2,29 +2,36 @@ extends ../layout
 
 block content
 
-    a(href='/admin') Back to Home Page
-
-    h1 Edit ONEXYS Modules
-    h3=course
-    table(class="admin_table")
-        tr 
-            th ID
-            th Primary Title
-            th Secondary Title
-            th Open?
-            th Practice Link
-            th Quiz Link
-            th Reflections Link
-        each module in modules
-            tr 
-                td=module._id
-                td=module.primary_title
-                td=module.secondary_title
-                td=module.open
-                td=module.practice_link
-                td=module.quiz_link
-                td=module.reflection_link
-                td
-                    form(method='GET' action='modules/'+module._id+'/edit')
-                        button(type='submit') Edit
-                    
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course + ' modules'
+    hr
+    br
+    div.container
+        div.row
+            table(class="admin_table")
+                tr
+                    th ID
+                    th Primary Title
+                    th Secondary Title
+                    th Open?
+                    th Practice Link
+                    th Quiz Link
+                    th Reflections Link
+                    th Edit Module
+                each module in modules
+                    tr
+                        td=module._id
+                        td=module.primary_title
+                        td=module.secondary_title
+                        td=module.open
+                        td=module.practice_link
+                        td=module.quiz_link
+                        td=module.reflection_link
+                        td
+                            form(method='GET' action='modules/'+module._id+'/edit')
+                                button.btn.btn-dark(type='submit') Edit
