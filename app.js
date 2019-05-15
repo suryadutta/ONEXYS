@@ -65,7 +65,7 @@ app.use('/launch',launch)
 // static file display
 
 app.get("/coach-information", function(req, res) {
-  res.sendFile("coach-information.html");
+  res.sendFile("./views/coach-information.html");
 });
 
 // catch 404 and forward to error handler
