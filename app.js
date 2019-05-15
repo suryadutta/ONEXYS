@@ -63,9 +63,16 @@ app.use('/modules',auth.updateCookies,modules)
 app.use('/launch',launch)
 
 // static file display
-
 app.get("/coach-information", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/coach-information.html"));
+  res.sendFile(path.join(__dirname, "/views/static/coach-information.html"));
+});
+
+app.get("/welcome", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
+});
+
+app.get("/life-on-grounds", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
 });
 
 // catch 404 and forward to error handler
