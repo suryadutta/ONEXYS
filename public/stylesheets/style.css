@@ -395,15 +395,14 @@
 #myteam_head{
 	font-size: 7px;
 	width: 40px;
-	height: 11px;
+	height: 15px;
 	color: rgb(34,92,203);
 	background-color: white;
 	text-align: center;
 	border-radius: 4px;
 	font-weight: bold;
-  	line-height: 12px;
-  	border: 2px solid rgb(34,92,203);
-
+	line-height: 12px;
+	border: 2px solid rgb(34,92,203);
 }
 
 #leaderboard h2 {
