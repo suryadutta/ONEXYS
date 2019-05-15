@@ -18,7 +18,6 @@ var home = require('./routes/home');
 var modules = require('./routes/modules');
 var badges = require('./routes/badges');
 var admin = require('./routes/admin');
-var static = require('./routes/static');
 var app = express();
 
 var launch = require('./routes/canvasLaunch');
