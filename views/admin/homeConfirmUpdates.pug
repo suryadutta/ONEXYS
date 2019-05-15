@@ -1,54 +1,60 @@
 extends ../layout
 
 block content
-  
-  h3=course
-  h1 Do you want to submit these changes?
 
-  .user_content(style='margin-top: 0px !important;')
-  .onexys_styling.o_hompage        
-    .left(style='width: 500px !important; margin-top: -10px;')
-      #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
-        h2 Updates
-        .entry.clear
-          p.entry_header
-            strong!=home_updates.main_header
-          p.entry_text!=home_updates.main_text
-        .entry.clear
-          p.entry_header!=home_updates.header2
-          p.entry_text!=home_updates.text2
-        .entry.clear
-          p.entry_header!=home_updates.header3
-          p.entry_text!=home_updates.text3
-      
-  form(method='POST', action='/admin/home')
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2='Confirm changes for ' + course + '?'
+    hr
 
-    input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
-    input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
+    .user_content(style='margin-top: 0px !important;')
+    .onexys_styling.o_hompage
+        .left(style='width: 500px !important; margin-top: -10px;')
+            #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+                h2 Updates
+                .entry.clear
+                    p.entry_header
+                        strong!=home_updates.main_header
+                    p.entry_text!=home_updates.main_text
+                .entry.clear
+                    p.entry_header!=home_updates.header2
+                    p.entry_text!=home_updates.text2
+                .entry.clear
+                    p.entry_header!=home_updates.header3
+                    p.entry_text!=home_updates.text3
 
-    input#header2(type='hidden', value=home_updates.header2, name='header2')
-    input#text2(type='hidden', value=home_updates.text2, name='text2')
+    form(method='POST', action='/admin/home')
 
-    input#header3(type='hidden', value=home_updates.header3, name='header3')
-    input#text3(type='hidden', value=home_updates.text3, name='text3')
+        input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
+        input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
 
-    input#post_test_open_true(type='hidden', value=home_updates.post_test, name='post_test')
-    input#post_test_link(type='hidden', value=home_updates.post_test_link, name='post_test_link')
+        input#header2(type='hidden', value=home_updates.header2, name='header2')
+        input#text2(type='hidden', value=home_updates.text2, name='text2')
 
-    button(type='submit') Back to Edits
+        input#header3(type='hidden', value=home_updates.header3, name='header3')
+        input#text3(type='hidden', value=home_updates.text3, name='text3')
 
-  form(method='POST' action='/admin/home/confirmUpdates')
+        input#post_test_open_true(type='hidden', value=home_updates.post_test, name='post_test')
+        input#post_test_link(type='hidden', value=home_updates.post_test_link, name='post_test_link')
 
-    input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
-    input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
+        button.btn.btn-danger(type='submit') Back to Edits
 
-    input#header2(type='hidden', value=home_updates.header2, name='header2')
-    input#text2(type='hidden', value=home_updates.text2, name='text2')
+    form(method='POST' action='/admin/home/confirmUpdates')
 
-    input#header3(type='hidden', value=home_updates.header3, name='header3')
-    input#text3(type='hidden', value=home_updates.text3, name='text3')
+        input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
+        input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
 
-    input#post_test_open_true(type='hidden', value=home_updates.post_test, name='post_test')
-    input#post_test_link(type='hidden', value=home_updates.post_test_link, name='post_test_link')
+        input#header2(type='hidden', value=home_updates.header2, name='header2')
+        input#text2(type='hidden', value=home_updates.text2, name='text2')
 
-    button.btn.btn-primary(type='submit') Save Changes
+        input#header3(type='hidden', value=home_updates.header3, name='header3')
+        input#text3(type='hidden', value=home_updates.text3, name='text3')
+
+        input#post_test_open_true(type='hidden', value=home_updates.post_test, name='post_test')
+        input#post_test_link(type='hidden', value=home_updates.post_test_link, name='post_test_link')
+
+        button.btn.btn-success(type='submit') Save Changes
