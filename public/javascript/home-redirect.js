@@ -7,13 +7,17 @@ var externalHomePageRedirects = {
     // courseId:toolId
 
     // CONEX Blue redirect
-    2517:170
+    2517:170,
+
+    // CONEX Orange redirect
+    3528:207,
+
+    // CONEX White redirect
+    3529:214
 };
 
 var homeRegex = new RegExp('^/courses/([0-9]+)/?$');
-console.log("path: " + window.location.pathname);
 if (homeRegex.test(window.location.pathname)) {
-    console.log("Successful regex")
     // On the course homepage
     var matches = homeRegex.exec(window.location.pathname);
     var courseId = matches[1];
