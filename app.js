@@ -71,6 +71,10 @@ app.get("/welcome", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
 });
 
+app.post("/welcome", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
+});
+
 app.get("/life-on-grounds", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
 });
