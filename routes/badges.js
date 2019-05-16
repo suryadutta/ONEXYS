@@ -18,16 +18,16 @@ router.use('/', function(req, res, next) {
       res.render('badges', {
         title: 'Badges | CONEX',
         badges: badges,
-       });
-     });
+      });
+    });
   }else{
     queries.badgesQuery(userID, courseID, function(badges){
       res.render('badges', {
         title: 'Badges | CONEX',
         badges: badges,
-       });
-     });
-     console.log(queries);
+      });
+    });
+    console.log(queries);
   }
 });
 
