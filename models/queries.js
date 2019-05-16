@@ -23,9 +23,9 @@ function homepageQuery(studentID,courseID,callback){
       canvas.getNextDailyYalie(courseID, callback);
     }
   ],
-  
+
   function(err, data) {
-    
+
     var module_progress = data[0],
         score = data[1][0],
         badges =  data[1][1],
@@ -49,7 +49,7 @@ function homepageQuery(studentID,courseID,callback){
     if (awarded_badge_ids.length>3){
       awarded_badge_ids = awarded_badge_ids.slice(0,3);
     }
-    
+
     callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
   });
 }
@@ -73,9 +73,9 @@ function homepageQueryMasquerade(studentID,courseID,callback){
       canvas.getNextDailyYalie(courseID, callback);
     }
   ],
-  
+
   function(err, data) {
-    
+
     var module_progress = data[0],
         score = data[1][0],
         badges =  data[1][1],
@@ -99,7 +99,7 @@ function homepageQueryMasquerade(studentID,courseID,callback){
     if (awarded_badge_ids.length>3){
       awarded_badge_ids = awarded_badge_ids.slice(0,3);
     }
-    
+
     callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
   });
 }
@@ -125,9 +125,9 @@ function homepageAdminQuery(courseID, callback){
       canvas.getNextDailyYalie(courseID, callback);
     }
   ],
-  
+
   function(err, data) {
-    
+
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],
@@ -135,12 +135,12 @@ function homepageAdminQuery(courseID, callback){
         home_links = data[2][2],
         students = data[3],
         daily_yalie=data[4];
-    
+
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
 }
 
-function badgesQuery(studentID,courseID,callback){
+function badgesQuery(studentID, courseID, callback){
   canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
     callback(badges);
   });
@@ -149,7 +149,7 @@ function badgesQuery(studentID,courseID,callback){
 function badgesAdminQuery(courseID, callback){
   mongo.getAllData(courseID, function(mongo_data){
     callback(mongo_data.badges);
-  })
+  });
 }
 
 module.exports = {
