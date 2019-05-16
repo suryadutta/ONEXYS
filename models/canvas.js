@@ -455,18 +455,18 @@ function getIndScoreAndBadges(studentID, courseID, callback){ // Get score and b
 
 function getStudentProgress(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
   mongo.getAllData(courseID,function(mongo_data){
-    getRequest(assignment_user_url(studentID, courseID), studentID, function(err, user_assigments) {
+    getRequest(assignment_user_url(studentID, courseID), studentID, function(err, user_assignments) {
       moduleProgress = mongo_data.modules;
       if (err){
         console.log(err);
         callback(null, moduleProgress);
-      } else if (user_assigments.status == "unauthorized"){
+      } else if (user_assignments.status == "unauthorized"){
         console.log('User unauthorized');
         callback(null, moduleProgress);
-      } else if (user_assigments.error>0){
+      } else if (user_assignments.error>0){
         console.log(data.error);
         callback(null, 0, moduleProgress);
-      } else if (user_assigments.length<1) {
+      } else if (user_assignments.length<1) {
         console.log('No User Assignments recorded');
         callback(null, moduleProgress);
       } else {
@@ -480,7 +480,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
               return obj
             }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
 
-          const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
+          const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
           console.log("Assignment ID's");
           user_assignments.forEach(function(assignment){
@@ -500,7 +500,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           }
 
           //quiz progress
-          var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
+          var quiz_object = user_assignments.find(assignment => assignment.assignment_id == module_object.quiz_link);
           if(quiz_object){
             (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
           } else {
@@ -1004,18 +1004,18 @@ function getIndScoreAndBadges_masquerade(studentID, courseID, callback){ // Get 
 
 function getStudentProgress_masquerade(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
   mongo.getAllData(courseID,function(mongo_data){
-    getAdminRequest(assignment_user_url(studentID, courseID), function(err, user_assigments) {
+    getAdminRequest(assignment_user_url(studentID, courseID), function(err, user_assignments) {
       moduleProgress = mongo_data.modules;
       if (err){
         console.log(err);
         callback(null, moduleProgress);
-      } else if (user_assigments.status == "unauthorized"){
+      } else if (user_assignments.status == "unauthorized"){
         console.log('User unauthorized');
         callback(null, moduleProgress);
-      } else if (user_assigments.error>0){
+      } else if (user_assignments.error>0){
         console.log(data.error);
         callback(null, 0, moduleProgress);
-      } else if (user_assigments.length<1) {
+      } else if (user_assignments.length<1) {
         console.log('No User Assignments recorded');
         callback(null, moduleProgress);
       } else {
@@ -1024,7 +1024,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
           var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
           //practice progress
-          var practice_object = user_assigments.find(assignment => assignment.assignment_id == module_object.practice_link);
+          var practice_object = user_assignments.find(assignment => assignment.assignment_id == module_object.practice_link);
           if(practice_object){
             (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
           } else {
@@ -1032,7 +1032,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
           }
 
           //quiz progress
-          var quiz_object = user_assigments.find(assignment => assignment.assignment_id == module_object.quiz_link);
+          var quiz_object = user_assignments.find(assignment => assignment.assignment_id == module_object.quiz_link);
           if(quiz_object){
             (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
           } else {
