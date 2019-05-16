@@ -482,7 +482,12 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
 
           const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assigments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
-          console.log(practice_objects.length);
+          console.log("Assignment ID's");
+          user_assignments.forEach(function(assignment){
+            console.log(assignment.assignment_id);
+          });
+
+          console.log("Practice objects: " + practice_objects.length);
           practice_objects.forEach(function(object){
             console.log(object);
             console.log(object.grade);
