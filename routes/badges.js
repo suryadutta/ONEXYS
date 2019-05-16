@@ -16,19 +16,18 @@ router.use('/', function(req, res, next) {
   if (req.session.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
-        title: 'Badges | ONEXYS',
+        title: 'Badges | CONEX',
         badges: badges,
        });
      });
-  }
-
-  else{
+  }else{
     queries.badgesQuery(userID, courseID, function(badges){
       res.render('badges', {
-        title: 'Badges | ONEXYS',
+        title: 'Badges | CONEX',
         badges: badges,
        });
      });
+     console.log(queries);
   }
 });
 
