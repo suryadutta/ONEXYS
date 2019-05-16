@@ -500,6 +500,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           });
           */
 
+          // practice_objects was often created with a single undefined object, as no user_assignment id's matched the practice_id
+          // The top line of the if statement catches that case to avoid an Undefined Object error from checking the grade property
           if(!(practice_objects.length > 0 && typeof practice_objects[0] === 'undefined') &&
             practice_objects.every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
 
