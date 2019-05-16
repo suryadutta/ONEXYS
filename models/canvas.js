@@ -482,10 +482,11 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
 
           const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
+          /*
           console.log("Cutoff ID's");
           Object.keys(practiceId_cutoff_obj).forEach(function(practice_id){
             console.log(practice_id);
-          })
+          });
 
           console.log("Assignment ID's");
           user_assignments.forEach(function(assignment){
@@ -497,8 +498,11 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             console.log(object);
             console.log(object.grade);
           });
+          */
 
-          if(practice_objects.length == 0 || practice_objects.every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
+          if(!(practice_objects.length > 0 && typeof practice_objects[0] === 'undefined') &&
+            practice_objects.every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
+
             (moduleProgress[i]).practice_progress = true;
           } else {
             (moduleProgress[i]).practice_progress = false;
