@@ -12,26 +12,26 @@ var pText1, pText2, pText3;
 
 $(document).ready(function() {
     pHead1 = $('#main_header').attr('value');
-    pText1 = $('#main_text').innerHTML;
+    pText1 = $('#main_text').text();
     console.log(pHead1);
     console.log(pText1);
 
     pHead2 = $('#header2').attr('value');
-    pText2 = $('#text2').innerHTML;
+    pText2 = $('#text2').text();
 
     pHead3 = $('#header3').attr('value');
-    pText3 = $('#text3').innerHTML;
+    pText3 = $('#text3').text();
 });
 
 
 
 function doSingleUpdate() {
-    $('#main_header').attr('value') = '';
-    $('#main_text').innerHTML = '';
-    $('#header2').attr('value') = pHead1;
-    $('#text2').innerHTML = pText1;
-    $('#header3').attr('value') = pHead2;
-    $('#text3').innerHTML = pText2;
+    $('#main_header').attr('value', '');
+    $('#main_text').text('');
+    $('#header2').attr('value', pHead1);
+    $('#text2').text(pText1);
+    $('#header3').attr('value', pHead2);
+    $('#text3').text(pText2);
 
     $('#header2').hide();
     $('#text2').hide();
@@ -47,12 +47,12 @@ function doSingleUpdate() {
 // Switches the form into edit existing updates mode. In this mode,
 // the three currently visible updates are all available to edit.
 function doExistingUpdates() {
-    $('#main_header').innerHTML = pHead1;
-    $('#main_text').innerHTML = pText1;
-    $('#header2').innerHTML = pHead2;
-    $('#text2').innerHTML = pText2;
-    $('#header3').innerHTML = pHead3;
-    $('#text3').innerHTML = pText3;
+    $('#main_header').attr('value', pHead1);
+    $('#main_text').text(pText1);
+    $('#header2').attr('value', pHead2);
+    $('#text2').text(pText2);
+    $('#header3').attr('value', pHead3);
+    $('#text3').text(pText3);
 
     $('#header2').fadeIn('slow');
     $('#text2').fadeIn('slow');
