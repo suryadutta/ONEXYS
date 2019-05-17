@@ -19,10 +19,10 @@ block content
             -}
 
             table
-                each lucky_bonus, index in lucky_data
+                each lucky_bonus in lucky_data
                     tr
                         td
-                            h2="Lucky Bonus "+(index+1)
+                            h2="Lucky Bonus "+ lucky_bonus._id
                             h4=prettyDate(lucky_bonus.time)
                         td
                             div.form.form-inline
