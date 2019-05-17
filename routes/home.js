@@ -32,7 +32,7 @@ router.use("/", (req, res, next) => {
           daily_yalie
         ) => {
           res.render("home", {
-            title: "Home | ONEXYS",
+            title: "Home | CONEX",
             courseID,
             module_progress,
             score,
@@ -62,7 +62,7 @@ router.use("/", (req, res, next) => {
           daily_yalie
         ) => {
           res.render("home", {
-            title: "Home | ONEXYS",
+            title: "Home | CONEX",
             courseID,
             module_progress,
             score: 0,
@@ -100,7 +100,7 @@ router.use("/", (req, res, next) => {
         daily_yalie
       ) => {
         res.render("home", {
-          title: "Home | ONEXYS",
+          title: "Home | CONEX",
           courseID,
           module_progress,
           score,

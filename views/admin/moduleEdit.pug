@@ -27,26 +27,18 @@ block content
                     label(for='secondary_title') Secondary Title:
                     input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
                 br
-
+                hr
                 div.form-group
-                    label Practice Assignment ID or URL to custom page for multiple practice assignments?
-                    br
-                    label(for='practice_id_bool_true') Practice Assignment ID
-                    input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
-                br
+                    h3 Practice Assignment ID or URL to custom page for multiple practice assignments? (pick one)
+                    hr
+                    div.row.form-inline
+                        input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
+                        input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link', placeholder='Practice Assignment ID')
+                    div.row.form-inline
+                        input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
+                        input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect', placeholder='Practice URL')
 
-                div.form-group
-                    label(for='practice_link') Practice Assignment ID:
-                    input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
-                    br
-                    label(for='practice_id_bool_false') Practice URL
-                    input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
-                br
-
-                div.form-group
-                    label(for='practice_url_redirect') Practice URL:
-                    input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
-                br
+                hr
 
                 //- new practice cutoff form
                 div.form-group
