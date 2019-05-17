@@ -13,10 +13,9 @@ block content
 
     form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
 
-        div.form-group
-        label(for='assignment_id') Assignment ID:
-        input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
-        br
-        br
+        div.form-group.form-inline
+            label(for='assignment_id') Assignment ID:
+            input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
+        hr
 
-        button.btn.btn-primary(type='submit') Save Changes
+        button.btn.btn-success(type='submit') Save Changes
