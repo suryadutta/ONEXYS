@@ -13,18 +13,16 @@ block content
 
     form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
 
-        div.form-group
-        label(for='title') Title:
-        input#title.form-control(type='text', value=badge.Title, name='title')
-        br
-        br
+        div.form-group.form-inline
+            label(for='title') Title:
+            input#title.form-control(type='text', value=badge.Title, name='title')
+        hr
 
         div.form-group
-        label(for='description') Description:
-        br
-        textarea(rows=3)#description.form-control(name='description')=badge.Description
-        br
-        br
+            label(for='description') Description:
+            br
+            textarea(rows=3)#description.form-control(name='description')=badge.Description
+        hr
 
         div.form-group
         label(for='badge_points') Points:
@@ -32,17 +30,15 @@ block content
         br
         br
 
-        div.form-group
-        label(for='portrait') Portrait:
-        input#portrait.form-control(type='text', value=badge.Portrait, name='portrait')
-        br
-        br
+        div.form-group.form-inline
+            label(for='portrait') Portrait:
+            input#portrait.form-control(type='text', value=badge.Portrait, name='portrait')
+        hr
 
         div.form-group
-        label(for='portraitdescription') Portrait Description:
-        br
-        textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
-        br
-        br
+            label(for='portraitdescription') Portrait Description:
+            br
+            textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
+        hr
 
-        button.btn.btn-primary(type='submit') Save Changes
+        button.btn.btn-success(type='submit') Save Changes
