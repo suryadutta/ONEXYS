@@ -1,150 +1,147 @@
-html
-  head
-    meta(charset="UTF-8")
-    link(rel="stylesheet", href="/stylesheets/onexys_style_2017.css")
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js")
+extends ../layout
+
+block content
     //Jade Mixing
     mixin space()
-      | !{' '}
+        | !{' '}
 
     h3=course
     h1 Do you want to save these changes?
-    
+
     form(method='POST' action='confirmUpdates')
-      input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
-      input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
-      input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
-      input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
-      input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
-      input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
-      input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
-      input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
-      input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
-      input#open_true(type='hidden', value=data.open, name='open')
-      input#background_image(type='hidden', value=data.background_image, name='background_image')
-      input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
-      input#background_name(type='hidden', value=data.background_name, name='background_name')
-      input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
-      input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
-      input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
-      input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
-      input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
-      input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
-      button.btn.btn-primary(type='submit') Save Changes
+        input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
+        input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
+        input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
+        input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
+        input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
+        input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
+        input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
+        input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
+        input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
+        input#open_true(type='hidden', value=data.open, name='open')
+        input#background_image(type='hidden', value=data.background_image, name='background_image')
+        input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
+        input#background_name(type='hidden', value=data.background_name, name='background_name')
+        input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
+        input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
+        input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
+        input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
+        input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
+        input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
+        button.btn.btn-primary(type='submit') Save Changes
 
     form(method='POST' action='edit')
-      input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
-      input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
-      input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
-      input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
-      input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
-      input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
-      input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
-      input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
-      input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
-      input#open_true(type='hidden', value=data.open, name='open')
-      input#background_image(type='hidden', value=data.background_image, name='background_image')
-      input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
-      input#background_name(type='hidden', value=data.background_name, name='background_name')
-      input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
-      input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
-      input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
-      input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
-      input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
-      input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
-      button.btn.btn-primary(type='submit') Back to Edits
+        input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
+        input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
+        input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
+        input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
+        input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
+        input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
+        input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
+        input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
+        input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
+        input#open_true(type='hidden', value=data.open, name='open')
+        input#background_image(type='hidden', value=data.background_image, name='background_image')
+        input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
+        input#background_name(type='hidden', value=data.background_name, name='background_name')
+        input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
+        input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
+        input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
+        input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
+        input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
+        input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
+        button.btn.btn-primary(type='submit') Back to Edits
 
-  body
-    div.onexys_styling
-      img.background_building(src='/images/moduleBackgrounds/'+data.background_image, alt= data.background_name)
-      div#background_building_outline
-        div#bbo_white
-      div#background_building_outline2
-      div.title_mod.standard_title_box.left
-        p!= data.primary_title
-        h1!= data.secondary_title
-      div.quicklinks.standard_title_box.left
-        a(href="#watch") Watch
-        br
-        a(href="#practice") Practice
-        br
-        a(href="#apply") Apply
-        br
-        a(href="#explore") Explore
-      div.building_descriptor.standard_title_box.right
-        h2!= data.background_name
-        p!= data.background_desc
-      div.clear
-      div#overview.module_box.standard_box.left
-        div.title_box.standard_box
-          h2 Overview
-        span!= data.overview
-          br
-          br
-      div.left
-        div#watch.module_box.standard_box
-          div.title_box.standard_box
-            h2 1. Watch
-          for item in data.videos
-            div.watch_video.left
-              div.onexys_video
-                a.colorbox.cboxElement(href=item.video_src)
-                  img.onexys_thumbnail(src='/images/video/'+item.video_image_src)
-                  img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
-              p
-                span(style='font-size: 12pt;')
-                  strong!=item.video_desc
-                span!=item.video_desc_helper
-          div.clear
-        div#practice.module_box.standard_box
-          div.title_box.standard_box
-            h2 2. Practice
-          p Practice, practice, practice! We would like you to keep working until you reach 90% proficiency for this module in ALEKS.
-          //- a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.practice_link, target="_blank")
-            div.onexys_button Practice Now
-          if data.practice_id_bool == 'true'
-            a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.practice_link, target="_blank")
-              div.onexys_button Practice Now
-          else
-            a(href= data.practice_url_redirect, target="_blank")
-              div.onexys_button Practice Now
-        div#apply.module_box.standard_box
-          div.title_box.standard_box
-            h2 3. Apply
-          span!= data.apply_description
-          a(href= '/applicationPDFs/'+data.apply_read_src, target="_blank")
-            div.onexys_button.apply_button.left
-              img(src="/images/icons/Read.png", alt="Read.png")
-              | 1. Read
-          p.apply_description.left
-            em Before
-            |  your team meeting read the scenario and questions.
-          div.clear
-          a(href= canvas_url+'/courses/'+course_number+'/discussion_topics/'+data.reflection_link, data-api-endpoint= "https://yale.instructure.com/api/v1/" + data.apply_discussion_src, data-api-returntype="Discussion", target="_blank")
-            div.onexys_button.apply_button.left
-              img(src="/images/icons/Reflect.png", alt="Reflect.png")
-              | 2. Reflect
-          p.apply_description.left
-            em Before
-            |  your team meeting, complete the reflection
-          div.clear
-          div#meet-button.onexys_button.apply_button.left
-            img(src="/images/icons/Meet.png", alt="Meet.png")
-            | 3. Meet
-          p.apply_description.left
-            em Meet with your team!
-            |  We'll unlock the questions afterwards.
-          div.clear
-          a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.quiz_link, target="_blank")
-            div.onexys_button.apply_button.left
-              img(src="/images/icons/Answer.png", alt="Answer.png")
-              | 4. Answer
-          p.apply_description.left
-            em After
-            |  your team meeting, the application quiz will be unlocked.
-          div.clear
-        div#explore.module_box.standard_box.left
-          div.title_box.standard_box
-            h2 4. Explore
-          div.explore_content!= data.explore
-      
+    div
+        div.onexys_styling
+            img.background_building(src='/images/moduleBackgrounds/'+data.background_image, alt= data.background_name)
+            div#background_building_outline
+                div#bbo_white
+            div#background_building_outline2
+            div.title_mod.standard_title_box.left
+                p!= data.primary_title
+                h1!= data.secondary_title
+            div.quicklinks.standard_title_box.left
+                a(href="#watch") Watch
+                br
+                a(href="#practice") Practice
+                br
+                a(href="#apply") Apply
+                br
+                a(href="#explore") Explore
+            div.building_descriptor.standard_title_box.right
+                h2!= data.background_name
+                p!= data.background_desc
+            div.clear
+            div#overview.module_box.standard_box.left
+                div.title_box.standard_box
+                    h2 Overview
+                span!= data.overview
+                    br
+                    br
+            div.left
+                div#watch.module_box.standard_box
+                    div.title_box.standard_box
+                        h2 1. Watch
+                    for item in data.videos
+                        div.watch_video.left
+                            div.onexys_video
+                                a.colorbox.cboxElement(href=item.video_src)
+                                    img.onexys_thumbnail(src='/images/video/'+item.video_image_src)
+                                    img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
+                            p
+                                span(style='font-size: 12pt;')
+                                    strong!=item.video_desc
+                                span!=item.video_desc_helper
+                    div.clear
+                div#practice.module_box.standard_box
+                    div.title_box.standard_box
+                        h2 2. Practice
+                    p Practice, practice, practice! We would like you to keep working until you reach 90% proficiency for this module in ALEKS.
+                    //- a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.practice_link, target="_blank")
+                        div.onexys_button Practice Now
+                    if data.practice_id_bool == 'true'
+                        a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.practice_link, target="_blank")
+                            div.onexys_button Practice Now
+                    else
+                        a(href= data.practice_url_redirect, target="_blank")
+                            div.onexys_button Practice Now
+                div#apply.module_box.standard_box
+                    div.title_box.standard_box
+                        h2 3. Apply
+                    span!= data.apply_description
+                    a(href= '/applicationPDFs/'+data.apply_read_src, target="_blank")
+                        div.onexys_button.apply_button.left
+                            img(src="/images/icons/Read.png", alt="Read.png")
+                            | 1. Read
+                    p.apply_description.left
+                        em Before
+                        |    your team meeting read the scenario and questions.
+                    div.clear
+                    a(href= canvas_url+'/courses/'+course_number+'/discussion_topics/'+data.reflection_link, data-api-endpoint= "https://yale.instructure.com/api/v1/" + data.apply_discussion_src, data-api-returntype="Discussion", target="_blank")
+                        div.onexys_button.apply_button.left
+                            img(src="/images/icons/Reflect.png", alt="Reflect.png")
+                            | 2. Reflect
+                    p.apply_description.left
+                        em Before
+                        |    your team meeting, complete the reflection
+                    div.clear
+                    div#meet-button.onexys_button.apply_button.left
+                        img(src="/images/icons/Meet.png", alt="Meet.png")
+                        | 3. Meet
+                    p.apply_description.left
+                        em Meet with your team!
+                        |    We'll unlock the questions afterwards.
+                    div.clear
+                    a(href= canvas_url+'/courses/'+course_number+'/assignments/'+data.quiz_link, target="_blank")
+                        div.onexys_button.apply_button.left
+                            img(src="/images/icons/Answer.png", alt="Answer.png")
+                            | 4. Answer
+                    p.apply_description.left
+                        em After
+                        |    your team meeting, the application quiz will be unlocked.
+                    div.clear
+                div#explore.module_box.standard_box.left
+                    div.title_box.standard_box
+                        h2 4. Explore
+                    div.explore_content!= data.explore
