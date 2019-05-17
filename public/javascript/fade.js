@@ -37,6 +37,11 @@ function doSingleUpdate() {
     $('#text2').hide();
     $('#header3').hide();
     $('#text3').hide();
+
+    $('#lbl0').hide();
+    $('#lbl1').hide();
+    $('#lbl2').hide();
+    $('#lbl3').hide();
 }
 
 // Switches the form into edit existing updates mode. In this mode,
@@ -53,4 +58,9 @@ function doExistingUpdates() {
     $('#text2').fadeIn('slow');
     $('#header3').fadeIn('slow');
     $('#text3').fadeIn('slow');
+
+    $('#lbl0').fadeIn('slow');
+    $('#lbl1').fadeIn('slow');
+    $('#lbl2').fadeIn('slow');
+    $('#lbl3').fadeIn('slow');
 }
