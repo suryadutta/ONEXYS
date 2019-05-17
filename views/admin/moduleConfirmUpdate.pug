@@ -5,52 +5,58 @@ block content
     mixin space()
         | !{' '}
 
-    h3=course
-    h1 Do you want to save these changes?
+    br
+    div.container
+        div.row
+            h3=course + ' ' + module + ' Preview'
+            div.form-inline
+                form(method='POST' action='confirmUpdates')
+                    input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
+                    input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
+                    input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
+                    input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
+                    input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
+                    input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
+                    input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
+                    input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
+                    input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
+                    input#open_true(type='hidden', value=data.open, name='open')
+                    input#background_image(type='hidden', value=data.background_image, name='background_image')
+                    input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
+                    input#background_name(type='hidden', value=data.background_name, name='background_name')
+                    input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
+                    input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
+                    input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
+                    input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
+                    input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
+                    input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
+                    button.btn.btn-success(type='submit') Save Changes
 
-    form(method='POST' action='confirmUpdates')
-        input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
-        input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
-        input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
-        input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
-        input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
-        input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
-        input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
-        input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
-        input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
-        input#open_true(type='hidden', value=data.open, name='open')
-        input#background_image(type='hidden', value=data.background_image, name='background_image')
-        input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
-        input#background_name(type='hidden', value=data.background_name, name='background_name')
-        input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
-        input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
-        input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
-        input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
-        input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
-        input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
-        button.btn.btn-primary(type='submit') Save Changes
+                form(method='POST' action='edit')
+                    input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
+                    input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
+                    input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
+                    input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
+                    input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
+                    input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
+                    input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
+                    input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
+                    input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
+                    input#open_true(type='hidden', value=data.open, name='open')
+                    input#background_image(type='hidden', value=data.background_image, name='background_image')
+                    input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
+                    input#background_name(type='hidden', value=data.background_name, name='background_name')
+                    input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
+                    input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
+                    input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
+                    input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
+                    input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
+                    input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
+                    button.btn.btn-dark(type='submit') Back to Edits
 
-    form(method='POST' action='edit')
-        input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
-        input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
-        input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
-        input#practice_url_redirect(type='hidden', value=data.practice_url_redirect, name='practice_url_redirect')
-        input#practice_id_bool(type='hidden', value=data.practice_id_bool, name='practice_id_bool')
-        input#practice_cutoff(type='hidden', value=data.practice_cutoff, name='practice_cutoff')
-        input#quiz_link(type='hidden', value=data.quiz_link, name='quiz_link')
-        input#quiz_cutoff(type='hidden', value=data.quiz_cutoff, name='quiz_cutoff')
-        input#reflection_link(type='hidden', value=data.reflection_link, name='reflection_link')
-        input#open_true(type='hidden', value=data.open, name='open')
-        input#background_image(type='hidden', value=data.background_image, name='background_image')
-        input#button_background_image(type='hidden', value=data.button_background_image, name='button_background_image')
-        input#background_name(type='hidden', value=data.background_name, name='background_name')
-        input#background_desc(type='hidden', value=data.background_desc name='background_desc',style="width: 750px;")
-        input#overview(type='hidden', value=data.overview, name='overview',style="width: 750px;")
-        input#apply_description(type='hidden', value=data.apply_description, name='apply_description',style="width: 750px;")
-        input#apply_read_src(type='hidden', value=data.apply_read_src, name='apply_read_src')
-        input#explore(type='hidden', value=data.explore, name='explore',style="width: 750px;")
-        input#multiple_practice_cutoff(type='hidden', value=data.multiple_practice_cutoff, name='multiple_practice_cutoff')
-        button.btn.btn-primary(type='submit') Back to Edits
+    br
+    hr
+    br
 
     div
         div.onexys_styling
