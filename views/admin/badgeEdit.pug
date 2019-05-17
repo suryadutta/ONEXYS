@@ -38,6 +38,7 @@ block content
             label(for='portraitdescription') Portrait Description:
             br
             textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
+            small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
         hr
 
         button.btn.btn-success(type='submit') Save Changes
