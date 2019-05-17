@@ -24,13 +24,13 @@ block content
                         td
                             h2="Lucky Bonus "+ lucky_bonus._id
                             h4=prettyDate(lucky_bonus.time)
+                            hr
                         td
                             div.form.form-inline
                                     form(method='GET' action='lucky/edit/'+lucky_bonus._id)
                                         button.btn.btn-dark(type='submit') Edit
                                     form(method='POST' action='lucky/delete/'+lucky_bonus._id, onsubmit="return confirm('Do you really want to delete this time?');")
                                         button.btn.btn-danger(type='submit') Delete
-                        hr
         div.row
             form(method='GET' action='lucky/add')
                 button.btn.btn-dark(type='submit') Add New Time
