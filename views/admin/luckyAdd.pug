@@ -11,10 +11,12 @@ block content
                 h2='Adding new Lucky Bonus to ' + course
     hr
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
-        div.form-group.form-inline
-            label(for='badge_points') Date and Time of Lucky Bonus:
-            input#badge_points.form-control(type='datetime-local', name='date_time')
-        hr
+    div.container
+        div.row
+            form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
+                div.form-group.form-inline
+                    label(for='badge_points') Date and Time of Lucky Bonus:
+                    input#badge_points.form-control(type='datetime-local', name='date_time')
+                hr
 
-        button.btn.btn-success(type='submit') Save Changes
+                button.btn.btn-success(type='submit') Save Changes
