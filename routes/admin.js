@@ -379,7 +379,8 @@ router.get("/lucky/edit/:id", (req, res, next) => {
     res.render("admin/luckyEdit", {
       title: "Lucky Bonus",
       course: req.session.course_title,
-      lucky_bonus: lucky_bonus
+      lucky_bonus: lucky_bonus,
+      id: req.params.id
     });
   });
 });
