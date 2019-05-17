@@ -26,22 +26,22 @@ block content
         div.row
             form(method='POST' action='')
 
-                div.form-group
+                div.form-group.form-inline
                     label(for='video_desc') Video Description:
                     input#video_desc.form-control(type='text', name='video_desc', value=video.video_desc, required)
                 hr
 
-                div.form-group
+                div.form-group.form-inline
                     label(for='video_desc_helper') Video Description Helper (Optional):
                     input#video_desc_helper.form-control(type='text', name='video_desc_helper', value=video.video_desc_helper)
                 hr
 
-                div.form-group
+                div.form-group.form-inline
                     label(for='video_src') Video Source:
                     input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
                 hr
 
-                div.form-group
+                div.form-group.form-inline
                     label(for='video_image_src') Video Image Path:
                     input#video_image_src.form-control(type='text', name='video_image_src',value=video.video_image_src, required)
                 hr
