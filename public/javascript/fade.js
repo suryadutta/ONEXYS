@@ -13,8 +13,6 @@ var pText1, pText2, pText3;
 $(document).ready(function() {
     pHead1 = $('#main_header').attr('value');
     pText1 = $('#main_text').text();
-    console.log(pHead1);
-    console.log(pText1);
 
     pHead2 = $('#header2').attr('value');
     pText2 = $('#text2').text();
