@@ -11,24 +11,26 @@ var pHead1, pHead2, pHead3;
 var pText1, pText2, pText3;
 
 $(document).ready(function() {
-    pHead1 = $('#main_header').innerHTML;
+    pHead1 = $('#main_header').attr('value');
     pText1 = $('#main_text').innerHTML;
+    console.log(pHead1);
+    console.log(pText1);
 
-    pHead2 = $('#header2').innerHTML;
+    pHead2 = $('#header2').attr('value');
     pText2 = $('#text2').innerHTML;
 
-    pHead3 = $('#header3').innerHTML;
+    pHead3 = $('#header3').attr('value');
     pText3 = $('#text3').innerHTML;
 });
 
 
 
 function doSingleUpdate() {
-    $('#main_header').innerHTML = '';
+    $('#main_header').attr('value') = '';
     $('#main_text').innerHTML = '';
-    $('#header2').innerHTML = pHead1;
+    $('#header2').attr('value') = pHead1;
     $('#text2').innerHTML = pText1;
-    $('#header3').innerHTML = pHead2;
+    $('#header3').attr('value') = pHead2;
     $('#text3').innerHTML = pText2;
 
     $('#header2').hide();
