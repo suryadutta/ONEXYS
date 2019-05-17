@@ -24,7 +24,7 @@ block content
                 label(for='primary_title') Primary Title:
                 input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
             hr
-            
+
             div.row.form-group.form-inline
                 label(for='secondary_title') Secondary Title:
                 input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
@@ -121,7 +121,7 @@ block content
         div.row
             div.col-md-9
                 form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
-                h2='Editing ' + course + ', Module ' + module._id + ' Videos'
+                h2='Editing videos for ' + course + ': Module ' + module._id
             div.col-md-3
                 form(method='GET',action='videos/add')
                     button.btn.btn-dark(type='submit') Add Video

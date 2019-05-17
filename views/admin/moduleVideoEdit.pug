@@ -2,6 +2,16 @@ extends ../layout
 
 block content
 
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2='Editing video for ' + course + ': Module ' + module._id
+    hr
+
+
     h1='Edit Video in ONEXYS Module ' + moduleID
     h3=course
 
@@ -20,25 +30,25 @@ block content
     form(method='POST' action='')
 
         div.form-group
-        label(for='video_desc') Video Description: 
+        label(for='video_desc') Video Description:
         input#video_desc.form-control(type='text', name='video_desc', value=video.video_desc, required)
         br
         br
 
         div.form-group
-        label(for='video_desc_helper') Video Description Helper (Optional): 
+        label(for='video_desc_helper') Video Description Helper (Optional):
         input#video_desc_helper.form-control(type='text', name='video_desc_helper', value=video.video_desc_helper)
         br
         br
-        
+
         div.form-group
-        label(for='video_src') Video Source: 
+        label(for='video_src') Video Source:
         input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
         br
         br
 
         div.form-group
-        label(for='video_image_src') Video Image Path: 
+        label(for='video_image_src') Video Image Path:
         input#video_image_src.form-control(type='text', name='video_image_src',value=video.video_image_src, required)
         br
         br
