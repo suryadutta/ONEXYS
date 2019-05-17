@@ -2,17 +2,19 @@ extends ../layout
 
 block content
 
-    a(href='/admin/lucky') Back to Lucky Page
-
-    h1='Add Lucky Bulldog Time'
-    h3=course
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin/lucky')
+                    i.fa.fa-chevron-left
+                h2='Adding new Lucky Bonus to ' + course
+    hr
 
     form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
-
         div.form-group
-            label(for='badge_points') Date and Time of Lucky Bulldog: 
+            label(for='badge_points') Date and Time of Lucky Bonus:
             input#badge_points.form-control(type='datetime-local', name='date_time')
-            br
-            br
+        hr
 
         button.btn.btn-primary(type='submit') Save Changes
