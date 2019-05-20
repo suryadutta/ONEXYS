@@ -39,5 +39,5 @@ for f in get_file_list(os.getcwd()):
 
     with open(f, 'r', encoding='latin-1') as contents:
         contents = contents.read()
-        if 'getIndScore' in contents:
+        if 'multiple_practice_cutoff' in contents:
             print(f)

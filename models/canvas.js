@@ -186,8 +186,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
       } else {
         //Daily Yalie questions
         for (var i = 0; i < mongo_data.dailies.length; i++) {
+          console.log(mongo_data.dalies[i]);
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
           if (daily_object){
+            console.log(daily_object);
             var daily_grade = parseFloat(daily_object.grade);
             if (daily_grade == parseFloat(100)) {
               daily_done += 1
