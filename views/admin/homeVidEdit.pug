@@ -6,28 +6,33 @@ block content
     //script(type='text/javascript').
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 
-    h1='Edit Home Page Video '+video._id
-    h3=course
-
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course + ': Home Page Video ' + video._id
+    hr
+    div.container
     form(method='POST' action='/admin/home/videos/preview/'+video._id)
+        div.row
+            div.form-group.form-inline
+                label(for='video_src') Video Source:
+                input#video_src.form-control.inlined-input(type='text', name='video_src', value=video.video_src, required)
+            hr
 
-        div.form-group
-        label(for='video_src') Video Source: 
-        input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
-        br
-        br
+        div.row
+            div.form-group
+                label(for='video_src') Video Image:
+                input#video_img.form-control.inlined-input(type='text', name='video_img', value=video.video_img, required)
+            hr
 
-        div.form-group
-        label(for='video_src') Video Image: 
-        input#video_img.form-control(type='text', name='video_img', value=video.video_img, required)
-        br
-        br
+        div.row
+            div.form-group
+                label(for='video_desc') Video Description:
+                textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
+            hr
 
-        div.form-group
-        label(for='video_desc') Video Description: 
-        br
-        textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
-        br
-        br
-
-        button.btn.btn-primary(type='submit') Preview Changes
+        div.row
+            button.btn.btn-success(type='submit') Preview Changes
