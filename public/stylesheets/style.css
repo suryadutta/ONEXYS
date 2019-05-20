@@ -1621,6 +1621,10 @@ textarea .form-control{
 	overflow: auto;
 }
 
+.inlined-input {
+    width: 500px;
+}
+
 
 /*
     Colorbox Core Style:

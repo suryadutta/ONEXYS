@@ -22,12 +22,12 @@ block content
 
             div.row.form-group.form-inline
                 label(for='primary_title') Primary Title:
-                input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
+                input#primary_title.form-control.inlined-input(type='text', value=module.primary_title, name='primary_title')
             hr
 
             div.row.form-group.form-inline
                 label(for='secondary_title') Secondary Title:
-                input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
+                input#secondary_title.form-control.inlined-input(type='text', value=module.secondary_title, name='secondary_title')
             hr
 
             div.form-group
@@ -39,7 +39,7 @@ block content
                 div.row.form-inline
                     input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
                     label(for='practice_url_redirect') Practice URL
-                    input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect', placeholder='Practice URL')
+                    input#practice_url_redirect.form-control.inlined-input(type='text', value=module.practice_url_redirect, name='practice_url_redirect', placeholder='Practice URL')
 
             hr
 
@@ -56,7 +56,7 @@ block content
 
             div.row.form-group.form-inline
                 label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100):
-                input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff')
+                input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff', style='width:55px;')
             hr
 
             div.row.form-group.form-inline
@@ -106,7 +106,7 @@ block content
 
             div.form-group.form-inline
                 label(for='apply_read_src') Apply Read Source:
-                input#apply_read_src.form-control(type='text', value=module.apply_read_src, name='apply_read_src')
+                input#apply_read_src.form-control.inlined-input(type='text', value=module.apply_read_src, name='apply_read_src')
             hr
 
             div.form-group

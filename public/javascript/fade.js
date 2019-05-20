@@ -44,6 +44,8 @@ function doSingleUpdate() {
     $('#lbl1').hide();
     $('#lbl2').hide();
     $('#lbl3').hide();
+    $('#hr1').hide();
+    $('#hr2').hide();
 }
 
 // Switches the form into edit existing updates mode. In this mode,
@@ -68,4 +70,6 @@ function doExistingUpdates() {
     $('#lbl1').fadeIn('slow');
     $('#lbl2').fadeIn('slow');
     $('#lbl3').fadeIn('slow');
+    $('#hr1').fadeIn('slow');
+    $('#hr2').fadeIn('slow');
 }

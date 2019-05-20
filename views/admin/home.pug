@@ -30,39 +30,34 @@ block content
                     hr
 
                     div.row
-                    hr
-
-                    div.row
-                        div.form-group
+                        div.form-group.form-inline
                             label(for='main_header') Main Header:
-                            input#main_header.form-control(type='text', value=home_updates.main_header, name='main_header')
+                            input#main_header.form-control.inlined-input(type='text', value=home_updates.main_header, name='main_header')
 
-                    div.row
                         div.form-group
                             label(for='main_text') Main Text:
                             textarea#main_text.form-control(rows=15, name='main_text',style="width: 750px;")=home_updates.main_text
                     hr
 
                     div.row
-                        div.form-group
+                        div.form-group.form-inline
                             label(id='lbl0' for='header2') Header 2:
-                            input#header2.form-control(type='text', value=home_updates.header2, name='header2')
-                    div.row
+                            input#header2.form-control.inlined-input(type='text', value=home_updates.header2, name='header2')
+
                         div.form-group
                             label(id='lbl1' for='text2') Text 2:
                             textarea#text2.form-control(rows=15, name='text2',style="width: 750px;")=home_updates.text2
-                    hr
+                    hr(id='hr1')
 
                     div.row
-                        div.form-group
+                        div.form-group.form-inline
                             label(id='lbl2' for='header3') Header 3:
-                            input#header3.form-control(type='text', value=home_updates.header3, name='header3')
+                            input#header3.form-control.inlined-input(type='text', value=home_updates.header3, name='header3')
 
-                    div.row
                         div.form-group
                             label(id='lbl3' for='text3') Text 3:
                             textarea#text3.form-control(rows=15, name='text3',style="width: 750px;")=home_updates.text3
-                    hr
+                    hr(id='hr2')
 
                     div.row
                         div.form-group
@@ -80,7 +75,7 @@ block content
                     div.row
                         div.form-group.form-inline
                             label(for='post_test_link') Post Test URL:
-                            textarea#post_test_link.form-control(name='post_test_link',style="width: 750px;")=home_updates.post_test_link
+                            input#post_test_link.form-control.inlined-input(type='text', name='post_test_link', value=home_updates.post_test_link)
                     hr
 
                     div.row
@@ -107,12 +102,11 @@ block content
                                     p
                                     span(style='font-size: 12pt;')
                                         strong!=video.video_desc
-                                    br
-                                    br
                                 td
                                     div.form.form-inline
                                         form(method='GET' action='home/videos/edit/'+video._id)
                                             button.btn.btn-dark(type='submit') Edit
                                         form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                                             button.btn.btn-danger(type='submit') Delete
+                                hr
             div.col-md-1
