@@ -492,15 +492,23 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             console.log(assignment.assignment_id);
           });
 
-          // practice_objects was often created with a single undefined object, as no user_assignment id's matched the practice_id
-          // The top line of the if statement catches that case to avoid an Undefined Object error from checking the grade property
-          if(!(practice_objects.length > 0 && typeof practice_objects[0] === 'undefined') &&
-            practice_objects.every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
+          // Modified method for setting practice_progress, avoids errors for undefined practice objects,
+          // which occurred when the student did not have a class with a matching class id. Original code below.
+          (moduleProgress[i]).practice_progress = true;
 
+          practice_objects.forEach(function(practice_object){
+            if(!(typeof practice_object === 'undefined') && parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
+              (moduleProgress[i]).practice_progress = false;
+            }
+          });
+
+          /* Original Code
+          if(practice_objects.every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
             (moduleProgress[i]).practice_progress = true;
           } else {
             (moduleProgress[i]).practice_progress = false;
           }
+          */
 
           //quiz progress
           var quiz_object = user_assignments.find(assignment => assignment.assignment_id == module_object.quiz_link);
