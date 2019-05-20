@@ -16,7 +16,7 @@ block content
               img.onexys_thumbnail(src=video.video_img)
             else
               img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+            img.onexys_playbutton(src='https://conex.herokuapp.com/images/icons/playbutton.png', alt='')
         p
           span(style='font-size: 12pt;')
             strong!=video.video_desc
@@ -27,7 +27,7 @@ block content
     input#video_img(type='hidden', value=video.video_img, name='video_img')
     input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
 
-    button(type='submit') Back to Edits
+    button.btn.btn-dark(type='submit') Back to Edits
 
   form(method='POST' action='/admin/home/videos/confirmUpdates/'+video_id)
 
@@ -35,4 +35,4 @@ block content
     input#video_img(type='hidden', value=video.video_img, name='video_img')
     input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
 
-    button(type='submit') Submit Changes
+    button.btn.btn-success(type='submit') Submit Changes

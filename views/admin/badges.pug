@@ -21,6 +21,7 @@ block content
                     th Portrait
                     th Portrait Description
                     th Edit Badge
+                    th Delete Badge
                 each badge in badges
                     tr
                         td=badge._id
@@ -31,8 +32,7 @@ block content
                         td=badge.PortraitDescription
                         td
                             form(method='GET' action='badges/edit/'+badge._id)
-                                button(type='submit') Edit
-                        //
-                            td
+                                button.btn.btn-dark(type='submit') Edit
+                        td
                                 form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
-                                    button.btn.btn-dark(type='submit') Delete
+                                    button.btn.btn-danger(type='submit') Delete

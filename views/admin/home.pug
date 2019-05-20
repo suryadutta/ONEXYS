@@ -5,7 +5,7 @@ block content
     //script(type='text/javascript', src='/javascript/nic-edit.js')
     //script(type='text/javascript').
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-
+    script(src='/javascript/fade.js')
 
     br
     div.container
@@ -17,71 +17,102 @@ block content
     hr
     div.container
         div.row
-            form(method='POST' action='home/preview')
-                button.btn.btn-success(type='submit') Preview Changes
+            div.col-md-1
+            div.col-md-10
+                form(method='POST' action='home/preview')
+                    div.row
+                        div.col-md-9
+                            button.btn.btn-dark(type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
+                            button.btn.btn-dark(type='button', onclick='doSingleUpdate();return false;') Add a New Update
 
-                div.form-group
-                    label(for='main_header') Main Header:
-                    input#main_header.form-control(type='text', value=home_updates.main_header, name='main_header')
+                        div.col-md-3
+                            button.btn.btn-success(type='submit') Preview Changes
+                    hr
 
-                div.form-group
-                    label(for='main_text') Main Text:
-                    textarea#main_text.form-control(rows=15, name='main_text',style="width: 750px;")=home_updates.main_text
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='main_header') Main Header:
+                                input#main_header.form-control.inlined-input(type='text', value=home_updates.main_header, name='main_header')
 
-                div.form-group
-                    label(for='header2') Header 2:
-                    input#header2.form-control(type='text', value=home_updates.header2, name='header2')
+                            div.form-group
+                                label(for='main_text') Main Text:
+                                textarea#main_text.form-control(rows=15, name='main_text',style="width: 750px;")=home_updates.main_text
+                            hr
 
-                div.form-group
-                    label(for='text2') Text 2:
-                    textarea#text2.form-control(rows=15, name='text2',style="width: 750px;")=home_updates.text2
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(id='lbl0' for='header2') Header 2:
+                                input#header2.form-control.inlined-input(type='text', value=home_updates.header2, name='header2')
 
-                div.form-group
-                    label(for='header3') Header 3:
-                    input#header3.form-control(type='text', value=home_updates.header3, name='header3')
+                            div.form-group
+                                label(id='lbl1' for='text2') Text 2:
+                                textarea#text2.form-control(rows=15, name='text2',style="width: 750px;")=home_updates.text2
+                        hr(id='hr1')
 
-                div.form-group
-                    label(for='text3') Text 3:
-                    textarea#text3.form-control(rows=15, name='text3',style="width: 750px;")=home_updates.text3
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(id='lbl2' for='header3') Header 3:
+                                input#header3.form-control.inlined-input(type='text', value=home_updates.header3, name='header3')
 
-                div.form-group
-                    label Post Test Open?
-                    label(for='post_test_open_true') Yes
-                    input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
-                    label(for='post_test_open_false') No
-                    input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
+                            div.form-group
+                                label(id='lbl3' for='text3') Text 3:
+                                textarea#text3.form-control(rows=15, name='text3',style="width: 750px;")=home_updates.text3
+                        hr(id='hr2')
 
-                div.form-group
-                    label(for='post_test_link') Post Test URL:
-                    textarea#post_test_link.form-control(rows=3, name='post_test_link',style="width: 750px;")=home_updates.post_test_link
+                    div.row
+                        div.col-md-12
+                            div.form-group
+                                label Post Test Open?
 
-                button.btn.btn-success(type='submit') Preview Changes
-        hr
-        div.row
-            h2='Home Page Videos'
-        div.row
-            form(method='GET',action='home/videos/add',target="_blank")
-                button.btn.btn-dark(type='submit') Add Video
-        div.row
-            table
-                for video in home_vids
-                    tr
-                        td
-                            div.onexys_video
-                                a.colorbox(href=video.video_src)
-                                    if video.video_img
-                                        img.onexys_thumbnail(src=video.video_img)
-                                    else
-                                        img.onexys_thumbnail(src='https://conex.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-                                    img.onexys_playbutton(src='https://conex.herokuapp.com/images/icons/playbutton.png', alt='')
-                            p
-                            span(style='font-size: 12pt;')
-                                strong!=video.video_desc
-                            br
-                            br
-                        td
-                            div.form.form-inline
-                                form(method='GET' action='home/videos/edit/'+video._id)
-                                    button.btn.btn-dark(type='submit') Edit
-                                form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                                    button.btn.btn-danger(type='submit') Delete
+                                div.form-inline
+                                    input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
+                                    label(for='post_test_open_true') Yes
+
+                                div.form-inline
+                                    input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
+                                    label(for='post_test_open_false') No
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='post_test_link') Post Test URL:
+                                input#post_test_link.form-control.inlined-input(type='text', name='post_test_link', value=home_updates.post_test_link)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            button.btn.btn-success(type='submit') Preview Changes
+                    hr
+
+                div.row
+                    h2='Home Page Videos'
+                div.row
+                    form(method='GET',action='home/videos/add',target="_blank")
+                        button.btn.btn-dark(type='submit') Add Video
+                div.row
+                    table
+                        for video in home_vids
+                            tr
+                                td
+                                    div.onexys_video
+                                        a.colorbox(href=video.video_src)
+                                            if video.video_img
+                                                img.onexys_thumbnail(src=video.video_img)
+                                            else
+                                                img.onexys_thumbnail(src='https://conex.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+                                            img.onexys_playbutton(src='https://conex.herokuapp.com/images/icons/playbutton.png', alt='')
+                                    p
+                                    span(style='font-size: 12pt;')
+                                        strong!=video.video_desc
+                                td
+                                    div.form.form-inline
+                                        form(method='GET' action='home/videos/edit/'+video._id)
+                                            button.btn.btn-dark(type='submit') Edit
+                                        form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                            button.btn.btn-danger(type='submit') Delete
+                                hr
+            div.col-md-1

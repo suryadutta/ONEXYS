@@ -2,45 +2,48 @@ extends ../layout
 
 block content
 
-    h1='Edit Video in ONEXYS Module ' + moduleID
-    h3=course
-
-    div.watch_video.left
-        div.onexys_video
-            a.colorbox.cboxElement(href=video.video_src)
-            img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
-            img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
-        p
-            span(style='font-size: 12pt;')
-            strong!=video.video_desc
-            span!=video.video_desc_helper
-
     br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin/modules/')
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course + ': Video ' + video._id
+    hr
+    div.container
+        div.row
+            div.watch_video.left
+                div.onexys_video
+                    a.colorbox.cboxElement(href=video.video_src)
+                    img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
+                    img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
+                p
+                    span(style='font-size: 12pt;')
+                    strong!=video.video_desc
+                    span!=video.video_desc_helper
+        hr
 
-    form(method='POST' action='')
+        div.row
+            form(method='POST' action='')
 
-        div.form-group
-        label(for='video_desc') Video Description: 
-        input#video_desc.form-control(type='text', name='video_desc', value=video.video_desc, required)
-        br
-        br
+                div.form-group.form-inline
+                    label(for='video_desc') Video Description:
+                    input#video_desc.form-control(type='text', name='video_desc', value=video.video_desc, required)
+                hr
 
-        div.form-group
-        label(for='video_desc_helper') Video Description Helper (Optional): 
-        input#video_desc_helper.form-control(type='text', name='video_desc_helper', value=video.video_desc_helper)
-        br
-        br
-        
-        div.form-group
-        label(for='video_src') Video Source: 
-        input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
-        br
-        br
+                div.form-group.form-inline
+                    label(for='video_desc_helper') Video Description Helper (Optional):
+                    input#video_desc_helper.form-control(type='text', name='video_desc_helper', value=video.video_desc_helper)
+                hr
 
-        div.form-group
-        label(for='video_image_src') Video Image Path: 
-        input#video_image_src.form-control(type='text', name='video_image_src',value=video.video_image_src, required)
-        br
-        br
+                div.form-group.form-inline
+                    label(for='video_src') Video Source:
+                    input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
+                hr
 
-        button(type='submit') Save Changes
+                div.form-group.form-inline
+                    label(for='video_image_src') Video Image Path:
+                    input#video_image_src.form-control(type='text', name='video_image_src',value=video.video_image_src, required)
+                hr
+
+                button.btn.btn-success(type='submit') Save Changes

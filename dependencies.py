@@ -39,5 +39,5 @@ for f in get_file_list(os.getcwd()):
 
     with open(f, 'r', encoding='latin-1') as contents:
         contents = contents.read()
-        if "https://onexys.herokuapp.com" in contents or "https://yale.instructure.com" in contents:
+        if 'getIndScore' in contents:
             print(f)

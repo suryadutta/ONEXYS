@@ -8,7 +8,7 @@ block content
             div.form.form-inline
                 a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                h2='Editing ' + course + ' Lucky Bulldogs'
+                h2='Editing ' + course + '\'s Lucky Bonuses'
     hr
     div.container
         div.row
@@ -19,18 +19,18 @@ block content
             -}
 
             table
-                each lucky_bulldog, index in lucky_data
+                each lucky_bonus in lucky_data
                     tr
                         td
-                            h2="Lucky Bulldog "+(index+1)
-                            h4=prettyDate(lucky_bulldog.time)
+                            h2="Bonus "+ lucky_bonus._id
+                            h4=prettyDate(lucky_bonus.time)
+                            hr
                         td
                             div.form.form-inline
-                                form(method='GET' action='lucky/edit/'+lucky_bulldog._id)
-                                    button.btn.btn-dark(type='submit') Edit
-                                form(method='POST' action='lucky/delete/'+lucky_bulldog._id, onsubmit="return confirm('Do you really want to delete this time?');")
-                                    button.btn.btn-danger(type='submit') Delete
-        hr
+                                    form(method='GET' action='lucky/edit/'+lucky_bonus._id)
+                                        button.btn.btn-dark(type='submit') Edit
+                                    form(method='POST' action='lucky/delete/'+lucky_bonus._id, onsubmit="return confirm('Do you really want to delete this time?');")
+                                        button.btn.btn-danger(type='submit') Delete
         div.row
             form(method='GET' action='lucky/add')
                 button.btn.btn-dark(type='submit') Add New Time

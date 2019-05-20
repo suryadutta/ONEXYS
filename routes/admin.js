@@ -3,7 +3,7 @@ const mongo = require("../models/mongo");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
-  res.render("admin", { 
+  res.render("admin", {
     title: "Express",
     course: req.session.course_title,
   });
@@ -93,7 +93,7 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
 //POST handler to edit home video
 router.post("/home/videos/edit/:id", (req, res, next) => {
   home_vid = req.body
-  home_vid._id = req.params.id 
+  home_vid._id = req.params.id
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
     course: req.session.course_title,
@@ -200,7 +200,7 @@ const makeid = () => {
   const TEXTLENGTH = 16;
   let text = "";
   let i = 0;
-  for (i = 0; i < TEXTLENGTH; i++) { 
+  for (i = 0; i < TEXTLENGTH; i++) {
     text += POSSIBLE.charAt(Math.floor(Math.random() * POSSIBLE.length));
   }
   return text;
@@ -375,11 +375,12 @@ router.get("/lucky", (req, res, next) => {
 
 router.get("/lucky/edit/:id", (req, res, next) => {
   mongo.getData(req.session.course_id,"lucky_bulldogs", (err, lucky_data) => {
-    lucky_bulldog = lucky_data.find(x => x._id == req.params.id);
+    lucky_bonus = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
-      title: "Lucky Bulldog",
+      title: "Lucky Bonus",
       course: req.session.course_title,
-      lucky_bulldog: lucky_bulldog
+      lucky_bonus: lucky_bonus,
+      id: req.params.id
     });
   });
 });
@@ -409,7 +410,7 @@ router.post("/lucky/delete/:id", (req, res, next) => {
 
 router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
-    title: "Lucky Bulldog",
+    title: "Lucky Bonuses",
     course: req.session.course_title,
   });
 });

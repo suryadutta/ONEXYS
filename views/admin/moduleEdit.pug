@@ -16,117 +16,112 @@ block content
                 h2='Editing ' + course + ', Module ' + module._id
     hr
     div.container
-        div.row
-            form(method='POST' action='preview')
-                div.form-group
-                    label(for='primary_title') Primary Title:
-                    input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
-                br
+        form(method='POST' action='preview')
+            button.btn.btn-success(type='submit') Preview Changes
+            hr
 
-                div.form-group
-                    label(for='secondary_title') Secondary Title:
-                    input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
-                br
+            div.row.form-group.form-inline
+                label(for='primary_title') Primary Title:
+                input#primary_title.form-control.inlined-input(type='text', value=module.primary_title, name='primary_title')
+            hr
 
-                div.form-group
-                    label Practice Assignment ID or URL to custom page for multiple practice assignments?
-                    br
-                    label(for='practice_id_bool_true') Practice Assignment ID
+            div.row.form-group.form-inline
+                label(for='secondary_title') Secondary Title:
+                input#secondary_title.form-control.inlined-input(type='text', value=module.secondary_title, name='secondary_title')
+            hr
+
+            div.form-group
+                h5 Practice Assignment ID or URL to custom page for multiple practice assignments? (pick one)
+                div.row.form-inline
                     input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
-                br
-
-                div.form-group
-                    label(for='practice_link') Practice Assignment ID:
-                    input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
-                    br
-                    label(for='practice_id_bool_false') Practice URL
+                    label(for='practice_link') Practice Assignment ID
+                    input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link', placeholder='Practice Assignment ID')
+                div.row.form-inline
                     input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
-                br
+                    label(for='practice_url_redirect') Practice URL
+                    input#practice_url_redirect.form-control.inlined-input(type='text', value=module.practice_url_redirect, name='practice_url_redirect', placeholder='Practice URL')
 
-                div.form-group
-                    label(for='practice_url_redirect') Practice URL:
-                    input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
-                br
+            hr
 
-                //- new practice cutoff form
-                div.form-group
-                    label(for='multiple_practice_cutoff') Practice Assignment Cutoff Scores Formatted in id_cutoff separated by commas (e.g., "73230_90", "73230_90,73231_100,73232_95"):
-                    input#multiple_practice_cutoff.form-control(type='text', value=module.multiple_practice_cutoff, name='multiple_practice_cutoff')
-                br
+            //- new practice cutoff form
+            div.row.form-group.form-inline
+                label(for='multiple_practice_cutoff') Practice Assignment Cutoff Scores Formatted in id_cutoff separated by commas (e.g., "73230_90", "73230_90,73231_100,73232_95"):
+                input#multiple_practice_cutoff.form-control(type='text', value=module.multiple_practice_cutoff, name='multiple_practice_cutoff')
+            hr
 
-                div.form-group
-                    label(for='quiz_link') Quiz Assignment ID:
-                    input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
-                br
+            div.row.form-group.form-inline
+                label(for='quiz_link') Quiz Assignment ID:
+                input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
+            hr
 
-                div.form-group
-                    label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100):
-                    input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff')
-                br
+            div.row.form-group.form-inline
+                label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100):
+                input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff', style='width:55px;')
+            hr
 
-                div.form-group
-                    label(for='reflection_link') Reflections Assignment ID:
-                    input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
-                br
+            div.row.form-group.form-inline
+                label(for='reflection_link') Reflections Assignment ID:
+                input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
+            hr
 
-                div.form-group
-                    label Module Open?
-                    br
-                    label(for='open_true') Yes
+            div.form-group
+                h5 Module Open?
+                div.row.form-inline
                     input#open_true.form-control(type='radio', value='true', checked=module.open=='true', name='open')
-                    br
-                    label(for='open_false') No
+                    label(for='open_true') Yes
+                div.row.form-inline
                     input#open_false.form-control(type='radio', value='false', checked=module.open=='false', name='open')
-                br
+                    label(for='open_false') No
+            hr
 
-                div.form-group
-                    label(for='background_image') Background Image Path:
-                    input#background_image.form-control(type='text', value=module.background_image, name='background_image')
-                br
+            div.form-group.form-inline
+                label(for='background_image') Background Image Path:
+                input#background_image.form-control(type='text', value=module.background_image, name='background_image')
+            hr
 
-                div.form-group
-                    label(for='button_background_image') Button Background Image (e.g., button_background_battel, button_background_sterling):
-                    input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
-                br
+            div.form-group.form-inline
+                label(for='button_background_image') Button Background Image (e.g., button_background_battel, button_background_sterling):
+                input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
+            hr
 
-                div.form-group
-                    label(for='background_name') Background Name:
-                    input#background_name.form-control(type='text', value=module.background_name, name='background_name')
-                br
+            div.form-group.form-inline
+                label(for='background_name') Background Name:
+                input#background_name.form-control(type='text', value=module.background_name, name='background_name')
+            hr
 
-                div.form-group
-                    label(for='background_desc') Background Description:
-                    textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
-                br
+            div.form-group
+                label(for='background_desc') Background Description:
+                textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
+            hr
 
-                div.form-group
-                    label(for='module_overview') Overview:
-                    textarea#module_overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
-                br
+            div.form-group
+                label(for='module_overview') Overview:
+                textarea#module_overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
+            hr
 
-                div.form-group
-                    label(for='apply_description') Apply Description:
-                    textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
-                br
+            div.form-group
+                label(for='apply_description') Apply Description:
+                textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
+            hr
 
-                div.form-group
-                    label(for='apply_read_src') Apply Read Source:
-                    input#apply_read_src.form-control(type='text', value=module.apply_read_src, name='apply_read_src')
-                br
+            div.form-group.form-inline
+                label(for='apply_read_src') Apply Read Source:
+                input#apply_read_src.form-control.inlined-input(type='text', value=module.apply_read_src, name='apply_read_src')
+            hr
 
-                div.form-group
-                    label(for='module_explore') Explore Text:
-                    textarea#module_explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
-                br
+            div.form-group
+                label(for='module_explore') Explore Text:
+                textarea#module_explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
+            hr
 
-                button.btn.btn-success(type='submit') Preview Changes
-            br
+            button.btn.btn-success(type='submit') Preview Changes
+        br
     hr
     div.container
         div.row
             div.col-md-9
                 form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
-                h2='Editing ' + course + ', Module ' + module._id + ' Videos'
+                h2='Editing videos for ' + course + ': Module ' + module._id
             div.col-md-3
                 form(method='GET',action='videos/add')
                     button.btn.btn-dark(type='submit') Add Video
