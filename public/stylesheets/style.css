@@ -977,7 +977,7 @@
 	width: 500px;
 }
 .lifeattitle{
-	width: 825px;
+	width: 840px;
 	height: 250px;
 	left: 175px;
 }
@@ -1007,6 +1007,7 @@
 .lifeatindex a{
 	font-size: 12px;
 	line-height: 20px;
+  border-bottom: 1px solid;
 }
 .lifeatshadow{
 	width: 800px;
