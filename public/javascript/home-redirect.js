@@ -13,7 +13,10 @@ var externalHomePageRedirects = {
     3528:207,
 
     // CONEX White redirect
-    3529:214
+    3529:214,
+
+    // CONEX Coach Demo Blue
+    2559:227
 };
 
 var homeRegex = new RegExp('^/courses/([0-9]+)/?$');
