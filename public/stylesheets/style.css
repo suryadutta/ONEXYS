@@ -1622,7 +1622,7 @@ textarea .form-control{
 }
 
 .inlined-input {
-    width: 500px;
+    width: 500px !important;
 }
 
 
