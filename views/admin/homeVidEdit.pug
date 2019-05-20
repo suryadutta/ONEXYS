@@ -10,29 +10,29 @@ block content
     div.container
         div.row
             div.form.form-inline
-                a.btn.btn-lg(href='/admin')
+                a.btn.btn-lg(href='/admin/home')
                     i.fa.fa-chevron-left
                 h2='Editing ' + course + ': Home Page Video ' + video._id
     hr
     div.container
-    form(method='POST' action='/admin/home/videos/preview/'+video._id)
-        div.row
-            div.form-group.form-inline
-                label(for='video_src') Video Source:
-                input#video_src.form-control.inlined-input(type='text', name='video_src', value=video.video_src, required)
-            hr
+        form(method='POST' action='/admin/home/videos/preview/'+video._id)
+            div.row
+                div.form-group.form-inline
+                    label(for='video_src') Video Source:
+                    input#video_src.form-control.inlined-input(type='text', name='video_src', value=video.video_src, required)
+                hr
 
-        div.row
-            div.form-group
-                label(for='video_src') Video Image:
-                input#video_img.form-control.inlined-input(type='text', name='video_img', value=video.video_img, required)
-            hr
+            div.row
+                div.form-group
+                    label(for='video_src') Video Image:
+                    input#video_img.form-control.inlined-input(type='text', name='video_img', value=video.video_img, required)
+                hr
 
-        div.row
-            div.form-group
-                label(for='video_desc') Video Description:
-                textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
-            hr
+            div.row
+                div.form-group
+                    label(for='video_desc') Video Description:
+                    textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
+                hr
 
-        div.row
-            button.btn.btn-success(type='submit') Preview Changes
+            div.row
+                button.btn.btn-success(type='submit') Preview Changes
