@@ -87,6 +87,14 @@ app.post("/life-on-grounds", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
 });
 
+app.get("/missing-resource", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/404.html"));
+});
+
+app.post("/missing-resource", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/404.html"));
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -102,7 +110,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+  res.sendFile(path.join(__dirname, "/views/static/404.html"));
 });
 
 module.exports = app;
