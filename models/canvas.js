@@ -500,7 +500,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           (moduleProgress[i]).practice_progress = true;
 
           practice_objects.forEach(function(practice_object){
-            if(!(typeof practice_object === 'undefined') && parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
+            if(typeof practice_object === 'undefined' || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
               (moduleProgress[i]).practice_progress = false;
             }
           });
