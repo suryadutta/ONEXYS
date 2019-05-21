@@ -28,7 +28,7 @@ config.mongoDBs = {
   '2517': 'blue',
   '3528': 'orange',
   '3529': 'white',
-  '3559': 'conex_blue_demo',
+  '3559': 'conexDemo',
 }
 
 //the name of the mongo db to connect to
