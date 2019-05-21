@@ -682,20 +682,22 @@ function getStudents(courseID, callback){
 }
 
 function getNextDailyYalie(courseID, callback){
-  getAdminRequest(daily_yalie_url(courseID), function(err,dailies_data){
-    var closest = Infinity;
-    console.log("Attempting to locate the next Daily Task");
-    console.log("All data: " + dailies_data);
-    dailies_data.forEach(function(daily) {
-      console.log("Due: " + daily.due_at);
-      if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
-          closest = daily;
-      }
-      console.log("----");
+    var dy = daily_yalie_url(courseID);
+    console.log("DY: " + dy);
+    getAdminRequest(dy, function(err,dailies_data){
+        var closest = Infinity;
+        console.log("Attempting to locate the next Daily Task");
+        console.log("All data: " + dailies_data);
+        dailies_data.forEach(function(daily) {
+            console.log("Due: " + daily.due_at);
+            if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
+                closest = daily;
+            }
+            console.log("----");
+        });
+        console.log("End search: " + closest);
+        callback(null,closest);
     });
-    console.log("End search: " + closest);
-    callback(null,closest);
-  });
 }
 
 function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Return score and badges
