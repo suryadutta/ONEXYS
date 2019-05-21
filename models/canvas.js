@@ -185,9 +185,9 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         callback(null, 0, badges);
       } else {
         //Daily Yalie questions
-        console.log(mongo_data.dalies.length)
+        console.log(mongo_data.dailies.length);
         for (var i = 0; i < mongo_data.dailies.length; i++) {
-          console.log(mongo_data.dalies[i]);
+          console.log(mongo_data.dailies[i]);
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
           if (daily_object){
             console.log(daily_object);
