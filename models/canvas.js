@@ -185,6 +185,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         callback(null, 0, badges);
       } else {
         //Daily Yalie questions
+        console.log(mongo_data.dalies.length)
         for (var i = 0; i < mongo_data.dailies.length; i++) {
           console.log(mongo_data.dalies[i]);
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
@@ -192,7 +193,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             console.log(daily_object);
             var daily_grade = parseFloat(daily_object.grade);
             if (daily_grade == parseFloat(100)) {
-              daily_done += 1
+              daily_done += 1;
             }
           }
         }
@@ -682,22 +683,20 @@ function getStudents(courseID, callback){
 }
 
 function getNextDailyYalie(courseID, callback){
-    var dy = daily_yalie_url(courseID);
-    console.log("DY: " + dy);
-    getAdminRequest(dy, function(err,dailies_data){
-        var closest = Infinity;
-        console.log("Attempting to locate the next Daily Task");
-        console.log("All data: " + dailies_data);
-        dailies_data.forEach(function(daily) {
-            console.log("Due: " + daily.due_at);
-            if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
-                closest = daily;
-            }
-            console.log("----");
-        });
-        console.log("End search: " + closest);
-        callback(null,closest);
+  getAdminRequest(daily_yalie_url(courseID), function(err,dailies_data){
+    var closest = Infinity;
+    console.log("Attempting to locate the next Daily Task");
+    console.log("All data: " + dailies_data);
+    dailies_data.forEach(function(daily) {
+      console.log("Due: " + daily.due_at);
+      if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
+          closest = daily;
+      }
+      console.log("----");
     });
+    console.log("End search: " + closest);
+    callback(null,closest);
+  });
 }
 
 function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Return score and badges
@@ -759,7 +758,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
           if (daily_object){
             var daily_grade = parseFloat(daily_object.grade);
             if (daily_grade == parseFloat(100)) {
-              daily_done += 1
+              daily_done += 1;
             }
           }
         }
@@ -1119,7 +1118,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get
         groupNames = data.map(section => section.name);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
         studentIndex = findIndexOfUser(studentIdsArrays);
-        callback(null, studentIdsArrays, groupNames, studentIndex)
+        callback(null, studentIdsArrays, groupNames, studentIndex);
       }
     });
   }
