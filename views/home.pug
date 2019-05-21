@@ -19,10 +19,12 @@ block content
         p#point_count= score
         #flag.blue
           if daily_yalie.id == null
-            h1 It is nill
-            a(title='No Quiz Available', href='https://conex.herokuapp.com/404', target='_blank')
+            //
+                h1 It is nill
+            a(title='Quiz List', href='https://conex.herokuapp.com/404', target='_blank')
           else
-            h1 Not nill
+            //
+                h1 Not nill
             a(title='Quiz List', href='https://curryvirginia.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
           img(src='https://conex.herokuapp.com/images/homepage/DY_Flag_2017.svg')
       #leaderboard.standard_home_box.left
