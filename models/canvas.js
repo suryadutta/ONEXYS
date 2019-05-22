@@ -37,7 +37,7 @@ var student_url = (courseID) => {
 }
 
 var daily_yalie_url = (courseID) => {
-  return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Daily';
+  return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Hoo';
 }
 
 function getRequest(url, userID, callback) {
@@ -682,6 +682,8 @@ function getStudents(courseID, callback){
 }
 
 function getNextDailyYalie(courseID, callback){
+    // dy is a string which will contain the URL used to pull the assignments.
+    // in this function the search query is defined, which won't find the 'Hoo Knews'
     var dy = daily_yalie_url(courseID);
     console.log("DY: " + dy);
     getAdminRequest(dy, function(err,dailies_data){
