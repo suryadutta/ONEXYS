@@ -37,7 +37,7 @@ var student_url = (courseID) => {
 }
 
 var daily_yalie_url = (courseID) => {
-  return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Daily';
+  return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Hoo';
 }
 
 function getRequest(url, userID, callback) {
@@ -185,14 +185,15 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         callback(null, 0, badges);
       } else {
         //Daily Yalie questions
+        console.log(mongo_data.dailies.length);
         for (var i = 0; i < mongo_data.dailies.length; i++) {
-          console.log(mongo_data.dalies[i]);
+          console.log(mongo_data.dailies[i]);
           var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
           if (daily_object){
             console.log(daily_object);
             var daily_grade = parseFloat(daily_object.grade);
             if (daily_grade == parseFloat(100)) {
-              daily_done += 1
+              daily_done += 1;
             }
           }
         }
@@ -499,7 +500,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
           (moduleProgress[i]).practice_progress = true;
 
           practice_objects.forEach(function(practice_object){
-            if(!(typeof practice_object === 'undefined') && parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
+            if(typeof practice_object === 'undefined' || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
               (moduleProgress[i]).practice_progress = false;
             }
           });
@@ -682,6 +683,7 @@ function getStudents(courseID, callback){
 }
 
 function getNextDailyYalie(courseID, callback){
+<<<<<<< HEAD
     // dy is a string which will contain the URL used to pull the assignments.
     // in this function the search query is defined, which won't find the 'Hoo Knews'
     var dy = daily_yalie_url(courseID);
@@ -699,7 +701,22 @@ function getNextDailyYalie(courseID, callback){
         });
         console.log("End search: " + closest);
         callback(null,closest);
+=======
+  getAdminRequest(daily_yalie_url(courseID), function(err,dailies_data){
+    var closest = Infinity;
+    console.log("Attempting to locate the next Daily Task");
+    console.log("All data: " + dailies_data);
+    dailies_data.forEach(function(daily) {
+      console.log("Due: " + daily.due_at);
+      if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
+          closest = daily;
+      }
+      console.log("----");
+>>>>>>> 16f16fd69e3fc37d171b6e8cdfa6fb1a2821aeae
     });
+    console.log("End search: " + closest);
+    callback(null,closest);
+  });
 }
 
 function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Return score and badges
@@ -761,7 +778,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
           if (daily_object){
             var daily_grade = parseFloat(daily_object.grade);
             if (daily_grade == parseFloat(100)) {
-              daily_done += 1
+              daily_done += 1;
             }
           }
         }
@@ -1121,7 +1138,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get
         groupNames = data.map(section => section.name);
         studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
         studentIndex = findIndexOfUser(studentIdsArrays);
-        callback(null, studentIdsArrays, groupNames, studentIndex)
+        callback(null, studentIdsArrays, groupNames, studentIndex);
       }
     });
   }
