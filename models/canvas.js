@@ -693,12 +693,18 @@ function getNextDailyYalie(courseID, callback){
         console.log("All data: " + dailies_data);
         dailies_data.forEach(function(daily) {
             console.log("Due: " + daily.due_at);
-            if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
+            if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < new Date(closest.due_at)) {
                 closest = daily;
             }
             console.log("----");
         });
         console.log("End search: " + closest);
+        consoloe.log("PRE: " +  closest.id);
+        // if the closest daily task opens in the future, we shouldn't link to it
+        if(new Date(closest.unlock_at) > new Date()) {
+            closest.id = -1;
+        }
+        console.log("POST: " + closest.id);
         callback(null,closest);
     });
 }
