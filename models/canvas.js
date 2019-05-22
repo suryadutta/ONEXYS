@@ -699,7 +699,7 @@ function getNextDailyYalie(courseID, callback){
             console.log("----");
         });
         console.log("End search: " + closest);
-        consoloe.log("PRE: " +  closest.id);
+        console.log("PRE: " +  closest.id);
         // if the closest daily task opens in the future, we shouldn't link to it
         if(new Date(closest.unlock_at) > new Date()) {
             closest.id = -1;
