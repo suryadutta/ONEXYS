@@ -95,6 +95,14 @@ app.post("/missing-resource", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/404.html"));
 });
 
+app.get("/not-open", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/not-open.html"));
+});
+
+app.post("/not-open", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/not-open.html"));
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
