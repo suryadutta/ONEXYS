@@ -37,7 +37,7 @@ var student_url = (courseID) => {
 }
 
 var daily_yalie_url = (courseID) => {
-  return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Hoo';
+  return config.canvasURL + '/api/v1/courses/'+ courseID+ '/assignments?search_term=Daily';
 }
 
 function getRequest(url, userID, callback) {
