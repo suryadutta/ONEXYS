@@ -693,7 +693,7 @@ function getNextDailyYalie(courseID, callback){
         console.log("All data: " + dailies_data);
         dailies_data.forEach(function(daily) {
             console.log("Due: " + daily.due_at);
-            if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest.due_at) {
+            if (new Date(daily.due_at) >= new Date() && new Date(daily.due_at) < closest) {
                 closest = daily;
             }
             console.log("----");
