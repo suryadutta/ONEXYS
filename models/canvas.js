@@ -703,28 +703,21 @@ function getNextDailyYalie(courseID, callback){
 
     getAdminRequest(url, function(err, assignment_list){
         var closest = Infinity;
-        console.log("Attempting to locate the next Daily Task");
-        console.log("All data: " + dailies_data);
-
 
         assignment_list.forEach(function(assignment) {
             // Check to see if the assignment is in the list of
             // designated daily task IDs, created in the Admin
             // panel and stored in MongoDB.
 
-            console.log("Due: " + assignment.due_at);
             if (new Date(daily.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
                     closest = assignment;
             }
-            console.log("----");
         });
-        console.log("End search: " + closest);
-        console.log("PRE: " +    closest.id);
+
         // if the closest daily task opens in the future, we shouldn't link to it
         if(new Date(closest.unlock_at) > new Date()) {
                 closest.id = -1;
         }
-        console.log("POST: " + closest.id);
         callback(null,closest);
     });
 }
