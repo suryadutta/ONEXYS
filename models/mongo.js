@@ -106,6 +106,11 @@ function getAllData(courseID, callback_main){
     });
 }
 
+// Gets the list of daily tasks and executes the callback function
+function getDailyTasks(courseID, callback) {
+    getData(courseID, 'dailies', callback);
+}
+
 module.exports = {
     getData,
     getAllData,
@@ -114,4 +119,5 @@ module.exports = {
     deleteData,
     getHomeContent,
     getModule,
+    getDailyTasks,
 }

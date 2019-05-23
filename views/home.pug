@@ -19,16 +19,16 @@ block content
         p#point_count= score
         #flag.blue
           if daily_yalie.id == null
-            a(title='Quiz List', href='https://conex.herokuapp.com/404', target='_blank')
+            a(title='Open Daily Task', href='https://conex.herokuapp.com/404', target='_blank')
               img(src='https://conex.herokuapp.com/images/homepage/DY_Flag_2017.svg')
           else
             if daily_yalie.id == -1
               //
                 An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
-              a(title='Quiz List', href='https://conex.herokuapp.com/not-open', target='_blank')
+              a(title='Open Daily Task', href='https://conex.herokuapp.com/not-open', target='_blank')
                 img(src='https://conex.herokuapp.com/images/homepage/DY_Flag_2017.svg')
             else
-              a(title='Quiz List', href='https://curryvirginia.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
+              a(title='Open Daily Task', href='https://curryvirginia.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
                 img(src='https://conex.herokuapp.com/images/homepage/DY_Flag_2017.svg')
       #leaderboard.standard_home_box.left
         h2 Leaderboard
