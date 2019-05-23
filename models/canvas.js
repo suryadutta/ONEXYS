@@ -708,6 +708,7 @@ function getNextDailyYalie(courseID, callback){
             // Check to see if the assignment is in the list of
             // designated daily task IDs, created in the Admin
             // panel and stored in MongoDB.
+            console.log("Assignment has quiz id: " + assignment.quiz_id)
             if(daily_task_ids.includes(assignment.quiz_id)) {
                 console.log("Found valid assignment. Running comparison logic...");
                 if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
