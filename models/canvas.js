@@ -709,7 +709,7 @@ function getNextDailyYalie(courseID, callback){
             // designated daily task IDs, created in the Admin
             // panel and stored in MongoDB.
 
-            if (new Date(daily.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
+            if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
                     closest = assignment;
             }
         });
