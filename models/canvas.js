@@ -696,7 +696,6 @@ function getNextDailyYalie(courseID, callback){
     var daily_task_ids = [];
     mongo.getDailyTasks(courseID, function(err, daily_task_objects) {
         daily_task_objects.forEach(function(task) {
-            console.log("Task's assignment ID: " + task['assignment_id']);
             daily_task_ids.push(task['assignment_id']);
         });
     });
@@ -709,9 +708,13 @@ function getNextDailyYalie(courseID, callback){
             // Check to see if the assignment is in the list of
             // designated daily task IDs, created in the Admin
             // panel and stored in MongoDB.
-
-            if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
-                    closest = assignment;
+            if(daily_task_ids.includes(assignment.quiz_id)) {
+                console.log("Found valid assignment. Running comparison logic...");
+                if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
+                        closest = assignment;
+                }
+            } else {
+                console.log("Found invalid assignment. Moving on to the next assignment.");
             }
         });
 
@@ -719,6 +722,8 @@ function getNextDailyYalie(courseID, callback){
         if(new Date(closest.unlock_at) > new Date()) {
                 closest.id = -1;
         }
+
+        // execute the callback
         callback(null,closest);
     });
 }
