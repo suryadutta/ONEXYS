@@ -696,10 +696,8 @@ function getNextDailyYalie(courseID, callback){
     var daily_task_ids = [];
     mongo.getDailyTasks(courseID, function(err, daily_task_objects) {
         daily_task_objects.forEach(function(task) {
-            console.log("Adding task with ID: " + task['assignment_id']);
             daily_task_ids.push(task['assignment_id']);
         });
-        console.log("Added task IDs: " + daily_task_ids);
 
         console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
 
@@ -710,8 +708,21 @@ function getNextDailyYalie(courseID, callback){
                 // Check to see if the assignment is in the list of
                 // designated daily task IDs, created in the Admin
                 // panel and stored in MongoDB.
-                console.log("Assignment has quiz id: " + assignment.quiz_id)
-                if(daily_task_ids.includes(assignment.quiz_id)) {
+
+
+                // if a daily task is a quiz, check it using the quiz id.
+                // otherwise, just use the assignment id.
+                var id = assignment.id;
+                if(assignment.quiz_id != undefined) {
+                    // use the quiz id to check
+                    console.log("Assignment has quiz id: " + assignment.quiz_id);
+                    id = assignment.quiz_id;
+                } else {
+                    // use the assignment id to check
+                    console.log("Assignment has id: " + assignment.id);
+                }
+
+                if(daily_task_ids.includes(id)) {
                     console.log("Found valid assignment. Running comparison logic...");
                     if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
                             closest = assignment;
