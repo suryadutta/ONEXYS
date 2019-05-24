@@ -23,7 +23,7 @@ def get_file_list(cwd):
     return file_list
 
 
-blacklist = ['.git', '.png', '.jpg', '.svg', '.pdf', 'mongodb_backups']
+blacklist = ['.git', '.png', '.jpg', '.svg', '.pdf', 'mongodb_backups', 'dependencies.py']
 
 for f in get_file_list(os.getcwd()):
     # exclude many file types from this edit
@@ -39,5 +39,5 @@ for f in get_file_list(os.getcwd()):
 
     with open(f, 'r', encoding='latin-1') as contents:
         contents = contents.read()
-        if 'getSections' in contents and f != 'dependencies.py':
+        if 'getSections' in contents:
             print(f)
