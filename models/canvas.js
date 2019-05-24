@@ -699,7 +699,6 @@ function getNextDailyYalie(courseID, callback){
             daily_task_ids.push(task['assignment_id']);
         });
 
-        console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
 
         getAdminRequest(url, function(err, assignment_list){
             var closest = Infinity;
@@ -722,6 +721,8 @@ function getNextDailyYalie(courseID, callback){
                     console.log("Assignment has id: " + assignment.id);
                 }
 
+                console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
+                console.log("Comparing against: " + id);
                 if(daily_task_ids.includes(id)) {
                     console.log("Found valid assignment. Running comparison logic...");
                     if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
