@@ -579,8 +579,9 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
                 studentIndex = findIndexOfUser(studentIdsArrays);
                 if(groupNames.length < 3){
                   callback(null,[],[],0);
+                }else{
+                  callback(null, studentIdsArrays, groupNames, studentIndex);
                 }
-                callback(null, studentIdsArrays, groupNames, studentIndex);
             }
         });
     }
