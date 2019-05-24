@@ -487,16 +487,6 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
 
                     const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
-                    console.log("Cutoff ID's");
-                    Object.keys(practiceId_cutoff_obj).forEach(function(practice_id){
-                        console.log(practice_id);
-                    });
-
-                    console.log("Assignment ID's");
-                    user_assignments.forEach(function(assignment){
-                        console.log(assignment.assignment_id);
-                    });
-
                     // Modified method for setting practice_progress, avoids errors for undefined practice objects,
                     // which occurred when the student did not have a class with a matching class id. Original code below.
                     (moduleProgress[i]).practice_progress = true;
@@ -587,8 +577,8 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
                 studentIndex = findIndexOfUser(studentIdsArrays);
-                while(groupNames.length < 3){
-                  groupNames.push("No Team Name");
+                if(groupNames.length < 3){
+                  callback(null,[],[],0);
                 }
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
