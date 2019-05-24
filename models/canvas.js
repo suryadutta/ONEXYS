@@ -536,17 +536,19 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
         var combinedArray = []
+        console.log("GroupNames: " + groupNames.length);
         for (var i = 0; i < groupNames.length; i++) {
             combinedArray.push({
                 'Name': groupNames[i],
                 'Score': scores[i]
-            })
+            });
+            console.log(groupNames[i]);
         }
         if (groupNames.length < 3){
             fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        return combinedArray
+        return combinedArray;
     }
 
     asyncStuff.waterfall([
@@ -567,7 +569,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
                 if (index > -1) {
-                    return i
+                    return i;
                 }
             }
         }
@@ -585,7 +587,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
                 studentIndex = findIndexOfUser(studentIdsArrays);
-                callback(null, studentIdsArrays, groupNames, studentIndex)
+                callback(null, studentIdsArrays, groupNames, studentIndex);
             }
         });
     }
