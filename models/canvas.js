@@ -700,34 +700,36 @@ function getNextDailyYalie(courseID, callback){
             daily_task_ids.push(task['assignment_id']);
         });
         console.log("Added task IDs: " + daily_task_ids);
-    });
-    console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
 
-    getAdminRequest(url, function(err, assignment_list){
-        var closest = Infinity;
+        console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
 
-        assignment_list.forEach(function(assignment) {
-            // Check to see if the assignment is in the list of
-            // designated daily task IDs, created in the Admin
-            // panel and stored in MongoDB.
-            console.log("Assignment has quiz id: " + assignment.quiz_id)
-            if(daily_task_ids.includes(assignment.quiz_id)) {
-                console.log("Found valid assignment. Running comparison logic...");
-                if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
-                        closest = assignment;
+        getAdminRequest(url, function(err, assignment_list){
+            var closest = Infinity;
+
+            assignment_list.forEach(function(assignment) {
+                // Check to see if the assignment is in the list of
+                // designated daily task IDs, created in the Admin
+                // panel and stored in MongoDB.
+                console.log("Assignment has quiz id: " + assignment.quiz_id)
+                if(daily_task_ids.includes(assignment.quiz_id)) {
+                    console.log("Found valid assignment. Running comparison logic...");
+                    if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
+                            closest = assignment;
+                    }
+                } else {
+                    console.log("Found invalid assignment. Moving on to the next assignment.");
                 }
-            } else {
-                console.log("Found invalid assignment. Moving on to the next assignment.");
+            });
+
+            // if the closest daily task opens in the future, we shouldn't link to it
+            if(new Date(closest.unlock_at) > new Date()) {
+                    closest.id = -1;
             }
+
+            // execute the callback
+            callback(null,closest);
         });
 
-        // if the closest daily task opens in the future, we shouldn't link to it
-        if(new Date(closest.unlock_at) > new Date()) {
-                closest.id = -1;
-        }
-
-        // execute the callback
-        callback(null,closest);
     });
 }
 
