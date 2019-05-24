@@ -696,7 +696,7 @@ function getNextDailyYalie(courseID, callback){
     var daily_task_ids = [];
     mongo.getDailyTasks(courseID, function(err, daily_task_objects) {
         daily_task_objects.forEach(function(task) {
-            daily_task_ids.push(task['assignment_id']);
+            daily_task_ids.push(parseInt(task['assignment_id']));
         });
 
 
@@ -711,11 +711,11 @@ function getNextDailyYalie(courseID, callback){
 
                 // if a daily task is a quiz, check it using the quiz id.
                 // otherwise, just use the assignment id.
-                var id = assignment.id;
+                var id = parseInt(assignment.id);
                 if(assignment.quiz_id != undefined) {
                     // use the quiz id to check
                     console.log("Assignment has quiz id: " + assignment.quiz_id);
-                    id = assignment.quiz_id;
+                    id = parseInt(assignment.quiz_id);
                 } else {
                     // use the assignment id to check
                     console.log("Assignment has id: " + assignment.id);
