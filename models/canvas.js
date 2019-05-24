@@ -708,37 +708,22 @@ function getNextDailyYalie(courseID, callback){
                 // designated daily task IDs, created in the Admin
                 // panel and stored in MongoDB.
 
-
-                // if a daily task is a quiz, check it using the quiz id.
+                // If a daily task is a quiz, check it using the quiz id.
                 // otherwise, just use the assignment id.
                 var id = parseInt(assignment.id);
-                if(assignment.quiz_id != undefined) {
-                    // use the quiz id to check
-                    console.log("Assignment has quiz id: " + assignment.quiz_id);
-                    id = parseInt(assignment.quiz_id);
-                } else {
-                    // use the assignment id to check
-                    console.log("Assignment has id: " + assignment.id);
-                }
+                if(assignment.quiz_id != undefined) id = parseInt(assignment.quiz_id);
 
-                console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
-                console.log("Comparing against: " + id);
+                // If in the list, we've found valid assignment. run
+                // comparison logic to see if it's the closest one so far.
                 if(daily_task_ids.includes(id)) {
-                    console.log("Found valid assignment. Running comparison logic...");
-                    if (new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) {
-                            closest = assignment;
-                    }
-                } else {
-                    console.log("Found invalid assignment. Moving on to the next assignment.");
+                    if(new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) closest = assignment;
                 }
             });
 
-            // if the closest daily task opens in the future, we shouldn't link to it
-            if(new Date(closest.unlock_at) > new Date()) {
-                    closest.id = -1;
-            }
+            // If the closest daily task opens in the future, we shouldn't link to it
+            if(new Date(closest.unlock_at) > new Date()) closest.id = -1;
 
-            // execute the callback
+            // Hand the closest daily task off to the callback function.
             callback(null,closest);
         });
 
