@@ -696,10 +696,12 @@ function getNextDailyYalie(courseID, callback){
     var daily_task_ids = [];
     mongo.getDailyTasks(courseID, function(err, daily_task_objects) {
         daily_task_objects.forEach(function(task) {
+            console.log("Adding task with ID: " + task['assignment_id']);
             daily_task_ids.push(task['assignment_id']);
         });
+        console.log("Added task IDs: " + daily_task_ids);
     });
-    console.log("IDs Designated as Daily Tasks: " + daily_task_ids);
+    console.log("IDs Designated as Daily Tasks: " + daily_task_ids + "\n-----");
 
     getAdminRequest(url, function(err, assignment_list){
         var closest = Infinity;
