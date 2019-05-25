@@ -399,12 +399,6 @@
   white-space: nowrap;
   overflow: hidden;
 }
-#leaderboard th:nth-child(2){
-  width: 113px;
-}
-#leaderboard th:nth-child(3){
-  width: 50px;
-}
 
 #myteam_head{
 	font-size: 7px;
@@ -468,10 +462,10 @@
   width: 50px;
 }
 #leaderboard thead th:nth-of-type(2) {
-  width: 250px;
+  width: 113px;
 }
 #leaderboard thead th:nth-of-type(3) {
-  width: 200px;
+  width: 50px;
   border-right: none !important;
 }
 #leaderboard tr:nth-child(odd) td {
