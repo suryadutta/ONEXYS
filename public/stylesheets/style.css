@@ -399,10 +399,10 @@
   white-space: nowrap;
   overflow: hidden;
 }
-#leaderboard tr:nth-child(2){
+#leaderboard th:nth-child(2){
   width: 113px;
 }
-#leaderboard tr:nth-child(3){
+#leaderboard th:nth-child(3){
   width: 50px;
 }
 
