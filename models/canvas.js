@@ -1126,9 +1126,10 @@ function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
                 if (index > -1) {
-                    return i
+                    return i;
                 }
             }
+            return 0;
         }
 
         getAdminRequest(sections_url(courseID),function(err,data){
