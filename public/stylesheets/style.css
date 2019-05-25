@@ -393,11 +393,17 @@
 }
 #leaderboard table {
   table-layout: fixed;
+  width: 213px;
 }
 #leaderboard td:nth-child(2) {
   white-space: nowrap;
   overflow: hidden;
-  width: 100px;
+}
+#leaderboard tr:nth-child(2){
+  width: 113px;
+}
+#leaderboard tr:nth-child(3){
+  width: 50px;
 }
 
 #myteam_head{
