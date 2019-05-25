@@ -51,7 +51,7 @@ function deleteData(courseID, collection_name, delete_index,callback){
             function(err, result) {
                 callback(err, result);
                 client.close();
-          });
+            });
     });
 }
 
@@ -61,7 +61,7 @@ function getHomeContent(courseID, callback){
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
         callback(err, home_updates, home_videos, home_links);
-      });
+    });
 }
 
 function getModule(courseID, moduleID, callback){
@@ -77,9 +77,9 @@ function getModule(courseID, moduleID, callback){
                 if (a.position > b.position)
                   return 1;
                 return 0;
-              }
+            }
             if (data.videos){
-                data.videos = data.videos.sort(orderVids)
+                data.videos = data.videos.sort(orderVids);
             }
             callback(err,data);
             client.close();

@@ -106,7 +106,7 @@ function homepageQueryMasquerade(studentID,courseID,callback){
   });
 }
 
-function homepageAdminQuery(courseID, callback){
+function homepageAdminQuery(courseID, course_title, callback){
 
   asyncStuff.parallel([
     function(callback) {
@@ -115,7 +115,7 @@ function homepageAdminQuery(courseID, callback){
       });
     },
     function(callback){
-      canvas.getAdminLeaderboardScores(courseID, callback);
+      canvas.getAdminLeaderboardScores(courseID, course_title, callback);
     },
     function(callback){
       mongo.getHomeContent(courseID, callback);
@@ -129,7 +129,7 @@ function homepageAdminQuery(courseID, callback){
   ],
 
   function(err, data) {
-  console.log(data);
+    console.log(data);
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],

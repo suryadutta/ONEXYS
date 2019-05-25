@@ -5,6 +5,7 @@ var queries = require("../models/queries");
 
 router.use("/", (req, res, next) => {
   console.log(req.session);
+  console.log("Course title: " + req.session.course_title);
 
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
@@ -52,6 +53,7 @@ router.use("/", (req, res, next) => {
     } else {
       queries.homepageAdminQuery(
         courseID,
+        req.session.course_title,
         (
           module_progress,
           leaderboard,

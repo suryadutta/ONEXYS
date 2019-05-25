@@ -603,14 +603,16 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
     }
 }
 
-function getAdminLeaderboardScores(courseID, callback){
+function getAdminLeaderboardScores(courseID, course_title, callback){
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
         var combinedArray = [];
         for (var i = 0; i < groupNames.length; i++) {
-            combinedArray.push({
-                'Name': groupNames[i],
-                'Score': scores[i]
-            });
+            if(groupNames[i] != course_title){
+                combinedArray.push({
+                    'Name': groupNames[i],
+                    'Score': scores[i]
+                });
+            }
         }
         if (groupNames.length < 3){
             fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
@@ -632,7 +634,7 @@ function getAdminLeaderboardScores(courseID, callback){
     });
 
     function getSections(callback){
-        getAdminRequest(sections_url(courseID),function(err,data){
+        getAdminRequest(sections_url(courseID), function(err,data){
 
             // remove section with all students
             for (var i = 0; i < data.length; i++) {
@@ -664,7 +666,7 @@ function getAdminLeaderboardScores(courseID, callback){
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
                 callback2(null, studentPoints, groupNames);
             });
-        })
+        });
     }
 }
 
@@ -835,7 +837,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                                 if(mongo_data.modules[i].leaderboard.practice_leaderboard.find(placement => placement.student_id==studentID)){
                                     //user is already on leaderboard
                                     awardBadge(20);
-                                    user_index =    mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)
+                                    user_index = mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID);
                                     mongo_data.modules[i].leaderboard.practice_leaderboard[user_index] = {
                                         'student_id': studentID.toString(),
                                         'score': practice_grade
