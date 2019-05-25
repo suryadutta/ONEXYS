@@ -400,7 +400,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#leaderboard tr:nth-child(4) td:nth-child(2) {
+#leaderboard tr:nth-child(4) td:nth-child(3) {
   border-bottom-right-radius: 5px;
 }
 
