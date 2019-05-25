@@ -562,6 +562,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
                     return i;
                 }
             }
+            return 0;
         }
 
         getAdminRequest(sections_url(courseID),function(err,data){
