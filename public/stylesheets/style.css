@@ -397,6 +397,7 @@
 #leaderboard td:nth-child(2) {
   white-space: nowrap;
   overflow: hidden;
+  width: 100px;
 }
 
 #myteam_head{
