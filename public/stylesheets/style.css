@@ -391,8 +391,12 @@
 #leaderboard .leader_me:hover td{
 	background-color: rgb(34,92,203) !important;
 }
-#leaderboard td:nth-child(2) {
-  position: absolute;
+#leaderboard table {
+  table-layout: fixed;
+}
+#leaderboard td {
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 #myteam_head{
