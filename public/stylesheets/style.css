@@ -411,6 +411,9 @@
 	font-weight: bold;
 	line-height: 12px;
 	border: 2px solid rgb(34,92,203);
+
+  /* Shifts the box to left, out of the way of my group's name */
+  margin-left: -6px;
 }
 
 #leaderboard h2 {
