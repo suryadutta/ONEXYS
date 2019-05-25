@@ -391,7 +391,7 @@
 #leaderboard .leader_me:hover td{
 	background-color: rgb(34,92,203) !important;
 }
-#leaderboard td:nth-child(1) {
+#leaderboard td:nth-child(2) {
   position: absolute;
 }
 
