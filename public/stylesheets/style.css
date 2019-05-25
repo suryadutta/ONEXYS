@@ -394,7 +394,7 @@
 #leaderboard table {
   table-layout: fixed;
 }
-#leaderboard td {
+#leaderboard td:nth-child(2) {
   white-space: nowrap;
   overflow: hidden;
 }
