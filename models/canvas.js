@@ -606,15 +606,11 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
 function getAdminLeaderboardScores(courseID, callback){
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
         var combinedArray = [];
-        console.log("Skip me: ");
-        console.log(request.session.course_title);
         for (var i = 0; i < groupNames.length; i++) {
-            if(groupNames[i] != request.session.course_title){
-                combinedArray.push({
-                    'Name': groupNames[i],
-                    'Score': scores[i]
-                });
-            }
+            combinedArray.push({
+                'Name': groupNames[i],
+                'Score': scores[i]
+            });
         }
         if (groupNames.length < 3){
             fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
@@ -1098,22 +1094,18 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
 function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get all leaderboard scores
 
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
-        var combinedArray = [];
-        console.log("Skip me: ");
-        console.log(request.session.course_title);
+        var combinedArray = []
         for (var i = 0; i < groupNames.length; i++) {
-            if(groupNames[i] != request.session.course_title){
-                combinedArray.push({
-                    'Name': groupNames[i],
-                    'Score': scores[i]
-                });
-            }
+            combinedArray.push({
+                'Name': groupNames[i],
+                'Score': scores[i]
+            })
         }
         if (groupNames.length < 3){
             fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        return combinedArray;
+        return combinedArray
     }
 
     asyncStuff.waterfall([
