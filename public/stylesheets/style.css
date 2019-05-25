@@ -391,6 +391,9 @@
 #leaderboard .leader_me:hover td{
 	background-color: rgb(34,92,203) !important;
 }
+#leaderboard td:nth-child(1) {
+  position: absolute;
+}
 
 #myteam_head{
 	font-size: 7px;
