@@ -26,7 +26,7 @@ function homepageQuery(studentID,courseID,callback){
 
   function(err, data) {
 
-    
+
 
     var module_progress = data[0],
         score = data[1][0],
@@ -121,7 +121,7 @@ function homepageAdminQuery(courseID, callback){
       mongo.getHomeContent(courseID, callback);
     },
     function(callback){
-      canvas.getStudents(courseID,callback);
+      canvas.getStudents(courseID, callback);
     },
     function(callback){
       canvas.getNextDailyYalie(courseID, callback);
