@@ -528,7 +528,7 @@ function getLeaderboardScores(studentID, courseID, callback) { // get all leader
         var combinedArray = [];
         console.log("Skip me: " + req.session.course_title);
         for (var i = 0; i < groupNames.length; i++) {
-            if(groupNames[i] != req.session.course_title){}
+            if(groupNames[i] != req.session.course_title){
                 combinedArray.push({
                     'Name': groupNames[i],
                     'Score': scores[i]
