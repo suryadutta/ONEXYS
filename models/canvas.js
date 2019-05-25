@@ -522,14 +522,11 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
     });
 }
 
-function getLeaderboardScores(studentID, courseID, callback) { // get all leaderboard scores
-
+function getLeaderboardScores(studentID, courseID, course_title, callback) { // get all leaderboard scores
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
         var combinedArray = [];
-        console.log("Skip me: ");
-        console.log(request.session.course_title);
         for (var i = 0; i < groupNames.length; i++) {
-            if(groupNames[i] != request.session.course_title){
+            if(groupNames[i] != course_title){
                 combinedArray.push({
                     'Name': groupNames[i],
                     'Score': scores[i]
@@ -1093,15 +1090,17 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
     });
 }
 
-function getLeaderboardScores_masquerade(studentID, courseID, callback) { // get all leaderboard scores
+function getLeaderboardScores_masquerade(studentID, courseID, course_title, callback) { // get all leaderboard scores
 
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
         var combinedArray = []
         for (var i = 0; i < groupNames.length; i++) {
-            combinedArray.push({
-                'Name': groupNames[i],
-                'Score': scores[i]
-            })
+            if(groupNames[i] != course_title){
+                combinedArray.push({
+                    'Name': groupNames[i],
+                    'Score': scores[i]
+                });
+            }
         }
         if (groupNames.length < 3){
             fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});

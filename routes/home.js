@@ -21,6 +21,7 @@ router.use("/", (req, res, next) => {
       queries.homepageQueryMasquerade(
         parseInt(req.query.masquerade),
         courseID,
+        req.session.course_title,
         (
           module_progress,
           score,
@@ -90,6 +91,7 @@ router.use("/", (req, res, next) => {
     queries.homepageQuery(
       userID,
       courseID,
+      req.session.course_title,
       (
         module_progress,
         score,

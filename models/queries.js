@@ -4,7 +4,7 @@ var asyncStuff = require('async');
 var canvas = require('./canvas');
 var mongo = require('./mongo');
 
-function homepageQuery(studentID,courseID,callback){
+function homepageQuery(studentID, courseID, course_title, callback){
 
   asyncStuff.parallel([
     function(callback) {
@@ -14,7 +14,7 @@ function homepageQuery(studentID,courseID,callback){
       canvas.getIndScoreAndBadges(studentID, courseID, callback);
     },
     function(callback){
-      canvas.getLeaderboardScores(studentID, courseID, callback);
+      canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
     },
     function(callback){
       mongo.getHomeContent(courseID, callback);
@@ -56,7 +56,7 @@ function homepageQuery(studentID,courseID,callback){
   });
 }
 
-function homepageQueryMasquerade(studentID,courseID,callback){
+function homepageQueryMasquerade(studentID, courseID, course_title, callback){
 
   asyncStuff.parallel([
     function(callback) {
@@ -66,7 +66,7 @@ function homepageQueryMasquerade(studentID,courseID,callback){
       canvas.getIndScoreAndBadges_masquerade(studentID, courseID, callback);
     },
     function(callback){
-      canvas.getLeaderboardScores_masquerade(studentID, courseID, callback);
+      canvas.getLeaderboardScores_masquerade(studentID, courseID, course_title, callback);
     },
     function(callback){
       mongo.getHomeContent(courseID, callback);
