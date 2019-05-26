@@ -11,11 +11,13 @@ block content
                 h2='Editing ' + course + ': Daily ' + daily._id
     hr
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+    div.container
+        div.row
+            form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
 
-        div.form-group.form-inline
-            label(for='assignment_id') Assignment ID:
-            input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
-        hr
+                div.form-group.form-inline
+                    label(for='assignment_id') Assignment ID:
+                    input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
+                hr
 
-        button.btn.btn-success(type='submit') Save Changes
+                button.btn.btn-success(type='submit') Save Changes
