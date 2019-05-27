@@ -1245,7 +1245,7 @@
 	width: 1200px;
 	margin-top: 70px;
 }
-.onexys_badge {
+.badge_container {
 	width:240px;
 	height: 350px;
 	float: left;
@@ -1384,7 +1384,7 @@
 #recent_badges .badge_descriptor{
 	display: none;
 }
-#recent_badges .onexys_badge {
+#recent_badges .badge_container {
 	margin: 0px;
 	width: 80px;
 	height: 90px;
