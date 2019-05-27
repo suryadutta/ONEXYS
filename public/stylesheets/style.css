@@ -1405,6 +1405,7 @@
 	box-shadow: 0px 0px 5px 3px rgb(255, 242, 23);
 }
 
+/*
 .badge1 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_1.png); }
 .badge1.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_2.png); }
 .badge1.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_3.png); }
@@ -1532,6 +1533,7 @@
 .badge32 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/burgwell_howard_1.png); }
 .badge32.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge30_1.png); }
 .badge32.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge30_2.png); }
+*/
 
 /***
 * Old Module Page
