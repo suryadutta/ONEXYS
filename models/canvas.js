@@ -220,12 +220,8 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                     awardBadge(6);
                 }
 
-                console.log("Checking Modules");
-                console.log(mongo_data.modules.length);
                 for (var i = 0; i < mongo_data.modules.length; i++) {
-                    console.log("Module " + i + ":");
                     if (mongo_data.modules[i].open=='true'){
-                        console.log("Open!");
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
@@ -364,13 +360,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                             }
                         }
 
-                        console.log("Reflection link: " + (mongo_data.modules[i]).reflection_link);
                         //number of reflections
-                        console.log(data);
                         var reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
                         if(reflection_object){
                             var reflection_grade = parseFloat(reflection_object.grade);
-                            console.log("Reflection grade: " + reflection_grade);
                             if (reflection_grade == parseFloat(100)) {
                                 reflections_done += 1;
 

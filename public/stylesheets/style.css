@@ -393,7 +393,7 @@
 }
 #leaderboard table {
   table-layout: fixed;
-  width: 213px;
+  width: 212px;
 }
 #leaderboard td:nth-child(2) {
   white-space: nowrap;
