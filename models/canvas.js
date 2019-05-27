@@ -44,7 +44,7 @@ var daily_task_url = (courseID) => {
 
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
-    auth.authTokenQueue.push(userID,function(auth_token){
+    auth.authTokenQueue.push(userID, function(auth_token){
         request.get({
             url: url,
             headers: {
@@ -366,6 +366,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                         console.log("Reflection link: " + (mongo_data.modules[i]).reflection_link);
                         //number of reflections
+                        console.log(data);
                         var reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
                         if(reflection_object){
                             var reflection_grade = parseFloat(reflection_object.grade);
