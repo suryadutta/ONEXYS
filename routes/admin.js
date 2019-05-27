@@ -286,7 +286,7 @@ router.post("/modules/:module_id/videos/delete/:video_id", (req, res) => {
 });
 
 router.get("/badges", (req, res, next) => {
-  mongo.getData(req.session.course_id,"badges", (err, badges_data) => {
+  mongo.getData(req.session.course_id, "badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
       course: req.session.course_title,

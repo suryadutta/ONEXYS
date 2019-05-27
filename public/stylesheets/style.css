@@ -1406,8 +1406,8 @@
 }
 
 .badge1 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_1.png); }
-.badge1.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badges/badge10_1.png); }
-.badge1.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge10_2.png); }
+.badge1.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_2.png); }
+.badge1.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_3.png); }
 
 .badge2 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/william_hawkins_1.png); }
 .badge2.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/william_hawkins_2.png); }
