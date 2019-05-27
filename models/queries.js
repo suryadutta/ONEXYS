@@ -26,8 +26,6 @@ function homepageQuery(studentID, courseID, course_title, callback){
 
   function(err, data) {
 
-
-
     var module_progress = data[0],
         score = data[1][0],
         badges =  data[1][1],

@@ -41,4 +41,15 @@ block content
             small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
         hr
 
+        div.form-group.form-inline
+            label(for='unearned_url') Unearned URL:
+            textarea(rows=1)#description.form-control(name='unearned_url')=badge.UnearnedURL
+
+            label(for='earned_url') Earned URL:
+            textarea(rows=1)#description.form-control(name='earned_url')=badge.EarnedURL
+
+            label(for='earned_hover_url') Earned Hover URL:
+            textarea(rows=1)#description.form-control(name='earned_hover_url')=badge.EarnedHoverURL
+        hr
+
         button.btn.btn-success(type='submit') Save Changes
