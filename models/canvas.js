@@ -220,8 +220,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                     awardBadge(6);
                 }
 
+                console.log("Checking Modules");
+                console.log(mongo_data.modules.length);
                 for (var i = 0; i < mongo_data.modules.length; i++) {
+                    console.log("Module " + i + ":");
                     if (mongo_data.modules[i].open=='true'){
+                        console.log("Open!");
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
@@ -360,10 +364,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                             }
                         }
 
+                        console.log("Reflection link: " + (mongo_data.modules[i]).reflection_link);
                         //number of reflections
                         var reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
                         if(reflection_object){
                             var reflection_grade = parseFloat(reflection_object.grade);
+                            console.log("Reflection grade: " + reflection_grade);
                             if (reflection_grade == parseFloat(100)) {
                                 reflections_done += 1;
 
@@ -453,9 +459,9 @@ function updateCanvas(studentID, courseID, totalPoints, badges, callback) { // U
 }
 
 function getIndScoreAndBadges(studentID, courseID, callback){ // Get score and badge info for user
-        computeScoreAndBadges(studentID, courseID, function(err, totalPoints, badges){ //compute scores
-                updateCanvas(studentID, courseID, totalPoints, badges, callback); //update Canvas
-        });
+    computeScoreAndBadges(studentID, courseID, function(err, totalPoints, badges){ //compute scores
+        updateCanvas(studentID, courseID, totalPoints, badges, callback); //update Canvas
+    });
 }
 
 function getStudentProgress(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
@@ -725,7 +731,7 @@ function getNextDailyYalie(courseID, callback){
 }
 
 function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Return score and badges
-    mongo.getAllData(courseID,function(mongo_data){
+    mongo.getAllData(courseID, function(mongo_data){
         var badges = mongo_data.badges;
         var totalPoints = 0;
         var practice_proficient = 0;
