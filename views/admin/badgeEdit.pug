@@ -43,13 +43,13 @@ block content
 
         div.form-group.form-inline
             label(for='unearned_url') Unearned URL:
-            textarea(rows=1)#description.form-control(name='unearned_url')=badge.UnearnedURL
+            input#portrait.form-control(type='text', value=badge.UnearedURL, name='unearned_url')
             br
             label(for='earned_url') Earned URL:
-            textarea(rows=1)#description.form-control(name='earned_url')=badge.EarnedURL
+            input#portrait.form-control(type='text', value=badge.EaredURL, name='earned_url')
             br
             label(for='earned_hover_url') Earned Hover URL:
-            textarea(rows=1)#description.form-control(name='earned_hover_url')=badge.EarnedHoverURL
+            input#portrait.form-control(type='text', value=badge.EaredHoverURL, name='earned_hover_url')
         hr
 
         button.btn.btn-success(type='submit') Save Changes
