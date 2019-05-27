@@ -317,7 +317,10 @@ router.post("/badges/edit/:id", (req, res, next) => {
       Description: req.body.description,
       Points: req.body.badge_points,
       Portrait: req.body.portrait,
-      PortraitDescription: req.body.portraitdescription
+      PortraitDescription: req.body.portraitdescription,
+      UnearnedURL: req.body.unearned_url,
+      EarnedURL: req.body.earned_url,
+      EarnedHoverURL: req.body.earned_hover_url
     },
     (err, result) => {
       res.redirect("/admin/badges");
