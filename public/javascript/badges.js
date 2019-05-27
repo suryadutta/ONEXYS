@@ -7,7 +7,7 @@ $(document).ready(function() {
 // for each badge image, sets to completed if the badge has been earned
 function setEarnedBadges(){
     $(".badge_container").each(function(badge){
-        var portrait = $(badge).children(".badge_portrait");
+        var portrait = $(badge).children(".badge_portrait")[0];
         if($(badge).hasClass("completed")){
             console.log('url(https://conex.herokuapp.com/images/badgePics/' + $(portrait).attr("earned_url") + ')');
             $(portrait).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(portrait).attr("earned_url") + ')');
