@@ -1326,11 +1326,12 @@
 	top: 35px;
 	position: relative;
 	display: block;
-	left: 19.5px;
+	left: 15px;
 	width: 180px;
 	margin: 5px;
 	text-align: center;
 	border: solid rgb(34,92,203) 5px;
+  margin-top: 210px;
 }
 .badge_label h3{
 	font-size: 13pt;
