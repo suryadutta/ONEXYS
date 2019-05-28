@@ -19,7 +19,7 @@ block content
 
       each badge, index in badges
 
-        if badge.Awarded
+        if !badge.Awarded
           div(class='badge_container badge'+(index+1)+' completed')
             .badge_descriptor.badge_box
               h3=badge.Title
