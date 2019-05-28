@@ -2,7 +2,7 @@ extends ../layout
 
 block content
 
-    a(href='/admin/modules/'+moduleID+'/edit') Go Back
+    a(href='/admin/modules/'+moduleID+'/edit?canvas_course_id=course_id') Go Back
 
     h1='Add Video to ONEXYS Module ' + moduleID
     h3=course
@@ -10,19 +10,19 @@ block content
     form(method='POST' action='')
 
         div.form-group
-        label(for='video_desc') Video Description: 
+        label(for='video_desc') Video Description:
         input#video_desc.form-control(type='text', name='video_desc', required)
         br
         br
-        
+
         div.form-group
-        label(for='video_src') Video Source: 
+        label(for='video_src') Video Source:
         input#video_src.form-control(type='text', name='video_src', required)
         br
         br
 
         div.form-group
-        label(for='video_image_src') Video Image Path: 
+        label(for='video_image_src') Video Image Path:
         input#video_image_src.form-control(type='text', name='video_image_src', required)
         br
         br

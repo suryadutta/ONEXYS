@@ -14,6 +14,7 @@ router.post("/", (req, res, next) => {
   res.render("admin", {
     title: "Express",
     course: req.session.course_title,
+    course_id: req.session.course_id
   });
 });
 
@@ -23,6 +24,7 @@ router.get("/home", (req, res, next) => {
     res.render("admin/home", {
       title: "home",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       home_updates,
       home_vids
     });
@@ -35,6 +37,7 @@ router.post("/home", (req, res, next) => {
     res.render("admin/home", {
       title: "home",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       home_updates: req.body,
       home_vids
     });
@@ -45,6 +48,7 @@ router.post("/home", (req, res, next) => {
 router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
     course: req.session.course_title,
+    course_id: req.session.course_id,
     home_updates: req.body
   })
 });
@@ -61,6 +65,7 @@ router.get("/home/videos/add", (req, res, next) => {
   res.render("admin/homeVidAdd", {
     title: "Add Home Video",
     course: req.session.course_title,
+    course_id: req.session.course_id,
   });
 });
 
@@ -82,6 +87,7 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
       res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
         course: req.session.course_title,
+        course_id: req.session.course_id,
         video: home_vid
       });
     } else {
@@ -97,6 +103,7 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
     course: req.session.course_title,
+    course_id: req.session.course_id,
     video: home_vid
   });
 });
@@ -106,6 +113,7 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
   res.render("admin/homeConfirmVideos", {
     title: "Edit Home Video",
     course: req.session.course_title,
+    course_id: req.session.course_id,
     video: req.body,
     video_id: req.params.id
   });
@@ -131,6 +139,7 @@ router.get("/modules", (req, res, next) => {
     res.render("admin/modules", {
       title: "Modules",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       modules: modulesInfo
     });
   });
@@ -142,6 +151,7 @@ router.get("/modules/:id/edit", (req, res, next) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       module: moduleInfo
     });
   });
@@ -154,6 +164,7 @@ router.post("/modules/:id/edit", (req, res, next) => {
     res.render('admin/moduleEdit', {
       title: "Edit Module",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       module: merged_data,
     });
   });
@@ -167,6 +178,7 @@ router.post("/modules/:id/preview", (req, res, next) => {
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
       course: req.session.course_title,
+      course_id: req.session.course_id,
       data: merged_data,
     });
   });
@@ -189,6 +201,7 @@ router.post("/modules/:id/confirmUpdates", (req, res, next) => {
 router.get("/modules/:id/videos/add", (req, res, next) => {
   res.render("admin/moduleVideoAdd", {
     course: req.session.course_title,
+    course_id: req.session.course_id,
     moduleID: req.params.id
   });
 });
@@ -236,6 +249,7 @@ router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
     res.render("admin/moduleVideoEdit", {
       title: "Edit Module Video",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       moduleID: req.params.module_id,
       video: vidObject
     });
@@ -290,6 +304,7 @@ router.get("/badges", (req, res, next) => {
     res.render("admin/badges", {
       title: "Badges",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       badges: badges_data
     });
   });
@@ -301,6 +316,7 @@ router.get("/badges/edit/:id", (req, res, next) => {
     res.render("admin/badgeEdit", {
       title: "Badges",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       badge: badge_data
     });
   });
@@ -333,6 +349,7 @@ router.get("/dailies", (req, res, next) => {
     res.render("admin/dailies", {
       title: "Dailies",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       dailies: dailies_data
     });
   });
@@ -344,6 +361,7 @@ router.get("/dailies/edit/:id", (req, res, next) => {
     res.render("admin/dailyEdit", {
       title: "Dailies",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       daily: daily_data
     });
   });
@@ -371,6 +389,7 @@ router.get("/lucky", (req, res, next) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       lucky_data: lucky_data
     });
   });
@@ -382,6 +401,7 @@ router.get("/lucky/edit/:id", (req, res, next) => {
     res.render("admin/luckyEdit", {
       title: "Lucky Bonus",
       course: req.session.course_title,
+      course_id: req.session.course_id,
       lucky_bonus: lucky_bonus,
       id: req.params.id
     });
@@ -415,6 +435,7 @@ router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
     title: "Lucky Bonuses",
     course: req.session.course_title,
+    course_id: req.session.course_id,
   });
 });
 
