@@ -49,6 +49,16 @@ function homepageQuery(studentID, courseID, course_title, callback){
       awarded_badges = awarded_badges.slice(0,3);
     }
 
+    console.log("BEGIN HOMEPAGE QUERY");
+    console.log("module_progress: " + module_progress);
+    console.log("leaderboard: " + leaderboard);
+    console.log("home_updates: " + home_updates);
+    console.log("home_vids: " + home_vids);
+    console.log("home_links: " + home_links);
+    console.log("daily_yalie: " + daily_yalie);
+    console.log("score: " + score);
+    console.log("awarded_badges: " + awarded_badges);
+
     callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
   });
 }
