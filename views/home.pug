@@ -59,15 +59,15 @@ block content
       #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
         h2 Recent Badges
 
-        each badgeID in awarded_badge_ids
+        each badge in awarded_badges
 
-          #recent_badge1.badge_container.completed(class='badge'+badgeID,style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
+          #recent_badge1.badge_container.completed(class='badge'+badge._id, style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
             .badge_descriptor.badge_box
               h3
               p  
             .badge_points.badge_box
               p  
-            .badge_portrait(style='width: 80px; height: 100px;')
+            .badge_portrait(style='width: 80px; height: 100px;' unearned_url=badge.UnearnedURL earned_url=badge.EarnedURL earned_hover_url=badge.EarnedHoverURL)
             .badge_label.badge_box
               h3s
               p  

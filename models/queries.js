@@ -45,12 +45,11 @@ function homepageQuery(studentID, courseID, course_title, callback){
     }
 
     var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    var awarded_badge_ids = awarded_badges.map(badge => badge._id);
-    if (awarded_badge_ids.length>3){
-      awarded_badge_ids = awarded_badge_ids.slice(0,3);
+    if (awarded_badgs.length>3){
+      awarded_badges = awarded_badges.slice(0,3);
     }
 
-    callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+    callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
   });
 }
 
@@ -95,12 +94,11 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
     }
 
     var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    var awarded_badge_ids = awarded_badges.map(badge => badge._id);
-    if (awarded_badge_ids.length>3){
-      awarded_badge_ids = awarded_badge_ids.slice(0,3);
+    if (awarded_badges.length>3){
+      awarded_badges = awarded_badges.slice(0,3);
     }
 
-    callback(module_progress, score, awarded_badge_ids, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+    callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
   });
 }
 
