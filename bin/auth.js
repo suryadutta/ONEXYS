@@ -76,7 +76,7 @@ var checkAdmin = function(req,res,next) {
 
 //middleware to update course information
 var updateCookies = function(req,res,next){
-
+  console.log("Pinged update cookies!");
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
