@@ -5,7 +5,7 @@ var canvas = require('./canvas');
 var mongo = require('./mongo');
 
 function homepageQuery(studentID, courseID, course_title, callback){
-
+  console.log("homepageQuery");
   asyncStuff.parallel([
     function(callback) {
       canvas.getStudentProgress(studentID, courseID, callback);
@@ -54,7 +54,7 @@ function homepageQuery(studentID, courseID, course_title, callback){
 }
 
 function homepageQueryMasquerade(studentID, courseID, course_title, callback){
-
+  console.log("homepageQueryMasquerade");
   asyncStuff.parallel([
     function(callback) {
       canvas.getStudentProgress_masquerade(studentID, courseID, callback);
@@ -103,7 +103,7 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
 }
 
 function homepageAdminQuery(courseID, course_title, callback){
-
+  console.log("homepageAdminQuery");
   asyncStuff.parallel([
     function(callback) {
       mongo.getAllData(courseID, function(mongo_data){
