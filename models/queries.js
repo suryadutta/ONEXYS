@@ -125,7 +125,6 @@ function homepageAdminQuery(courseID, course_title, callback){
   ],
 
   function(err, data) {
-    console.log(data);
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],
@@ -133,6 +132,15 @@ function homepageAdminQuery(courseID, course_title, callback){
         home_links = data[2][2],
         students = data[3],
         daily_yalie=data[4];
+
+    console.log("BEGIN HOMEPAGE ADMIN QUERY");
+    console.log("module_progress: " + module_progress);
+    console.log("leaderboard: " + leaderboard);
+    console.log("home_updates: " + home_updates);
+    console.log("home_vids: " + home_vids);
+    console.log("home_links: " + home_links);
+    console.log("daily_yalie: " + daily_yalie);
+    console.log("students: " + students);
 
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
