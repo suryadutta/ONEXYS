@@ -67,7 +67,8 @@ block content
               p  
             .badge_points.badge_box
               p  
-            .badge_portrait(style='width: 80px; height: 100px;' unearned_url=badge.UnearnedURL earned_url=badge.EarnedURL earned_hover_url=badge.EarnedHoverURL)
+            .hidden_portrait(style='background-image: url(https://conex.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
+              .badge_portrait(style='width: 80px; height: 100px;' unearned_url=badge.UnearnedURL earned_url=badge.EarnedURL)
             .badge_label.badge_box
               h3s
               p  

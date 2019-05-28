@@ -5,10 +5,10 @@ $(document).ready(function() {
     $(".completed .badge_portrait").hover(
         function(event){
             // mouse in
-            $(this).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(this).attr("earned_hover_url") + ')');
+            $(this).css('opacity', '0');
         }, function(event){
             // mouse out
-            $(this).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(this).attr("earned_url") + ')');
+            $(this).css('opacity', '1');
         }
     );
 });
