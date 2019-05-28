@@ -18,7 +18,9 @@ function setEarnedBadges(){
     });
 }
 
-$(".badge_portrait").hover(
+
+
+$(".badge_container").hover(
     function(){
         // mouse in
         console.log("over!");
