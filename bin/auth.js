@@ -92,7 +92,8 @@ var updateCookies = function(req, res, next){
   */
   /* Past code. Set cookies less often, introduced bug with setting admin pages
   */
-  console.log("Pinged update cookies!");
+  console.log("Pinged update cookies, with course_id = " + req.body.custom_canvas_course_id);
+  console.log(req.body);
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
@@ -107,7 +108,6 @@ var updateCookies = function(req, res, next){
   } else {
     next();
   }
-  
 };
 
 //middleware to check user and launch lti
