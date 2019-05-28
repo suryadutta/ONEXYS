@@ -64,6 +64,16 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("BEGIN HOMEPAGE ADMIN QUERY");
+          console.log("courseID: " + courseID);
+          console.log("module_progress: " + module_progress);
+          console.log("leaderboard: " + leaderboard);
+          console.log("home_updates: " + home_updates);
+          console.log("home_vids: " + home_vids);
+          console.log("home_links: " + home_links);
+          console.log("daily_yalie: " + daily_yalie);
+          console.log("is_physics: " + is_physics);
+          console.log("students: " + students);
           res.render("home", {
             title: "Home | CONEX",
             courseID,
