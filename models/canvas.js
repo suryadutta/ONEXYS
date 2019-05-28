@@ -533,8 +533,8 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                 });
             }
         }
-        if (groupNames.length < 3){
-            fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+        if (combinedArray.length < 3){
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
         return combinedArray;
@@ -739,7 +739,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                //console.log(lucky_bulldog);
+                console.log(lucky_bulldog);
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
@@ -1102,8 +1102,8 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                 });
             }
         }
-        if (groupNames.length < 3){
-            fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+        if (combinedArray.length < 3){
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
         return combinedArray
