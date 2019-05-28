@@ -1251,10 +1251,11 @@
 	float: left;
 	padding: 7px;
 	padding-bottom: 40px;
+  position: relative;
 }
 .badge_portrait {
 	display: block;
-	position: relative;
+	position: absolute;
 	top: 30px;
 	left: 17px;
 	width: 200px;
