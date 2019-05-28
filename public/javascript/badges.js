@@ -1,6 +1,18 @@
 
 $(document).ready(function() {
     setEarnedBadges();
+
+    $(".completed .badge_portrait").hover(
+        function(event){
+            // mouse in
+            console.log("over!");
+            $(this).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(this).attr("earned_hover_url") + ')');
+        }, function(event){
+            // mouse out
+            console.log("out!");
+            $(this).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(this).attr("earned_url") + ')');
+        }
+    );
 });
 
 
@@ -17,15 +29,3 @@ function setEarnedBadges(){
         }
     });
 }
-
-$(".completed .badge_portrait").hover(
-    function(event){
-        // mouse in
-        console.log("over!");
-        $(this).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(this).attr("earned_hover_url") + ')');
-    }, function(event){
-        // mouse out
-        console.log("out!");
-        $(this).css('background-image', 'url(https://conex.herokuapp.com/images/badgePics/' + $(this).attr("earned_url") + ')');
-    }
-);
