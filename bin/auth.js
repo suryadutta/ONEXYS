@@ -76,7 +76,7 @@ var checkAdmin = function(req, res, next) {
 
 //middleware to update course information
 var updateCookies = function(req, res, next){
-
+  /*
   if (!(typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1) && typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
     res.status(500).render('cookieError');
@@ -89,7 +89,9 @@ var updateCookies = function(req, res, next){
     req.session.admin = req.body.roles.includes('Instructor');
     next();
   }
+  */
   /* Past code. Set cookies less often, introduced bug with setting admin pages
+  */
   console.log("Pinged update cookies!");
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
@@ -105,7 +107,7 @@ var updateCookies = function(req, res, next){
   } else {
     next();
   }
-  */
+  
 };
 
 //middleware to check user and launch lti
