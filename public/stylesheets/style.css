@@ -1266,6 +1266,9 @@
 	background-size: 100% 100%;
 	transition: all 0.5s ease;
 }
+.badge_portrait.front_portrait:hover {
+  opacity: 0;
+}
 
 .badge_box {
 	background: #fff;
