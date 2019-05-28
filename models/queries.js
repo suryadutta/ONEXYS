@@ -45,7 +45,7 @@ function homepageQuery(studentID, courseID, course_title, callback){
     }
 
     var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    if (awarded_badgs.length>3){
+    if (awarded_badges.length>3){
       awarded_badges = awarded_badges.slice(0,3);
     }
 
