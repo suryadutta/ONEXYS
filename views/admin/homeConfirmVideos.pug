@@ -22,17 +22,23 @@ block content
             strong!=video.video_desc
 
   form(method='POST', action='/admin/home/videos/edit/'+video_id)
+      input(type='hidden', value=course_id, name='course-id')
+      input(type='hidden', value=course_title, name='course-title')
+      input(type='hidden', value=user_id, name='user-id')
 
-    input#video_src(type='hidden', value=video.video_src, name='video_src')
-    input#video_img(type='hidden', value=video.video_img, name='video_img')
-    input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
+      input#video_src(type='hidden', value=video.video_src, name='video_src')
+      input#video_img(type='hidden', value=video.video_img, name='video_img')
+      input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
 
-    button.btn.btn-dark(type='submit') Back to Edits
+      button.btn.btn-dark(type='submit') Back to Edits
 
   form(method='POST' action='/admin/home/videos/confirmUpdates/'+video_id)
+      input(type='hidden', value=course_id, name='course-id')
+      input(type='hidden', value=course_title, name='course-title')
+      input(type='hidden', value=user_id, name='user-id')
 
-    input#video_src(type='hidden', value=video.video_src, name='video_src')
-    input#video_img(type='hidden', value=video.video_img, name='video_img')
-    input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
+      input#video_src(type='hidden', value=video.video_src, name='video_src')
+      input#video_img(type='hidden', value=video.video_img, name='video_img')
+      input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
 
-    button.btn.btn-success(type='submit') Submit Changes
+      button.btn.btn-success(type='submit') Submit Changes

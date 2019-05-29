@@ -20,6 +20,9 @@ block content
             div.col-md-1
             div.col-md-10
                 form(method='POST' action='home/preview')
+                    input(type='hidden', value=course_id, name='course-id')
+                    input(type='hidden', value=course_title, name='course-title')
+                    input(type='hidden', value=user_id, name='user-id')
                     div.row
                         div.col-md-9
                             button.btn.btn-dark(type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
@@ -92,6 +95,9 @@ block content
                     h2='Home Page Videos'
                 div.row
                     form(method='GET',action='home/videos/add',target="_blank")
+                        input(type='hidden', value=course_id, name='course-id')
+                        input(type='hidden', value=course_title, name='course-title')
+                        input(type='hidden', value=user_id, name='user-id')
                         button.btn.btn-dark(type='submit') Add Video
                 div.row
                     table
@@ -111,8 +117,14 @@ block content
                                 td
                                     div.form.form-inline
                                         form(method='GET' action='home/videos/edit/'+video._id)
+                                            input(type='hidden', value=course_id, name='course-id')
+                                            input(type='hidden', value=course_title, name='course-title')
+                                            input(type='hidden', value=user_id, name='user-id')
                                             button.btn.btn-dark(type='submit') Edit
                                         form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                            input(type='hidden', value=course_id, name='course-id')
+                                            input(type='hidden', value=course_title, name='course-title')
+                                            input(type='hidden', value=user_id, name='user-id')
                                             button.btn.btn-danger(type='submit') Delete
                                 hr
             div.col-md-1

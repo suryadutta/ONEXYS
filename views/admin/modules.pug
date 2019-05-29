@@ -34,4 +34,7 @@ block content
                         td=module.reflection_link
                         td
                             form(method='GET' action='modules/'+module._id+'/edit')
+                                input(type='hidden', value=course_id, name='course-id')
+                                input(type='hidden', value=course_title, name='course-title')
+                                input(type='hidden', value=user_id, name='user-id')
                                 button.btn.btn-dark(type='submit') Edit

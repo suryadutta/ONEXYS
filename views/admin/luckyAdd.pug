@@ -14,6 +14,9 @@ block content
     div.container
         div.row
             form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
+                input(type='hidden', value=course_id, name='course-id')
+                input(type='hidden', value=course_title, name='course-title')
+                input(type='hidden', value=user_id, name='user-id')
                 div.form-group.form-inline
                     label(for='badge_points') Date and Time of Lucky Bonus:
                     input#badge_points.form-control(type='datetime-local', name='date_time')

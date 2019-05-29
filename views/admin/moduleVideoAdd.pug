@@ -8,6 +8,9 @@ block content
     h3=course
 
     form(method='POST' action='')
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
 
         div.form-group
         label(for='video_desc') Video Description:

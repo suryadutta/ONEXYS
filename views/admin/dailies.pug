@@ -38,4 +38,7 @@ block content
                         td=daily.assignment_id
                         td
                             form(method='GET' action='dailies/edit/'+daily._id)
+                                input(type='hidden', value=course_id, name='course-id')
+                                input(type='hidden', value=course_title, name='course-title')
+                                input(type='hidden', value=user_id, name='user-id')
                                 button.btn.btn-dark(type='submit') Edit

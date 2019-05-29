@@ -28,6 +28,9 @@ block content
                     p.entry_text!=home_updates.text3
 
     form(method='POST', action='/admin/home')
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
 
         input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
         input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
@@ -44,6 +47,9 @@ block content
         button.btn.btn-danger(type='submit') Back to Edits
 
     form(method='POST' action='/admin/home/confirmUpdates')
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
 
         input#main_header(type='hidden', value=home_updates.main_header, name='main_header')
         input#main_text(type='hidden', value=home_updates.main_text, name='main_text')
