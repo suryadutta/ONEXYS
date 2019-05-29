@@ -546,7 +546,6 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
 
     asyncStuff.waterfall([
         asyncStuff.apply(getSections, course_title),
-        getSections,
         getTotalScores,
     ], function(err, scores, groupNames, studentIndex) {
         function compare(a, b) {
@@ -1118,7 +1117,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
     }
 
     asyncStuff.waterfall([
-        getSections,
+        asyncStuff.apply(getSections, course_title),
         getTotalScores,
     ], function(err, scores, groupNames, studentIndex) {
         function compare(a, b) {
@@ -1130,11 +1129,11 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
         callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
-    function getSections(callback){
-        function findIndexOfUser(studentIdsArrays) {
+    function getSections(course_title, callback){
+        function findIndexOfUser(studentIdsArrays, groupNames) {
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-                if (index > -1) {
+                if (index > -1 && groupNames[i] != course_title) {
                     return i;
                 }
             }
@@ -1153,7 +1152,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
-                studentIndex = findIndexOfUser(studentIdsArrays);
+                studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
         });
