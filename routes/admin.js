@@ -62,8 +62,6 @@ router.post("/home/preview", (req, res, next) => {
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
   mongo.updateData(req.session.course_id,"home", { type: "updates" }, req.body, (err, result) => {
-    console.log("Posted Body:");
-    console.log(req.body);
     res.redirect("/admin");
   });
 });
@@ -159,9 +157,10 @@ router.get("/modules", (req, res, next) => {
   });
 });
 
+//Post Modules Home Page (for changing if the post-test is available)
 router.post("/modules", (req, res, next) => {
   mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
-    res.redirect("admin/modules");
+    res.redirect("/admin");
   });
 });
 
