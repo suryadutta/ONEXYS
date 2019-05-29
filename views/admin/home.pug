@@ -67,20 +67,6 @@ block content
 
                     div.row
                         div.col-md-12
-                            div.form-group
-                                label Post Test Open?
-
-                                div.form-inline
-                                    input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
-                                    label(for='post_test_open_true') Yes
-
-                                div.form-inline
-                                    input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
-                                    label(for='post_test_open_false') No
-                        hr
-
-                    div.row
-                        div.col-md-12
                             div.form-group.form-inline
                                 label(for='post_test_link') Post Test URL:
                                 input#post_test_link.form-control.inlined-input(type='text', name='post_test_link', value=home_updates.post_test_link)
