@@ -65,14 +65,10 @@ function getHomeContent(courseID, callback){
 }
 
 function getModules(courseID, callback){
-    console.log("getModules");
     getData(courseID, "home", function(err, data){
-        console.log("First get!");
         post_test = data.find(document => document.type == 'updates').post_test;
-        console.log("post_test: " + post_test);
 
         getData(courseID, "modules", function(err, data){
-            console.log("Second get! " + post_test);
             callback(err, data, post_test);
         });
     });
