@@ -541,11 +541,11 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
     }
 
     function myTeam(groupNames, scores, index) {
-        console.log("Used myTeam");
         return {'Name': groupNames[index], 'Score': scores[index]};
     }
 
     asyncStuff.waterfall([
+        asyncStuff.apply(getSections, course_title),
         getSections,
         getTotalScores,
     ], function(err, scores, groupNames, studentIndex) {
@@ -558,11 +558,11 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
         callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
-    function getSections(callback){
+    function getSections(course_title, callback){
         function findIndexOfUser(studentIdsArrays) {
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-                if (index > -1) {
+                if (index > -1 && groupNames[i] != course_title) {
                     return i;
                 }
             }
@@ -581,7 +581,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
-                studentIndex = findIndexOfUser(studentIdsArrays);
+                studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
         });
@@ -1113,6 +1113,10 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
         return combinedArray;
     }
 
+    function myTeam(groupNames, scores, index) {
+        return {'Name': groupNames[index], 'Score': scores[index]};
+    }
+
     asyncStuff.waterfall([
         getSections,
         getTotalScores,
@@ -1123,7 +1127,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             return 0;
         }
 
-        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[parseInt(studentIndex)]);
+        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
     function getSections(callback){
