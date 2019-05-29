@@ -541,6 +541,9 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
     }
 
     function myTeam(groupNames, scores, index) {
+        if(index < 0){
+            return {'Name': "", 'Score': 0};
+        }
         return {'Name': groupNames[index], 'Score': scores[index]};
     }
 
@@ -565,7 +568,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                     return i;
                 }
             }
-            return 0;
+            return -1;
         }
 
         getAdminRequest(sections_url(courseID),function(err,data){
@@ -1113,6 +1116,9 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
     }
 
     function myTeam(groupNames, scores, index) {
+        if(index < 0){
+            return {'Name': "", 'Score': 0};
+        }
         return {'Name': groupNames[index], 'Score': scores[index]};
     }
 
@@ -1137,7 +1143,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                     return i;
                 }
             }
-            return 0;
+            return -1;
         }
 
         getAdminRequest(sections_url(courseID),function(err,data){
