@@ -76,27 +76,16 @@ var checkAdmin = function(req, res, next) {
 
 //middleware to update course information
 var updateCookies = function(req, res, next){
-  /*
-  if (!(typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1) && typeof(req.session.course_id)!='string'){
-    console.log('ERROR: COOKIES NOT SET');
-    res.status(500).render('cookieError');
-  } else {
-    console.log('Assigning Cookies');
-    console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
-    req.session.course_id = req.body.custom_canvas_course_id;
-    req.session.course_title = req.body.context_title;
-    req.session.user_id = req.body.custom_canvas_user_id;
-    req.session.admin = req.body.roles.includes('Instructor');
-    next();
-  }
-  */
-  /* Past code. Set cookies less often, introduced bug with setting admin pages
-  */
+
   console.log("Pinged update cookies, with course_id = " + req.body.custom_canvas_course_id + " or " + req.param('course-id'));
 
+  // Looks for passed url parameter 'course-id', updates cookie appropriately
+  // Keeps admin pages set to proper course across multiple tabs
   if(typeof req.param('course-id') !== 'undefined'){
     console.log("Session id set to " + req.param('course-id'));
     req.session.course_id = req.param('course-id');
+    req.session.course_title = req.param('course-title');
+    req.session.user_id = req.param('user-id');
   }
 
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
