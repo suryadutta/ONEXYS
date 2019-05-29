@@ -132,6 +132,7 @@ module.exports = {
     updateData,
     deleteData,
     getHomeContent,
+    getModules,
     getModule,
     getDailyTasks,
 }
