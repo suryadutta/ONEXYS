@@ -131,27 +131,28 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-  mongo.updateData(req.session.course_id,"home", { _id: req.params.id }, req.body, (err, result) => {
+  mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //delete home video
 router.post("/home/videos/delete/:id", (req, res, next) => {
-  mongo.deleteData(req.session.course_id,"home", { _id: req.params.id }, (err, result) => {
+  mongo.deleteData(req.session.course_id, "home", { _id: req.params.id }, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get("/modules", (req, res, next) => {
-  mongo.getData(req.session.course_id,"modules", (err, modulesInfo) => {
+  mongo.getModules(req.session.course_id, (err, modulesInfo, post_test) => {
     res.render("admin/modules", {
       title: "Modules",
       course_title: req.session.course_title,
       course_id: req.session.course_id,
       user_id: req.session.user_id,
-      modules: modulesInfo
+      modules: modulesInfo,
+      post_test: post_test
     });
   });
 });

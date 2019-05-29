@@ -11,6 +11,23 @@ block content
                 h2='Editing ' + course_title + ' modules'
     hr
     br
+
+    form(method='POST' action='modules')
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
+
+        label Post Test Open?
+
+        div.form-inline
+            input#post_test_open_true.form-control(type='radio', value='true', checked=post_test=='true', name='post_test')
+            label(for='post_test_open_true') Yes
+
+        div.form-inline
+            input#post_test_open_false.form-control(type='radio', value='false', checked=post_test=='false', name='post_test')
+            label(for='post_test_open_false') No
+
+    br
     div.container
         div.row
             table(class="admin_table")
