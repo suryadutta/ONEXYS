@@ -92,7 +92,7 @@ var updateCookies = function(req, res, next){
   */
   /* Past code. Set cookies less often, introduced bug with setting admin pages
   */
-  console.log("Pinged update cookies, with course_id = " + req.body.custom_canvas_course_id + " or " + req.param('canvas_course_id'));
+  console.log("Pinged update cookies, with course_id = " + req.body.custom_canvas_course_id + " or " + req.param('course_id'));
 
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');

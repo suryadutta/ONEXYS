@@ -1019,7 +1019,6 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                     awardBadge(31);
                 }
 
-
                 callback(null, totalPoints, badges);
             }
 
@@ -1041,9 +1040,9 @@ function updateCanvas_masquerade(studentID, courseID, totalPoints, badges, callb
 }
 
 function getIndScoreAndBadges_masquerade(studentID, courseID, callback){ // Get score and badge info for user
-        computeScoreAndBadges_masquerade(studentID, courseID, function(err, totalPoints, badges){ //compute scores
-                updateCanvas_masquerade(studentID, courseID, totalPoints, badges, callback); //update Canvas
-        });
+    computeScoreAndBadges_masquerade(studentID, courseID, function(err, totalPoints, badges){ //compute scores
+        updateCanvas_masquerade(studentID, courseID, totalPoints, badges, callback); //update Canvas
+    });
 }
 
 function getStudentProgress_masquerade(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
@@ -1093,7 +1092,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
 function getLeaderboardScores_masquerade(studentID, courseID, course_title, callback) { // get all leaderboard scores
 
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
-        var combinedArray = []
+        var combinedArray = [];
         for (var i = 0; i < groupNames.length; i++) {
             if(groupNames[i] != course_title){
                 combinedArray.push({
@@ -1106,7 +1105,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        return combinedArray
+        return combinedArray;
     }
 
     asyncStuff.waterfall([
@@ -1150,7 +1149,6 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             }
         });
     }
-
 
     function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
         get_update_url(courseID, function(update_url){
