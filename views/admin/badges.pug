@@ -31,8 +31,8 @@ block content
                         td=badge.Portrait
                         td=badge.PortraitDescription
                         td
-                            form(method='GET' action='badges/edit/'+badge._id)
+                            form(method='GET' action='badges/edit/'+badge._id+'?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                                 button.btn.btn-dark(type='submit') Edit
                         td
-                                form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
+                                form(method='POST' action='badges/delete/'+badge._id+'?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id onsubmit="return confirm('Do you really want to delete this badge?');")
                                     button.btn.btn-danger(type='submit') Delete
