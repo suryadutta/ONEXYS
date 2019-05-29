@@ -94,6 +94,11 @@ var updateCookies = function(req, res, next){
   */
   console.log("Pinged update cookies, with course_id = " + req.body.custom_canvas_course_id + " or " + req.param('course-id'));
 
+  if(typeof req.param('course-id') !== 'undefined'){
+    console.log("Session id set to " + req.param('course-id'));
+    req.session.course_id = req.param('course-id');
+  }
+
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
