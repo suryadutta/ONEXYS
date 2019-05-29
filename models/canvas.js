@@ -540,6 +540,11 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
         return combinedArray;
     }
 
+    function myTeam(groupNames, scores, index) {
+        console.log("Used myTeam");
+        return {'Name': groupNames[index], 'Score': scores[index]};
+    }
+
     asyncStuff.waterfall([
         getSections,
         getTotalScores,
@@ -550,7 +555,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             return 0;
         }
 
-        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[parseInt(studentIndex)]);
+        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
     function getSections(callback){
