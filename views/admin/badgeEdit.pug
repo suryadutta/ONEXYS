@@ -8,7 +8,7 @@ block content
             div.form.form-inline
                 a.btn.btn-lg(href='/admin/badges?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
-                h2='Editing ' + course + ': Badge ' + badge._id
+                h2='Editing ' + course_title + ': Badge ' + badge._id
     hr
 
     form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")

@@ -5,9 +5,8 @@ const mongo = require("../models/mongo");
 router.get("/", (req, res, next) => {
   res.render("admin", {
     title: "Express",
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id
   });
 });
@@ -16,9 +15,8 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   res.render("admin", {
     title: "Express",
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id
   });
 });
@@ -28,9 +26,8 @@ router.get("/home", (req, res, next) => {
   mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       home_updates,
       home_vids
@@ -43,9 +40,8 @@ router.post("/home", (req, res, next) => {
   mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       home_updates: req.body,
       home_vids
@@ -56,9 +52,8 @@ router.post("/home", (req, res, next) => {
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id,
     home_updates: req.body
   })
@@ -75,9 +70,8 @@ router.post("/home/confirmUpdates", (req, res, next) => {
 router.get("/home/videos/add", (req, res, next) => {
   res.render("admin/homeVidAdd", {
     title: "Add Home Video",
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id,
   });
 });
@@ -99,9 +93,8 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
     if (home_vid) {
       res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
-        course: req.session.course_title,
-        course_id: req.session.course_id,
         course_title: req.session.course_title,
+        course_id: req.session.course_id,
         user_id: req.session.user_id,
         video: home_vid
       });
@@ -117,9 +110,8 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
   home_vid._id = req.params.id
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id,
     video: home_vid
   });
@@ -129,9 +121,8 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
 router.post('/home/videos/preview/:id', (req,res,next) => {
   res.render("admin/homeConfirmVideos", {
     title: "Edit Home Video",
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id,
     video: req.body,
     video_id: req.params.id
@@ -157,9 +148,8 @@ router.get("/modules", (req, res, next) => {
   mongo.getData(req.session.course_id,"modules", (err, modulesInfo) => {
     res.render("admin/modules", {
       title: "Modules",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       modules: modulesInfo
     });
@@ -171,9 +161,8 @@ router.get("/modules/:id/edit", (req, res, next) => {
   mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       module: moduleInfo
     });
@@ -186,9 +175,8 @@ router.post("/modules/:id/edit", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       module: merged_data,
     });
@@ -202,9 +190,8 @@ router.post("/modules/:id/preview", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       data: merged_data,
     });
@@ -227,9 +214,8 @@ router.post("/modules/:id/confirmUpdates", (req, res, next) => {
 //GET page to add video to module
 router.get("/modules/:id/videos/add", (req, res, next) => {
   res.render("admin/moduleVideoAdd", {
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id,
     moduleID: req.params.id
   });
@@ -277,9 +263,8 @@ router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
     );
     res.render("admin/moduleVideoEdit", {
       title: "Edit Module Video",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       moduleID: req.params.module_id,
       video: vidObject
@@ -334,9 +319,8 @@ router.get("/badges", (req, res, next) => {
   mongo.getData(req.session.course_id, "badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       badges: badges_data
     });
@@ -348,9 +332,8 @@ router.get("/badges/edit/:id", (req, res, next) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
     res.render("admin/badgeEdit", {
       title: "Badges",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       badge: badge_data
     });
@@ -383,9 +366,8 @@ router.get("/dailies", (req, res, next) => {
   mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
     res.render("admin/dailies", {
       title: "Dailies",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       dailies: dailies_data
     });
@@ -397,9 +379,8 @@ router.get("/dailies/edit/:id", (req, res, next) => {
     daily_data = dailies_data.find(element => element._id == req.params.id);
     res.render("admin/dailyEdit", {
       title: "Dailies",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       daily: daily_data
     });
@@ -427,9 +408,8 @@ router.get("/lucky", (req, res, next) => {
     "lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       lucky_data: lucky_data
     });
@@ -441,9 +421,8 @@ router.get("/lucky/edit/:id", (req, res, next) => {
     lucky_bonus = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
       title: "Lucky Bonus",
-      course: req.session.course_title,
-      course_id: req.session.course_id,
       course_title: req.session.course_title,
+      course_id: req.session.course_id,
       user_id: req.session.user_id,
       lucky_bonus: lucky_bonus,
       id: req.params.id
@@ -477,9 +456,8 @@ router.post("/lucky/delete/:id", (req, res, next) => {
 router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
     title: "Lucky Bonuses",
-    course: req.session.course_title,
-    course_id: req.session.course_id,
     course_title: req.session.course_title,
+    course_id: req.session.course_id,
     user_id: req.session.user_id,
   });
 });

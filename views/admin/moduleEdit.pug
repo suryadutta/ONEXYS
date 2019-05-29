@@ -13,7 +13,7 @@ block content
             div.form.form-inline
                 a.btn.btn-lg(href='/admin/modules?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
-                h2='Editing ' + course + ', Module ' + module._id
+                h2='Editing ' + course_title + ', Module ' + module._id
     hr
     div.container
         form(method='POST' action='preview')
@@ -127,7 +127,7 @@ block content
                     input(type='hidden', value=course_id, name='course-id')
                     input(type='hidden', value=course_title, name='course-title')
                     input(type='hidden', value=user_id, name='user-id')
-                h2='Editing videos for ' + course + ': Module ' + module._id
+                h2='Editing videos for ' + course_title + ': Module ' + module._id
             div.col-md-3
                 form(method='GET',action='videos/add')
                     input(type='hidden', value=course_id, name='course-id')
