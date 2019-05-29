@@ -160,9 +160,9 @@ router.get("/modules", (req, res, next) => {
 });
 
 router.post("/modules", (req, res, next) => {
-    console.log("Module POST");
-    console.log(req.body);
-    console.log(req.body.post_test);
+  mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
+    res.redirect("admin/modules");
+  });
 });
 
 //Get Page to Edit Module Content
