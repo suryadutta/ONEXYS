@@ -820,8 +820,13 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
+                        console.log("Practice Object");
+                        console.log(practice_object);
+                        console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
+                            console.log("My grade: " + parseFloat(practice_object.grade));
+                            console.log("Cutoff: " + parseFloat(mongo_data.modules[i].practice_cutoff));
                             if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                                 practice_proficient += 1;
