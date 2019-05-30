@@ -13,7 +13,7 @@ var add_page_number = (url) => {
 }
 
 var assignment_user_url = (studentID, courseID) => {
-    return config.canvasURL + '/api/v1/courses/' + courseID + '/students/grades/' + studentID;
+    return config.canvasURL + '/api/v1/courses/' + courseID + '/grades/' + studentID;
     //return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID;
 }
 
