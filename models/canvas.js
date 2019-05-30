@@ -225,8 +225,15 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
+                        console.log("Practice Object");
+                        console.log(practice_object);
+                        console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
+
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
+
+                            console.log("My grade: " + parseFloat(practice_object.grade));
+                            console.log("Cutoff: " + parseFloat(mongo_data.modules[i].practice_cutoff));
                             if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                                 practice_proficient += 1;
@@ -537,11 +544,14 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
+        console.log("Combined: " + combinedArray);
         return combinedArray;
     }
 
     function myTeam(groupNames, scores, index) {
+        console.log(index);
         if(index < 0){
+            console.log("< 0");
             return {'Name': "", 'Score': 0};
         }
         return {'Name': groupNames[index], 'Score': scores[index]};
@@ -557,6 +567,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             return 0;
         }
 
+        console.log("Jim");
         callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
@@ -820,13 +831,9 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
-                        console.log("Practice Object");
-                        console.log(practice_object);
-                        console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
+
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
-                            console.log("My grade: " + parseFloat(practice_object.grade));
-                            console.log("Cutoff: " + parseFloat(mongo_data.modules[i].practice_cutoff));
                             if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                                 practice_proficient += 1;
