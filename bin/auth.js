@@ -77,17 +77,17 @@ var checkAdmin = function(req, res, next) {
 //middleware to update course information
 var updateCookies = function(req, res, next){
 
-  console.log("Pinged update cookies, with course_id = " + req.body.custom_canvas_course_id + " or " + req.param('course-id'));
-
   // Looks for passed url parameter 'course-id', updates cookie appropriately
   // Keeps admin pages set to proper course across multiple tabs
   if(typeof req.param('course-id') !== 'undefined'){
-    console.log("Session id set to " + req.param('course-id'));
+    console.log("Assigning Admin Cookies");
+    console.log("Assigned course id: " + req.param('course-id'));
     req.session.course_id = req.param('course-id');
     req.session.course_title = req.param('course-title');
     req.session.user_id = req.param('user-id');
   }
 
+  // Manages cookies for other pages
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);

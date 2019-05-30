@@ -39,5 +39,5 @@ for f in get_file_list(os.getcwd()):
 
     with open(f, 'r', encoding='latin-1') as contents:
         contents = contents.read()
-        if 'custom_canvas_course_id' in contents:
+        if 'valid_request' in contents:
             print(f)
