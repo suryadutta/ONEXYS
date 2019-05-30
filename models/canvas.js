@@ -13,7 +13,8 @@ var add_page_number = (url) => {
 }
 
 var assignment_user_url = (studentID, courseID) => {
-    return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID
+    return config.canvasURL + '/api/v1/courses/' + courseID + '/students/grades/' + studentID;
+    //return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID;
 }
 
 var notes_column_url = (courseID) => {
@@ -172,7 +173,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             return 0;
         }
 
-        getRequest(assignment_user_url(studentID, courseID),studentID, function(err, data) {
+        getRequest(assignment_user_url(studentID, courseID), studentID, function(err, data) {
             if (err){
                 console.log(err);
                 callback(err, 0, badges);
