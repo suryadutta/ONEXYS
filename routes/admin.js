@@ -37,7 +37,7 @@ router.get("/home", (req, res, next) => {
 
 //Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
-  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
+  mongo.getHomeContent(req.session.course_id, (err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
       course_title: req.session.course_title,
@@ -56,12 +56,12 @@ router.post("/home/preview", (req, res, next) => {
     course_id: req.session.course_id,
     user_id: req.session.user_id,
     home_updates: req.body
-  })
+  });
 });
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
-  mongo.updateData(req.session.course_id,"home", { type: "updates" }, req.body, (err, result) => {
+  mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
 });
