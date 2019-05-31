@@ -45,7 +45,6 @@ var daily_task_url = (courseID) => {
 
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
-    console.log("GET from this url: " + url);
     auth.authTokenQueue.push(userID, function(auth_token){
         request.get({
             url: url,
@@ -175,9 +174,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         }
 
         getRequest(assignment_user_url(studentID, courseID), studentID, function(err, data) {
-            console.log(data);
-
-
             if (err){
                 console.log(err);
                 callback(err, 0, badges);
@@ -230,15 +226,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
-                        console.log("Practice Object");
-                        console.log(practice_object);
-                        console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
+                        //console.log("Practice Object");
+                        //console.log(practice_object);
+                        //console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
 
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
-
-                            console.log("My grade: " + parseFloat(practice_object.grade));
-                            console.log("Cutoff: " + parseFloat(mongo_data.modules[i].practice_cutoff));
                             if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
 
                                 practice_proficient += 1;
