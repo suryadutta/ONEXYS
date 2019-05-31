@@ -25,15 +25,13 @@ block content
                     input(type='hidden', value=user_id, name='user-id')
                     div.row
                         div.col-md-9
-                            button.btn.btn-dark(style='margin-right:5px;', type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
-                            button.btn.btn-secondary(type='button', onclick='doSingleUpdate();return false;') Add a New Update
+                            button.btn.btn-dark(id='btn-existing', style='margin-right:5px;', type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
+                            button.btn.btn-secondary(id='btn-single', type='button', onclick='doSingleUpdate();return false;') Add a New Update
                         div.col-md-3
                             button.btn.btn-success(type='submit') Preview Changes
-                        br
-                        hr
-
                     div.row
                         div.col-md-12
+                            hr
                             div.form-group.form-inline
                                 label(for='main_header') Main Header:
                                 input#main_header.form-control.inlined-input(type='text', value=home_updates.main_header, name='main_header')
