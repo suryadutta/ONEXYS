@@ -188,6 +188,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 callback(null, 0, badges);
             } else {
                 //Daily Yalie questions
+                console.log(data);
+
+                console.log("-------------------------");
+
                 console.log(mongo_data.dailies.length);
                 for (var i = 0; i < mongo_data.dailies.length; i++) {
                     console.log(mongo_data.dailies[i]);
