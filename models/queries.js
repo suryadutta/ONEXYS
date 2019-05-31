@@ -101,6 +101,7 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
 }
 
 function homepageAdminQuery(courseID, course_title, callback){
+  console.log("Made it here!");
   asyncStuff.parallel([
     function(callback) {
       mongo.getAllData(courseID, function(mongo_data){
@@ -129,7 +130,8 @@ function homepageAdminQuery(courseID, course_title, callback){
         home_links = data[2][2],
         students = data[3],
         daily_yalie=data[4];
-        
+
+    console.log(leaderboard);
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
 }

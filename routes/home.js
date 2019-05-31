@@ -17,6 +17,7 @@ router.use("/", (req, res, next) => {
   var is_physics = Boolean(courseID == 38083);
 
   if (req.session.admin) {
+    console.log("HOME ADMIN!");
     if (req.query.masquerade) {
       queries.homepageQueryMasquerade(
         parseInt(req.query.masquerade),
@@ -52,6 +53,7 @@ router.use("/", (req, res, next) => {
         }
       );
     } else {
+      console.log("NOT MASQUERADE!");
       queries.homepageAdminQuery(
         courseID,
         req.session.course_title,
