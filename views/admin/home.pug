@@ -25,11 +25,11 @@ block content
                     input(type='hidden', value=user_id, name='user-id')
                     div.row
                         div.col-md-9
-                            button.btn.btn-dark(type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
-                            button.btn.btn-dark(type='button', onclick='doSingleUpdate();return false;') Add a New Update
-
+                            button.btn.btn-dark(style='margin-right:5px;', type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
+                            button.btn.btn-secondary(type='button', onclick='doSingleUpdate();return false;') Add a New Update
                         div.col-md-3
                             button.btn.btn-success(type='submit') Preview Changes
+                        br
                         hr
 
                     div.row

@@ -126,7 +126,7 @@ function putAdminRequest(url, parameters, callback) {
 } //admin PUT request
 
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
-    mongo.getAllData(courseID, function(mongo_data){
+    mongo.getAllData(courseID,function(mongo_data){
         var badges = mongo_data.badges;
         var totalPoints = 0;
         var practice_proficient = 0;
@@ -195,7 +195,9 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 console.log(mongo_data.dailies.length);
                 for (var i = 0; i < mongo_data.dailies.length; i++) {
                     console.log(mongo_data.dailies[i]);
+
                     var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
+
                     if (daily_object){
                         console.log(daily_object);
                         var daily_grade = parseFloat(daily_object.grade);
@@ -610,9 +612,6 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                for(var i = 0; i < studentPoints.length; i++){
-                    studentPoints[i] /= studentIdsArrays[i].length;
-                }
                 callback2(null, studentPoints, groupNames, studentIndex);
             });
         })
@@ -680,11 +679,6 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                console.log("Points");
-                for(var i = 0; i < studentPoints.length; i++){
-                    studentPoints[i] /= studentIdsArrays[i].length;
-                }
-                console.log(studentPoints);
                 callback2(null, studentPoints, groupNames);
             });
         });
@@ -1193,9 +1187,6 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                for(var i = 0; i < studentPoints.length; i++){
-                    studentPoints[i] /= studentIdsArrays[i].length;
-                }
                 callback2(null, studentPoints, groupNames, studentIndex);
             });
         })
