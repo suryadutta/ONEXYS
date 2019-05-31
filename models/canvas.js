@@ -553,7 +553,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
         console.log(index);
         if(index < 0){
             console.log("< 0");
-            return {'Name': "", 'Score': 0};
+            return {'Name': '', 'Score': 0};
         }
         return {'Name': groupNames[index], 'Score': scores[index]};
     }
@@ -646,6 +646,9 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             if (a.Score > b.Score) return -1;
             return 0;
         }
+        console.log("Got out...");
+        console.log(groupNames);
+        console.log(scores);
         callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare));
     });
 
@@ -687,14 +690,12 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
 }
 
 function getStudents(courseID, callback){
-    console.log("Get students");
     getAdminRequest(student_url(courseID),function(err,student_data){
         var student_data_sorted = student_data.sort(function(a, b) {
             var textA = a.sortable_name.toUpperCase();
             var textB = b.sortable_name.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
-        console.log("Done w/ students");
         callback(err,student_data_sorted);
     });
 }
@@ -1132,7 +1133,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
     function myTeam(groupNames, scores, index) {
         if(index < 0){
-            return {'Name': "", 'Score': 0};
+            return {'Name': '', 'Score': 0};
         }
         return {'Name': groupNames[index], 'Score': scores[index]};
     }
