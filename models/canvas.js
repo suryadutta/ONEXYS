@@ -545,14 +545,11 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        console.log("Combined: " + combinedArray);
         return combinedArray;
     }
 
     function myTeam(groupNames, scores, index) {
-        console.log(index);
         if(index < 0){
-            console.log("< 0");
             return {'Name': '', 'Score': 0};
         }
         return {'Name': groupNames[index], 'Score': scores[index]};
@@ -568,7 +565,6 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             return 0;
         }
 
-        console.log("Jim");
         callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
@@ -631,7 +627,7 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             }
         }
         if (groupNames.length < 3){
-            fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
         return combinedArray;
@@ -646,9 +642,6 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             if (a.Score > b.Score) return -1;
             return 0;
         }
-        console.log("Got out...");
-        console.log(groupNames);
-        console.log(scores);
         callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare));
     });
 
