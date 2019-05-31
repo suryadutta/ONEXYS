@@ -613,7 +613,8 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
                 for(var i = 0; i < studentPoints.length; i++){
-                    studentPoints[i] /= parseInt(studentIdsArrays[i].length, 10);
+                    studentPoints[i] /= studentIdsArrays[i].length;
+                    studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
                 callback2(null, studentPoints, groupNames, studentIndex);
             });
@@ -685,7 +686,8 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                 console.log("Points");
                 console.log(studentPoints);
                 for(var i = 0; i < studentPoints.length; i++){
-                    studentPoints[i] /= parseInt(studentIdsArrays[i].length, 10);
+                    studentPoints[i] /= studentIdsArrays[i].length;
+                    studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
                 console.log(studentPoints);
                 callback2(null, studentPoints, groupNames);
@@ -1197,7 +1199,8 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
                 for(var i = 0; i < studentPoints.length; i++){
-                    studentPoints[i] /= parseInt(studentIdsArrays[i].length, 10);
+                    studentPoints[i] /= studentIdsArrays[i].length;
+                    studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
                 callback2(null, studentPoints, groupNames, studentIndex);
             });
