@@ -681,8 +681,10 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
                 console.log("Points");
+                console.log(studentPoints);
                 for(var i = 0; i < studentPoints.length; i++){
                     studentPoints[i] /= studentIdsArrays[i].length;
+                    console.log(i + ", " + studentIdsArrays[i].length);
                 }
                 console.log(studentPoints);
                 callback2(null, studentPoints, groupNames);
