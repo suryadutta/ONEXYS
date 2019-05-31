@@ -45,6 +45,7 @@ var daily_task_url = (courseID) => {
 
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
+    console.log("GET from this url: " + url);
     auth.authTokenQueue.push(userID, function(auth_token){
         request.get({
             url: url,
@@ -174,6 +175,9 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         }
 
         getRequest(assignment_user_url(studentID, courseID), studentID, function(err, data) {
+            console.log(data);
+
+
             if (err){
                 console.log(err);
                 callback(err, 0, badges);
