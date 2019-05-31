@@ -51,6 +51,7 @@ router.post("/home", (req, res, next) => {
 
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
+  console.log(req.body);
   res.render('admin/homeConfirmUpdates', {
     course_title: req.session.course_title,
     course_id: req.session.course_id,
@@ -61,6 +62,7 @@ router.post("/home/preview", (req, res, next) => {
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
+  console.log(req.body);
   mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
