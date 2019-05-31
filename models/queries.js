@@ -125,7 +125,20 @@ function homepageAdminQuery(courseID, course_title, callback){
 
   function(err, data) {
     console.log("Basically done...");
-    console.log(data);
+    console.log("0");
+    console.log(data[0]);
+    console.log("1");
+    console.log(data[1]);
+    console.log("2[0]");
+    console.log(data[2][0]);
+    console.log("2[1]");
+    console.log(data[2][1]);
+    console.log("2[2]");
+    console.log(data[2][2]);
+    console.log("3");
+    console.log(data[3]);
+    console.log("4");
+    console.log(data[4]);
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],
