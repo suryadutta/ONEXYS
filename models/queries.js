@@ -101,8 +101,6 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
 }
 
 function homepageAdminQuery(courseID, course_title, callback){
-  console.log("Made it here!");
-  console.log("ID: " + courseID + ", Title: " + course_title);
   asyncStuff.parallel([
     function(callback) {
       mongo.getAllData(courseID, function(mongo_data){
@@ -124,28 +122,13 @@ function homepageAdminQuery(courseID, course_title, callback){
   ],
 
   function(err, data) {
-    console.log("Basically done...");
-    console.log("0");
-    console.log(data[0]);
-    console.log("1");
-    console.log(data[1]);
-    console.log("2[0]");
-    console.log(data[2][0]);
-    console.log("2[1]");
-    console.log(data[2][1]);
-    console.log("2[2]");
-    console.log(data[2][2]);
-    console.log("3");
-    console.log(data[3]);
-    console.log("4");
-    console.log(data[4]);
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],
         home_vids = data[2][1],
         home_links = data[2][2],
         students = data[3],
-        daily_yalie=data[4];
+        daily_yalie = data[4];
 
     console.log(leaderboard);
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
