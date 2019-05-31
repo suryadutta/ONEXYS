@@ -126,7 +126,7 @@ function putAdminRequest(url, parameters, callback) {
 } //admin PUT request
 
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
-    mongo.getAllData(courseID,function(mongo_data){
+    mongo.getAllData(courseID, function(mongo_data){
         var badges = mongo_data.badges;
         var totalPoints = 0;
         var practice_proficient = 0;
@@ -677,6 +677,9 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+                console.log("Points");
+                console.log(studentPoints);
+                console.log(studentIdsArrays);
                 callback2(null, studentPoints, groupNames);
             });
         });
