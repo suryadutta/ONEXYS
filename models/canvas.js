@@ -687,12 +687,14 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
 }
 
 function getStudents(courseID, callback){
+    console.log("Get students");
     getAdminRequest(student_url(courseID),function(err,student_data){
         var student_data_sorted = student_data.sort(function(a, b) {
             var textA = a.sortable_name.toUpperCase();
             var textB = b.sortable_name.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
+        console.log("Done w/ students");
         callback(err,student_data_sorted);
     });
 }
