@@ -401,9 +401,12 @@ router.get("/dailies/edit/:id", (req, res, next) => {
 });
 
 router.post("/dailies/edit/:id", (req, res, next) => {
+    console.log("POSTing");
     var valid_assignment_ids, valid_quiz_ids;
     canvas.getAdminRequest(req.session.course_id, function(err, assignment_list) {
+        console.log("Entered admin request");
         assignment_list.forEach(function(assignment) {
+            console.log("Assignment Obj: " + assignment);
             valid_assignment_ids.push(assignment.id);
             valid_quiz_ids.push(assignment.quiz_id);
         });
