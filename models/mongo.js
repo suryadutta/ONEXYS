@@ -66,10 +66,12 @@ function getHomeContent(courseID, callback){
 
 function getModules(courseID, callback){
     getData(courseID, "home", function(err, data){
-        post_test = data.find(document => document.type == 'updates').post_test;
+        var updates = data.find(document => document.type == 'updates');
+        post_test = updates.post_test;
+        post_test_filename = updates.post_test_filename;
 
         getData(courseID, "modules", function(err, data){
-            callback(err, data, post_test);
+            callback(err, data, post_test, post_test_filename);
         });
     });
 }

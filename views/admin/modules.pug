@@ -29,6 +29,13 @@ block content
                     input#post_test_open_false.form-control(type='radio', value='false', checked=post_test=='false', name='post_test')
                     label(for='post_test_open_false') No
 
+                div.row
+                    div.col-md-12
+                        div.form-group.form-inline
+                            label(for='post_test_filename') Post Test URL:
+                            input#post_test_filename.form-control.inlined-input(type='text', name='post_test_filename', value=home_updates.post_test_filename)
+                    hr
+
                 button.btn.btn-success(type='submit') Save Post Test Changes
             hr
     br
