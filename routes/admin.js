@@ -406,15 +406,19 @@ router.post("/dailies/edit/:id", (req, res, next) => {
     var valid_quiz_ids = [];
     canvas.getAdminRequest(canvas.daily_task_url(req.session.course_id), function(err, assignment_list) {
         assignment_list.forEach(function(assignment) {
-            valid_assignment_ids.push(assignment.id);
-            valid_quiz_ids.push(assignment.quiz_id);
+            valid_assignment_ids.push(parseInt(assignment.id));
+            if(assignment.quiz_id != undefined) {
+                valid_quiz_ids.push(parseInt(assignment.quiz_id));
+            } else {
+                valid_quiz_ids.push(-1);
+            }
         });
 
         console.log("VAID List: " + valid_assignment_ids);
         console.log("VQID List: " + valid_quiz_ids);
         console.log("Input ID: " + req.body.assignment_id);
 
-        var dex = valid_quiz_ids.indexOf(req.body.assignment_id);
+        var dex = valid_quiz_ids.indexOf(parseInt(req.body.assignment_id));
         if(dex > -1) {
             console.log("Quiz id was given, converting...");
             req.body.assignment_id = valid_assignment_ids(dex);
