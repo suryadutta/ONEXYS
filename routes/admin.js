@@ -414,16 +414,9 @@ router.post("/dailies/edit/:id", (req, res, next) => {
             }
         });
 
-        console.log("VAID List: " + valid_assignment_ids);
-        console.log("VQID List: " + valid_quiz_ids);
-        console.log("Input ID: " + req.body.assignment_id);
-
         var dex = valid_quiz_ids.indexOf(parseInt(req.body.assignment_id));
         if(dex > -1) {
-            console.log("Quiz id was given, converting...");
-            req.body.assignment_id = valid_assignment_ids(dex);
-        } else {
-            console.log("Assignment id was given, doing nothing...");
+            req.body.assignment_id = valid_assignment_ids[dex];
         }
         console.log("Submitting ID: " + req.body.assignment_id);
 
