@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
+const canvas = require("../models/canvas");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
@@ -394,8 +395,7 @@ router.get("/dailies/edit/:id", (req, res, next) => {
             course_title: req.session.course_title,
             course_id: req.session.course_id,
             user_id: req.session.user_id,
-            daily: daily_data,
-            assignments: valid_assignments
+            daily: daily_data
         });
     });
 });
