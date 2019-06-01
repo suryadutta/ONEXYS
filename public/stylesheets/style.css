@@ -1516,6 +1516,9 @@ textarea .form-control{
     width: 500px !important;
 }
 
+.form-inline label {
+  padding-right: 10px;
+}
 
 /*
     Colorbox Core Style:
