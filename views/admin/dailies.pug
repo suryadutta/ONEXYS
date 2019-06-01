@@ -24,17 +24,19 @@ block content
                         a(href="https://conex.herokuapp.com/images/misc/dailytask_id_examples.png", target="_blank")
                             p See here for an example.
                 li
-                    p For each daily task, in your course, enter the assignment or quiz ID on this page. The system will automatically determine which type of ID you have entered.
+                    p For each daily task, in your course, enter the assignment or quiz ID on this page. The system will automatically determine which type of ID you have entered and convert it to the corresponding assignment ID, if necessary.
                 li
                     p Watch the homepage as the next available daily task is linked to in the top left! If no daily task is found, the generic 404 / Missing resource page will be linked on the homepage. In the case that the next daily task is not open yet, the generic not-open page is displayed.
             hr
         div.row
             table(class="admin_table")
                 tr
-                    th Assignment or Quiz ID
+                    th Row
+                    th Assignment ID
                     th Edit Item
                 each daily in dailies
                     tr
+                        td=daily._id
                         td=daily.assignment_id
                         td
                             form(method='GET' action='dailies/edit/'+daily._id)
