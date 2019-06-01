@@ -375,14 +375,15 @@ router.post("/badges/edit/:id", (req, res, next) => {
 });
 
 router.get("/dailies", (req, res, next) => {
-    console.log("Test boolean: " + req.session.test_bool);
     mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
         res.render("admin/dailies", {
             title: "Dailies",
             course_title: req.session.course_title,
             course_id: req.session.course_id,
             user_id: req.session.user_id,
-            dailies: dailies_data
+            dailies: dailies_data,
+            fixed_id: req.session.fixed_id,
+            last_edited: req.session.last_edited
         });
     });
 });
@@ -415,11 +416,11 @@ router.post("/dailies/edit/:id", (req, res, next) => {
             }
         });
 
-        var swapped = false;
+        var fixed_id = false;
         var dex = valid_quiz_ids.indexOf(parseInt(req.body.assignment_id));
         if(dex > -1) {
             req.body.assignment_id = valid_assignment_ids[dex];
-            swapped = true;
+            fixed_id = true;
         }
         console.log("Submitting ID: " + req.body.assignment_id);
 
@@ -432,7 +433,8 @@ router.post("/dailies/edit/:id", (req, res, next) => {
                 assignment_id: req.body.assignment_id,
             },
             (err, result) => {
-                req.session.test_bool = swapped;
+                req.session.fixed_id = fixed_id;
+                req.session.last_edited = parseInt(req.params.id);
                 res.redirect("/admin/dailies");
             }
         );

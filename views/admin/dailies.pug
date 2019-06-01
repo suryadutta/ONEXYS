@@ -9,6 +9,9 @@ block content
                 a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
                 h2='Editing ' + course_title + ' Daily Tasks'
+            if fixed_id
+                script.
+                    alert("The system detected you submitted a quiz ID. This was automatically corrected to the corresponding assignment ID (so what you typed may not be in the table).");
     hr
     div.container
         div.row
@@ -35,12 +38,23 @@ block content
                     th Assignment ID
                     th Edit Item
                 each daily in dailies
-                    tr
-                        td=daily._id
-                        td=daily.assignment_id
-                        td
-                            form(method='GET' action='dailies/edit/'+daily._id)
-                                input(type='hidden', value=course_id, name='course-id')
-                                input(type='hidden', value=course_title, name='course-title')
-                                input(type='hidden', value=user_id, name='user-id')
-                                button.btn.btn-dark(type='submit') Edit
+                    if(daily._id == last_edited)
+                        tr(style="background-color:#ff99cc;")
+                            td=daily._id
+                            td=daily.assignment_id
+                            td
+                                form(method='GET' action='dailies/edit/'+daily._id)
+                                    input(type='hidden', value=course_id, name='course-id')
+                                    input(type='hidden', value=course_title, name='course-title')
+                                    input(type='hidden', value=user_id, name='user-id')
+                                    button.btn.btn-dark(type='submit') Edit
+                    else
+                        tr
+                            td=daily._id
+                            td=daily.assignment_id
+                            td
+                                form(method='GET' action='dailies/edit/'+daily._id)
+                                    input(type='hidden', value=course_id, name='course-id')
+                                    input(type='hidden', value=course_title, name='course-title')
+                                    input(type='hidden', value=user_id, name='user-id')
+                                    button.btn.btn-dark(type='submit') Edit
