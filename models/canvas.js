@@ -1224,4 +1224,5 @@ module.exports = {
     getIndScoreAndBadges_masquerade,
     getStudentProgress_masquerade,
     getLeaderboardScores_masquerade,
+    daily_task_url,
 }

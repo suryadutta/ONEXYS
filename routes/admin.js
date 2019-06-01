@@ -386,31 +386,53 @@ router.get("/dailies", (req, res, next) => {
 });
 
 router.get("/dailies/edit/:id", (req, res, next) => {
-  mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
-    daily_data = dailies_data.find(element => element._id == req.params.id);
-    res.render("admin/dailyEdit", {
-      title: "Dailies",
-      course_title: req.session.course_title,
-      course_id: req.session.course_id,
-      user_id: req.session.user_id,
-      daily: daily_data
+    mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
+        daily_data = dailies_data.find(element => element._id == req.params.id);
+
+        res.render("admin/dailyEdit", {
+            title: "Dailies",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            daily: daily_data,
+            assignments: valid_assignments
+        });
     });
-  });
 });
 
 router.post("/dailies/edit/:id", (req, res, next) => {
-  //update badges info
-  mongo.updateData(
-    req.session.course_id,
-    "dailies",
-    { _id: parseInt(req.params.id) },
-    {
-      assignment_id: req.body.assignment_id,
-    },
-    (err, result) => {
-      res.redirect("/admin/dailies");
+    var valid_assignment_ids, valid_quiz_ids;
+    canvas.getAdminRequest(req.session.course_id, function(err, assignment_list) {
+        assignment_list.forEach(function(assignment) {
+            valid_assignment_ids.push(assignment.id);
+            valid_quiz_ids.push(assignment.quiz_id);
+        });
+    });
+    console.log("VAID List: " + valid_assignment_ids);
+    console.log("VQID List: " + valid_quiz_ids);
+    console.log("Input ID: " + req.body.assignment_id);
+
+    var dex = valid_quiz_ids.indexOf(req.body.assignment_id);
+    if(dex > -1) {
+        console.log("Quiz id was given, converting...");
+        req.body.assignment_id = valid_assignment_ids(dex);
+    } else {
+        console.log("Assignment id was given, doing nothing...");
     }
-  );
+    console.log("Submitting ID: " + req.body.assignment_id);
+
+    //update badges info
+    mongo.updateData(
+        req.session.course_id,
+        "dailies",
+        { _id: parseInt(req.params.id) },
+        {
+            assignment_id: req.body.assignment_id,
+        },
+        (err, result) => {
+            res.redirect("/admin/dailies");
+        }
+    );
 });
 
 router.get("/lucky", (req, res, next) => {
