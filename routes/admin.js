@@ -402,28 +402,6 @@ router.get("/dailies/edit/:id", (req, res, next) => {
 
 router.post("/dailies/edit/:id", (req, res, next) => {
     console.log("POSTing");
-    var valid_assignment_ids, valid_quiz_ids;
-    canvas.getAdminRequest(req.session.course_id, function(err, assignment_list) {
-        console.log("Entered admin request");
-        assignment_list.forEach(function(assignment) {
-            console.log("Assignment Obj: " + assignment);
-            valid_assignment_ids.push(assignment.id);
-            valid_quiz_ids.push(assignment.quiz_id);
-        });
-    });
-    console.log("VAID List: " + valid_assignment_ids);
-    console.log("VQID List: " + valid_quiz_ids);
-    console.log("Input ID: " + req.body.assignment_id);
-
-    var dex = valid_quiz_ids.indexOf(req.body.assignment_id);
-    if(dex > -1) {
-        console.log("Quiz id was given, converting...");
-        req.body.assignment_id = valid_assignment_ids(dex);
-    } else {
-        console.log("Assignment id was given, doing nothing...");
-    }
-    console.log("Submitting ID: " + req.body.assignment_id);
-
     //update badges info
     mongo.updateData(
         req.session.course_id,
