@@ -415,9 +415,11 @@ router.post("/dailies/edit/:id", (req, res, next) => {
             }
         });
 
+        var swapped = false;
         var dex = valid_quiz_ids.indexOf(parseInt(req.body.assignment_id));
         if(dex > -1) {
             req.body.assignment_id = valid_assignment_ids[dex];
+            swapped = true;
         }
         console.log("Submitting ID: " + req.body.assignment_id);
 
@@ -430,7 +432,7 @@ router.post("/dailies/edit/:id", (req, res, next) => {
                 assignment_id: req.body.assignment_id,
             },
             (err, result) => {
-                req.session.test_bool = true;
+                req.session.test_bool = swapped;
                 res.redirect("/admin/dailies");
             }
         );
