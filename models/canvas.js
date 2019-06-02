@@ -145,8 +145,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
                         totalPoints += parseInt(lucky_bulldog_points);
-                    }
-                    else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
+                    } else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
                         totalPoints += parseInt(lucky_bulldog_points);
                         lucky_bulldog.awarded_ids.push(studentID);
                         mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
@@ -191,16 +190,11 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 //console.log(data);
 
                 console.log("-------------------------");
-
-                console.log("Length: " + mongo_data.dailies.length);
                 for (var i = 0; i < mongo_data.dailies.length; i++) {
-                    console.log("Assignment " + i + ": " + mongo_data.dailies[i]);
+                    var daily_obj = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
 
-                    var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
-
-                    if (daily_object){
-                        console.log("Daily obj: " + daily_object);
-                        var daily_grade = parseFloat(daily_object.grade);
+                    if (daily_obj){
+                        var daily_grade = parseFloat(daily_obj.grade);
                         if (daily_grade == parseFloat(100)) {
                             daily_done += 1;
                         }
@@ -682,12 +676,12 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                console.log("Points: " + studentPoints);
+                //console.log("Points: " + studentPoints);
                 for(var i = 0; i < studentPoints.length; i++){
                     studentPoints[i] /= studentIdsArrays[i].length;
                     studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
-                console.log("Points 2: " + studentPoints);
+                //console.log("Points 2: " + studentPoints);
                 callback2(null, studentPoints, groupNames);
             });
         });
@@ -765,7 +759,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                console.log("Lucky Bonus: " + lucky_bulldog);
+                //console.log("Lucky Bonus: " + lucky_bulldog);
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
