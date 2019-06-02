@@ -497,14 +497,17 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                         }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
 
                     const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
+
                     // Modified method for setting practice_progress, avoids errors for undefined practice objects,
                     // which occurred when the student did not have a class with a matching class id. Original code below.
                     (moduleProgress[i]).practice_progress = true;
-
                     practice_objects.forEach(function(practice_object){
                         console.log("Practice Obj Grade: " + practice_object.grade + " | Parsed float: " + parseFloat(practice_object.grade));
-                        if(typeof practice_object === 'undefined' || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
+                        if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
+                            console.log("Setting to false..");
                             (moduleProgress[i]).practice_progress = false;
+                        } else {
+                            console.log("Keeping true..");
                         }
                     });
 
