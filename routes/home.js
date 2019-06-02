@@ -10,11 +10,11 @@ router.use("/", (req, res, next) => {
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
 
-  if (courseID == 10184) {
-    courseID = 38082;
-  }
+  //if (courseID == 10184) {
+    //courseID = 38082;
+  //}
 
-  var is_physics = Boolean(courseID == 38083);
+  //var is_physics = Boolean(courseID == 38083);
 
   if (req.session.admin) {
     if (req.query.masquerade) {
