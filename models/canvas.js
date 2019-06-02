@@ -806,12 +806,12 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                     var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
                     if (daily_object){
                         var daily_grade = parseFloat(daily_object.grade);
-                        if (daily_grade == parseFloat(100)) {
+                        if (daily_grade > parseFloat(0)) {
                             daily_done += 1;
                         }
                     }
                 }
-                totalPoints += (parseInt(daily_done) * 50); //assign points for each daily
+                totalPoints += (parseInt(daily_done) * daily_task_point_worth); //assign points for each daily
                 //assign points for each badge earned
                 if (daily_done >= 1) {
                     awardBadge(1);
