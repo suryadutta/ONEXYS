@@ -4,6 +4,10 @@ var request = require('request');
 var asyncStuff = require('async');
 var mongo = require('./mongo');
 
+// The number of points granted to a student for each
+// daily task they have completed.
+var daily_task_point_worth = 50;
+
 var add_page_number = (url) => {
     if(url.indexOf("?")>-1){
         return url+'&per_page='+String(config.canvasPageResults);
@@ -195,12 +199,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                     if (daily_obj){
                         var daily_grade = parseFloat(daily_obj.grade);
-                        if (daily_grade == parseFloat(100)) {
+                        if (daily_grade > parseFloat(0)) {
                             daily_done += 1;
                         }
                     }
                 }
-                totalPoints += (parseInt(daily_done) * 50); //assign points for each daily
+                totalPoints += (parseInt(daily_done) * daily_task_point_worth); //assign points for each daily
                 //assign points for each badge earned
                 if (daily_done >= 1) {
                     awardBadge(1);
