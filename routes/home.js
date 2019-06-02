@@ -4,7 +4,7 @@ var config = require("../bin/config");
 var queries = require("../models/queries");
 
 router.use("/", (req, res, next) => {
-  console.log(req.session);
+  console.log("Request session: " + req.session);
   console.log("Course title: " + req.session.course_title);
 
   var courseID = parseInt(req.session.course_id);

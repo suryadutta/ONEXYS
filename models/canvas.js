@@ -188,18 +188,18 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 callback(null, 0, badges);
             } else {
                 //Daily Yalie questions
-                console.log(data);
+                //console.log(data);
 
                 console.log("-------------------------");
 
-                console.log(mongo_data.dailies.length);
+                console.log("Length: " + mongo_data.dailies.length);
                 for (var i = 0; i < mongo_data.dailies.length; i++) {
-                    console.log(mongo_data.dailies[i]);
+                    console.log("Assignment " + i + ": " + mongo_data.dailies[i]);
 
                     var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
 
                     if (daily_object){
-                        console.log(daily_object);
+                        console.log("Daily obj: " + daily_object);
                         var daily_grade = parseFloat(daily_object.grade);
                         if (daily_grade == parseFloat(100)) {
                             daily_done += 1;
@@ -682,13 +682,12 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                console.log("Points");
-                console.log(studentPoints);
+                console.log("Points: " + studentPoints);
                 for(var i = 0; i < studentPoints.length; i++){
                     studentPoints[i] /= studentIdsArrays[i].length;
                     studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
-                console.log(studentPoints);
+                console.log("Points 2: " + studentPoints);
                 callback2(null, studentPoints, groupNames);
             });
         });
@@ -709,7 +708,6 @@ function getStudents(courseID, callback){
 function getNextDailyYalie(courseID, callback){
     // url is a string which will contain the URL used to pull the assignments.
     var url = daily_task_url(courseID);
-    console.log("Pulling Daily Task data from: " + url);
 
     // Get the list of designated daily task IDs from MongoDB and store it.
     // This code works by making a request to MongoDB for a list of the Daily Task
@@ -767,7 +765,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                console.log(lucky_bulldog);
+                console.log("Lucky Bonus: " + lucky_bulldog);
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){

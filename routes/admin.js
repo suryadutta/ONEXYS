@@ -52,7 +52,6 @@ router.post("/home", (req, res, next) => {
 
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
-  console.log(req.body);
   res.render('admin/homeConfirmUpdates', {
     course_title: req.session.course_title,
     course_id: req.session.course_id,
@@ -63,7 +62,6 @@ router.post("/home/preview", (req, res, next) => {
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
-  console.log(req.body);
   mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
@@ -413,7 +411,6 @@ router.get("/dailies/edit/:id", (req, res, next) => {
 });
 
 router.post("/dailies/edit/:id", (req, res, next) => {
-    console.log("POSTing");
     var valid_assignment_ids = [];
     var valid_quiz_ids = [];
     canvas.getAdminRequest(canvas.daily_task_url(req.session.course_id), function(err, assignment_list) {
@@ -432,7 +429,6 @@ router.post("/dailies/edit/:id", (req, res, next) => {
             req.body.assignment_id = valid_assignment_ids[dex];
             fixed_id = true;
         }
-        console.log("Submitting ID: " + req.body.assignment_id);
 
         //update badges info
         mongo.updateData(
