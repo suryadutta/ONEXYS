@@ -115,7 +115,7 @@ router.use("/", (req, res, next) => {
           home_vids,
           home_links,
           daily_yalie,
-          is_physics,
+          //is_physics,
           admin: req.session.admin
         });
       }
