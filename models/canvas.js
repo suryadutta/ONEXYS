@@ -502,12 +502,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                     // which occurred when the student did not have a class with a matching class id. Original code below.
                     (moduleProgress[i]).practice_progress = true;
                     practice_objects.forEach(function(practice_object){
-                        console.log("Practice Obj Grade: " + practice_object.grade + " | Parsed float: " + parseFloat(practice_object.grade));
                         if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
-                            console.log("Setting to false..");
                             (moduleProgress[i]).practice_progress = false;
-                        } else {
-                            console.log("Keeping true..");
                         }
                     });
 
@@ -1099,15 +1095,15 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                 for (var i = 0; i < moduleProgress.length; i++) {
                     var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-                    //practice progress
-                    var practice_object = user_assignments.find(assignment => assignment.assignment_id == module_object.practice_link);
-                    if(practice_object){
-                        (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
-                    } else {
-                        (moduleProgress[i]).practice_progress = false;
-                    }
+                    // Modified the code below in accordance with the fix in getStudentProgress()
+                    (moduleProgress[i]).practice_progress = true;
+                    practice_objects.forEach(function(practice_object){
+                        if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
+                            (moduleProgress[i]).practice_progress = false;
+                        }
+                    });
 
-                    //quiz progress
+                    // Quiz progress
                     var quiz_object = user_assignments.find(assignment => assignment.assignment_id == module_object.quiz_link);
                     if(quiz_object){
                         (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
