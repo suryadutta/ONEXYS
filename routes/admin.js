@@ -376,19 +376,21 @@ router.post("/badges/edit/:id", (req, res, next) => {
 
 router.get("/dailies", (req, res, next) => {
     mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
+        // Reset session variables for next time
+        var fixed = req.session.fixed_id;
+        var last = req.session.last_edited;
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
+
         res.render("admin/dailies", {
             title: "Dailies",
             course_title: req.session.course_title,
             course_id: req.session.course_id,
             user_id: req.session.user_id,
             dailies: dailies_data,
-            fixed_id: req.session.fixed_id,
-            last_edited: req.session.last_edited
+            fixed_id: fixed,
+            last_edited: last
         });
-
-        // Reset session variables for next time
-        req.session.fixed_id = false;
-        req.session.last_edited = -1;
     });
 });
 
