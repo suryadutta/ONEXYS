@@ -396,6 +396,10 @@ router.get("/dailies/edit/:id", (req, res, next) => {
     mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
         daily_data = dailies_data.find(element => element._id == req.params.id);
 
+        // Reset session variables
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
+
         res.render("admin/dailyEdit", {
             title: "Dailies",
             course_title: req.session.course_title,
