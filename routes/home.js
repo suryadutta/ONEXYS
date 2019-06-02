@@ -15,6 +15,7 @@ router.use("/", (req, res, next) => {
   //}
 
   //var is_physics = Boolean(courseID == 38083);
+  var is_physics = false;
 
   if (req.session.admin) {
     if (req.query.masquerade) {
@@ -115,7 +116,7 @@ router.use("/", (req, res, next) => {
           home_vids,
           home_links,
           daily_yalie,
-          //is_physics,
+          is_physics,
           admin: req.session.admin
         });
       }
