@@ -385,6 +385,10 @@ router.get("/dailies", (req, res, next) => {
             fixed_id: req.session.fixed_id,
             last_edited: req.session.last_edited
         });
+
+        // Reset session variables for next time
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
     });
 });
 
