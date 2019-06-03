@@ -725,15 +725,10 @@ function getNextDailyYalie(courseID, callback){
                 // Check to see if the assignment is in the list of
                 // designated daily task IDs, created in the Admin
                 // panel and stored in MongoDB.
-
-                // If a daily task is a quiz, check it using the quiz id.
-                // otherwise, just use the assignment id.
-                var id = parseInt(assignment.id);
-                if(assignment.quiz_id != undefined) id = parseInt(assignment.quiz_id);
-
                 // If in the list, we've found valid assignment. run
                 // comparison logic to see if it's the closest one so far.
-                if(daily_task_ids.includes(id)) {
+                
+                if(daily_task_ids.includes(parseInt(assignment.id))) {
                     if(new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) closest = assignment;
                 }
             });
