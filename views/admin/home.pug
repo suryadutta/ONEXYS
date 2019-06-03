@@ -11,26 +11,27 @@ block content
     div.container
         div.row
             div.form.form-inline
-                a.btn.btn-lg(href='/admin')
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
-                h2='Editing home page for ' + course
+                h2='Editing home page for ' + course_title
     hr
     div.container
         div.row
             div.col-md-1
             div.col-md-10
                 form(method='POST' action='home/preview')
+                    input(type='hidden', value=course_id, name='course-id')
+                    input(type='hidden', value=course_title, name='course-title')
+                    input(type='hidden', value=user_id, name='user-id')
                     div.row
                         div.col-md-9
-                            button.btn.btn-dark(type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
-                            button.btn.btn-dark(type='button', onclick='doSingleUpdate();return false;') Add a New Update
-
+                            button.btn.btn-dark(id='btn-existing', style='margin-right:5px;', type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
+                            button.btn.btn-secondary(id='btn-single', type='button', onclick='doSingleUpdate();return false;') Add a New Update
                         div.col-md-3
                             button.btn.btn-success(type='submit') Preview Changes
-                    hr
-
                     div.row
                         div.col-md-12
+                            hr
                             div.form-group.form-inline
                                 label(for='main_header') Main Header:
                                 input#main_header.form-control.inlined-input(type='text', value=home_updates.main_header, name='main_header')
@@ -38,7 +39,7 @@ block content
                             div.form-group
                                 label(for='main_text') Main Text:
                                 textarea#main_text.form-control(rows=15, name='main_text',style="width: 750px;")=home_updates.main_text
-                            hr
+                        hr
 
                     div.row
                         div.col-md-12
@@ -64,23 +65,17 @@ block content
 
                     div.row
                         div.col-md-12
-                            div.form-group
-                                label Post Test Open?
-
-                                div.form-inline
-                                    input#post_test_open_true.form-control(type='radio', value='true', checked=home_updates.post_test=='true', name='post_test')
-                                    label(for='post_test_open_true') Yes
-
-                                div.form-inline
-                                    input#post_test_open_false.form-control(type='radio', value='false', checked=home_updates.post_test=='false', name='post_test')
-                                    label(for='post_test_open_false') No
+                            div.form-group.form-inline
+                                label(for='badges_link') Badges URL:
+                                input#badges_link.form-control.inlined-input(type='text', name='badges_link', value=home_updates.badges_link)
                         hr
+
 
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
-                                label(for='post_test_link') Post Test URL:
-                                input#post_test_link.form-control.inlined-input(type='text', name='post_test_link', value=home_updates.post_test_link)
+                                label(for='life_on_grounds_link') Life on Grounds URL:
+                                input#life_on_grounds_link.form-control.inlined-input(type='text', name='life_on_grounds_link', value=home_updates.life_on_grounds_link)
                         hr
 
                     div.row
@@ -92,6 +87,9 @@ block content
                     h2='Home Page Videos'
                 div.row
                     form(method='GET',action='home/videos/add',target="_blank")
+                        input(type='hidden', value=course_id, name='course-id')
+                        input(type='hidden', value=course_title, name='course-title')
+                        input(type='hidden', value=user_id, name='user-id')
                         button.btn.btn-dark(type='submit') Add Video
                 div.row
                     table
@@ -111,8 +109,14 @@ block content
                                 td
                                     div.form.form-inline
                                         form(method='GET' action='home/videos/edit/'+video._id)
+                                            input(type='hidden', value=course_id, name='course-id')
+                                            input(type='hidden', value=course_title, name='course-title')
+                                            input(type='hidden', value=user_id, name='user-id')
                                             button.btn.btn-dark(type='submit') Edit
                                         form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                            input(type='hidden', value=course_id, name='course-id')
+                                            input(type='hidden', value=course_title, name='course-title')
+                                            input(type='hidden', value=user_id, name='user-id')
                                             button.btn.btn-danger(type='submit') Delete
                                 hr
             div.col-md-1

@@ -4,6 +4,10 @@ var request = require('request');
 var asyncStuff = require('async');
 var mongo = require('./mongo');
 
+// The number of points granted to a student for each
+// daily task they have completed.
+var daily_task_point_worth = 50;
+
 var add_page_number = (url) => {
     if(url.indexOf("?")>-1){
         return url+'&per_page='+String(config.canvasPageResults);
@@ -13,7 +17,8 @@ var add_page_number = (url) => {
 }
 
 var assignment_user_url = (studentID, courseID) => {
-    return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID
+    return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID;
+    //return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID;
 }
 
 var notes_column_url = (courseID) => {
@@ -139,13 +144,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                console.log(lucky_bulldog);
+                //console.log(lucky_bulldog);
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
                         totalPoints += parseInt(lucky_bulldog_points);
-                    }
-                    else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
+                    } else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
                         totalPoints += parseInt(lucky_bulldog_points);
                         lucky_bulldog.awarded_ids.push(studentID);
                         mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
@@ -172,7 +176,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
             return 0;
         }
 
-        getRequest(assignment_user_url(studentID, courseID),studentID, function(err, data) {
+        getRequest(assignment_user_url(studentID, courseID), studentID, function(err, data) {
             if (err){
                 console.log(err);
                 callback(err, 0, badges);
@@ -187,19 +191,20 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 callback(null, 0, badges);
             } else {
                 //Daily Yalie questions
-                console.log(mongo_data.dailies.length);
+                //console.log(data);
+
+                console.log("-------------------------");
                 for (var i = 0; i < mongo_data.dailies.length; i++) {
-                    console.log(mongo_data.dailies[i]);
-                    var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
-                    if (daily_object){
-                        console.log(daily_object);
-                        var daily_grade = parseFloat(daily_object.grade);
-                        if (daily_grade == parseFloat(100)) {
+                    var daily_obj = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
+
+                    if (daily_obj){
+                        var daily_grade = parseFloat(daily_obj.grade);
+                        if (daily_grade > parseFloat(0)) {
                             daily_done += 1;
                         }
                     }
                 }
-                totalPoints += (parseInt(daily_done) * 50); //assign points for each daily
+                totalPoints += (parseInt(daily_done) * daily_task_point_worth); //assign points for each daily
                 //assign points for each badge earned
                 if (daily_done >= 1) {
                     awardBadge(1);
@@ -225,6 +230,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
+                        //console.log("Practice Object");
+                        //console.log(practice_object);
+                        //console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
+
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
                             if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
@@ -490,9 +499,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                     // Modified method for setting practice_progress, avoids errors for undefined practice objects,
                     // which occurred when the student did not have a class with a matching class id. Original code below.
                     (moduleProgress[i]).practice_progress = true;
-
                     practice_objects.forEach(function(practice_object){
-                        if(typeof practice_object === 'undefined' || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])){
+                        if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
                             (moduleProgress[i]).practice_progress = false;
                         }
                     });
@@ -533,15 +541,22 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                 });
             }
         }
-        if (groupNames.length < 3){
-            fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+        if (combinedArray.length < 3){
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
         return combinedArray;
     }
 
+    function myTeam(groupNames, scores, index) {
+        if(index < 0){
+            return {'Name': '', 'Score': 0};
+        }
+        return {'Name': groupNames[index], 'Score': scores[index]};
+    }
+
     asyncStuff.waterfall([
-        getSections,
+        asyncStuff.apply(getSections, course_title),
         getTotalScores,
     ], function(err, scores, groupNames, studentIndex) {
         function compare(a, b) {
@@ -550,18 +565,18 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             return 0;
         }
 
-        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[parseInt(studentIndex)]);
+        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
-    function getSections(callback){
+    function getSections(course_title, callback){
         function findIndexOfUser(studentIdsArrays) {
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-                if (index > -1) {
+                if (index > -1 && groupNames[i] != course_title) {
                     return i;
                 }
             }
-            return 0;
+            return -1;
         }
 
         getAdminRequest(sections_url(courseID),function(err,data){
@@ -576,7 +591,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
-                studentIndex = findIndexOfUser(studentIdsArrays);
+                studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
         });
@@ -594,6 +609,10 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+                for(var i = 0; i < studentPoints.length; i++){
+                    studentPoints[i] /= studentIdsArrays[i].length;
+                    studentPoints[i] = parseInt(studentPoints[i], 10);
+                }
                 callback2(null, studentPoints, groupNames, studentIndex);
             });
         })
@@ -612,7 +631,7 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             }
         }
         if (groupNames.length < 3){
-            fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
         return combinedArray;
@@ -661,6 +680,12 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+                //console.log("Points: " + studentPoints);
+                for(var i = 0; i < studentPoints.length; i++){
+                    studentPoints[i] /= studentIdsArrays[i].length;
+                    studentPoints[i] = parseInt(studentPoints[i], 10);
+                }
+                //console.log("Points 2: " + studentPoints);
                 callback2(null, studentPoints, groupNames);
             });
         });
@@ -681,7 +706,6 @@ function getStudents(courseID, callback){
 function getNextDailyYalie(courseID, callback){
     // url is a string which will contain the URL used to pull the assignments.
     var url = daily_task_url(courseID);
-    console.log("Pulling Daily Task data from: " + url);
 
     // Get the list of designated daily task IDs from MongoDB and store it.
     // This code works by making a request to MongoDB for a list of the Daily Task
@@ -701,15 +725,10 @@ function getNextDailyYalie(courseID, callback){
                 // Check to see if the assignment is in the list of
                 // designated daily task IDs, created in the Admin
                 // panel and stored in MongoDB.
-
-                // If a daily task is a quiz, check it using the quiz id.
-                // otherwise, just use the assignment id.
-                var id = parseInt(assignment.id);
-                if(assignment.quiz_id != undefined) id = parseInt(assignment.quiz_id);
-
                 // If in the list, we've found valid assignment. run
                 // comparison logic to see if it's the closest one so far.
-                if(daily_task_ids.includes(id)) {
+                
+                if(daily_task_ids.includes(parseInt(assignment.id))) {
                     if(new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) closest = assignment;
                 }
             });
@@ -739,7 +758,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                console.log(lucky_bulldog);
+                //console.log("Lucky Bonus: " + lucky_bulldog);
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
@@ -782,12 +801,12 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                     var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
                     if (daily_object){
                         var daily_grade = parseFloat(daily_object.grade);
-                        if (daily_grade == parseFloat(100)) {
+                        if (daily_grade > parseFloat(0)) {
                             daily_done += 1;
                         }
                     }
                 }
-                totalPoints += (parseInt(daily_done) * 50); //assign points for each daily
+                totalPoints += (parseInt(daily_done) * daily_task_point_worth); //assign points for each daily
                 //assign points for each badge earned
                 if (daily_done >= 1) {
                     awardBadge(1);
@@ -813,6 +832,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
+
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
                             if (practice_grade >= parseFloat(mongo_data.modules[i].practice_cutoff)) {
@@ -1019,7 +1039,6 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                     awardBadge(31);
                 }
 
-
                 callback(null, totalPoints, badges);
             }
 
@@ -1041,9 +1060,9 @@ function updateCanvas_masquerade(studentID, courseID, totalPoints, badges, callb
 }
 
 function getIndScoreAndBadges_masquerade(studentID, courseID, callback){ // Get score and badge info for user
-        computeScoreAndBadges_masquerade(studentID, courseID, function(err, totalPoints, badges){ //compute scores
-                updateCanvas_masquerade(studentID, courseID, totalPoints, badges, callback); //update Canvas
-        });
+    computeScoreAndBadges_masquerade(studentID, courseID, function(err, totalPoints, badges){ //compute scores
+        updateCanvas_masquerade(studentID, courseID, totalPoints, badges, callback); //update Canvas
+    });
 }
 
 function getStudentProgress_masquerade(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
@@ -1067,15 +1086,15 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                 for (var i = 0; i < moduleProgress.length; i++) {
                     var module_object = mongo_data.modules.find(module => module._id == i + 1);
 
-                    //practice progress
-                    var practice_object = user_assignments.find(assignment => assignment.assignment_id == module_object.practice_link);
-                    if(practice_object){
-                        (moduleProgress[i]).practice_progress = parseFloat(practice_object.grade) >= parseFloat(module_object.practice_cutoff);
-                    } else {
-                        (moduleProgress[i]).practice_progress = false;
-                    }
+                    // Modified the code below in accordance with the fix in getStudentProgress()
+                    (moduleProgress[i]).practice_progress = true;
+                    practice_objects.forEach(function(practice_object){
+                        if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
+                            (moduleProgress[i]).practice_progress = false;
+                        }
+                    });
 
-                    //quiz progress
+                    // Quiz progress
                     var quiz_object = user_assignments.find(assignment => assignment.assignment_id == module_object.quiz_link);
                     if(quiz_object){
                         (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
@@ -1093,7 +1112,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
 function getLeaderboardScores_masquerade(studentID, courseID, course_title, callback) { // get all leaderboard scores
 
     function mergeLeaderboardArrays(groupNames, scores) { //merge name and score arrays for leaderboard
-        var combinedArray = []
+        var combinedArray = [];
         for (var i = 0; i < groupNames.length; i++) {
             if(groupNames[i] != course_title){
                 combinedArray.push({
@@ -1102,15 +1121,22 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                 });
             }
         }
-        if (groupNames.length < 3){
-            fillerArray = Array(3-groupNames.length).fill({'Name': '','Score': 0});
+        if (combinedArray.length < 3){
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        return combinedArray
+        return combinedArray;
+    }
+
+    function myTeam(groupNames, scores, index) {
+        if(index < 0){
+            return {'Name': '', 'Score': 0};
+        }
+        return {'Name': groupNames[index], 'Score': scores[index]};
     }
 
     asyncStuff.waterfall([
-        getSections,
+        asyncStuff.apply(getSections, course_title),
         getTotalScores,
     ], function(err, scores, groupNames, studentIndex) {
         function compare(a, b) {
@@ -1119,18 +1145,18 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             return 0;
         }
 
-        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), mergeLeaderboardArrays(groupNames, scores)[parseInt(studentIndex)]);
+        callback(err, mergeLeaderboardArrays(groupNames, scores).sort(compare), myTeam(groupNames, scores, parseInt(studentIndex)));
     });
 
-    function getSections(callback){
-        function findIndexOfUser(studentIdsArrays) {
+    function getSections(course_title, callback){
+        function findIndexOfUser(studentIdsArrays, groupNames) {
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-                if (index > -1) {
+                if (index > -1 && groupNames[i] != course_title) {
                     return i;
                 }
             }
-            return 0;
+            return -1;
         }
 
         getAdminRequest(sections_url(courseID),function(err,data){
@@ -1145,12 +1171,11 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
-                studentIndex = findIndexOfUser(studentIdsArrays);
+                studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
         });
     }
-
 
     function getTotalScores(studentIdsArrays, groupNames, studentIndex, callback2) {
         get_update_url(courseID, function(update_url){
@@ -1163,6 +1188,10 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
+                for(var i = 0; i < studentPoints.length; i++){
+                    studentPoints[i] /= studentIdsArrays[i].length;
+                    studentPoints[i] = parseInt(studentPoints[i], 10);
+                }
                 callback2(null, studentPoints, groupNames, studentIndex);
             });
         })
@@ -1185,4 +1214,5 @@ module.exports = {
     getIndScoreAndBadges_masquerade,
     getStudentProgress_masquerade,
     getLeaderboardScores_masquerade,
+    daily_task_url,
 }

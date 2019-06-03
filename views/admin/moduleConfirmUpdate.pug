@@ -9,9 +9,13 @@ block content
             br
             div.row
                 div.col-md-6
-                    h3=course + ' Module Preview'
+                    h3=course_title + ' Module Preview'
                 div.col-md-6.form-inline
                     form(method='POST' action='confirmUpdates')
+                        input(type='hidden', value=course_id, name='course-id')
+                        input(type='hidden', value=course_title, name='course-title')
+                        input(type='hidden', value=user_id, name='user-id')
+
                         input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
                         input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
                         input#practice_link(type='hidden', value=data.practice_link, name='practice_link')
@@ -34,6 +38,10 @@ block content
                         button.btn.btn-success(type='submit') Save Changes
 
                     form(method='POST' action='edit')
+                        input(type='hidden', value=course_id, name='course-id')
+                        input(type='hidden', value=course_title, name='course-title')
+                        input(type='hidden', value=user_id, name='user-id')
+
                         input#primary_title(type='hidden', value=data.primary_title, name='primary_title')
                         input#secondary_title(type='hidden', value=data.secondary_title, name='secondary_title')
                         input#practice_link(type='hidden', value=data.practice_link, name='practice_link')

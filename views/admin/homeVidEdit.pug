@@ -10,12 +10,15 @@ block content
     div.container
         div.row
             div.form.form-inline
-                a.btn.btn-lg(href='/admin/home')
+                a.btn.btn-lg(href='/admin/home?course_id='+course_id)
                     i.fa.fa-chevron-left
-                h2='Editing ' + course + ': Home Page Video ' + video._id
+                h2='Editing ' + course_title + ': Home Page Video ' + video._id
     hr
     div.container
         form(method='POST' action='/admin/home/videos/preview/'+video._id)
+            input(type='hidden', value=course_id, name='course-id')
+            input(type='hidden', value=course_title, name='course-title')
+            input(type='hidden', value=user_id, name='user-id')
             div.row
                 div.form-group.form-inline
                     label(for='video_src') Video Source:

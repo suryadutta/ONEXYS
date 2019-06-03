@@ -1,11 +1,14 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
+const canvas = require("../models/canvas");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
   res.render("admin", {
     title: "Express",
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id
   });
 });
 
@@ -13,7 +16,9 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   res.render("admin", {
     title: "Express",
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id
   });
 });
 
@@ -22,7 +27,9 @@ router.get("/home", (req, res, next) => {
   mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       home_updates,
       home_vids
     });
@@ -31,10 +38,12 @@ router.get("/home", (req, res, next) => {
 
 //Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
-  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
+  mongo.getHomeContent(req.session.course_id, (err, home_updates, home_vids) => {
     res.render("admin/home", {
       title: "home",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       home_updates: req.body,
       home_vids
     });
@@ -44,14 +53,16 @@ router.post("/home", (req, res, next) => {
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
   res.render('admin/homeConfirmUpdates', {
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
     home_updates: req.body
-  })
+  });
 });
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
-  mongo.updateData(req.session.course_id,"home", { type: "updates" }, req.body, (err, result) => {
+  mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
 });
@@ -60,7 +71,9 @@ router.post("/home/confirmUpdates", (req, res, next) => {
 router.get("/home/videos/add", (req, res, next) => {
   res.render("admin/homeVidAdd", {
     title: "Add Home Video",
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
   });
 });
 
@@ -81,7 +94,9 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
     if (home_vid) {
       res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
-        course: req.session.course_title,
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id,
         video: home_vid
       });
     } else {
@@ -96,7 +111,9 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
   home_vid._id = req.params.id
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
     video: home_vid
   });
 });
@@ -105,7 +122,9 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
 router.post('/home/videos/preview/:id', (req,res,next) => {
   res.render("admin/homeConfirmVideos", {
     title: "Edit Home Video",
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
     video: req.body,
     video_id: req.params.id
   });
@@ -113,26 +132,37 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-  mongo.updateData(req.session.course_id,"home", { _id: req.params.id }, req.body, (err, result) => {
+  mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //delete home video
 router.post("/home/videos/delete/:id", (req, res, next) => {
-  mongo.deleteData(req.session.course_id,"home", { _id: req.params.id }, (err, result) => {
+  mongo.deleteData(req.session.course_id, "home", { _id: req.params.id }, (err, result) => {
     res.redirect("/admin/home");
   });
 });
 
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get("/modules", (req, res, next) => {
-  mongo.getData(req.session.course_id,"modules", (err, modulesInfo) => {
+  mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename) => {
     res.render("admin/modules", {
       title: "Modules",
-      course: req.session.course_title,
-      modules: modulesInfo
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
+      modules: modulesInfo,
+      post_test: post_test,
+      post_test_filename: post_test_filename
     });
+  });
+});
+
+//Post Modules Home Page (for changing if the post-test is available)
+router.post("/modules", (req, res, next) => {
+  mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
+    res.redirect("/admin");
   });
 });
 
@@ -141,7 +171,9 @@ router.get("/modules/:id/edit", (req, res, next) => {
   mongo.getModule(req.session.course_id,req.params.id, (err, moduleInfo) => {
     res.render("admin/moduleEdit", {
       title: "Edit Module",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       module: moduleInfo
     });
   });
@@ -153,7 +185,9 @@ router.post("/modules/:id/edit", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo);
     res.render('admin/moduleEdit', {
       title: "Edit Module",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       module: merged_data,
     });
   });
@@ -166,7 +200,9 @@ router.post("/modules/:id/preview", (req, res, next) => {
     merged_data = Object.assign(moduleInfo,bodyInfo)
     res.set('X-XSS-Protection', 0);
     res.render('admin/moduleConfirmUpdate', {
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       data: merged_data,
     });
   });
@@ -188,7 +224,9 @@ router.post("/modules/:id/confirmUpdates", (req, res, next) => {
 //GET page to add video to module
 router.get("/modules/:id/videos/add", (req, res, next) => {
   res.render("admin/moduleVideoAdd", {
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
     moduleID: req.params.id
   });
 });
@@ -229,13 +267,15 @@ router.post("/modules/:id/videos/add", (req, res, next) => {
 
 //GET page to edit video from module
 router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
-  mongo.getModule(req.session.course_id,req.params.module_id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id, req.params.module_id, (err, moduleInfo) => {
     vidObject = moduleInfo.videos.find(
       video => video._id == req.params.video_id
     );
     res.render("admin/moduleVideoEdit", {
       title: "Edit Module Video",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       moduleID: req.params.module_id,
       video: vidObject
     });
@@ -244,7 +284,7 @@ router.get("/modules/:module_id/videos/edit/:video_id", (req, res, next) => {
 
 //POST handler to edit video from module
 router.post("/modules/:module_id/videos/edit/:video_id", (req, res) => {
-  mongo.getModule(req.session.course_id,req.params.module_id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id, req.params.module_id, (err, moduleInfo) => {
     vid_index = moduleInfo.videos.findIndex(
       video => video._id == req.params.video_id
     );
@@ -266,7 +306,7 @@ router.post("/modules/:module_id/videos/edit/:video_id", (req, res) => {
 
 //POST handler to delete video from module
 router.post("/modules/:module_id/videos/delete/:video_id", (req, res) => {
-  mongo.getModule(req.session.course_id,req.params.module_id, (err, moduleInfo) => {
+  mongo.getModule(req.session.course_id, req.params.module_id, (err, moduleInfo) => {
     vid_index = moduleInfo.videos.findIndex(
       video => video._id == req.params.video_id
     );
@@ -289,7 +329,9 @@ router.get("/badges", (req, res, next) => {
   mongo.getData(req.session.course_id, "badges", (err, badges_data) => {
     res.render("admin/badges", {
       title: "Badges",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       badges: badges_data
     });
   });
@@ -300,7 +342,9 @@ router.get("/badges/edit/:id", (req, res, next) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
     res.render("admin/badgeEdit", {
       title: "Badges",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       badge: badge_data
     });
   });
@@ -329,39 +373,78 @@ router.post("/badges/edit/:id", (req, res, next) => {
 });
 
 router.get("/dailies", (req, res, next) => {
-  mongo.getData(req.session.course_id,"dailies", (err, dailies_data) => {
-    res.render("admin/dailies", {
-      title: "Dailies",
-      course: req.session.course_title,
-      dailies: dailies_data
+    mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
+        // Reset session variables for next time
+        var fixed = req.session.fixed_id;
+        var last = req.session.last_edited;
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
+
+        res.render("admin/dailies", {
+            title: "Dailies",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            dailies: dailies_data,
+            fixed_id: fixed,
+            last_edited: last
+        });
     });
-  });
 });
 
 router.get("/dailies/edit/:id", (req, res, next) => {
-  mongo.getData(req.session.course_id,"dailies", (err, dailies_data) => {
-    daily_data = dailies_data.find(element => element._id == req.params.id);
-    res.render("admin/dailyEdit", {
-      title: "Dailies",
-      course: req.session.course_title,
-      daily: daily_data
+    mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
+        daily_data = dailies_data.find(element => element._id == req.params.id);
+
+        // Reset session variables
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
+
+        res.render("admin/dailyEdit", {
+            title: "Dailies",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            daily: daily_data
+        });
     });
-  });
 });
 
 router.post("/dailies/edit/:id", (req, res, next) => {
-  //update badges info
-  mongo.updateData(
-    req.session.course_id,
-    "dailies",
-    { _id: parseInt(req.params.id) },
-    {
-      assignment_id: req.body.assignment_id,
-    },
-    (err, result) => {
-      res.redirect("/admin/dailies");
-    }
-  );
+    var valid_assignment_ids = [];
+    var valid_quiz_ids = [];
+    canvas.getAdminRequest(canvas.daily_task_url(req.session.course_id), function(err, assignment_list) {
+        assignment_list.forEach(function(assignment) {
+            valid_assignment_ids.push(parseInt(assignment.id));
+            if(assignment.quiz_id != undefined) {
+                valid_quiz_ids.push(parseInt(assignment.quiz_id));
+            } else {
+                valid_quiz_ids.push(-1);
+            }
+        });
+
+        var fixed_id = false;
+        var dex = valid_quiz_ids.indexOf(parseInt(req.body.assignment_id));
+        if(dex > -1) {
+            req.body.assignment_id = valid_assignment_ids[dex];
+            fixed_id = true;
+        }
+
+        //update badges info
+        mongo.updateData(
+            req.session.course_id,
+            "dailies",
+            { _id: parseInt(req.params.id) },
+            {
+                assignment_id: req.body.assignment_id,
+            },
+            (err, result) => {
+                req.session.fixed_id = fixed_id;
+                req.session.last_edited = parseInt(req.params.id);
+                res.redirect("/admin/dailies");
+            }
+        );
+    });
 });
 
 router.get("/lucky", (req, res, next) => {
@@ -370,7 +453,9 @@ router.get("/lucky", (req, res, next) => {
     "lucky_bulldogs", (err, lucky_data) => {
     res.render("admin/lucky", {
       title: "Lucky Bulldog",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       lucky_data: lucky_data
     });
   });
@@ -381,7 +466,9 @@ router.get("/lucky/edit/:id", (req, res, next) => {
     lucky_bonus = lucky_data.find(x => x._id == req.params.id);
     res.render("admin/luckyEdit", {
       title: "Lucky Bonus",
-      course: req.session.course_title,
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
       lucky_bonus: lucky_bonus,
       id: req.params.id
     });
@@ -414,7 +501,9 @@ router.post("/lucky/delete/:id", (req, res, next) => {
 router.get("/lucky/add", (req, res, next) => {
   res.render("admin/luckyAdd", {
     title: "Lucky Bonuses",
-    course: req.session.course_title,
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
   });
 });
 

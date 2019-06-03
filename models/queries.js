@@ -5,7 +5,6 @@ var canvas = require('./canvas');
 var mongo = require('./mongo');
 
 function homepageQuery(studentID, courseID, course_title, callback){
-
   asyncStuff.parallel([
     function(callback) {
       canvas.getStudentProgress(studentID, courseID, callback);
@@ -25,7 +24,6 @@ function homepageQuery(studentID, courseID, course_title, callback){
   ],
 
   function(err, data) {
-
     var module_progress = data[0],
         score = data[1][0],
         badges =  data[1][1],
@@ -54,7 +52,6 @@ function homepageQuery(studentID, courseID, course_title, callback){
 }
 
 function homepageQueryMasquerade(studentID, courseID, course_title, callback){
-
   asyncStuff.parallel([
     function(callback) {
       canvas.getStudentProgress_masquerade(studentID, courseID, callback);
@@ -103,7 +100,6 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
 }
 
 function homepageAdminQuery(courseID, course_title, callback){
-
   asyncStuff.parallel([
     function(callback) {
       mongo.getAllData(courseID, function(mongo_data){
@@ -125,15 +121,15 @@ function homepageAdminQuery(courseID, course_title, callback){
   ],
 
   function(err, data) {
-    console.log(data);
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],
         home_vids = data[2][1],
         home_links = data[2][2],
         students = data[3],
-        daily_yalie=data[4];
+        daily_yalie = data[4];
 
+    //console.log("Leaderboard: " + leaderboard);
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
 }

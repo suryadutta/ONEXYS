@@ -6,10 +6,38 @@ block content
     div.container
         div.row
             div.form.form-inline
-                a.btn.btn-lg(href='/admin')
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
-                h2='Editing ' + course + ' modules'
+                h2='Editing ' + course_title + ' modules'
     hr
+    br
+
+    div.container
+        div.row
+            form(method='POST' action='modules')
+                input(type='hidden', value=course_id, name='course-id')
+                input(type='hidden', value=course_title, name='course-title')
+                input(type='hidden', value=user_id, name='user-id')
+
+                label Post Test Open?
+
+                div.form-inline
+                    input#post_test_open_true.form-control(type='radio', value='true', checked=post_test=='true', name='post_test')
+                    label(for='post_test_open_true') Yes
+
+                div.form-inline
+                    input#post_test_open_false.form-control(type='radio', value='false', checked=post_test=='false', name='post_test')
+                    label(for='post_test_open_false') No
+
+                div.row
+                    div.col-md-12
+                        div.form-group.form-inline
+                            label(for='post_test_filename') Post Test Filename (located in views/static/post-test folder):
+                            input#post_test_filename.form-control.inlined-input(type='text', name='post_test_filename', value=post_test_filename)
+                    hr
+
+                button.btn.btn-success(type='submit') Save Post Test Changes
+            hr
     br
     div.container
         div.row
@@ -34,4 +62,7 @@ block content
                         td=module.reflection_link
                         td
                             form(method='GET' action='modules/'+module._id+'/edit')
+                                input(type='hidden', value=course_id, name='course-id')
+                                input(type='hidden', value=course_title, name='course-title')
+                                input(type='hidden', value=user_id, name='user-id')
                                 button.btn.btn-dark(type='submit') Edit

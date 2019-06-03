@@ -64,6 +64,18 @@ function getHomeContent(courseID, callback){
     });
 }
 
+function getModules(courseID, callback){
+    getData(courseID, "home", function(err, data){
+        var updates = data.find(document => document.type == 'updates');
+        post_test = updates.post_test;
+        post_test_filename = updates.post_test_filename;
+
+        getData(courseID, "modules", function(err, data){
+            callback(err, data, post_test, post_test_filename);
+        });
+    });
+}
+
 function getModule(courseID, moduleID, callback){
     // Use connect method to connect to the server
     var connectionURL = config.mongoURL;
@@ -118,6 +130,7 @@ module.exports = {
     updateData,
     deleteData,
     getHomeContent,
+    getModules,
     getModule,
     getDailyTasks,
 }

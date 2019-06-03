@@ -65,18 +65,29 @@ var authTokenQueue = new Queue(function(user_id,callback){
 });
 
 //middleware to check if admin
-var checkAdmin = function(req,res,next) {
+var checkAdmin = function(req, res, next) {
     if (typeof req.session.admin == 'undefined' && !req.session.admin) {
       console.log('Err authenticating admin');
       res.send('Err authenticating admin');
     } else {
-      next()
+      next();
     }
 }
 
 //middleware to update course information
-var updateCookies = function(req,res,next){
+var updateCookies = function(req, res, next){
 
+  // Looks for passed url parameter 'course-id', updates cookie appropriately
+  // Keeps admin pages set to proper course across multiple tabs
+  if(typeof req.param('course-id') !== 'undefined'){
+    console.log("Assigning Admin Cookies");
+    console.log("Assigned course id: " + req.param('course-id'));
+    req.session.course_id = req.param('course-id');
+    req.session.course_title = req.param('course-title');
+    req.session.user_id = req.param('user-id');
+  }
+
+  // Manages cookies for other pages
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);

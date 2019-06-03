@@ -46,6 +46,9 @@ function doSingleUpdate() {
     $('#lbl3').hide();
     $('#hr1').hide();
     $('#hr2').hide();
+
+    $('#btn-single').removeClass("btn-secondary").addClass("btn-dark");
+    $('#btn-existing').removeClass("btn-dark").addClass("btn-secondary");
 }
 
 // Switches the form into edit existing updates mode. In this mode,
@@ -72,4 +75,7 @@ function doExistingUpdates() {
     $('#lbl3').fadeIn('slow');
     $('#hr1').fadeIn('slow');
     $('#hr2').fadeIn('slow');
+
+    $('#btn-existing').removeClass("btn-secondary").addClass("btn-dark");
+    $('#btn-single').removeClass("btn-dark").addClass("btn-secondary");
 }

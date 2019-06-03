@@ -296,14 +296,16 @@
 	font-size: 18px;
 }
 #point_count {
-	padding-right: 10px;
+	/*padding-right: 10px;
 	width: 100%;
 	box-sizing: border-box;
-	font-size: 50px;
+	font-size: 50px;*/
+    font-size: 2.3rem;
 	letter-spacing: -1.5px;
 	font-weight: bold;
 	color: rgb(254, 202, 10);
-	margin-top: 18.0px;
+	margin-top: 14.0px;
+    margin-left: 0px;
 	text-align: center;
 }
 
@@ -1409,136 +1411,6 @@
 	box-shadow: 0px 0px 5px 3px rgb(255, 242, 23);
 }
 
-/*
-.badge1 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_1.png); }
-.badge1.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_2.png); }
-.badge1.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/jim_rolf_3.png); }
-
-.badge2 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/william_hawkins_1.png); }
-.badge2.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/william_hawkins_2.png); }
-.badge2.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/william_hawkins_3.png); }
-
-.badge3 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/richard_deming_1.png); }
-.badge3.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/richard_deming_2.png); }
-.badge3.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/richard_deming_3.png); }
-
-.badge4 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/craig_wright_1.png); }
-.badge4.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/craig_wright_2.png); }
-.badge4.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/craig_wright_3.png); }
-
-.badge5 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/ozan_say_1.png); }
-.badge5.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/ozan_say_2.png); }
-.badge5.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/ozan_say_3.png); }
-
-.badge6 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/eileen_m_galvez_1.png); }
-.badge6.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/eileen_m_galvez_2.png); }
-.badge6.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/eileen_m_galvez_3.png); }
-
-.badge7 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/peter_salovey_1.png); }
-.badge7.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badges/badge7_1.png); }
-.badge7.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge7_2.png); }
-
-.badge8 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/patrick_holland_1.png); }
-.badge8.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/patrick_holland_2.png); }
-.badge8.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/patrick_holland_3.png); }
-
-.badge9 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/daniel_spielman_1.png); }
-.badge9.completed .badge_portrait{ 			background-image: url(https://conex.herokuapp.com/images/badgePics/daniel_spielman_2.png); }
-.badge9.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/daniel_spielman_3.png); }
-
-.badge10 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/laurie_santos_1.png); }
-.badge10.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/laurie_santos_2.png); }
-.badge10.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/laurie_santos_3.png); }
-
-.badge11 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/marvin_chun_1.png); }
-.badge11.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/marvin_chun_2.png); }
-.badge11.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/marvin_chun_3.png); }
-
-.badge12 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/ryan_wepler_1.png); }
-.badge12.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/ryan_wepler_2.png); }
-.badge12.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/ryan_wepler_3.png); }
-
-.badge13 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/hannah_peck_1.png); }
-.badge13.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/hannah_peck_2.png); }
-.badge13.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/hannah_peck_3.png); }
-
-.badge14 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/ann_kuhlman_1.png); }
-.badge14.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/ann_kuhlman_2.png); }
-.badge14.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/ann_kuhlman_3.png); }
-
-.badge15 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/robert_shiller_1.png); }
-.badge15.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge29_1.png); }
-.badge15.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge29_2.png); }
-
-.badge16 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/kailasnath_purushothaman_1.png); }
-.badge16.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/kailasnath_purushothaman_2.png); }
-.badge16.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/kailasnath_purushothaman_3.png); }
-
-.badge17 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/kurt_zilm_1.png); }
-.badge17.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge15_1.png); }
-.badge17.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge15_2.png); }
-
-.badge18 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/a_douglas_stone_1.png); }
-.badge18.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/a_douglas_stone_2.png); }
-.badge18.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/a_douglas_stone_3.png); }
-
-.badge19 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/vince_wilczynski_1.png); }
-.badge19.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge17_1.png); }
-.badge19.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge17_2.png); }
-
-.badge20 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/karin_gosselink_1.png); }
-.badge20.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/karin_gosselink_2.png); }
-.badge20.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/karin_gosselink_3.png); }
-
-.badge21 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/jenny_frederick_1.png); }
-.badge21.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/jenny_frederick_2.png); }
-.badge21.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/jenny_frederick_3.png); }
-
-.badge22 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/risa_sodi_1.png); }
-.badge22.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/risa_sodi_2.png); }
-.badge22.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/risa_sodi_3.png); }
-
-.badge23 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/pamela_schirmeister_1.png); }
-.badge23.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/pamela_schirmeister_2.png); }
-.badge23.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/pamela_schirmeister_3.png); }
-
-.badge24 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/allison_bushman_1.png); }
-.badge24.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/allison_bushman_2.png); }
-.badge24.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/allison_bushman_3.png); }
-
-.badge25 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/sharon_kugler_1.png); }
-.badge25.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/sharon_kugler_2.png); }
-.badge25.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/sharon_kugler_3.png); }
-
-.badge26 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/jed_thompson_1.png); }
-.badge26.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/jed_thompson_2.png); }
-.badge26.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/jed_thompson_3.png); }
-
-.badge27 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/jeremiah_quinlan_1.png); }
-.badge27.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge14_1.png); }
-.badge27.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge14_2.png); }
-
-.badge28 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/john_hall_1.png); }
-.badge28.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge26_1.png); }
-.badge28.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge26_2.png); }
-
-.badge29 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/maria_trumpler_1.png); }
-.badge29.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/maria_trumpler_2.png); }
-.badge29.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/maria_trumpler_3.png); }
-
-.badge30 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/april_ruiz_1.png); }
-.badge30.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/april_ruiz_2.png); }
-.badge30.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/april_ruiz_3.png); }
-
-.badge31 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/camille_lizarribar_1.png); }
-.badge31.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badgePics/camille_lizarribar_2.png); }
-.badge31.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badgePics/camille_lizarribar_3.png); }
-
-.badge32 .badge_portrait{ 					background-image: url(https://conex.herokuapp.com/images/badgePics/burgwell_howard_1.png); }
-.badge32.completed .badge_portrait{ 		background-image: url(https://conex.herokuapp.com/images/badges/badge30_1.png); }
-.badge32.completed .badge_portrait:hover { 	background-image: url(https://conex.herokuapp.com/images/badges/badge30_2.png); }
-*/
-
 /***
 * Old Module Page
 ***/
@@ -1646,6 +1518,9 @@ textarea .form-control{
     width: 500px !important;
 }
 
+.form-inline label {
+  padding-right: 10px;
+}
 
 /*
     Colorbox Core Style:

@@ -2,13 +2,13 @@ extends layout
 
 block content
     br
-    h1(class='display-4')='Admin panel for ' + course
+    h1(class='display-4')='Admin panel for ' + course_title
     hr
     div(class='container')
         div(class='col')
             div(class='form')
-                a(href='/admin/home', class='btn btn-dark', role='button', style='margin:4px') Home Page
-                a(href='/admin/modules', class='btn btn-dark', role='button', style='margin:4px') Modules
-                a(href='/admin/badges', class='btn btn-dark', role='button', style='margin:4px') Badges
-                a(href='/admin/dailies', class='btn btn-dark', role='button', style='margin:4px') Daily Tasks
-                a(href='/admin/lucky', class='btn btn-dark', role='button', style='margin:4px') Lucky Bonuses
+                a(href='/admin/home?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Home Page
+                a(href='/admin/modules?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Modules
+                a(href='/admin/badges?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Badges
+                a(href='/admin/dailies?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Daily Tasks
+                a(href='/admin/lucky?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Lucky Bonuses
