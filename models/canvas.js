@@ -727,7 +727,7 @@ function getNextDailyYalie(courseID, callback){
                 // panel and stored in MongoDB.
                 // If in the list, we've found valid assignment. run
                 // comparison logic to see if it's the closest one so far.
-                
+
                 if(daily_task_ids.includes(parseInt(assignment.id))) {
                     if(new Date(assignment.due_at) >= new Date() && new Date(assignment.due_at) < closest) closest = assignment;
                 }
@@ -1085,6 +1085,14 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                 //get quiz and aleks progress
                 for (var i = 0; i < moduleProgress.length; i++) {
                     var module_object = mongo_data.modules.find(module => module._id == i + 1);
+
+                    const practiceId_cutoff_obj = (array =>
+                        array.reduce((obj, x) => {
+                            obj[x.substring(0, x.indexOf('_')).trim()] = parseInt(x.substring(x.indexOf('_')+1).trim());
+                            return obj
+                        }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
+                    
+                    const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
                     // Modified the code below in accordance with the fix in getStudentProgress()
                     (moduleProgress[i]).practice_progress = true;
