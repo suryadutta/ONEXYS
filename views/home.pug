@@ -93,17 +93,17 @@ block content
           div
             if module.open == 'true'
               if module.practice_progress && module.quiz_progress
-                a.progress_box.completed(style='width: 187.5px !important; background-image: url(https://conex.herokuapp.com/images/progress_bar/'+module.button_background_image+'1.png);', href= '/modules/'+module._id)
+                a.progress_box.completed(style='width: 187.5px !important; background-image: url(https://conex.herokuapp.com/images/progress_bar/'+module.button_background_image+'_1.png);', href= '/modules/'+module._id)
                   span= module.primary_title
                   br
                   span= module.secondary_title
               else
-                a.progress_box.available(style='width: 187.5px !important; background-image: url(https://conex.herokuapp.com/images/progress_bar/'+module.button_background_image+'0.png);', href= '/modules/'+module._id)
+                a.progress_box.available(style='width: 187.5px !important; background-image: url(https://conex.herokuapp.com/images/progress_bar/'+module.button_background_image+'_0.png);', href= '/modules/'+module._id)
                   span= module.primary_title
                   br
                   span= module.secondary_title
             else
-              a.progress_box(style='width: 187.5px !important; background-image: url(https://conex.herokuapp.com/images/progress_bar/'+module.button_background_image+'2.png);')
+              a.progress_box(style='width: 187.5px !important; background-image: url(https://conex.herokuapp.com/images/progress_bar/'+module.button_background_image+'_2.png);')
                 span= module.primary_title
                 br
                 span= module.secondary_title
