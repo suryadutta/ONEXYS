@@ -547,69 +547,6 @@
 	width: 100%;
 }
 
-.module_background_0  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/timothy_2.png'); }
-.module_background_00 .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/classroom_2.png'); }
-.button_background_alderman  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/alderman_2.png'); }
-.button_background_kroon  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/kroon_2.png'); }
-.button_background_beinecke  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/beinecke_2.png'); }
-.button_background_harkness  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/harkness_2.png'); }
-.button_background_connecticut  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/connecticut_2.png'); }
-.button_background_linsly  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/linsly_2.png'); }
-.button_background_kline  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/kline_2.png'); }
-.button_background_bowl  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/bowl_2.png'); }
-.button_background_malone  .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/malone_2.png'); }
-.button_background_ingalls .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/ingalls_2.png'); }
-.button_background_sterling .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/sterling_2.png'); }
-.button_background_schwarzman .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/schwarzman_2.png'); }
-.button_background_woolsey .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/woolsey_2.png'); }
-.button_background_battell .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/battell_2.png'); }
-.button_background_dwight .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/dwight_2.png'); }
-.button_background_green .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/green_2.png'); }
-.button_background_saybrook .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/saybrook_2.png'); }
-.button_background_yuag .progress_box  { background-image: url('https://conex.herokuapp.com/images/progress_bar/yuag_2.png'); }
-
-.module_background_0  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/timothy_0.png'); }
-.module_background_00 .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/classroom_0.png'); }
-.button_background_alderman  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/alderman_0.png'); }
-.button_background_kroon  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/kroon_0.png'); }
-.button_background_beinecke  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/beinecke_0.png'); }
-.button_background_harkness  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/harkness_0.png'); }
-.button_background_connecticut  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/connecticut_0.png'); }
-.button_background_linsly  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/linsly_0.png'); }
-.button_background_kline  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/kline_0.png'); }
-.button_background_bowl  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/bowl_0.png'); }
-.button_background_malone  .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/malone_0.png'); }
-.button_background_ingalls .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/ingalls_0.png'); }
-.button_background_sterling .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/sterling_0.png'); }
-.button_background_schwarzman .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/schwarzman_0.png'); }
-.button_background_woolsey .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/woolsey_0.png'); }
-.button_background_battell .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/battell_0.png'); }
-.button_background_dwight .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/dwight_0.png'); }
-.button_background_green .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/green_0.png'); }
-.button_background_saybrook .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/saybrook_0.png'); }
-.button_background_yuag .progress_box.available { background-image: url('https://conex.herokuapp.com/images/progress_bar/yuag_0.png'); }
-
-.module_background_0  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/timothy_1.png'); }
-.module_background_00 .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/classroom_1.png'); }
-.button_background_alderman  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/alderman_1.png'); }
-.button_background_kroon  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/kroon_1.png'); }
-.button_background_beinecke  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/beinecke_1.png'); }
-.button_background_harkness  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/harkness_1.png'); }
-.button_background_connecticut  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/connecticut_1.png'); }
-.button_background_linsly  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/linsly_1.png'); }
-.button_background_kline  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/kline_1.png'); }
-.button_background_bowl  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/bowl_1.png'); }
-.button_background_malone  .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/malone_1.png'); }
-.button_background_ingalls .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/ingalls_1.png'); }
-.button_background_sterling .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/sterling_1.png'); }
-.button_background_schwarzman .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/schwarzman_1.png'); }
-.button_background_woolsey .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/woolsey_1.png'); }
-.button_background_battell .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/battell_1.png'); }
-.button_background_dwight .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/dwight_1.png'); }
-.button_background_green .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/green_1.png'); }
-.button_background_saybrook .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/saybrook_1.png'); }
-.button_background_yuag .progress_box.completed { background-image: url('https://conex.herokuapp.com/images/progress_bar/yuag_1.png'); }
-
 /****
 * Module
 ****/
