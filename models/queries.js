@@ -24,7 +24,6 @@ function homepageQuery(studentID, courseID, course_title, callback){
   ],
 
   function(err, data) {
-
     var module_progress = data[0],
         score = data[1][0],
         badges =  data[1][1],
@@ -130,7 +129,7 @@ function homepageAdminQuery(courseID, course_title, callback){
         students = data[3],
         daily_yalie = data[4];
 
-    console.log(leaderboard);
+    //console.log("Leaderboard: " + leaderboard);
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
 }

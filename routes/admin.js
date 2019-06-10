@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
+const canvas = require("../models/canvas");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
@@ -51,7 +52,6 @@ router.post("/home", (req, res, next) => {
 
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
-  console.log(req.body);
   res.render('admin/homeConfirmUpdates', {
     course_title: req.session.course_title,
     course_id: req.session.course_id,
@@ -62,7 +62,6 @@ router.post("/home/preview", (req, res, next) => {
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
-  console.log(req.body);
   mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
     res.redirect("/admin");
   });
@@ -374,43 +373,78 @@ router.post("/badges/edit/:id", (req, res, next) => {
 });
 
 router.get("/dailies", (req, res, next) => {
-  mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
-    res.render("admin/dailies", {
-      title: "Dailies",
-      course_title: req.session.course_title,
-      course_id: req.session.course_id,
-      user_id: req.session.user_id,
-      dailies: dailies_data
+    mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
+        // Reset session variables for next time
+        var fixed = req.session.fixed_id;
+        var last = req.session.last_edited;
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
+
+        res.render("admin/dailies", {
+            title: "Dailies",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            dailies: dailies_data,
+            fixed_id: fixed,
+            last_edited: last
+        });
     });
-  });
 });
 
 router.get("/dailies/edit/:id", (req, res, next) => {
-  mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
-    daily_data = dailies_data.find(element => element._id == req.params.id);
-    res.render("admin/dailyEdit", {
-      title: "Dailies",
-      course_title: req.session.course_title,
-      course_id: req.session.course_id,
-      user_id: req.session.user_id,
-      daily: daily_data
+    mongo.getData(req.session.course_id, "dailies", (err, dailies_data) => {
+        daily_data = dailies_data.find(element => element._id == req.params.id);
+
+        // Reset session variables
+        req.session.fixed_id = false;
+        req.session.last_edited = -1;
+
+        res.render("admin/dailyEdit", {
+            title: "Dailies",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            daily: daily_data
+        });
     });
-  });
 });
 
 router.post("/dailies/edit/:id", (req, res, next) => {
-  //update badges info
-  mongo.updateData(
-    req.session.course_id,
-    "dailies",
-    { _id: parseInt(req.params.id) },
-    {
-      assignment_id: req.body.assignment_id,
-    },
-    (err, result) => {
-      res.redirect("/admin/dailies");
-    }
-  );
+    var valid_assignment_ids = [];
+    var valid_quiz_ids = [];
+    canvas.getAdminRequest(canvas.daily_task_url(req.session.course_id), function(err, assignment_list) {
+        assignment_list.forEach(function(assignment) {
+            valid_assignment_ids.push(parseInt(assignment.id));
+            if(assignment.quiz_id != undefined) {
+                valid_quiz_ids.push(parseInt(assignment.quiz_id));
+            } else {
+                valid_quiz_ids.push(-1);
+            }
+        });
+
+        var fixed_id = false;
+        var dex = valid_quiz_ids.indexOf(parseInt(req.body.assignment_id));
+        if(dex > -1) {
+            req.body.assignment_id = valid_assignment_ids[dex];
+            fixed_id = true;
+        }
+
+        //update badges info
+        mongo.updateData(
+            req.session.course_id,
+            "dailies",
+            { _id: parseInt(req.params.id) },
+            {
+                assignment_id: req.body.assignment_id,
+            },
+            (err, result) => {
+                req.session.fixed_id = fixed_id;
+                req.session.last_edited = parseInt(req.params.id);
+                res.redirect("/admin/dailies");
+            }
+        );
+    });
 });
 
 router.get("/lucky", (req, res, next) => {

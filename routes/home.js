@@ -4,17 +4,18 @@ var config = require("../bin/config");
 var queries = require("../models/queries");
 
 router.use("/", (req, res, next) => {
-  console.log(req.session);
-  console.log("Course title: " + req.session.course_title);
+  //console.log("Request session: " + req.session);
+  //console.log("Course title: " + req.session.course_title);
 
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
 
-  if (courseID == 10184) {
-    courseID = 38082;
-  }
+  //if (courseID == 10184) {
+    //courseID = 38082;
+  //}
 
-  var is_physics = Boolean(courseID == 38083);
+  //var is_physics = Boolean(courseID == 38083);
+  var is_physics = false;
 
   if (req.session.admin) {
     if (req.query.masquerade) {
