@@ -1208,9 +1208,9 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
 function getGradebook(courseID, callback) {
     var gradebook = [];
-
+    console.log("Course ID: " + courseID) + '\n-----';
     mongo.getAllData(courseID, (mongo_data) => {
-        console.log(mongo_data);
+        console.log(mongo_data.modules);
         console.log("-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n")
         getAdminRequest(sections_url(courseID), (err, section_data) => {
             console.log(section_data);
