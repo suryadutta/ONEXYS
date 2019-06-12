@@ -18,6 +18,7 @@ router.use('/', function(req, res, next) {
       res.render('badges', {
         title: 'Badges | CONEX',
         badges: badges,
+        heroku_app: config.herokuAppName
       });
     });
   }else{
@@ -25,9 +26,9 @@ router.use('/', function(req, res, next) {
       res.render('badges', {
         title: 'Badges | CONEX',
         badges: badges,
+        heroku_app: config.herokuAppName
       });
     });
-    console.log(queries);
   }
 });
 

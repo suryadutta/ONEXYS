@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
 const canvas = require("../models/canvas");
+const config = require('../bin/config');
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
@@ -31,7 +32,8 @@ router.get("/home", (req, res, next) => {
       course_id: req.session.course_id,
       user_id: req.session.user_id,
       home_updates,
-      home_vids
+      home_vids,
+      heroku_app: config.herokuAppName
     });
   });
 });
@@ -45,7 +47,8 @@ router.post("/home", (req, res, next) => {
       course_id: req.session.course_id,
       user_id: req.session.user_id,
       home_updates: req.body,
-      home_vids
+      home_vids,
+      heroku_app: config.herokuAppName
     });
   });
 });
@@ -126,7 +129,8 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
     course_id: req.session.course_id,
     user_id: req.session.user_id,
     video: req.body,
-    video_id: req.params.id
+    video_id: req.params.id,
+    heroku_app: config.herokuAppName
   });
 });
 
@@ -146,7 +150,7 @@ router.post("/home/videos/delete/:id", (req, res, next) => {
 
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get("/modules", (req, res, next) => {
-  mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename) => {
+  mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
     res.render("admin/modules", {
       title: "Modules",
       course_title: req.session.course_title,
@@ -154,7 +158,9 @@ router.get("/modules", (req, res, next) => {
       user_id: req.session.user_id,
       modules: modulesInfo,
       post_test: post_test,
-      post_test_filename: post_test_filename
+      post_test_filename: post_test_filename,
+      post_test_button_background: post_test_button_background,
+      pre_test_button_background: pre_test_button_background
     });
   });
 });
@@ -387,7 +393,8 @@ router.get("/dailies", (req, res, next) => {
             user_id: req.session.user_id,
             dailies: dailies_data,
             fixed_id: fixed,
-            last_edited: last
+            last_edited: last,
+            heroku_app: config.herokuAppName
         });
     });
 });
