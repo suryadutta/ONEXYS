@@ -1210,10 +1210,15 @@ function getGradebook(courseID, callback) {
     var gradebook = [];
     console.log("Course ID: " + courseID) + '\n-----';
     mongo.getAllData(courseID, (mongo_data) => {
-        console.log(mongo_data.modules);
-        console.log("-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n")
         getAdminRequest(sections_url(courseID), (err, section_data) => {
-            console.log(section_data);
+            //console.log(section_data);
+            // Teams are implmented as sections in Canvas.
+            // Each section has a name field , which is considered
+            // the name of the team in this system.
+            getStudents(courseID, (err, student_data) => {
+                console.log(student_data);
+            });
+
         });
     });
 
