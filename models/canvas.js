@@ -1091,7 +1091,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                             obj[x.substring(0, x.indexOf('_')).trim()] = parseInt(x.substring(x.indexOf('_')+1).trim());
                             return obj
                         }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
-                    
+
                     const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
                     // Modified the code below in accordance with the fix in getStudentProgress()
@@ -1206,6 +1206,42 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
     }
 }
 
+function getGradebook(courseID, callback) {
+    var gradebook = [];
+    console.log("Course ID: " + courseID) + '\n-----';
+    mongo.getAllData(courseID, (mongo_data) => {
+        getAdminRequest(sections_url(courseID), (err, section_data) => {
+            //console.log(section_data);
+            // Teams are implmented as sections in Canvas.
+            // Each section has a name field , which is considered
+            // the name of the team in this system.
+
+            section_data.forEach( (team) => {
+                console.log(team.name);
+                team.students.forEach( (student) => {
+                    console.log('==========');
+                    console.log(student.name + ' ' + student.id);
+                    // create an array of grades for the student
+                    var grades = [];
+                    (mongo_data.modules).forEach( (module) => {
+                        grades.push({
+                            module_id: module._id,
+                            module_name: (module.primary_title + ' ' + module.secondary_title),
+                            practice_grade: module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
+                            quiz_grade: module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
+                        });
+                    });
+                    console.log('Module grades');
+                    console.log(grades);
+                });
+                console.log('--------\n--------\n--------\n--------\n--------\n');
+            });
+        });
+    });
+
+    callback(gradebook);
+}
+
 module.exports = {
     getRequest,
     postRequest,
@@ -1223,4 +1259,5 @@ module.exports = {
     getStudentProgress_masquerade,
     getLeaderboardScores_masquerade,
     daily_task_url,
+    getGradebook,
 }

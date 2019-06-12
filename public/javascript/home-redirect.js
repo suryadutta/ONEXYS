@@ -1,4 +1,8 @@
 
+// Replace the logo in the top left of Canvas with a custom one
+$('.ic-app-header__logomark').css("background-image", "url(https://i.gyazo.com/46410a59a873b83687e1c83ae7064582.png)");
+$('.ic-app-header__logomark').css("background-color", "white");  
+
 // URL of the canvas site used for the course
 var canvasURL = 'https://curryvirginia.instructure.com';
 
