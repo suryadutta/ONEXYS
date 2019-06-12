@@ -128,7 +128,8 @@ function homepageAdminQuery(courseID, course_title, callback){
         home_links = data[2][2],
         students = data[3],
         daily_yalie = data[4];
-
+    console.log('Query things');
+    console.log(students);
     //console.log("Leaderboard: " + leaderboard);
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
