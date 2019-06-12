@@ -529,7 +529,7 @@ router.post("/lucky/add", (req, res, next) => {
   });
 });
 
-router.get('/gradebook', (res, res, next) => {
+router.get('/gradebook', (res, res) => {
     canvas.getGradebook(req.session.courseID, (gradebook) => {
         res.render("admin/unifiedGradebook", { title: 'Unified Gradebook' });
     });
