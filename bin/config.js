@@ -29,11 +29,13 @@ config.mongoDBs = {
   '3528': 'orange',
   '3529': 'white',
   '3559': 'conexDemo',
-}
+};
 
 //the name of the mongo db to connect to
-config.mongo_db_name = process.env.MONGO_DB_NAME
+config.mongo_db_name = process.env.MONGO_DB_NAME;
 
 config.cookieduration = 1000 * 60 * 60 * 24;
+
+config.herokuAppName = process.env.HEROKU_APP_NAME;
 
 module.exports = config;

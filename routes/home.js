@@ -48,7 +48,8 @@ router.use("/", (req, res, next) => {
             daily_yalie,
             is_physics,
             admin: req.session.admin,
-            masquerade: true
+            masquerade: true,
+            heroku_app: config.herokuAppName
           });
         }
       );
@@ -83,7 +84,8 @@ router.use("/", (req, res, next) => {
             is_physics,
             admin: req.session.admin,
             masquerade: false,
-            students
+            students,
+            heroku_app: config.herokuAppName
           });
         }
       );
@@ -117,7 +119,8 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
-          admin: req.session.admin
+          admin: req.session.admin,
+          heroku_app: config.herokuAppName
         });
       }
     );
