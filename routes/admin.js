@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const mongo = require("../models/mongo");
 const canvas = require("../models/canvas");
+const config = require('../bin/config');
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
