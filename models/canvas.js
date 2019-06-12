@@ -1219,7 +1219,8 @@ function getGradebook(courseID, callback) {
             section_data.forEach( (team) => {
                 console.log(team.name);
                 team.students.forEach( (student) => {
-                    //console.log(student);
+                    console.log('==========');
+                    console.log(student.name + ' ' + student.id);
                     // create an array of grades for the student
                     var grades = [];
                     (mongo_data.modules).forEach( (module) => {
