@@ -1219,20 +1219,26 @@ function getGradebook(courseID, callback) {
             section_data.forEach( (team) => {
                 console.log(team.name);
                 team.students.forEach( (student) => {
-                    console.log('==========');
+                    console.log('=============================');
                     console.log(student.name + ' ' + student.id);
                     // create an array of grades for the student
                     var grades = [];
-                    (mongo_data.modules).forEach( (module) => {
-                        grades.push({
-                            module_id: module._id,
-                            module_name: (module.primary_title + ' ' + module.secondary_title),
-                            practice_grade: module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
-                            quiz_grade: module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
+                    getAdminRequest(assignment_user_url(student.id), courseID, (err, user_assignments) => {
+                        user_assignments.forEach( (assignment) => {
+                            console.log(assignment);
                         });
+                        /*(mongo_data.modules).forEach( (module) => {
+                            grades.push({
+                                module_id: module._id,
+                                module_name: (module.primary_title + ' ' + module.secondary_title),
+                                practice_grade: module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
+                                quiz_grade: module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
+                            });
+                        });/**/
                     });
-                    console.log('Module grades');
-                    console.log(grades);
+
+                    //console.log('Module grades');
+                    //console.log(grades);
                 });
                 console.log('--------\n--------\n--------\n--------\n--------\n');
             });
