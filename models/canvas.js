@@ -1091,7 +1091,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                             obj[x.substring(0, x.indexOf('_')).trim()] = parseInt(x.substring(x.indexOf('_')+1).trim());
                             return obj
                         }, {}))(module_object.multiple_practice_cutoff.trim().split(','));
-                    
+
                     const practice_objects = Object.keys(practiceId_cutoff_obj).map(practice_id => user_assignments.find(assignment => assignment.assignment_id == parseInt(practice_id)));
 
                     // Modified the code below in accordance with the fix in getStudentProgress()
@@ -1206,6 +1206,20 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
     }
 }
 
+function getGradebook(courseID, callback) {
+    var gradebook = [];
+
+    mongo.getAllData(courseID, (mongo_data) => {
+        console.log(mongo_data);
+        console.log("-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n-----\n")
+        getAdminRequest(sections_url(courseID), (err, section_data) => {
+            console.log(section_data);
+        });
+    });
+
+    callback(gradebook);
+}
+
 module.exports = {
     getRequest,
     postRequest,
@@ -1223,4 +1237,5 @@ module.exports = {
     getStudentProgress_masquerade,
     getLeaderboardScores_masquerade,
     daily_task_url,
+    getGradebook,
 }
