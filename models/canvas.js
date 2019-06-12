@@ -1223,7 +1223,7 @@ function getGradebook(courseID, callback) {
                     console.log(student.name + ' ' + student.id);
                     // create an array of grades for the student
                     var grades = [];
-                    getAdminRequest(assignment_user_url(student.id), courseID, (err, user_assignments) => {
+                    getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         user_assignments.forEach( (assignment) => {
                             console.log(assignment);
                         });
