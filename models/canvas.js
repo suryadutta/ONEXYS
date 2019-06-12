@@ -1215,10 +1215,14 @@ function getGradebook(courseID, callback) {
             // Teams are implmented as sections in Canvas.
             // Each section has a name field , which is considered
             // the name of the team in this system.
-            getStudents(courseID, (err, student_data) => {
-                console.log(student_data);
-            });
 
+            section_data.forEach( (team) => {
+                console.log(team.name);
+                team.students.forEach( (student) => {
+                    console.log(student);
+                });
+                console.log('--------\n--------\n--------\n--------\n--------\n');
+            });
         });
     });
 
