@@ -16,7 +16,7 @@ block content
               img.onexys_thumbnail(src=video.video_img)
             else
               img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-            img.onexys_playbutton(src='https://conex.herokuapp.com/images/icons/playbutton.png', alt='')
+            img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
         p
           span(style='font-size: 12pt;')
             strong!=video.video_desc

@@ -31,7 +31,8 @@ router.get("/home", (req, res, next) => {
       course_id: req.session.course_id,
       user_id: req.session.user_id,
       home_updates,
-      home_vids
+      home_vids,
+      heroku_app: config.herokuAppName
     });
   });
 });
@@ -45,7 +46,8 @@ router.post("/home", (req, res, next) => {
       course_id: req.session.course_id,
       user_id: req.session.user_id,
       home_updates: req.body,
-      home_vids
+      home_vids,
+      heroku_app: config.herokuAppName
     });
   });
 });
@@ -126,7 +128,8 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
     course_id: req.session.course_id,
     user_id: req.session.user_id,
     video: req.body,
-    video_id: req.params.id
+    video_id: req.params.id,
+    heroku_app: config.herokuAppName
   });
 });
 
@@ -389,7 +392,8 @@ router.get("/dailies", (req, res, next) => {
             user_id: req.session.user_id,
             dailies: dailies_data,
             fixed_id: fixed,
-            last_edited: last
+            last_edited: last,
+            heroku_app: config.herokuAppName
         });
     });
 });
