@@ -36,7 +36,21 @@ block content
                             input#post_test_filename.form-control.inlined-input(type='text', name='post_test_filename', value=post_test_filename)
                     hr
 
-                button.btn.btn-success(type='submit') Save Post Test Changes
+                div.row
+                    div.col-md-12
+                        div.form-group.form-inline
+                            label(for='post_test_button_background') Post Test Button Background (located in public/images/progress_bar folder):
+                            input#post_test_button_background.form-control.inlined-input(type='text', name='post_test_button_background', value=post_test_button_background)
+                    hr
+
+                div.row
+                    div.col-md-12
+                        div.form-group.form-inline
+                            label(for='pre_test_button_background') Pre Test Button Background (located in public/images/progress_bar folder):
+                            input#pre_test_button_background.form-control.inlined-input(type='text', name='pre_test_button_background', value=pre_test_button_background)
+                    hr
+
+                button.btn.btn-success(type='submit') Save Pre/Post Test Changes
             hr
     br
     div.container

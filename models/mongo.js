@@ -69,9 +69,11 @@ function getModules(courseID, callback){
         var updates = data.find(document => document.type == 'updates');
         post_test = updates.post_test;
         post_test_filename = updates.post_test_filename;
+        post_test_button_background = updates.post_test_button_background;
+        pre_test_button_background = updates.pre_test_button_background;
 
         getData(courseID, "modules", function(err, data){
-            callback(err, data, post_test, post_test_filename);
+            callback(err, data, post_test, post_test_filename, post_test_button_background, pre_test_button_background);
         });
     });
 }

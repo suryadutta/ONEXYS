@@ -146,7 +146,7 @@ router.post("/home/videos/delete/:id", (req, res, next) => {
 
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get("/modules", (req, res, next) => {
-  mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename) => {
+  mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
     res.render("admin/modules", {
       title: "Modules",
       course_title: req.session.course_title,
@@ -154,7 +154,9 @@ router.get("/modules", (req, res, next) => {
       user_id: req.session.user_id,
       modules: modulesInfo,
       post_test: post_test,
-      post_test_filename: post_test_filename
+      post_test_filename: post_test_filename,
+      post_test_button_background: post_test_button_background,
+      pre_test_button_background: pre_test_button_background
     });
   });
 });
