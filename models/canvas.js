@@ -1267,9 +1267,9 @@ function getGradebook(courseID, callback) {
                 });
             });
 
-            while(loading_grades) {
+            /*while(loading_grades) {
                 console.log("Waiting for gradebook to finish loading");
-            }
+            }/**/
             console.log('GRADEBOOK EXPORTED');
             //console.log(gradebook);
             callback(gradebook);
