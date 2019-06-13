@@ -1208,7 +1208,6 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
 function getGradebook(courseID, callback) {
     var gradebook = [];
-    console.log("Course ID: " + courseID) + '\n-----';
     mongo.getAllData(courseID, (mongo_data) => {
         getAdminRequest(sections_url(courseID), (err, section_data) => {
             //console.log(section_data);
@@ -1217,11 +1216,8 @@ function getGradebook(courseID, callback) {
             // the name of the team in this system.
 
             section_data.forEach( (team) => {
-                console.log(team.name);
                 team.students.forEach( (student) => {
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
-                        console.log('=============================');
-                        console.log(student.name + ' ' + student.id);
                         // create the base grades array
                         var grades = [];
                         (mongo_data.modules).forEach( (module) => {
@@ -1236,26 +1232,22 @@ function getGradebook(courseID, callback) {
                         user_assignments.forEach( (assignment) => {
                             // We are looking for assignments which are in the module list as either a practice or quiz.
                             // These have to be separate because they use different fields :(
-                            console.log(assignment.assignment_id);
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
                             var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
-                                console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
+                                //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
                                 grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
                             // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
-                                console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
+                                //console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
                                 grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
                             }
                         });
-
-                        console.log(grades);
-                        console.log('--------\n--------\n--------\n--------\n--------\n');
 
                         gradebook.push({
                             student_id: student.id,
@@ -1265,14 +1257,13 @@ function getGradebook(courseID, callback) {
                         });
                     });
 
-                    //console.log('Module grades');
-                    //console.log(grades);
                 });
             });
+            console.log(gradebook);
+            callback(gradebook);
         });
     });
 
-    callback(gradebook);
 }
 
 module.exports = {
