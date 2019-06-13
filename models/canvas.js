@@ -1225,7 +1225,7 @@ function getGradebook(courseID, callback) {
                     var grades = [];
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // create the base grades array
-                        var toPush;
+                        var toPush = new Object();
                         (mongo_data.modules).forEach( (module) => {
                             toPush.module_id = module._id;
                             toPush.module_name =  (module.primary_title + ' ' + module.secondary_title);
