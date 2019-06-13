@@ -1217,8 +1217,8 @@ function getGradebook(courseID, callback) {
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
             section_data.forEach( (team) => {
-                getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
-                    team.students.forEach( (student) => {
+                team.students.forEach( (student) => {
+                    getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // For each student on a given team, we need to go a couple of things.
                         var grades = [];
                         (mongo_data.modules).forEach( (module) => {
