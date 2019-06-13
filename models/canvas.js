@@ -1222,41 +1222,47 @@ function getGradebook(courseID, callback) {
                     console.log('=============================');
                     console.log(student.name + ' ' + student.id);
                     // create an array of grades for the student
-                    var grades = [];
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // create the base grades array
-                        var toPush = new Object();
+                        var grades = [];
                         (mongo_data.modules).forEach( (module) => {
-                            toPush.module_id = module._id;
-                            toPush.module_name =  (module.primary_title + ' ' + module.secondary_title);
-                            toPush.practice_grade = -1; //module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
-                            toPush.quiz_grade = -1; //module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
+                            grades.push({
+                                module_id: module._id,
+                                module_name: (module.primary_title + ' ' + module.secondary_title),
+                                practice_grade: -1, //module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
+                                quiz_grade: -1
+                            }); //module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
                         });
                         // now populate those grades
                         user_assignments.forEach( (assignment) => {
-                            // going through every assignment this student has submitted...
-                            // find the relevant module
+                            // We are looking for assignments which are in the module list as either a practice or quiz.
+                            // These have to be separate because they use different fields :(
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_id) == parseInt(assignment.assignment_id));
                             var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_id) == parseInt(assignment.assignment_id));
 
+                            // If the current assignment was flagged as a "practice" module, locate the module in the
+                            // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
-                                toPush.practice_grade = thisPracticeModule.score;
+                                var editThis = grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = thisPracticeModule.score;;
                             }
 
+                            // If the current assignment was flagged as an "apply" module, locate the module in the
+                            // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
-                                toPush.quiz_grade = thisQuizModule.score;
+                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = thisQuizModule.score;
                             }
                         });
-                        console.log(toPush);
-                        grades.push(toPush);
+
+                        console.log(grades);
+                        
+                        gradebook.push({
+                            student_id: student.id,
+                            student_name: student.name,
+                            team: team.name,
+                            grades: grades
+                        });
                     });
 
-                    gradebook.push({
-                        student_id: student.id,
-                        student_name: student.name,
-                        team: team.name,
-                        grades: grades
-                    });
                     //console.log('Module grades');
                     //console.log(grades);
                 });
