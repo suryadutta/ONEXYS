@@ -1242,17 +1242,15 @@ function getGradebook(courseID, callback) {
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
-                                //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + thisPracticeModule.score);
-                                console.log('Practice module:');
-                                console.log(thisPracticeModule);
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = thisPracticeModule.score;
+                                console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
+                                grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
                             // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
-                                console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + thisQuizModule.score);
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = thisQuizModule.score;
+                                console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
+                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
                             }
                         });
 
