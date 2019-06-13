@@ -1236,10 +1236,9 @@ function getGradebook(courseID, callback) {
                         user_assignments.forEach( (assignment) => {
                             // We are looking for assignments which are in the module list as either a practice or quiz.
                             // These have to be separate because they use different fields :(
+                            console.log(assignment.assignment_id);
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_id) == parseInt(assignment.assignment_id));
                             var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_id) == parseInt(assignment.assignment_id));
-                            console.log(thisPracticeModule);
-                            console.log(thisQuizModule);
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
