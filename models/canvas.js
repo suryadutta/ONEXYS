@@ -1260,8 +1260,9 @@ function getGradebook(courseID, callback) {
                                 grades: grades
                             });
                             console.log("Added gradebook item");
-
-                            /*if(index + 1 == team.students.length) {
+                            console.log(index + ' / ' + team.students.length);
+                            console.log('----');
+                            if(index == team.students.length - 1) {
                                 console.log("Gradebook finished");
                                 loading_grades = false;
                             }/**/
