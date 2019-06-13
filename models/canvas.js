@@ -1216,8 +1216,9 @@ function getGradebook(courseID, callback) {
 
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
+            var loading_grades = true;
             section_data.forEach( (team) => {
-                team.students.forEach( (student) => {
+                team.students.forEach( (student, index) => {
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // For each student on a given team, we need to go a couple of things.
                         var grades = [];
@@ -1257,9 +1258,18 @@ function getGradebook(courseID, callback) {
                             grades: grades
                         });
                         console.log("ADDED ITEM TO GRADEBOOK");
+
+                        if(index + 1 == team.students.length) {
+                            console.log("Gradebook finished");
+                            loading_grades = false;
+                        }
                     });
                 });
             });
+
+            while(loading_grades) {
+                console.log("Waiting for gradebook to finish loading");
+            }
             console.log('GRADEBOOK EXPORTED');
             //console.log(gradebook);
             callback(gradebook);
