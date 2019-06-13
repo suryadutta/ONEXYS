@@ -1228,9 +1228,9 @@ function getGradebook(courseID, callback) {
                         var toPush;
                         (mongo_data.modules).forEach( (module) => {
                             toPush.module_id = module._id;
-                            toPush.module_name: (module.primary_title + ' ' + module.secondary_title);
-                            toPush.practice_grade: -1; //module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
-                            toPush.quiz_grade: -1; //module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
+                            toPush.module_name =  (module.primary_title + ' ' + module.secondary_title);
+                            toPush.practice_grade = -1; //module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
+                            toPush.quiz_grade = -1; //module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
                         });
                         // now populate those grades
                         user_assignments.forEach( (assignment) => {
