@@ -1224,19 +1224,38 @@ function getGradebook(courseID, callback) {
                     // create an array of grades for the student
                     var grades = [];
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
-                        user_assignments.forEach( (assignment) => {
-                            console.log(assignment);
+                        // create the base grades array
+                        var toPush;
+                        (mongo_data.modules).forEach( (module) => {
+                            toPush.module_id = module._id;
+                            toPush.module_name: (module.primary_title + ' ' + module.secondary_title);
+                            toPush.practice_grade: -1; //module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
+                            toPush.quiz_grade: -1; //module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
                         });
-                        /*(mongo_data.modules).forEach( (module) => {
-                            grades.push({
-                                module_id: module._id,
-                                module_name: (module.primary_title + ' ' + module.secondary_title),
-                                practice_grade: module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
-                                quiz_grade: module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
-                            });
-                        });/**/
+                        // now populate those grades
+                        user_assignments.forEach( (assignment) => {
+                            // going through every assignment this student has submitted...
+                            // find the relevant module
+                            var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_id) == parseInt(assignment.assignment_id));
+                            var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_id) == parseInt(assignment.assignment_id));
+
+                            if(thisPracticeModule != undefined) {
+                                toPush.practice_grade = thisPracticeModule.score;
+                            }
+
+                            if(thisQuizModule != undefined) {
+                                toPush.quiz_grade = thisQuizModule.score;
+                            }
+                        });
+                        grades.push(toPush);
                     });
 
+                    gradebook.push({
+                        student_id: student.id,
+                        student_name: student.name,
+                        team: team.name,
+                        grades: grades
+                    });
                     //console.log('Module grades');
                     //console.log(grades);
                 });
