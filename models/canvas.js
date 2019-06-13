@@ -1219,10 +1219,9 @@ function getGradebook(courseID, callback) {
             section_data.forEach( (team) => {
                 console.log(team.name);
                 team.students.forEach( (student) => {
-                    console.log('=============================');
-                    console.log(student.name + ' ' + student.id);
-                    // create an array of grades for the student
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
+                        console.log('=============================');
+                        console.log(student.name + ' ' + student.id);
                         // create the base grades array
                         var grades = [];
                         (mongo_data.modules).forEach( (module) => {
@@ -1254,7 +1253,8 @@ function getGradebook(courseID, callback) {
                         });
 
                         console.log(grades);
-                        
+                        console.log('--------\n--------\n--------\n--------\n--------\n');
+
                         gradebook.push({
                             student_id: student.id,
                             student_name: student.name,
@@ -1266,7 +1266,6 @@ function getGradebook(courseID, callback) {
                     //console.log('Module grades');
                     //console.log(grades);
                 });
-                console.log('--------\n--------\n--------\n--------\n--------\n');
             });
         });
     });
