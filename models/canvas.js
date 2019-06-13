@@ -1210,23 +1210,24 @@ function getGradebook(courseID, callback) {
     var gradebook = [];
     mongo.getAllData(courseID, (mongo_data) => {
         getAdminRequest(sections_url(courseID), (err, section_data) => {
-            //console.log(section_data);
             // Teams are implmented as sections in Canvas.
             // Each section has a name field , which is considered
             // the name of the team in this system.
 
+            // For each team in the Canvas course, we're going to look at
+            // every student on the team.
             section_data.forEach( (team) => {
-                team.students.forEach( (student) => {
-                    getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
-                        // create the base grades array
+                getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
+                    team.students.forEach( (student) => {
+                        // For each student on a given team, we need to go a couple of things.
                         var grades = [];
                         (mongo_data.modules).forEach( (module) => {
                             grades.push({
                                 module_id: module._id,
                                 module_name: (module.primary_title + ' ' + module.secondary_title),
-                                practice_grade: -1, //module.leaderboard.practice_leaderboard.find(submission => submission.student_id == student.id), // element such that (=>) condition
+                                practice_grade: -1,
                                 quiz_grade: -1
-                            }); //module.leaderboard.quiz_leaderboard.find(submission => submission.student_id == student.id)
+                            });
                         });
                         // now populate those grades
                         user_assignments.forEach( (assignment) => {
@@ -1255,11 +1256,12 @@ function getGradebook(courseID, callback) {
                             team: team.name,
                             grades: grades
                         });
+                        console.log("ADDED ITEM TO GRADEBOOK");
                     });
-
                 });
             });
-            console.log(gradebook);
+            console.log('GRADEBOOK EXPORTED');
+            //console.log(gradebook);
             callback(gradebook);
         });
     });
