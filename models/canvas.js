@@ -1217,62 +1217,75 @@ function getGradebook(courseID, callback) {
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
             var loading_grades = true;
-            section_data.forEach( (team) => {
-                team.students.forEach( (student, index) => {
-                    getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
-                        // For each student on a given team, we need to go a couple of things.
-                        var grades = [];
-                        (mongo_data.modules).forEach( (module) => {
-                            grades.push({
-                                module_id: module._id,
-                                module_name: (module.primary_title + ' ' + module.secondary_title),
-                                practice_grade: -1,
-                                quiz_grade: -1
+
+            let gradebook_loader = new Promise( (resolve, reject) => {
+                section_data.forEach( (team) => {
+                    team.students.forEach( (student, index) => {
+                        getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
+                            // For each student on a given team, we need to go a couple of things.
+                            var grades = [];
+                            (mongo_data.modules).forEach( (module) => {
+                                grades.push({
+                                    module_id: module._id,
+                                    module_name: (module.primary_title + ' ' + module.secondary_title),
+                                    practice_grade: -1,
+                                    quiz_grade: -1
+                                });
                             });
-                        });
-                        // now populate those grades
-                        user_assignments.forEach( (assignment) => {
-                            // We are looking for assignments which are in the module list as either a practice or quiz.
-                            // These have to be separate because they use different fields :(
-                            var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
-                            var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
-                            // If the current assignment was flagged as a "practice" module, locate the module in the
-                            // grades array and update the proper field (practice grade in this case).
-                            if(thisPracticeModule != undefined) {
-                                //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
-                            }
+                            // now populate those grades
+                            user_assignments.forEach( (assignment) => {
+                                // We are looking for assignments which are in the module list as either a practice or quiz.
+                                // These have to be separate because they use different fields :(
+                                var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
+                                var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
+                                // If the current assignment was flagged as a "practice" module, locate the module in the
+                                // grades array and update the proper field (practice grade in this case).
+                                if(thisPracticeModule != undefined) {
+                                    //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
+                                    grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
+                                }
 
-                            // If the current assignment was flagged as an "apply" module, locate the module in the
-                            // grades array and update the proper field (quiz grade in this case).
-                            if(thisQuizModule != undefined) {
-                                //console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
-                            }
-                        });
+                                // If the current assignment was flagged as an "apply" module, locate the module in the
+                                // grades array and update the proper field (quiz grade in this case).
+                                if(thisQuizModule != undefined) {
+                                    //console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
+                                    grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
+                                }
+                            });
 
-                        gradebook.push({
-                            student_id: student.id,
-                            student_name: student.name,
-                            team: team.name,
-                            grades: grades
+                            gradebook.push({
+                                student_id: student.id,
+                                student_name: student.name,
+                                team: team.name,
+                                grades: grades
+                            });
+                            console.log("Added gradebook item");
+                            console.log(index + ' / ' + team.students.length);
+                            console.log('----');
+                            if(index == team.students.length - 1) {
+                                console.log("Gradebook finished");
+                                loading_grades = false;
+                            }/**/
                         });
-                        console.log("ADDED ITEM TO GRADEBOOK");
-
-                        if(index + 1 == team.students.length) {
-                            console.log("Gradebook finished");
-                            loading_grades = false;
-                        }
                     });
                 });
+                resolve(gradebook);
+            });
+
+            gradebook_loader.then((result) => {
+                console.log('Gradebook loading complete.');
+                callback(result);
+            }, (error) => {
+                console.log('Gradebook fail to load properly.')
+                console.log(error);
+                callback(null);
             });
 
             /*while(loading_grades) {
                 console.log("Waiting for gradebook to finish loading");
             }/**/
-            console.log('GRADEBOOK EXPORTED');
             //console.log(gradebook);
-            callback(gradebook);
+            //callback(gradebook);
         });
     });
 
