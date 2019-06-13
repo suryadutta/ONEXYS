@@ -1247,6 +1247,7 @@ function getGradebook(courseID, callback) {
                                 toPush.quiz_grade = thisQuizModule.score;
                             }
                         });
+                        console.log(toPush);
                         grades.push(toPush);
                     });
 
