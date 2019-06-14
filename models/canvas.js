@@ -1286,7 +1286,7 @@ function getGradebook(courseID, callback) {
                 console.log('Gradebook loading complete.');
                 callback(result);
 
-            });
+            }
 
             gradebook_loader();
 
