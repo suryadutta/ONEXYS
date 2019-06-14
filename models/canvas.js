@@ -1218,10 +1218,18 @@ function getGradebook(courseID, callback) {
             // every student on the team.
             var loading_grades = true;
 
+            // Create a function which allows for asynchronous forEach loops
+            // https://codeburst.io/javascript-async-await-with-foreach-b6ba62bbf404
+            async function asyncForEach(array, callback) {
+                for(let i = 0; i < array.length; i++) {
+                    await callback(array[i], i);
+                }
+            }
+
             let gradebook_loader = new Promise( (resolve, reject) => {
                 section_data.forEach( (team) => {
                     //var students_left = team.students.length;
-                    team.students.forEach( (student, index) => {
+                    asyncForEach(team.students, (student, index) => {
                         getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                             // For each student on a given team, we need to go a couple of things.
                             var grades = [];
