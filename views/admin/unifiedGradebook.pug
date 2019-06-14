@@ -11,4 +11,13 @@ block content
                 h2='Viewing the Unified Gradebook for ' + course_title
     hr
     div.container
-        p Feature under construction. Check back later!
+        table
+            tr
+                th Student Name
+                th Student ID
+                th Team Name
+            each student in gradebook
+                tr
+                    td=student.student_name
+                    td=student.student_id
+                    td=student.student_team
