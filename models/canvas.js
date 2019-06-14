@@ -1227,64 +1227,61 @@ function getGradebook(courseID, callback) {
             }
 
             const gradebook_loader = async() => {
-                await asyncForEach(section_data, (team, ind) => {
+                await asyncForEach(section_data, async (team, ind) => {
                     //var students_left = team.students.length;
-                    const get = async() => {
-                        await asyncForEach(team.students, (student, index) => {
-                            getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
-                                // For each student on a given team, we need to go a couple of things.
-                                var grades = [];
-                                (mongo_data.modules).forEach( (module) => {
-                                    grades.push({
-                                        module_id: module._id,
-                                        module_name: (module.primary_title + ' ' + module.secondary_title),
-                                        practice_grade: -1,
-                                        quiz_grade: -1
-                                    });
+                    await asyncForEach(team.students, async (student, index) => {
+                        await getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
+                            // For each student on a given team, we need to go a couple of things.
+                            var grades = [];
+                            (mongo_data.modules).forEach( (module) => {
+                                grades.push({
+                                    module_id: module._id,
+                                    module_name: (module.primary_title + ' ' + module.secondary_title),
+                                    practice_grade: -1,
+                                    quiz_grade: -1
                                 });
-                                // Now populate those grades
-                                user_assignments.forEach( (assignment) => {
-                                    // We are looking for assignments which are in the module list as either a practice or quiz.
-                                    // These have to be separate because they use different fields :(
-                                    var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
-                                    var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
-                                    // If the current assignment was flagged as a "practice" module, locate the module in the
-                                    // grades array and update the proper field (practice grade in this case).
-                                    if(thisPracticeModule != undefined) {
-                                        //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
-                                        grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
-                                    }
-
-                                    // If the current assignment was flagged as an "apply" module, locate the module in the
-                                    // grades array and update the proper field (quiz grade in this case).
-                                    if(thisQuizModule != undefined) {
-                                        //console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
-                                        grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
-                                    }
-                                });
-
-                                gradebook.push({
-                                    student_id: student.id,
-                                    student_name: student.name,
-                                    team: team.name,
-                                    grades: grades
-                                });
-                                console.log("Added gradebook item for team: " + team.name);
-                                console.log(index + ' / ' + team.students.length);
-                                console.log('----');
-                                /*if(gradebook.length == team.students.length) {
-                                    console.log("Gradebook finished");
-                                    loading_grades = false;
-                                }/**/
                             });
+                            // Now populate those grades
+                            user_assignments.forEach( (assignment) => {
+                                // We are looking for assignments which are in the module list as either a practice or quiz.
+                                // These have to be separate because they use different fields :(
+                                var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
+                                var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
+                                // If the current assignment was flagged as a "practice" module, locate the module in the
+                                // grades array and update the proper field (practice grade in this case).
+                                if(thisPracticeModule != undefined) {
+                                    //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
+                                    grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
+                                }
+
+                                // If the current assignment was flagged as an "apply" module, locate the module in the
+                                // grades array and update the proper field (quiz grade in this case).
+                                if(thisQuizModule != undefined) {
+                                    //console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
+                                    grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
+                                }
+                            });
+
+                            gradebook.push({
+                                student_id: student.id,
+                                student_name: student.name,
+                                team: team.name,
+                                grades: grades
+                            });
+                            console.log("Added gradebook item for team: " + team.name);
+                            console.log(index + ' / ' + team.students.length);
+                            console.log('----');
+                            /*if(gradebook.length == team.students.length) {
+                                console.log("Gradebook finished");
+                                loading_grades = false;
+                            }/**/
                         });
-                        console.log('Team ' + team.name + ' done.');
-                    }
-                    get();
+                    });
+                    console.log('Team ' + team.name + ' done.');
                 });
 
                 console.log('Gradebook loading complete.');
-                callback(result);
+                callback(gradebook);
 
             }
 
