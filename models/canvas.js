@@ -1226,8 +1226,8 @@ function getGradebook(courseID, callback) {
                 }
             }
 
-            let gradebook_loader = new Promise( (resolve, reject) => {
-                asyncForEach(section_data, (team, ind) => {
+            const gradebook_loader = async() => {
+                await asyncForEach(section_data, (team, ind) => {
                     //var students_left = team.students.length;
                     const get = async() => {
                         await asyncForEach(team.students, (student, index) => {
@@ -1283,17 +1283,12 @@ function getGradebook(courseID, callback) {
                     get();
                 });
 
-                resolve(gradebook);
-            });
-
-            gradebook_loader.then((result) => {
                 console.log('Gradebook loading complete.');
                 callback(result);
-            }, (error) => {
-                console.log('Gradebook fail to load properly.')
-                console.log(error);
-                callback(null);
+
             });
+
+            gradebook_loader();
 
             /*while(loading_grades) {
                 console.log("Waiting for gradebook to finish loading");
