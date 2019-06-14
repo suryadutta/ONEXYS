@@ -1263,7 +1263,7 @@ function getGradebook(courseID, callback) {
                             console.log("Added gradebook item for team: " + team.name);
                             console.log(index + ' / ' + team.students.length);
                             console.log('----');
-                            //if(gradebook.length == team.students.length) {
+                            /*if(gradebook.length == team.students.length) {
                                 console.log("Gradebook finished");
                                 loading_grades = false;
                             }/**/
