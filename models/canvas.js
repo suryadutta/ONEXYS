@@ -1208,7 +1208,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
 function getGradebook(courseID, callback) {
     var gradebook = [];
-    var assignmentTitles[];
+    var assignmentTitles = [];
 
     function gradebook_done() {
         console.log('Gradebook loading complete.');
