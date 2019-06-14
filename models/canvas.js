@@ -1208,6 +1208,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
 function getGradebook(courseID, callback) {
     var gradebook = [];
+    var assignmentTitles[];
 
     function gradebook_done() {
         console.log('Gradebook loading complete.');
@@ -1216,22 +1217,24 @@ function getGradebook(courseID, callback) {
 
 
     mongo.getAllData(courseID, (mongo_data) => {
+        mongo_data.modules.forEach( (module) => {
+            assignmentTitles.push(module.primary_title + ' ' + module.secondary_title);
+        });
+
         getAdminRequest(sections_url(courseID), (err, section_data) => {
             // Teams are implmented as sections in Canvas.
             // Each section has a name field , which is considered
             // the name of the team in this system.
 
             // Calculate expected gradebook size
-            var gradebook_size = 0;
+            var completed_gradebook_size = 0;
             section_data.forEach( (team) => {
-                gradebook_size += team.students.length;
+                completed_gradebook_size += team.students.length;
             })
-            console.log('Expected gradebook size: ' + gradebook_size + '\n===========');
 
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
             section_data.forEach( (team, ind) => {
-                //console.log('Team index: ' + ind);
                 team.students.forEach( (student, index) => {
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // For each student on a given team, we need to go a couple of things.
@@ -1244,23 +1247,23 @@ function getGradebook(courseID, callback) {
                                 quiz_grade: -1
                             });
                         });
+
                         // Now populate those grades
                         user_assignments.forEach( (assignment) => {
                             // We are looking for assignments which are in the module list as either a practice or quiz.
                             // These have to be separate because they use different fields :(
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
                             var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
+
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
-                                //console.log(module.primary_title + ' ' + module.secondary_title + ' practice grade: ' + assignment.score);
                                 grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
                             // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
-                                //console.log(module.primary_title + ' ' + module.secondary_title + ' quiz grade: ' + assignment.score);
                                 grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
                             }
                         });
@@ -1271,9 +1274,8 @@ function getGradebook(courseID, callback) {
                             team: team.name,
                             grades: grades
                         });
-                        console.log('Current Gradebook Size: ' + gradebook.length);
-                        if(gradebook_size == gradebook.length) {
-                            console.log('Gradebook loading complete.');
+
+                        if(gradebook.length == completed_gradebook_size) {
                             gradebook_done();
                         }
                     });
