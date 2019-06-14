@@ -1220,6 +1220,7 @@ function getGradebook(courseID, callback) {
 
             let gradebook_loader = new Promise( (resolve, reject) => {
                 section_data.forEach( (team) => {
+                    //var students_left = team.students.length;
                     team.students.forEach( (student, index) => {
                         getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                             // For each student on a given team, we need to go a couple of things.
@@ -1259,16 +1260,17 @@ function getGradebook(courseID, callback) {
                                 team: team.name,
                                 grades: grades
                             });
-                            console.log("Added gradebook item");
+                            console.log("Added gradebook item for team: " + team.name);
                             console.log(index + ' / ' + team.students.length);
                             console.log('----');
-                            if(index == team.students.length - 1) {
+                            //if(gradebook.length == team.students.length) {
                                 console.log("Gradebook finished");
                                 loading_grades = false;
                             }/**/
                         });
                     });
                 });
+
                 resolve(gradebook);
             });
 
