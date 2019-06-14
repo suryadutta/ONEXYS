@@ -1224,7 +1224,7 @@ function getGradebook(courseID, callback) {
             // Calculate expected gradebook size
             var gradebook_size = 0;
             section_data.forEach( (team) => {
-                gradebook_size += team.studens.length;
+                gradebook_size += team.students.length;
             })
             console.log('Expected gradebook size: ' + gradebook_size + '\n===========');
 
