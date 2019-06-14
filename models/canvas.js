@@ -1227,7 +1227,7 @@ function getGradebook(courseID, callback) {
             }
 
             let gradebook_loader = new Promise( (resolve, reject) => {
-                asyncForEach(section_data, (team ind) => {
+                asyncForEach(section_data, (team, ind) => {
                     //var students_left = team.students.length;
                     const get = async() => {
                         await asyncForEach(team.students, (student, index) => {
