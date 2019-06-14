@@ -1237,7 +1237,7 @@ function getGradebook(courseID, callback) {
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
             section_data.forEach( (team, ind) => {
-                if(blacklist.contains(ind)) return;
+                if(blacklist.includes(ind)) return;
                 team.students.forEach( (student, index) => {
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // For each student on a given team, we need to go a couple of things.
