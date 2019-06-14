@@ -1218,9 +1218,18 @@ function getGradebook(courseID, callback) {
             // every student on the team.
             var loading_grades = true;
 
+            // Create a function which allows for asynchronous forEach loops
+            // https://codeburst.io/javascript-async-await-with-foreach-b6ba62bbf404
+            async function asyncForEach(array, callback) {
+                for(let i = 0; i < array.length; i++) {
+                    await callback(array[i], i);
+                }
+            }
+
             let gradebook_loader = new Promise( (resolve, reject) => {
                 section_data.forEach( (team) => {
-                    team.students.forEach( (student, index) => {
+                    //var students_left = team.students.length;
+                    await asyncForEach(team.students, (student, index) => {
                         getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                             // For each student on a given team, we need to go a couple of things.
                             var grades = [];
@@ -1232,7 +1241,7 @@ function getGradebook(courseID, callback) {
                                     quiz_grade: -1
                                 });
                             });
-                            // now populate those grades
+                            // Now populate those grades
                             user_assignments.forEach( (assignment) => {
                                 // We are looking for assignments which are in the module list as either a practice or quiz.
                                 // These have to be separate because they use different fields :(
@@ -1259,16 +1268,19 @@ function getGradebook(courseID, callback) {
                                 team: team.name,
                                 grades: grades
                             });
-                            console.log("Added gradebook item");
+                            console.log("Added gradebook item for team: " + team.name);
                             console.log(index + ' / ' + team.students.length);
                             console.log('----');
-                            if(index == team.students.length - 1) {
+                            /*if(gradebook.length == team.students.length) {
                                 console.log("Gradebook finished");
                                 loading_grades = false;
                             }/**/
                         });
                     });
+
+                    console.log('Team ' + team.name + ' done.');
                 });
+
                 resolve(gradebook);
             });
 
