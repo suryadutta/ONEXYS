@@ -24,7 +24,6 @@ block content
                     td=student.student_name
                     td=student.student_id
                     td=student.team
-                    each assignment in student.grades
-                        td=grade.module_name
-                        td=grade.practice_grade
-                        td=grade.quiz_grade
+                    td=grades[0].module_name
+                    td=grades[0].practice_grade
+                    td=grades[0].quiz_grade
