@@ -1229,7 +1229,7 @@ function getGradebook(courseID, callback) {
             let gradebook_loader = new Promise( (resolve, reject) => {
                 section_data.forEach( (team) => {
                     //var students_left = team.students.length;
-                    asyncForEach(team.students, (student, index) => {
+                    await asyncForEach(team.students, (student, index) => {
                         getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                             // For each student on a given team, we need to go a couple of things.
                             var grades = [];
@@ -1241,7 +1241,7 @@ function getGradebook(courseID, callback) {
                                     quiz_grade: -1
                                 });
                             });
-                            // now populate those grades
+                            // Now populate those grades
                             user_assignments.forEach( (assignment) => {
                                 // We are looking for assignments which are in the module list as either a practice or quiz.
                                 // These have to be separate because they use different fields :(
@@ -1277,6 +1277,8 @@ function getGradebook(courseID, callback) {
                             }/**/
                         });
                     });
+
+                    console.log('Team ' + team.name + ' done.');
                 });
 
                 resolve(gradebook);
