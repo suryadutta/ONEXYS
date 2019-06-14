@@ -16,8 +16,15 @@ block content
                 th Student Name
                 th Student ID
                 th Team Name
+                th Module Name
+                th Practice Grade
+                th Quiz Grade
             each student in gradebook
                 tr
                     td=student.student_name
                     td=student.student_id
-                    td=student.student_team
+                    td=student.team
+                    each assignment in student.grades
+                        td=grade.module_name
+                        td=grade.practice_grade
+                        td=grade.quiz_grade
