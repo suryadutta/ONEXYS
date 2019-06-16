@@ -18,8 +18,8 @@ block content
                 th Team Name
                 each obj in gradebook[0].grades
                     th=obj.module_name
-                    th=obj.practice_grade
-                    th=obj.quiz_grade
+                    th Practice Grade
+                    th Quiz Grade
             each student in gradebook
                 tr
                     td=student.student_name
