@@ -16,15 +16,15 @@ block content
                 th Student Name
                 th Student ID
                 th Team Name
-                th Module Name
-                th Practice Grade
-                th Quiz Grade
+                each obj in gradebook[0].grades
+                    th=obj.module_name
+                    th=obj.practice_grade
+                    th=obj.quiz_grade
             each student in gradebook
                 tr
                     td=student.student_name
                     td=student.student_id
                     td=student.team
                     each obj in student.grades
-                        td=obj.module_name
                         td=obj.practice_grade
                         td=obj.quiz_grade
