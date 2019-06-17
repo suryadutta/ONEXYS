@@ -1228,13 +1228,16 @@ function getGradebook(courseID, callback) {
 
             // Calculate expected gradebook size
             var completed_gradebook_size = 0;
-            section_data.forEach( (team) => {
-                completed_gradebook_size += team.students.length;
+            var blacklist = [];
+            section_data.forEach( (team, ind) => {
+                if(team.students == undefined) blacklist.push(ind);
+                else completed_gradebook_size += team.students.length;
             })
 
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
             section_data.forEach( (team, ind) => {
+                if(blacklist.includes(ind)) return;
                 team.students.forEach( (student, index) => {
                     getAdminRequest(assignment_user_url(student.id, courseID), (err, user_assignments) => {
                         // For each student on a given team, we need to go a couple of things.
