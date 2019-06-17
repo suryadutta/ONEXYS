@@ -1271,9 +1271,15 @@ function getGradebook(courseID, callback) {
                             }
                         });
 
+                        // Some student names are still in the format of Last, First even when we pull from student.name,
+                        // which, according to Canvas, should be First Last. So let's fix that.
+                        var repaired_name = student.name;
+                        var dex = repaired_name.indexOf(',');
+                        if(dex != -1) repaired_name = repaired_name.substring(dex + 1) + ' ' + repaired_name.substring(0, dex - 1);
+
                         gradebook.push({
                             student_id: student.id,
-                            student_name: student.name,
+                            student_name: repaired_name,
                             team: team.name,
                             grades: grades
                         });

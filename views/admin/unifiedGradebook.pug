@@ -21,7 +21,7 @@ block content
                     th Practice Grade
                     th Quiz Grade
             each student in gradebook
-                tr
+                tr(team=student.team)
                     td=student.student_name
                     td=student.student_id
                     td=student.team
