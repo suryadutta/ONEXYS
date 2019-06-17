@@ -1,7 +1,8 @@
 extends ../layout
 
 block content
-
+    link(rel="/stylesheets/gradebook.css")
+    script(src="/javascript/gradebook.js")
     br
     div.container
         div.row
@@ -12,16 +13,21 @@ block content
     hr
     div.container
         table
-            tr
-                th Student Name
-                th Student ID
-                th Team Name
+            tr(class="tdata-header)
+                th(class="spacer")
+                th
                 each obj in gradebook[0].grades
                     th=obj.module_name
-                    th Practice Grade
-                    th Quiz Grade
+        table(class="gradebook", style="border-bottom: 2px double black;")
+            tr(id="first", style="border-bottom: 2px double black;")
+                th(class="bg-light") Student Name
+                th(class="bg-light") Student ID
+                th(class="bg-light") Team Name
+                each obj in gradebook[0].grades
+                    th(class="bg-light") Practice
+                    th(class="bg-light") Quiz
             each student in gradebook
-                tr(team=student.team)
+                tr(class="student", team=student.team)
                     td=student.student_name
                     td=student.student_id
                     td=student.team
