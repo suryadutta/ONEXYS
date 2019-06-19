@@ -1,7 +1,8 @@
 extends ../layout
 
 block content
-    script(src="https://" + heroku + ".herokuapp.com/javascript/gradebook.js")
+    link(rel="stylesheet", link="/stylesheets/gradebook.css")
+    script(src="/javascript/gradebook.js")
     br
     div.container
         div.row
@@ -14,9 +15,11 @@ block content
         table
             tr(class="tdata-header)
                 th(class="spacer")
+                    //
+                        spacer
                 th
-                each obj in gradebook[0].grades
-                    th=obj.module_name
+                    //
+                        spacer
         table(class="gradebook", style="border-bottom: 2px double black;")
             tr(id="first", style="border-bottom: 2px double black;")
                 th(class="bg-light") Student Name
