@@ -35,7 +35,7 @@ router.use("/", (req, res, next) => {
           daily_yalie
         ) => {
           res.render("home", {
-            title: "Home | CONEX",
+            title: "Home | " + config.herokuAppName,
             courseID,
             module_progress,
             score,

@@ -543,7 +543,8 @@ router.get('/gradebook', (req, res, next) => {
             course_title: req.session.course_title,
             course_id: req.session.course_id,
             user_id: req.session.user_id,
-            gradebook: gradebook
+            gradebook: gradebook,
+            heroku: config.herokuAppName
         });
     });
 });
