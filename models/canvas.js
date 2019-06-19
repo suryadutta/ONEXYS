@@ -1208,19 +1208,13 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
 function getGradebook(courseID, callback) {
     var gradebook = [];
-    var assignmentTitles = [];
 
     function gradebook_done() {
         console.log('Gradebook loading complete.');
         callback(gradebook);
     }
 
-
     mongo.getAllData(courseID, (mongo_data) => {
-        mongo_data.modules.forEach( (module) => {
-            assignmentTitles.push(module.primary_title + ' ' + module.secondary_title);
-        });
-
         getAdminRequest(sections_url(courseID), (err, section_data) => {
             // Teams are implmented as sections in Canvas.
             // Each section has a name field , which is considered
