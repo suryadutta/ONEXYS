@@ -20,16 +20,16 @@ block content
         #flag.blue
           if daily_yalie.id == null
             a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/404', target='_blank')
-              img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/DY_Flag_2017.svg')
+              img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/dailyTask.png')
           else
             if daily_yalie.id == -1
               //
                 An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
               a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/not-open', target='_blank')
-                img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/DY_Flag_2017.svg')
+                img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/dailyTask.png')
             else
               a(title='Open Daily Task', href='https://curryvirginia.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
-                img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/DY_Flag_2017.svg')
+                img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/dailyTask.png')
       #leaderboard.standard_home_box.left
         h2 Leaderboard
         table
