@@ -559,8 +559,7 @@ router.get('/gradebook', (req, res, next) => {
         }
     ];
 
-    console.log(sample_gradebook);
-    res.render("admin/unifiedGradebook", {
+    res.render("admin/gradebook", {
         title: 'Unified Gradebook',
         course_title: req.session.course_title,
         course_id: req.session.course_id,
