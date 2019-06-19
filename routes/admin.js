@@ -559,12 +559,15 @@ router.get('/gradebook', (req, res, next) => {
         }
     ];
 
-    res.render("admin/gradebook", {
-        title: 'Unified Gradebook',
-        course_title: req.session.course_title,
-        course_id: req.session.course_id,
-        user_id: req.session.user_id,
-        gradebook: sample_gradebook,
+    canvas.getGradebook(req.session.course_id, (gradebook_data) => {
+        console.log(gradebook_data);
+        res.render("admin/gradebook", {
+            title: 'Unified Gradebook',
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            gradebook: gradebook_data,
+        });
     });
 });
 
