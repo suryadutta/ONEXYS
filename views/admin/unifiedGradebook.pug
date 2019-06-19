@@ -1,8 +1,6 @@
 extends ../layout
 
 block content
-    link(rel="stylesheet", link="/stylesheets/gradebook.css")
-    script(src="/javascript/gradebook.js")
     br
     div.container
         div.row
@@ -20,3 +18,21 @@ block content
                 th
                     //
                         spacer
+                each obj in gradebook[0].grades
+                    th=obj.module_name
+        table(class="gradebook", style="border-bottom: 2px double black;")
+            tr(id="first", style="border-bottom: 2px double black;")
+                th(class="bg-light") Student Name
+                th(class="bg-light") Student ID
+                th(class="bg-light") Team Name
+                each obj in gradebook[0].grades
+                    th(class="bg-light") Practice
+                    th(class="bg-light") Quiz
+            each student in gradebook
+                tr(class="student", team=student.team)
+                    td=student.student_name
+                    td=student.student_id
+                    td=student.team
+                    each obj in student.grades
+                        td=obj.practice_grade
+                        td=obj.quiz_grade
