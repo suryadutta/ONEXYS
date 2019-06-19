@@ -537,14 +537,14 @@ router.post("/lucky/add", (req, res, next) => {
 });
 
 router.get('/gradebook', (req, res, next) => {
-    canvas.getGradebook(req.session.course_id, (gradebook) => {
-        console.log(gradebook);
+    canvas.getGradebook(req.session.course_id, (gradebook_data) => {
+        console.log(gradebook_data);
         res.render("admin/unifiedGradebook", {
             title: 'Unified Gradebook',
             course_title: req.session.course_title,
             course_id: req.session.course_id,
             user_id: req.session.user_id,
-            gradebook: gradebook,
+            gradebook: gradebook_data,
             heroku: config.herokuAppName
         });
     });
