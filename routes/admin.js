@@ -537,15 +537,35 @@ router.post("/lucky/add", (req, res, next) => {
 });
 
 router.get('/gradebook', (req, res, next) => {
-    canvas.getGradebook(req.session.course_id, (gradebook_data) => {
-        console.log(gradebook_data);
-        res.render("admin/unifiedGradebook", {
-            title: 'Unified Gradebook',
-            course_title: req.session.course_title,
-            course_id: req.session.course_id,
-            user_id: req.session.user_id,
-            gradebook: gradebook_data,
-        });
+    sample_gradebook = [
+        {
+            student_id: 14037,
+            student_name: 'Conex Test5',
+            team: 'Tester Team',
+            grades: [
+                {
+                    module_id: 42,
+                    module_name: 'My first assignment',
+                    practice_grade: 96,
+                    quiz_grade: 85
+                },
+                {
+                    module_id: 69,
+                    module_name: 'The final assignment',
+                    practice_grade: 12,
+                    quiz_grade: 37
+                },
+            ]
+        }
+    ];
+
+    console.log(sample_gradebook);
+    res.render("admin/unifiedGradebook", {
+        title: 'Unified Gradebook',
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id,
+        gradebook: sample_gradebook,
     });
 });
 
