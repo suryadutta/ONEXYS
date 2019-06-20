@@ -18,7 +18,6 @@ block content
             p Clicking on the same header after it is already selected will invert the sort direction.
             p To separate sorting results by team, enable the Team Lock by clicking on the Team Name header until it turns yellow. Then, click on the column you'd like to sort by. The students will be sorted, but they will remain grouped by team. To disable the Team Lock, click the Team Name header again.
             p Mousing over a row will create an outline around it, so you can keep track of the row as you scroll to the right or look into the middle of the table.
-
     hr
     div
         table
@@ -44,3 +43,9 @@ block content
                         each obj in student.grades
                             td=obj.practice_grade
                             td=obj.quiz_grade
+    br
+    hr
+    br
+    .container
+        .row
+            small="Note: Some teams are removed from this list. Teams named \'Coaches\' or \'" + course_title + "\' have been removed. More obviously, teams with no students in them do not appear on this list."
