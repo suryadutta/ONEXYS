@@ -1,13 +1,13 @@
 @@ -0,0 +1,1633 @@
 
-/*  Right wrapper is visible
+/* Change visibility of Right wrapper on line 10
     Life on Grounds is now 120px instead of 180[x
     */
 .user_content {
     overflow-x: scroll;
 }
 #right-side-wrapper.ic-app-main-content__secondary {
-	/*display: none !important;*/
+	display: none !important;
 }
 .page-title {
 	display: none !important;
