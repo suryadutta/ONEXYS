@@ -1224,9 +1224,10 @@ function getGradebook(courseID, callback) {
             var completed_gradebook_size = 0;
             var blacklist = [];
             section_data.forEach( (team, ind) => {
-                if(team.students == undefined || team.name == courseName) blacklist.push(ind);
+                if(team.students == undefined || team.name == courseName || team.name == 'Coaches') blacklist.push(ind);
                 else completed_gradebook_size += team.students.length;
             })
+            console.log(blacklist);
 
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
