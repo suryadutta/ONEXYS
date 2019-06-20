@@ -5,12 +5,20 @@ block content
         link(rel="stylesheet", href="/stylesheets/gradebook.css")
         script(src="/javascript/gradebook.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
+    .container
+        .row
+            .form.form-inline
                 a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
                 h2='Viewing the Unified Gradebook for ' + course_title
+    hr
+    .container
+        .row
+            p To sort the table based on a particular column, click on that column's header (Student Name, Team Name, etc. - not the assignment name).
+            p Clicking on the same header after it is already selected will invert the sort direction.
+            p To separate sorting results by team, enable the Team Lock by clicking on the Team Name header until it turns yellow. Then, click on the column you'd like to sort by. The students will be sorted, but they will remain grouped by team. To disable the Team Lock, click the Team Name header again.
+            p Mousing over a row will create an outline around it, so you can keep track of the row as you scroll to the right or look into the middle of the table.
+
     hr
     div
         table
