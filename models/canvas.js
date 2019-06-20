@@ -1206,7 +1206,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
     }
 }
 
-function getGradebook(courseID, callback) {
+function getGradebook(courseID, courseName, callback) {
     var gradebook = [];
 
     function gradebook_done() {
@@ -1214,7 +1214,7 @@ function getGradebook(courseID, callback) {
         callback(gradebook);
     }
 
-    mongo.getAllData(courseID, courseName, (mongo_data) => {
+    mongo.getAllData(courseID, (mongo_data) => {
         getAdminRequest(sections_url(courseID), (err, section_data) => {
             // Teams are implmented as sections in Canvas.
             // Each section has a name field , which is considered
@@ -1226,8 +1226,7 @@ function getGradebook(courseID, callback) {
             section_data.forEach( (team, ind) => {
                 if(team.students == undefined || team.name == courseName || team.name == 'Coaches') blacklist.push(ind);
                 else completed_gradebook_size += team.students.length;
-            })
-            console.log(blacklist);
+            });
 
             // For each team in the Canvas course, we're going to look at
             // every student on the team.
