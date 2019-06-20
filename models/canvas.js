@@ -1214,7 +1214,7 @@ function getGradebook(courseID, callback) {
         callback(gradebook);
     }
 
-    mongo.getAllData(courseID, (mongo_data) => {
+    mongo.getAllData(courseID, courseName, (mongo_data) => {
         getAdminRequest(sections_url(courseID), (err, section_data) => {
             // Teams are implmented as sections in Canvas.
             // Each section has a name field , which is considered
@@ -1224,7 +1224,7 @@ function getGradebook(courseID, callback) {
             var completed_gradebook_size = 0;
             var blacklist = [];
             section_data.forEach( (team, ind) => {
-                if(team.students == undefined) blacklist.push(ind);
+                if(team.students == undefined || team.name == courseName) blacklist.push(ind);
                 else completed_gradebook_size += team.students.length;
             })
 
