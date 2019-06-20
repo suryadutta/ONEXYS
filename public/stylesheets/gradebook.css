@@ -1,7 +1,11 @@
 table {
 	table-layout: fixed;
 }
-	
+
+.team-lock-highlight {
+	background-color: #ede504 !important;
+}
+
 th {
 	padding-right: 10px;
 	text-align: center;
