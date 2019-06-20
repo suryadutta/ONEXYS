@@ -19,8 +19,8 @@ block content
                 th
                 each obj in gradebook[0].grades
                     th=obj.module_name
-        table(style="border-bottom: 2px double black;")
-            tbody(id="gradebook")
+        table
+            tbody(id="gradebook", style="border-bottom: 2px double black;")
                 tr(id="first", style="border-bottom: 2px double black;")
                     th(class="bg-light") Student Name
                     th(class="bg-light") Student ID
