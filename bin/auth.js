@@ -134,8 +134,6 @@ var checkUser = function(req, res, next) {
                 redirect_uri: config.redirectURL,
                 state: String(req.session.user_id),
               });
-              console.log("Authorization URI:");
-              console.log(authorizationUri)
               res.redirect(authorizationUri);
             } else {
               // auth token exists
