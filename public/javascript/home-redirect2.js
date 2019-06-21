@@ -1,8 +1,13 @@
 
 // Replace the logo in the top left of Canvas with a custom one
 //$('.ic-app-header__logomark').css("background-image", "url(https://i.gyazo.com/46410a59a873b83687e1c83ae7064582.png)");
-$('.ic-app-header__logomark').css("background-image", "url(https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/logo/conexIcon.png?raw=true");
-$('.ic-app-header__logomark').css("background-color", "white");  
+if (id==3559){
+    $('.ic-app-header__logomark').css("background-image", "url(https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/logo/smithLogoWhiteTransparent2.png?raw=true");}else{
+    $('.ic-app-header__logomark').css("background-image", "url(https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/logo/institutionIcon.png?raw=true");
+    $('.ic-app-header__logomark').css("background-color", "white");  
+}
+
+
 
 // URL of the canvas site used for the course
 var canvasURL = 'https://curryvirginia.instructure.com';
