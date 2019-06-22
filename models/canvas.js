@@ -583,6 +583,9 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
 
         getAdminRequest(sections_url(courseID),function(err,data){
             // remove section with all students
+            console.log('All sections data');
+            console.log(data);
+            console.log('\n-\n-\n-\n-\n-\n-');
             for (var i = 0; i < data.length; i++) {
                 if(data[i].students==null){
                     data.splice(i, 1);
