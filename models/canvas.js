@@ -594,7 +594,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section) => {
                     console.log('Found a section');
-                    if(students) return section.students.map(studentInfo => studentInfo.id);
+                    if(section.students) return section.students.map(studentInfo => studentInfo.id);
                     else {
                         console.log('Encountered section with no students. Inserting empty array placeholder');
                         return [];
