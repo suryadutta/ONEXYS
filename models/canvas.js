@@ -593,7 +593,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section) => {
-                    if(section.students) return section.students.map(studentInfo => studentInfo.id);
+                    if(section.students == null) return section.students.map(studentInfo => studentInfo.id);
                     else return [];
                 });
                 console.log('Student ID Array');
