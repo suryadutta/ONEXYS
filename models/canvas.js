@@ -593,7 +593,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                 studentIdsArrays = data.map((section) => {
                     console.log('--------------------------\nNew section\n--------------------------');
                     console.log(section);
-                    return section.students.map(studentInfo => studentInfo.id)
+                    return section.students.map(studentInfo => studentInfo.id);
                 });
                 console.log('Student ID Array');
                 console.log(studentIdsArrays);
