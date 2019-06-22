@@ -596,8 +596,6 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                     if(section.students == null) return section.students.map(studentInfo => studentInfo.id);
                     else return [];
                 });
-                console.log('Student ID Array');
-                console.log(studentIdsArrays);
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
@@ -669,8 +667,10 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                 callback(null,[],[]);
             } else {
                 groupNames = data.map(section => section.name);
-                studentsArray = data.map(section => section.students);
-                studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
+                studentIdsArrays = data.map((section) => {
+                    if(section.students == null) return section.students.map(studentInfo => studentInfo.id);
+                    else return [];
+                });
                 callback(null, studentIdsArrays, groupNames);
             }
         });
