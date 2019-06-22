@@ -590,7 +590,13 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
                 callback(null,[],[],0);
             } else {
                 groupNames = data.map(section => section.name);
-                studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
+                studentIdsArrays = data.map((section) => {
+                    console.log('--------------------------\nNew section\n--------------------------');
+                    console.log(section);
+                    section.students.map(studentInfo => studentInfo.id)
+                });
+                console.log('Student ID Array');
+                console.log(studentIdsArrays);
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
