@@ -593,7 +593,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section) => {
-                    if(section.students == null) return section.students.map(studentInfo => studentInfo.id);
+                    if(section.students != null) return section.students.map(studentInfo => studentInfo.id);
                     else return [];
                 });
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
@@ -668,7 +668,7 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section) => {
-                    if(section.students == null) return section.students.map(studentInfo => studentInfo.id);
+                    if(section.students != null) return section.students.map(studentInfo => studentInfo.id);
                     else return [];
                 });
                 callback(null, studentIdsArrays, groupNames);
