@@ -27,6 +27,8 @@ var notes_column_url = (courseID) => {
 
 var get_update_url = (courseID, callback) => {
     getAdminRequest(notes_column_url(courseID), function(err, custom_columns){
+        console.log('Custom gradebook columns');
+        console.log(custom_columns);
         var points_id = custom_columns.find(column => column.title='Notes').id;
         var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data';
         callback(update_url);
@@ -583,9 +585,6 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
 
         getAdminRequest(sections_url(courseID),function(err,data){
             // remove section with all students
-            console.log('All sections data');
-            console.log(data);
-            console.log('\n-\n-\n-\n-\n-\n-');
             for (var i = 0; i < data.length; i++) {
                 if(data[i].students==null){
                     data.splice(i, 1);
@@ -596,17 +595,8 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section) => {
-                    console.log('Found a section');
-                    console.log(section.name);
-                    console.log(section.students);
-                    if(section.students) {
-                        console.log('Encountered team containing students')
-                        return section.students.map(studentInfo => studentInfo.id);
-                    }
-                    else {
-                        console.log('Encountered section with no students. Inserting empty array placeholder');
-                        return [];
-                    }
+                    if(section.students) return section.students.map(studentInfo => studentInfo.id);
+                    else return [];
                 });
                 console.log('Student ID Array');
                 console.log(studentIdsArrays);
