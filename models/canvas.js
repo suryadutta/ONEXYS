@@ -571,10 +571,12 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
     function getSections(course_title, callback){
         function findIndexOfUser(studentIdsArrays) {
             for (var i = 0; i < studentIdsArrays.length; i++) {
+                // No need to look through teams which contained no students!
+                if(studentIdsArrays.length == 0) continue;
+
+                // See if the student is in this array
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-                if (index > -1 && groupNames[i] != course_title) {
-                    return i;
-                }
+                if (index > -1 && groupNames[i] != course_title) return i;
             }
             return -1;
         }
@@ -591,9 +593,12 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             } else {
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section) => {
-                    console.log('--------------------------\nNew section\n--------------------------');
-                    console.log(section);
-                    return section.students.map(studentInfo => studentInfo.id);
+                    console.log('Found a section');
+                    if(students) return section.students.map(studentInfo => studentInfo.id);
+                    else {
+                        console.log('Encountered section with no students. Inserting empty array placeholder');
+                        return [];
+                    }
                 });
                 console.log('Student ID Array');
                 console.log(studentIdsArrays);
