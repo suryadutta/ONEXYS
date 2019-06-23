@@ -66,21 +66,21 @@ block content
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
-                                label(for='badges_link') Badges URL:
+                                label(for='badges_link') Badges URL (Link to Canvas page or tool):
                                 input#badges_link.form-control.inlined-input(type='text', name='badges_link', value=home_updates.badges_link)
                         hr
 
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
-                                label(for='life_on_grounds_title') Life on Grounds Title:
+                                label(for='life_on_grounds_title') Life on Campus Title (Life at UVA, Yale, etc):
                                 input#life_on_grounds_title.form-control.inlined-input(type='text', name='life_on_grounds_title', value=home_updates.life_on_grounds_title)
                         hr
 
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
-                                label(for='life_on_grounds_link') Life on Grounds URL:
+                                label(for='life_on_grounds_link') Life on Campus URL (Link to the Canvas page or tool):
                                 input#life_on_grounds_link.form-control.inlined-input(type='text', name='life_on_grounds_link', value=home_updates.life_on_grounds_link)
                         hr
 
@@ -112,7 +112,7 @@ block content
                                     div.onexys_video
                                         a.colorbox(href=video.video_src)
                                             if video.video_img
-                                                img.onexys_thumbnail(src=video.video_img)
+                                                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
                                             else
                                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
                                             img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
