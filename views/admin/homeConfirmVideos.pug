@@ -9,13 +9,13 @@ block content
   .onexys_styling.o_hompage
     .left(style='width: 500px !important; margin-top: -10px;')
       #featured.standard_home_box.left(style='width: 458px !important;')
-        h2=life_on_grounds_title + ' Videos'
+        h2=video.life_on_grounds_title + ' Videos'
         .onexys_video
           a.colorbox(href=video.video_src)
             if video.video_img
               img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
             else
-              img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+life_on_grounds_thumbnail, alt='')
+              img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.life_on_grounds_thumbnail, alt='')
             img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
         p
           span(style='font-size: 12pt;')
