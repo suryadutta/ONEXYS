@@ -9,13 +9,13 @@ block content
   .onexys_styling.o_hompage
     .left(style='width: 500px !important; margin-top: -10px;')
       #featured.standard_home_box.left(style='width: 458px !important;')
-        h2 Life @ Yale Videos
+        h2=life_on_grounds_title + ' Videos'
         .onexys_video
           a.colorbox(href=video.video_src)
             if video.video_img
-              img.onexys_thumbnail(src=video.video_img)
+              img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
             else
-              img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+              img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+life_on_grounds_thumbnail, alt='')
             img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
         p
           span(style='font-size: 12pt;')
@@ -29,7 +29,6 @@ block content
       input#video_src(type='hidden', value=video.video_src, name='video_src')
       input#video_img(type='hidden', value=video.video_img, name='video_img')
       input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
-
       button.btn.btn-dark(type='submit') Back to Edits
 
   form(method='POST' action='/admin/home/videos/confirmUpdates/'+video_id)
@@ -40,5 +39,8 @@ block content
       input#video_src(type='hidden', value=video.video_src, name='video_src')
       input#video_img(type='hidden', value=video.video_img, name='video_img')
       input#video_desc(type='hidden', value=video.video_desc, name='video_desc')
+
+      input#life_on_grounds_title(type='hidden', value=life_on_grounds_title, name='life_on_grounds_title')
+      input#life_on_grounds_thumbnail(type='hidden', value=life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
 
       button.btn.btn-success(type='submit') Submit Changes

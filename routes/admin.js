@@ -130,6 +130,8 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
     user_id: req.session.user_id,
     video: req.body,
     video_id: req.params.id,
+    life_on_grounds_title: req.life_on_grounds_title,
+    life_on_grounds_thumbnail: req.life_on_grounds_thumbnail,
     heroku_app: config.herokuAppName
   });
 });
