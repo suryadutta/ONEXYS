@@ -94,6 +94,8 @@ router.post("/home/videos/add", (req, res, next) => {
 router.get("/home/videos/edit/:id", (req, res, next) => {
   mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
     home_vid = home_vids.find(video => video._id == req.params.id);
+    console.log('Incoming Request');
+    console.log(req);
     if (home_vid) {
       res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
