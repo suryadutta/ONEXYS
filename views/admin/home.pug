@@ -87,6 +87,13 @@ block content
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
+                                label(for='life_on_grounds_link') Life on Campus Default Thumbnail:
+                                input#life_on_grounds_link.form-control.inlined-input(type='text', name='life_on_grounds_thumbnail', value=home_updates.life_on_grounds_thumbnail)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
                                 label(for='daily_task_img') Daily Task Flag:
                                 input#daily_task_img.form-control.inlined-input(type='text', name='daily_task_img', value=home_updates.daily_task_img)
                         hr
