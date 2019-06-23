@@ -119,7 +119,9 @@ router.post("/home/videos/edit/:id", (req, res, next) => {
     course_title: req.session.course_title,
     course_id: req.session.course_id,
     user_id: req.session.user_id,
-    video: home_vid
+    video: home_vid,
+    life_on_grounds_title: req.body.life_on_grounds_title,
+    life_on_grounds_thumbnail: req.body.life_on_grounds_thumbnail
   });
 });
 
