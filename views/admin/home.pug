@@ -66,16 +66,36 @@ block content
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
-                                label(for='badges_link') Badges URL:
+                                label(for='badges_link') Badges URL (Link to Canvas page or tool):
                                 input#badges_link.form-control.inlined-input(type='text', name='badges_link', value=home_updates.badges_link)
                         hr
-
 
                     div.row
                         div.col-md-12
                             div.form-group.form-inline
-                                label(for='life_on_grounds_link') Life on Grounds URL:
+                                label(for='life_on_grounds_title') Life on Campus Title (Life at UVA, Yale, etc):
+                                input#life_on_grounds_title.form-control.inlined-input(type='text', name='life_on_grounds_title', value=home_updates.life_on_grounds_title)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='life_on_grounds_link') Life on Campus URL (Link to the Canvas page or tool):
                                 input#life_on_grounds_link.form-control.inlined-input(type='text', name='life_on_grounds_link', value=home_updates.life_on_grounds_link)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='life_on_grounds_thumbnail') Life on Campus Default Thumbnail:
+                                input#life_on_grounds_thumbnail.form-control.inlined-input(type='text', name='life_on_grounds_thumbnail', value=home_updates.life_on_grounds_thumbnail)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='daily_task_img') Daily Task Flag:
+                                input#daily_task_img.form-control.inlined-input(type='text', name='daily_task_img', value=home_updates.daily_task_img)
                         hr
 
                     div.row
@@ -99,9 +119,9 @@ block content
                                     div.onexys_video
                                         a.colorbox(href=video.video_src)
                                             if video.video_img
-                                                img.onexys_thumbnail(src=video.video_img)
+                                                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
                                             else
-                                                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
+                                                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
                                             img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
                                     p
                                     span(style='font-size: 12pt;')
@@ -112,6 +132,8 @@ block content
                                             input(type='hidden', value=course_id, name='course-id')
                                             input(type='hidden', value=course_title, name='course-title')
                                             input(type='hidden', value=user_id, name='user-id')
+                                            input(type='hidden', value=home_updates.life_on_grounds_title, name='life_on_grounds_title')
+                                            input(type='hidden', value=home_updates.life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
                                             button.btn.btn-dark(type='submit') Edit
                                         form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                                             input(type='hidden', value=course_id, name='course-id')
