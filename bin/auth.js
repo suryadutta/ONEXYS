@@ -117,6 +117,7 @@ var checkUser = function(req, res, next) {
     if (req.query.login_success=='1'){
       next();
     } else {
+      console.log(provider);
       provider.valid_request(req, function(err, is_valid) {
         if (!is_valid) {
           console.log('Unverified User:');
