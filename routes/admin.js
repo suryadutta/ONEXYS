@@ -214,6 +214,9 @@ router.post("/modules/:id/preview", (req, res, next) => {
       course_id: req.session.course_id,
       user_id: req.session.user_id,
       canvas_url: config.canvasURL,
+      // This is a duplicate, but the two variables are used for different things
+      // and the pug templates are already hard enough to read.
+      course_number: req.session.course_id,
       data: merged_data,
     });
   });
