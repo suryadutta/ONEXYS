@@ -30,6 +30,7 @@ config.mongoDBs = {
   '3529': 'white',
   '3559': 'conexDemo',
   '48080': 'smith',
+  '48036': 'yale-blue',
 };
 
 //the name of the mongo db to connect to
