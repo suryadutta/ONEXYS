@@ -3,7 +3,7 @@ var config = require('./config');
 var request = require('request');
 var Queue = require('better-queue');
 
-var lti = require ('ims-lti');
+var lti = require('ims-lti');
 var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
 var redis = require("redis"),
     redis_client = redis.createClient(config.redisURL);
@@ -91,10 +91,13 @@ var updateCookies = function(req, res, next){
   if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
+    console.log("Provider admin before cookies set? " + provider.admin);
+    console.log(provider);
     req.session.course_id = req.body.custom_canvas_course_id;
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
     req.session.admin = req.body.roles.includes('Instructor');
+    console.log("Am admin? " + req.session.admin);
     next();
   } else if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');

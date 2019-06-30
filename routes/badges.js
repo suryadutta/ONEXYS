@@ -13,6 +13,8 @@ router.use('/', function(req, res, next) {
   console.log(courseID)
   console.log(userID)
 
+  console.log("Admin? " + req.session.admin);
+
   if (req.session.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
