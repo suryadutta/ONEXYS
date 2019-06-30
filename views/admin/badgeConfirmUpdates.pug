@@ -16,7 +16,7 @@ block content
         h3=badge.title
         p=badge.description
       .badge_points.badge_box
-        p=badge.points
+        p=badge.badge_points
       .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.earned_hover_url+')')
       .badge_portrait.front_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.earned_url+')')
       .badge_label.badge_box
@@ -28,7 +28,7 @@ block content
         h3=badge.title
         p=badge.description
       .badge_points.badge_box
-        p=badge.points
+        p=badge.badge_points
       .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.unearned_url+')')
       .badge_label.badge_box
         h3=badge.portrait
@@ -42,7 +42,7 @@ block content
 
         input#title(type='hidden', value=badge.Title, name='title')
         input#description(type='hidden', value=badge.description, name='description')
-        input#badge_points(type='hidden', value=badge.points, name='badge_points')
+        input#badge_points(type='hidden', value=badge.badge_points, name='badge_points')
 
         input#portrait(type='hidden', value=badge.portrait, name='portrait')
         input#portraitdescription(type='hidden', value=badge.portraitdescription name='portraitdescription')
@@ -62,7 +62,7 @@ block content
 
         input#title(type='hidden', value=badge.Title, name='title')
         input#description(type='hidden', value=badge.description, name='description')
-        input#badge_points(type='hidden', value=badge.points, name='badge_points')
+        input#badge_points(type='hidden', value=badge.badge_points, name='badge_points')
 
         input#portrait(type='hidden', value=badge.portrait, name='portrait')
         input#portraitdescription(type='hidden', value=badge.portraitdescription name='portraitdescription')
