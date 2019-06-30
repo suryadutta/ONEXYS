@@ -394,19 +394,21 @@ router.post("/badges/preview", (req, res, next) => {
 //post badge edits
 router.post("/badges/confirmUpdates", (req, res, next) => {
   //update badges info
+  console.log("What about this?");
+  console.log(req.body);
   mongo.updateData(
     req.session.course_id,
     "badges",
     { _id: parseInt(req.params.id) },
     {
-      Title: req.body.title,
-      Description: req.body.description,
-      Points: req.body.badge_points,
-      Portrait: req.body.portrait,
-      PortraitDescription: req.body.portraitdescription,
-      UnearnedURL: req.body.unearned_url,
-      EarnedURL: req.body.earned_url,
-      EarnedHoverURL: req.body.earned_hover_url
+      Title: req.body.Title,
+      Description: req.body.Description,
+      Points: req.body.Points,
+      Portrait: req.body.Portrait,
+      PortraitDescription: req.body.PortraitDescription,
+      UnearnedURL: req.body.UnearnedURL,
+      EarnedURL: req.body.EarnedURL,
+      EarnedHoverURL: req.body.EarnedHoverURL
     },
     (err, result) => {
       res.redirect("/admin/badges");

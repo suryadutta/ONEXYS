@@ -36,22 +36,22 @@ block content
 
     br
 
-    form(method='POST', action='/admin/badges/edit/'+badge.badge-id)
+    form(method='POST', action='/admin/badges/edit/'+badge.badge_id)
 
         input(type='hidden', value=course_id, name='course-id')
         input(type='hidden', value=course_title, name='course-title')
         input(type='hidden', value=user_id, name='user-id')
 
-        input#title(type='hidden', value=badge.Title, name='title')
-        input#description(type='hidden', value=badge.Description, name='description')
-        input#badge_points(type='hidden', value=badge.Points, name='badge_points')
+        input#title(type='hidden', value=badge.Title, name='Title')
+        input#description(type='hidden', value=badge.Description, name='Description')
+        input#badge_points(type='hidden', value=badge.Points, name='Points')
 
-        input#portrait(type='hidden', value=badge.Portrait, name='portrait')
-        input#portraitdescription(type='hidden', value=badge.PortraitDescription name='portraitdescription')
+        input#portrait(type='hidden', value=badge.Portrait, name='Portrait')
+        input#portraitdescription(type='hidden', value=badge.PortraitDescription name='PortraitDescription')
 
-        input#unearned_url(type='hidden', value=badge.UnearnedURL, name='unearned_url')
-        input#earned_url(type='hidden', value=badge.EarnedURL, name='earned_url')
-        input#earned_hover_url(type='hidden', value=badge.EarnedHoverURL, name='earned_hover_url')
+        input#unearned_url(type='hidden', value=badge.UnearnedURL, name='UnearnedURL')
+        input#earned_url(type='hidden', value=badge.EarnedURL, name='EarnedURL')
+        input#earned_hover_url(type='hidden', value=badge.EarnedHoverURL, name='EarnedHoverURL')
 
 
         button.btn.btn-danger(type='submit') Back to Edits
@@ -62,16 +62,16 @@ block content
         input(type='hidden', value=course_title, name='course-title')
         input(type='hidden', value=user_id, name='user-id')
 
-        input#title(type='hidden', value=badge.Title, name='title')
-        input#description(type='hidden', value=badge.Description, name='description')
-        input#badge_points(type='hidden', value=badge.Points, name='badge_points')
+        input#title(type='hidden', value=badge.Title, name='Title')
+        input#description(type='hidden', value=badge.Description, name='Description')
+        input#badge_points(type='hidden', value=badge.Points, name='Points')
 
-        input#portrait(type='hidden', value=badge.Portrait, name='portrait')
-        input#portraitdescription(type='hidden', value=badge.PortraitDescription name='portraitdescription')
+        input#portrait(type='hidden', value=badge.Portrait, name='Portrait')
+        input#portraitdescription(type='hidden', value=badge.PortraitDescription name='PortraitDescription')
 
-        input#unearned_url(type='hidden', value=badge.UnearnedURL, name='unearned_url')
-        input#earned_url(type='hidden', value=badge.EarnedURL, name='earned_url')
-        input#earned_hover_url(type='hidden', value=badge.EarnedHoverURL, name='earned_hover_url')
+        input#unearned_url(type='hidden', value=badge.UnearnedURL, name='UnearnedURL')
+        input#earned_url(type='hidden', value=badge.EarnedURL, name='EarnedURL')
+        input#earned_hover_url(type='hidden', value=badge.EarnedHoverURL, name='EarnedHoverURL')
 
 
         button.btn.btn-success(type='submit') Save Changes
