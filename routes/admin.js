@@ -380,6 +380,7 @@ router.post("/badges/edit/:id", (req, res, next) => {
 router.post("/badges/preview", (req, res, next) => {
   console.log("Made it here!");
   console.log(req.body);
+  console.log("Badge id: " + req.body.badge_id);
   res.render("admin/badgeConfirmUpdates", {
     title: "Badges",
     course_title: req.session.course_title,
