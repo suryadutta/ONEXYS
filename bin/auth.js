@@ -114,14 +114,13 @@ var checkUser = function(req, res, next) {
     console.log('Session Test: Course-ID');
     console.log(req.session.course_id);
     req.connection.encrypted = true;
+    console.log(provider);
     if (req.query.login_success=='1'){
       next();
     } else {
-      console.log(provider);
       provider.valid_request(req, function(err, is_valid) {
         if (!is_valid) {
           console.log('Unverified User:');
-          console.log(provider.valid_request);
           console.log(provider);
           res.send('Unverified User');
         } else {
