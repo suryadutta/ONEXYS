@@ -351,6 +351,7 @@ router.get("/badges", (req, res, next) => {
   });
 });
 
+//get to badge edit from badges list
 router.get("/badges/edit/:id", (req, res, next) => {
   mongo.getData(req.session.course_id,"badges", (err, badges_data) => {
     badge_data = badges_data.find(element => element._id == req.params.id);
@@ -364,7 +365,30 @@ router.get("/badges/edit/:id", (req, res, next) => {
   });
 });
 
+//Go back to badge edit with recent edits
 router.post("/badges/edit/:id", (req, res, next) => {
+  res.render("admin/badgeEdit", {
+    title: "Badges",
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
+    badge: req.body
+  });
+});
+
+//go to confirmation page
+router.post("/badges/preview", (req, res, next) => {
+  res.render('/badges/confirmUpdates', {
+    title: "Badges",
+    course_title: req.session.course_title,
+    course_id: req.session.course_id,
+    user_id: req.session.user_id,
+    badge: req.body
+  });
+});
+
+//post badge edits
+router.post("/badges/confirmUpdates", (req, res, next) => {
   //update badges info
   mongo.updateData(
     req.session.course_id,

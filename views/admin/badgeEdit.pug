@@ -11,10 +11,11 @@ block content
                 h2='Editing ' + course_title + ': Badge ' + badge._id
     hr
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+    form(method='POST' action='/admin/badges/preview' onsubmit="return confirm('Do you really want to submit your changes?');")
         input(type='hidden', value=course_id, name='course-id')
         input(type='hidden', value=course_title, name='course-title')
         input(type='hidden', value=user_id, name='user-id')
+        input(type='hidden', value=badge._id, name='badge-id')
 
         div.form-group.form-inline
             label(for='title') Title:
