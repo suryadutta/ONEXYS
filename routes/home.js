@@ -66,8 +66,12 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("Module Progress: " + module_progress);
+          console.log("Leaderboard: " + leaderboard)
+          console.log("Students: " + students);
+          console.log("Admin: " + req.session.admin);
           res.render("home", {
-            title: "Home | CONEX",
+            title: "Home | " + config.herokuAppName,
             courseID,
             module_progress,
             score: 0,
@@ -83,9 +87,9 @@ router.use("/", (req, res, next) => {
             daily_yalie,
             is_physics,
             admin: req.session.admin,
+            heroku_app: config.herokuAppName,
             masquerade: false,
-            students,
-            heroku_app: config.herokuAppName
+            students
           });
         }
       );
@@ -107,7 +111,7 @@ router.use("/", (req, res, next) => {
         daily_yalie
       ) => {
         res.render("home", {
-          title: "Home | CONEX",
+          title: "Home | " + config.herokuAppName,
           courseID,
           module_progress,
           score,
