@@ -636,9 +636,10 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             }
         }
         if (groupNames.length < 3){
-            fillerArray = Array(3-combinedArray.length).fill({'Name': '','Score': 0});
+            fillerArray = Array(3-combinedArray.length).fill({'Name': '', 'Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
+        console.log("Admin leaderboard here: " + combinedArray);
         return combinedArray;
     }
 
