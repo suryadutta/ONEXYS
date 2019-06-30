@@ -378,7 +378,8 @@ router.post("/badges/edit/:id", (req, res, next) => {
 
 //go to confirmation page
 router.post("/badges/preview", (req, res, next) => {
-  res.render('/badges/confirmUpdates', {
+  console.log("Made it here!");
+  res.render('/admin/badgeConfirmUpdates', {
     title: "Badges",
     course_title: req.session.course_title,
     course_id: req.session.course_id,
