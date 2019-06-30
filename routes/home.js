@@ -66,12 +66,10 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
-          console.log("Course ID: " + courseID);
-          console.log("home_updates: " + home_updates);
-          console.log("home_vids: " + home_vids);
-          console.log("home_links: " + home_links);
-          console.log("students: " + students);
           console.log("daily_yalie: " + daily_yalie);
+          console.log("daily_yalie.id: " + daily_yalie.id);
+          console.log("Null? " + daily_yalie.id == null);
+          console.log("-1? " + daily_yalie.id == -1);
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,
