@@ -68,7 +68,7 @@ router.use("/", (req, res, next) => {
         ) => {
           console.log("Course ID: " + courseID);
           console.log("home_updates: " + home_updates);
-          console.log("home_vids: " + home_vid);
+          console.log("home_vids: " + home_vids);
           console.log("home_links: " + home_links);
           console.log("students: " + students);
           console.log("daily_yalie: " + daily_yalie);
