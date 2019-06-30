@@ -396,7 +396,7 @@ router.post("/badges/confirmUpdates", (req, res, next) => {
   mongo.updateData(
     req.session.course_id,
     "badges",
-    { _id: parseInt(req.params.id) },
+    { _id: parseInt(req.body.badge_id) },
     {
       Title: req.body.Title,
       Description: req.body.Description,
@@ -408,7 +408,6 @@ router.post("/badges/confirmUpdates", (req, res, next) => {
       EarnedHoverURL: req.body.EarnedHoverURL
     },
     (err, result) => {
-      console.log(err);
       res.redirect("/admin/badges");
     }
   );
