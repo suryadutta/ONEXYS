@@ -394,8 +394,6 @@ router.post("/badges/preview", (req, res, next) => {
 //post badge edits
 router.post("/badges/confirmUpdates", (req, res, next) => {
   //update badges info
-  console.log("What about this?");
-  console.log(req.body);
   mongo.updateData(
     req.session.course_id,
     "badges",
