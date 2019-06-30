@@ -19,41 +19,41 @@ block content
 
         div.form-group.form-inline
             label(for='title') Title:
-            input#title.form-control(type='text', value=badge.Title, name='title')
+            input#title.form-control(type='text', value=badge.Title, name='Title')
         hr
 
         div.form-group
             label(for='description') Description:
             br
-            textarea(rows=3)#description.form-control(name='description')=badge.Description
+            textarea(rows=3)#description.form-control(name='Description')=badge.Description
         hr
 
         div.form-group.form-inline
             label(for='badge_points') Points:
-            input#badge_points.form-control(type='numeric', value=badge.Points, name='badge_points')
+            input#badge_points.form-control(type='numeric', value=badge.Points, name='Points')
         hr
 
         div.form-group.form-inline
             label(for='portrait') Portrait:
-            input#portrait.form-control(type='text', value=badge.Portrait, name='portrait')
+            input#portrait.form-control(type='text', value=badge.Portrait, name='Portrait')
         hr
 
         div.form-group
             label(for='portraitdescription') Portrait Description:
             br
-            textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
+            textarea(rows=3)#portraitdescription.form-control(name='PortraitDescription')=badge.PortraitDescription
             small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
         hr
 
         div.form-group
             label(for='unearned_url') Unearned URL:
-            input#unearned_url.form-control(type='text', value=badge.UnearnedURL, name='unearned_url')
+            input#unearned_url.form-control(type='text', value=badge.UnearnedURL, name='UnearnedURL')
             br
             label(for='earned_url') Earned URL:
-            input#earned_url.form-control(type='text', value=badge.EarnedURL, name='earned_url')
+            input#earned_url.form-control(type='text', value=badge.EarnedURL, name='EarnedURL')
             br
             label(for='earned_hover_url') Earned Hover URL:
-            input#earned_hover_url.form-control(type='text', value=badge.EarnedHoverURL, name='earned_hover_url')
+            input#earned_hover_url.form-control(type='text', value=badge.EarnedHoverURL, name='EarnedHoverURL')
         hr
 
         button.btn.btn-success(type='submit') Save Changes
