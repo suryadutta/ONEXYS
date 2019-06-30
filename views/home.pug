@@ -23,7 +23,8 @@ block content
               img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
           else
             if daily_yalie.id == -1
-              // An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
+              //
+                An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
               a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/not-open', target='_blank')
                 img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
             else
@@ -86,3 +87,76 @@ block content
           p Apply
         br
         .clear
+
+        each module, index in module_progress
+
+          div
+            if module.open == 'true'
+              if module.practice_progress && module.quiz_progress
+                a.progress_box.completed(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+module.button_background_image+'_1.png);', href= '/modules/'+module._id)
+                  span= module.primary_title
+                  br
+                  span= module.secondary_title
+              else
+                a.progress_box.available(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+module.button_background_image+'_0.png);', href= '/modules/'+module._id)
+                  span= module.primary_title
+                  br
+                  span= module.secondary_title
+            else
+              a.progress_box(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+module.button_background_image+'_2.png);')
+                span= module.primary_title
+                br
+                span= module.secondary_title
+
+            if module.practice_progress
+              div(class='onexys_checkbox aleks_checkbox completed' style='margin-left: 14px !important;')
+            else
+              div(class='onexys_checkbox aleks_checkbox' style='margin-left: 14px !important;')
+
+            if module.quiz_progress
+              div(class='onexys_checkbox quiz_checkbox completed')
+            else
+              div(class='onexys_checkbox quiz_checkbox')
+
+          br
+          .clear
+
+        if home_updates.post_test == 'true'
+          .module_11.module_background_00
+            a.progress_box.available.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_0.png);', href='/post-test?filename='+home_updates.post_test_filename)  Post-Test
+        else
+          .module_11.module_background_00
+            a.progress_box.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_2.png);')  Post-Test
+    .left(style='width: 500px !important; margin-top: -10px;')
+      .lucky_bulldog
+        img(src='', alt='Lucky Bulldog')
+        .lucky_bulldog_text +500pts!
+      br
+      .clear
+      #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+        h2 Updates
+        .entry.clear
+          p.entry_header
+            strong!=home_updates.main_header
+          p.entry_text!=home_updates.main_text
+        .entry.clear
+          p.entry_header!=home_updates.header2
+          p.entry_text!=home_updates.text2
+        .entry.clear
+          p.entry_header!=home_updates.header3
+          p.entry_text!=home_updates.text3
+      #featured.standard_home_box.left(style='width: 458px !important;')
+        h2= home_updates.life_on_grounds_title+" Videos"
+        p
+          a(href=home_updates.life_on_grounds_link, target='_blank')= "Click here to see all "+home_updates.life_on_grounds_title+" videos"
+        each video in home_vids
+          .onexys_video
+            a.colorbox(href=video.video_src)
+              if video.video_img
+                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
+              else
+                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
+              img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
+          p
+            span(style='font-size: 12pt;')
+              strong!=video.video_desc
