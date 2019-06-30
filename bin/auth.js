@@ -92,12 +92,12 @@ var updateCookies = function(req, res, next){
     console.log('Assigning Cookies');
     console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
     console.log("Provider admin before cookies set? " + provider.admin);
-    console.log(provider);
     req.session.course_id = req.body.custom_canvas_course_id;
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
     req.session.admin = req.body.roles.includes('Instructor');
     console.log("Am admin? " + req.session.admin);
+    console.log("Provider still admin? " + provider.admin);
     next();
   } else if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
@@ -116,8 +116,9 @@ var checkUser = function(req, res, next) {
   } else {
     console.log('Session Test: Course-ID');
     console.log(req.session.course_id);
+    console.log("Pre encryption? " + provider.admin);
     req.connection.encrypted = true;
-    console.log(provider);
+    console.log("Post encryption? " + provider.admin);
     if (req.query.login_success=='1'){
       next();
     } else {
