@@ -39,6 +39,7 @@
 .onexys_styling a {
 	color: rgb(37, 63, 142);
 	/*text-decoration: none;*/
+	/* the above line was originall part of the onexys_styling.  It's commented out so that links are now underlined */
 }
 
 .clear {
