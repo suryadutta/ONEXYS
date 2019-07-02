@@ -34,6 +34,17 @@ block content
         h3=badge.Portrait
         p=badge.PortraitDescription
 
+    div(class='badge_container completed')
+      .badge_descriptor.badge_box
+        h3=badge.Title
+        p=badge.Description
+      .badge_points.badge_box
+        p=badge.Points
+      .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
+      .badge_label.badge_box
+        h3=badge.Portrait
+        p=badge.PortraitDescription
+
     br
 
     form(method='POST', action='/admin/badges/edit/'+badge.badge_id)
