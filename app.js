@@ -68,8 +68,9 @@ app.get("/coach-information", function(req, res) {
 });
 
 app.post("/coach-information", function(req, res) {
-
-  res.sendFile(path.join(__dirname, "/views/static/coach-information.html"));
+  mongo.getStaticPage(req.session.course_id, "coach-information", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.get("/welcome", function(req, res) {

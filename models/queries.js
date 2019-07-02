@@ -132,13 +132,6 @@ function homepageAdminQuery(courseID, course_title, callback){
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
 }
-
-function staticPagesQuery(courseID, callback) {
-  mongo.getStaticPages(courseID, function(err, pages) {
-    callback(pages);
-  });
-}
-
 function badgesQuery(studentID, courseID, callback) {
   canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
     callback(badges);
@@ -155,7 +148,6 @@ module.exports = {
   homepageQuery,
   homepageQueryMasquerade,
   homepageAdminQuery,
-  staticPagesQuery,
   badgesQuery,
   badgesAdminQuery
 }

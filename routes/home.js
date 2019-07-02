@@ -47,11 +47,10 @@ router.use("/", (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            domain: config.canvasDomain,
+            canvasURL: config.canvasURL,
             admin: req.session.admin,
             masquerade: true,
-            heroku_app: config.herokuAppName,
-            canvasURL: config.canvasURL
+            heroku_app: config.herokuAppName
           });
         }
       );
@@ -84,12 +83,11 @@ router.use("/", (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
-            domain: config.canvasDomain,
+            canvasURL: config.canvasURL,
             admin: req.session.admin,
             heroku_app: config.herokuAppName,
             masquerade: false,
-            students,
-            canvasURL: config.canvasURL
+            students
           });
         }
       );
@@ -123,10 +121,9 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
-          domain: config.canvasDomain,
+          canvasURL: config.canvasURL,
           admin: req.session.admin,
-          heroku_app: config.herokuAppName,
-          canvasURL: config.canvasURL
+          heroku_app: config.herokuAppName
         });
       }
     );
