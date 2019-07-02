@@ -47,6 +47,8 @@ block content
         input#life_on_grounds_thumbnail(type='hidden', value=home_updates.life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
         input#daily_task_img(type='hidden', value=home_updates.daily_task_img, name='daily_task_img')
 
+        input#coach_information(type='hidden', value=home_updates.coach_information, name='coach_information')
+
         button.btn.btn-danger(type='submit') Back to Edits
 
     form(method='POST' action='/admin/home/confirmUpdates')
@@ -68,5 +70,7 @@ block content
         input#life_on_grounds_title(type='hidden', value=home_updates.life_on_grounds_title, name='life_on_grounds_title')
         input#life_on_grounds_thumbnail(type='hidden', value=home_updates.life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
         input#daily_task_img(type='hidden', value=home_updates.daily_task_img, name='daily_task_img')
+
+        input#coach_information(type='hidden', value=home_updates.coach_information, name='coach_information')
 
         button.btn.btn-success(type='submit') Save Changes

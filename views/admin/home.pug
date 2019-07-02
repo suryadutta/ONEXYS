@@ -100,6 +100,13 @@ block content
 
                     div.row
                         div.col-md-12
+                            div.form-group.form-inline
+                                label(for='coach_information') Coach Information Filename:
+                                input#coach_information.form-control.inlined-input(type='text', name='coach_information', value=home_updates.coach_information)
+                        hr
+
+                    div.row
+                        div.col-md-12
                             button.btn.btn-success(type='submit') Preview Changes
                     hr
 
