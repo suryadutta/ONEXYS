@@ -741,7 +741,6 @@
 	background-color: rgb(235, 95, 12);
 	color: white;
 	border: 4px solid rgb(235, 95, 12);
-	z-index: -1;
 }
 
 .coach_packet{
@@ -824,6 +823,7 @@
 	border-radius: 2px;
 	background-color: rgb(34, 92, 203);
 	height: calc(100% - 20px);
+	z-index: 9999;
 
 }
 .coach_title_shadow{
