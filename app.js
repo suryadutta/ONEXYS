@@ -64,7 +64,9 @@ app.use('/launch',launch)
 
 // static file display
 app.get("/coach-information", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/coach-information.html"));
+  mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.post("/coach-information", function(req, res) {
