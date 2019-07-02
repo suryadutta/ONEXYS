@@ -955,7 +955,8 @@
 	width: 110px;
 }
 .lifeatindex a{
-	font-size: 12px;
+	/* font-size: 12px; */
+	font-size: 14px;
 	line-height: 20px;
   /*border-bottom: 1px solid;*/
 }
