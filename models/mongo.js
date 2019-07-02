@@ -55,6 +55,13 @@ function deleteData(courseID, collection_name, delete_index,callback){
     });
 }
 
+function getStaticPages(courseID, callback){
+    getData(courseID, 'home', function(err, data){
+        pages = data.filter(document => document.type == 'staticPage');
+        callback(err, pages);
+    });
+}
+
 function getHomeContent(courseID, callback){
     getData(courseID, 'home', function(err, data){
         home_updates = data.find(document => document.type == 'updates');
@@ -131,6 +138,7 @@ module.exports = {
     insertData,
     updateData,
     deleteData,
+    getStaticPages,
     getHomeContent,
     getModules,
     getModule,

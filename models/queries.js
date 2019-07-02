@@ -133,13 +133,19 @@ function homepageAdminQuery(courseID, course_title, callback){
   });
 }
 
-function badgesQuery(studentID, courseID, callback){
+function staticPagesQuery(courseID, callback) {
+  mongo.getStaticPages(courseID, function(err, pages) {
+    callback(pages);
+  });
+}
+
+function badgesQuery(studentID, courseID, callback) {
   canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
     callback(badges);
   });
 }
 
-function badgesAdminQuery(courseID, callback){
+function badgesAdminQuery(courseID, callback) {
   mongo.getAllData(courseID, function(mongo_data){
     callback(mongo_data.badges);
   });
@@ -149,6 +155,7 @@ module.exports = {
   homepageQuery,
   homepageQueryMasquerade,
   homepageAdminQuery,
+  staticPagesQuery,
   badgesQuery,
   badgesAdminQuery
 }

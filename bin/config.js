@@ -39,6 +39,8 @@ config.mongoDBs = {
 //the name of the mongo db to connect to
 config.mongo_db_name = process.env.MONGO_DB_NAME;
 
+config.canvasDomain = process.CANVAS_DOMAIN;
+
 config.cookieduration = 1000 * 60 * 60 * 24;
 
 config.herokuAppName = process.env.HEROKU_APP_NAME;

@@ -47,6 +47,7 @@ router.use("/", (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
+            domain: config.canvasDomain,
             admin: req.session.admin,
             masquerade: true,
             heroku_app: config.herokuAppName
@@ -82,6 +83,7 @@ router.use("/", (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
+            domain: config.canvasDomain,
             admin: req.session.admin,
             heroku_app: config.herokuAppName,
             masquerade: false,
@@ -119,6 +121,7 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
+          domain: config.canvasDomain,
           admin: req.session.admin,
           heroku_app: config.herokuAppName
         });

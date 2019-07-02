@@ -68,6 +68,7 @@ app.get("/coach-information", function(req, res) {
 });
 
 app.post("/coach-information", function(req, res) {
+
   res.sendFile(path.join(__dirname, "/views/static/coach-information.html"));
 });
 
