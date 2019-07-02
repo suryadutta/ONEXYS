@@ -741,6 +741,7 @@
 	background-color: rgb(235, 95, 12);
 	color: white;
 	border: 4px solid rgb(235, 95, 12);
+	z-index: -1;
 }
 
 .coach_packet{
