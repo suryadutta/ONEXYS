@@ -957,7 +957,7 @@
 .lifeatindex a{
 	font-size: 12px;
 	line-height: 20px;
-  border-bottom: 1px solid;
+  /*border-bottom: 1px solid;*/
 }
 .lifeatshadow{
 	width: 800px;
