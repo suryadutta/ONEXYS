@@ -28,7 +28,7 @@ block content
               a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/not-open', target='_blank')
                 img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
             else
-              a(title='Open Daily Task', href='https://curryvirginia.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
+              a(title='Open Daily Task', href=canvaslURL+'/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
                 img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
       #leaderboard.standard_home_box.left
         h2 Leaderboard
