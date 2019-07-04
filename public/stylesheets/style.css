@@ -2,10 +2,6 @@
     display: none !important;
 }
 
-*, ::after, ::before {
-    box-sizing: border-box;
-}
-
 @@ -0,0 +1,1633 @@
 .user_content {
     overflow-x: scroll;
