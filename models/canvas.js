@@ -143,12 +143,14 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var d = new Date();
 
         console.log("Triggered get-all!");
-        console.log(mongo_data.lucky_bulldogs);
 
         if (mongo_data.lucky_bulldogs.length>0){
             console.log("Luckies:");
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 console.log(lucky_bulldog);
+                console.log("Assigned time: " + Date.parse(lucky_bulldog.time));
+                console.log("Current time: " + d.getTime());
+                console.log("Difference: " + (d.getTime() - Date.parse(lucky_bulldog.time)));
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
