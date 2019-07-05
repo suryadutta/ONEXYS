@@ -551,11 +551,15 @@ router.get("/lucky/add", (req, res, next) => {
 
 router.post("/lucky/add", (req, res, next) => {
   mongo.getData(req.session.course_id,"lucky_bulldogs", (err, lucky_data) => {
+    console.log("Largest ID: " + Math.max(lucky_data.map(data => data._id)));
+    console.log(lucky_data);
+    console.log(lucky_data.map(data => data._id));
     if (lucky_data.length > 0) {
       new_id = Math.max(lucky_data.map(data => data._id)) + 1;
     } else {
       new_id = 1;
     }
+    console.log("New id: " + new_id);
     mongo.insertData(
       req.session.course_id,
       "lucky_bulldogs",
