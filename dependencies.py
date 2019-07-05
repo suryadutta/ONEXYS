@@ -39,5 +39,5 @@ for f in get_file_list(os.getcwd()):
 
     with open(f, 'r', encoding='latin-1') as contents:
         contents = contents.read()
-        if 'lucky_bulldogs' in contents:
+        if 'env.TZ' in contents:
             print(f)

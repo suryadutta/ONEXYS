@@ -142,36 +142,24 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         lucky_bulldog_points = 100;
         var d = new Date();
 
-        console.log("Triggered get-all!");
-
         if (mongo_data.lucky_bulldogs.length>0){
-            console.log("Luckies:");
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                console.log(lucky_bulldog);
-                console.log("Assigned time: " + Date.parse(lucky_bulldog.time));
-                console.log("Current time: " + d.getTime());
-                console.log("Difference: " + (d.getTime() - Date.parse(lucky_bulldog.time)));
                 //student already was awarded lucky bulldog
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
-                        console.log("Counted points!");
                         totalPoints += parseInt(lucky_bulldog_points);
                     } else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
-                        console.log("Awarded lucky (1) to " + studentID);
                         totalPoints += parseInt(lucky_bulldog_points);
                         lucky_bulldog.awarded_ids.push(studentID);
                         mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                     }
                 } else if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
-                    console.log("Awarded lucky (2) to " + studentID);
                     totalPoints += parseInt(lucky_bulldog_points);
                     lucky_bulldog.awarded_ids.push(studentID);
                     mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                 }
             }
         }
-
-        console.log("Points: " + totalPoints);
 
         function awardBadge(badgeID) {
             badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
