@@ -56,10 +56,8 @@ function deleteData(courseID, collection_name, delete_index,callback){
 }
 
 function getStaticPage(courseID, targetPage, callback){
-    console.log("Here!");
     getData(courseID, 'home', function(err, data){
         home_updates = data.find(document => document.type == 'updates');
-        console.log("Target Page: " + home_updates[targetPage]);
         callback(err, home_updates[targetPage]);
     });
 }
