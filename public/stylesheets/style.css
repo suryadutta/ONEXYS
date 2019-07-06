@@ -38,8 +38,13 @@
 }
 .onexys_styling a {
 	color: rgb(37, 63, 142);
-	/*text-decoration: none;*/
-	/* the above line was originall part of the onexys_styling.  It's commented out so that links are now underlined */
+  text-decoration: underline;
+}
+
+.onexys_styling h4 {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 18px;
 }
 
 .clear {
@@ -556,7 +561,7 @@
 	padding-top: 40px;
 }
 .title_box {
-	min-width: 80px;
+	min-width: 100.5px;
 	position: absolute;
 	left: -20px;
 	top: -35px;
@@ -1037,19 +1042,19 @@
 	position: absolute;
 	left: 790px;
 	top: 0px;
-	width:220px;
+	width:246.5px;
 	padding-bottom: 0px;
 }
 #overview {
 	margin-top:170px;
 	padding-top: 20px;
-	width:300px;
+	width:326.5px;
 	padding-top: 20px;
 }
 #watch{
 	margin-top:450px;
 	padding-top: 20px;
-	width:650px;
+	width:676.5px;
 	padding-top: 20px;
 }
 #practice {
@@ -1061,7 +1066,7 @@
 #apply {
 	margin-top: 40px;
 	padding-top: 20px;
-	width:400px;
+	width: 426.5px;
 	padding-top: 20px;
 }
 #explore {
@@ -1069,7 +1074,7 @@
 	padding-left: 10px;
 	padding-right: 10px;
 	margin-top: 40px;
-	width:400px;
+	width: 426.5px;
 	padding-bottom: 10px;
 	padding-top: 20px;
 }
@@ -1099,7 +1104,8 @@
 #practice .onexys_button{
 	display: block;
 	margin: 0px auto 10px;
-	width: 90px;
+	width: 134px;
+  text-decoration-color: rgb(40, 60, 120);
 }
 
 .watch_video {
@@ -1113,7 +1119,7 @@
 
 .apply_button {
 	margin: 0px 10px 10px;
-	width: 70px;
+	width: 114px;
 	position: relative;
 	text-align: left;
 	text-indent: 10px;

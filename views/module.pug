@@ -1,21 +1,10 @@
-// Revert to extending layout once styling is ready!
-//extends layout
+extends layout
 
-//block content
-  ////Jade Mixing
-  //mixin space()
-    //| !{' '}
-  //div
-    
-html
-  head
-    meta(charset="UTF-8")
-    link(rel="stylesheet", href="/stylesheets/style.css")
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js")
-    //Jade Mixing
-    mixin space()
-      | !{' '}
-  body
+block content
+  //Jade Mixing
+  mixin space()
+    | !{' '}
+  div
     div.onexys_styling
       img.background_building(src='/images/moduleBackgrounds/'+data.background_image, alt= data.background_name)
       div#background_building_outline
