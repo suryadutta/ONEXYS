@@ -24,7 +24,7 @@ block content
         table
             tr(class="tdata-header")
                 th(class="spacer")
-                    a.btn.btn-primary(onclick="exportcsv();return false;", loaded="false") Build CSV
+                    a.btn.btn-primary#export(onclick="exportcsv();return false;", loaded="false") Build CSV
                 th
                 each obj in gradebook[0].grades
                     th=obj.module_name
