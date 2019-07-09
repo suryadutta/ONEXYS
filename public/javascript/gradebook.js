@@ -154,37 +154,33 @@ $(document).ready(function() {
 	});
 
 	sortTable(teamCol, mode);
+	exportcsv();
 });
 
 // Functionality to create CSV from grade table
 function exportcsv() {
-	if($("#export").attr('loaded') != 'true') {
-		var exp = [];
-		$("#gradebook tr").each(function() {
-			var row = [];
-			$(this).children().each(function() {
-				row.push($(this).text());
-			});
-			exp.push(row);
+	var exp = [];
+	$("#gradebook tr").each(function() {
+		var row = [];
+		$(this).children().each(function() {
+			row.push($(this).text());
 		});
+		exp.push(row);
+	});
 
-		// "exp" is an array of 'rows'. Each 'row' is an array of each cell in the row.
-		// Now, it must be converted into a csv.
-		var raw = "";
-		exp.forEach(row => {
-			row.forEach(cell => {
-				raw += cell + ", ";
-			});
-			raw += "\n";
+	// "exp" is an array of 'rows'. Each 'row' is an array of each cell in the row.
+	// Now, it must be converted into a csv.
+	var raw = "";
+	exp.forEach(row => {
+		row.forEach(cell => {
+			raw += cell + ", ";
 		});
+		raw += "\n";
+	});
 
-		var csvdata = "data:application/csv;charset=utf-8," + encodeURIComponent(raw);
-		$("#export").text("Export CSV");
-		$("#export").attr({
-			"download": $("#course_name").text() + ".csv",
-			"href": csvdata,
-			"target": "_blank",
-			"loaded": "true",
-		});
-	}
+	var csvdata = "data:application/csv;charset=utf-8," + encodeURIComponent(raw);
+	$("#export").text("Download CSV");
+	$("#export").attr({
+		"href": csvdata,
+	});
 }

@@ -8,7 +8,6 @@ block content
     .container
         .row
             .form.form-inline
-                #course_name(style="display:none;")=course_title
                 a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
                 h2='Viewing the Unified Gradebook for ' + course_title
@@ -24,7 +23,7 @@ block content
         table
             tr(class="tdata-header")
                 th(class="spacer")
-                    a.btn.btn-primary#export(onclick="exportcsv();return false;", loaded="false") Build CSV
+                    a.btn.btn-primary#export(download=course_title + ".csv", type="text/csv") Build CSV
                 th
                 each obj in gradebook[0].grades
                     th=obj.module_name
