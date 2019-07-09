@@ -1247,8 +1247,8 @@ function getGradebook(courseID, courseName, callback) {
                             grades.push({
                                 module_id: module._id,
                                 module_name: (module.primary_title + ' ' + module.secondary_title),
-                                practice_grade: -1,
-                                quiz_grade: -1
+                                practice_grade: '',
+                                quiz_grade: ''
                             });
                         });
 
