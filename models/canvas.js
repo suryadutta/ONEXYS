@@ -1259,16 +1259,20 @@ function getGradebook(courseID, courseName, callback) {
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
                             var thisQuizModule = (mongo_data.modules).find(module => parseInt(module.quiz_link) == parseInt(assignment.assignment_id));
 
+                            // Round the score off to two decimal places if it exists.
+                            var score = assignment.score;
+                            if(!isNaN(assignment.score)) score = Math.round(parseFloat(score)*100) / 100;
+
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = assignment.score;
+                                grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = score;
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
                             // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = assignment.score;
+                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = score;
                             }
                         });
 
