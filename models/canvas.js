@@ -1267,6 +1267,7 @@ function getGradebook(courseID, courseName, callback) {
                             console.log('Round: ' + Math.round(parseFloat(score)*100));
                             console.log('Divide: ' + Math.round(parseFloat(score)*100) / 100);
                             if(!isNaN(assignment.score)) score = Math.round(parseFloat(score)*100) / 100;
+                            if(isNan(score)) score = '';
                             console.log('After: ' + score);
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
