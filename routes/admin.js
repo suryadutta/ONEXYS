@@ -154,7 +154,7 @@ router.post("/home/videos/delete/:id", (req, res, next) => {
 
 //Get Navigation page
 router.get("/navigation", (req, res, next) => {
-  mongo.getData(req.session.course_id, "navigation", (err, nav_info) => {
+  mongo.getNavigationData(req.session.course_id, "navigation", (err, nav_info) => {
     res.render("admin/navigation", {
       title: "Navigation",
       course_title: req.session.course_title,
@@ -167,13 +167,6 @@ router.get("/navigation", (req, res, next) => {
 
 //Post Navigation information
 router.post("/navigation", (req, res, next) => {
-  //Doesn't yet post the data!
-  // req.session.course_id,
-  // "modules",
-  // { _id: parseInt(req.params.id) },
-  // moduleInfo,
-
-
   mongo.updateData(req.session.course_id, "navigation", {type: "navigation"},
     //Build navigation object to be saved in Mongo
     {
