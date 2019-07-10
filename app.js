@@ -65,7 +65,6 @@ app.use('/launch',launch)
 
 // static file display
 app.get("/coach-information", function(req, res) {
-  console.log("Just before!");
   mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
     res.sendFile(path.join(__dirname, "/views/static/"+page));
   });
@@ -78,19 +77,27 @@ app.post("/coach-information", function(req, res) {
 });
 
 app.get("/welcome", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
+  mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.post("/welcome", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
+  mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.get("/life-on-grounds", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
+  mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.post("/life-on-grounds", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
+  mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.get("/missing-resource", function(req, res) {

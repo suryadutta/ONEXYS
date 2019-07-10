@@ -68,7 +68,7 @@ function getNavigationData(courseID, callback){
 
 function getStaticPage(courseID, targetPage, callback){
     getData(courseID, 'navigation', function(err, data){
-        nav_info = data.find(document => document._id == '1');
+        nav_info = data.find(document => document.type == 'navigation');
         callback(err, nav_info[targetPage]);
     });
 }
