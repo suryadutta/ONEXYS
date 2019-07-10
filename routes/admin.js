@@ -152,6 +152,31 @@ router.post("/home/videos/delete/:id", (req, res, next) => {
   });
 });
 
+//Get Navigation page
+router.get("/navigation", (req, res, next) => {
+  mongo.getData(req.session.course_id, "navigation", (err, nav_info) => {
+    res.render("admin/navigation", {
+      title: "Navigation",
+      course_title: req.session.course_title,
+      course_id: req.session.course_id,
+      user_id: req.session.user_id,
+      nav_info: nav_info
+    });
+  });
+});
+
+//Post Navigation information
+router.post("/navigation", (req, res, next) => {
+  //Doesn't yet post the data!
+  // req.session.course_id,
+  // "modules",
+  // { _id: parseInt(req.params.id) },
+  // moduleInfo,
+
+  console.log(req.body);
+  res.redirect("/admin");
+});
+
 //Get Modules Home Page (Table of all modules + edit buttons)
 router.get("/modules", (req, res, next) => {
   mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
@@ -224,8 +249,7 @@ router.post("/modules/:id/preview", (req, res, next) => {
 
 //POST handler for Module Edits
 router.post("/modules/:id/confirmUpdates", (req, res, next) => {
-  mongo.updateData(
-    req.session.course_id,
+  mongo.updateData(req.session.course_id,
     "modules",
     { _id: parseInt(req.params.id) },
     req.body,
