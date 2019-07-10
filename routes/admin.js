@@ -174,7 +174,7 @@ router.post("/navigation", (req, res, next) => {
   // moduleInfo,
 
 
-  mongo.updateData(req.session.course_id, "navigation", "1",
+  mongo.updateData(req.session.course_id, "navigation", { _id: "1" },
     //Build navigation object to be saved in Mongo
     {
       welcome_page: req.body.welcome_page,
