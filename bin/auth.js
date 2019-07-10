@@ -112,8 +112,6 @@ var checkUser = function(req, res, next) {
     console.log('ERROR: COOKIES NOT SET');
     res.status(500).render('cookieError');
   } else {
-    console.log('Session Test: Course-ID');
-    console.log(req.session.course_id);
     req.connection.encrypted = true;
     if (req.query.login_success=='1'){
       next();

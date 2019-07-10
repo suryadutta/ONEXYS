@@ -67,6 +67,14 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log(courseID);
+          console.log(module_progress);
+          console.log(leaderboard);
+          console.log(home_updates);
+          console.log(home_vids);
+          console.log(home_links);
+          console.log(daily_yalie);
+          console.log(students);
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,
