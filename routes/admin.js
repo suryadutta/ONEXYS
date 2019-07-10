@@ -154,7 +154,7 @@ router.post("/home/videos/delete/:id", (req, res, next) => {
 
 //Get Navigation page
 router.get("/navigation", (req, res, next) => {
-  mongo.getNavigationData(req.session.course_id, "navigation", (err, nav_info) => {
+  mongo.getNavigationData(req.session.course_id, (err, nav_info) => {
     res.render("admin/navigation", {
       title: "Navigation",
       course_title: req.session.course_title,
