@@ -100,6 +100,18 @@ app.post("/life-on-grounds", function(req, res) {
   });
 });
 
+app.get("/post-test", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
+});
+
+app.post("/post-test", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
+});
+
 app.get("/missing-resource", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/404.html"));
 });
@@ -114,14 +126,6 @@ app.get("/not-open", function(req, res) {
 
 app.post("/not-open", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/not-open.html"));
-});
-
-app.get("/post-test", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/post-test/" + req.query.filename));
-});
-
-app.post("/post-test", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/post-test/" + req.query.filename));
 });
 
 // catch 404 and forward to error handler

@@ -172,7 +172,8 @@ router.post("/navigation", (req, res, next) => {
     {
       welcome_page: req.body.welcome_page,
       coach_information: req.body.coach_information,
-      life_on_grounds: req.body.life_on_grounds
+      life_on_grounds: req.body.life_on_grounds,
+      post_test: req.body.post_test
     },
     //Redirect user to admin page
     (err, result) => {
