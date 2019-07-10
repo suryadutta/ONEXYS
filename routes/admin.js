@@ -173,8 +173,18 @@ router.post("/navigation", (req, res, next) => {
   // { _id: parseInt(req.params.id) },
   // moduleInfo,
 
-  console.log(req.body);
-  res.redirect("/admin");
+
+  mongo.updateData(req.session.course_id, "navigation", "1",
+    //Build navigation object to be saved in Mongo
+    {
+      welcome_page: req.body.welcome_page,
+      coach_information: req.body.coach_information,
+      life_on_grounds: req.body.life_on_grounds
+    },
+    //Redirect user to admin page
+    (err, result) => {
+      res.redirect("/admin");
+  });
 });
 
 //Get Modules Home Page (Table of all modules + edit buttons)
