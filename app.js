@@ -135,7 +135,7 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-*/
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -148,5 +148,6 @@ app.use(function(err, req, res, next) {
   //res.render('error');
   res.sendFile(path.join(__dirname, "/views/static/404.html"));
 });
+*/
 
 module.exports = app;
