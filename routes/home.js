@@ -8,6 +8,7 @@ router.use("/", (req, res, next) => {
   //console.log("Course title: " + req.session.course_title);
 
   console.log("Made it to home!?");
+  console.log(req.session.admin);
 
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
