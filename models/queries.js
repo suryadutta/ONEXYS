@@ -100,7 +100,6 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
 }
 
 function homepageAdminQuery(courseID, course_title, callback){
-  console.log("Got here");
   asyncStuff.parallel([
     function(callback) {
       mongo.getAllData(courseID, function(mongo_data){
@@ -122,8 +121,6 @@ function homepageAdminQuery(courseID, course_title, callback){
   ],
 
   function(err, data) {
-    console.log("And here...");
-    console.log(data);
     var module_progress = data[0],
         leaderboard = data[1],
         home_updates = data[2][0],
