@@ -7,6 +7,8 @@ router.use("/", (req, res, next) => {
   //console.log("Request session: " + req.session);
   //console.log("Course title: " + req.session.course_title);
 
+  console.log("Made it to home!?");
+
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
 
@@ -18,6 +20,7 @@ router.use("/", (req, res, next) => {
   //var is_physics = false;
 
   if (req.session.admin) {
+    console.log("Is admin");
     if (req.query.masquerade) {
       queries.homepageQueryMasquerade(
         parseInt(req.query.masquerade),
@@ -55,6 +58,7 @@ router.use("/", (req, res, next) => {
         }
       );
     } else {
+      console.log("Not masquerade");
       queries.homepageAdminQuery(
         courseID,
         req.session.course_title,
