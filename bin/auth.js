@@ -96,7 +96,7 @@ var updateCookies = function(req, res, next){
     req.session.course_id = req.body.custom_canvas_course_id;
     req.session.course_title = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
-    console.log(req.session.admin);
+    req.session.admin = req.body.roles.includes('Instructor');
     next();
   } else if (typeof(req.session.course_id)!='string'){
     console.log('ERROR: COOKIES NOT SET');
