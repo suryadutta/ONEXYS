@@ -135,15 +135,20 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  console.log("404 Error:");
+  console.log(err.message);
+
   // render the error page
   res.status(err.status || 500);
   //res.render('error');
+
   res.sendFile(path.join(__dirname, "/views/static/404.html"));
 });
 

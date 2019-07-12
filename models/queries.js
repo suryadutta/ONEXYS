@@ -132,6 +132,7 @@ function homepageAdminQuery(courseID, course_title, callback){
     callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
   });
 }
+
 function badgesQuery(studentID, courseID, callback) {
   canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
     callback(badges);
