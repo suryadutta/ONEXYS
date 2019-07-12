@@ -34,7 +34,7 @@ function updateData(courseID, collection_name, update_index, update_data, callba
     console.log("ID: " + courseID);
     console.log("Collection: " + collection_name);
     console.log("Index: " + update_index);
-    console.log("Data: " + update_data);
+    //console.log("Data: " + update_data);
     var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
         var db = client.db(config.mongoDBs[courseID]);
