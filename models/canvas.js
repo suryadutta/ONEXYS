@@ -138,21 +138,21 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var daily_done = 0;
         var reflections_done = 0;
 
-        //lucky bulldog
-        lucky_bulldog_points = 100;
         var d = new Date();
+        console.log("Current time: " + d.getTime());
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 // If within a minute of assigned time AND doesn't already have the award
+                console.log("Lucky time: " + Date.parse(lucky_bulldog.time));
                 if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)) < 1 && !lucky_bulldog.awarded_ids.includes(studentID)){
-                    totalPoints += parseInt(lucky_bulldog_points);
                     //LUCKY AWARDED
+                    console.log("Awarded!");
                     lucky_bulldog.awarded_ids.push(studentID);
                     mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                 }
                 if (lucky_bulldog.awarded_ids.includes(studentID)){
-                    totalPoints += parseInt(lucky_bulldog_points);
+                    totalPoints += parseInt(lucky_bulldog.point_value);
                 }
             }
         }
@@ -755,18 +755,18 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
         var daily_done = 0;
         var reflections_done = 0;
 
-        //lucky bulldog
-        lucky_bulldog_points = 100;
         var d = new Date();
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                //console.log("Lucky Bonus: " + lucky_bulldog);
-                //student already was awarded lucky bulldog
-                if(lucky_bulldog.awarded_ids.length>0){
-                    if (lucky_bulldog.awarded_ids.includes(studentID)){
-                        totalPoints += parseInt(lucky_bulldog_points);
-                    }
+                // If within a minute of assigned time AND doesn't already have the award
+                if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)) < 1 && !lucky_bulldog.awarded_ids.includes(studentID)){
+                    //LUCKY AWARDED
+                    lucky_bulldog.awarded_ids.push(studentID);
+                    mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
+                }
+                if (lucky_bulldog.awarded_ids.includes(studentID)){
+                    totalPoints += parseInt(lucky_bulldog.point_value);
                 }
             }
         }
