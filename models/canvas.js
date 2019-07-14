@@ -139,15 +139,12 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var reflections_done = 0;
 
         var d = new Date();
-        console.log("Current time: " + d.getTime());
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 // If within a minute of assigned time AND doesn't already have the award
-                console.log("Lucky time: " + Date.parse(lucky_bulldog.time));
                 if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)) < 1 && !lucky_bulldog.awarded_ids.includes(studentID)){
                     //LUCKY AWARDED
-                    console.log("Awarded!");
                     lucky_bulldog.awarded_ids.push(studentID);
                     mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                 }
