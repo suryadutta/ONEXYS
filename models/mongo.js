@@ -10,7 +10,7 @@ function getData(courseID, collection_name, callback){
         assert.equal(null, err);
         var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).find().sort({"_id":1}).toArray(function(err, data) {
-            callback(err,data);
+            callback(err, data);
             client.close();
         });
     });
@@ -31,6 +31,10 @@ function insertData(courseID, collection_name, data, callback){
 
 function updateData(courseID, collection_name, update_index, update_data, callback){
     // Use connect method to connect to the server
+    console.log("ID: " + courseID);
+    console.log("Collection: " + collection_name);
+    console.log("Index: " + update_index);
+    //console.log("Data: " + update_data);
     var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function(err, client) {
         var db = client.db(config.mongoDBs[courseID]);
@@ -55,10 +59,17 @@ function deleteData(courseID, collection_name, delete_index,callback){
     });
 }
 
+function getNavigationData(courseID, callback){
+    getData(courseID, 'navigation', function(err, data){
+        nav_info = data.find(document => document.type == 'navigation');
+        callback(err, nav_info);
+    });
+}
+
 function getStaticPage(courseID, targetPage, callback){
-    getData(courseID, 'home', function(err, data){
-        home_updates = data.find(document => document.type == 'updates');
-        callback(err, home_updates[targetPage]);
+    getData(courseID, 'navigation', function(err, data){
+        nav_info = data.find(document => document.type == 'navigation');
+        callback(err, nav_info[targetPage]);
     });
 }
 
@@ -138,6 +149,7 @@ module.exports = {
     insertData,
     updateData,
     deleteData,
+    getNavigationData,
     getStaticPage,
     getHomeContent,
     getModules,

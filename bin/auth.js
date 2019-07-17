@@ -33,6 +33,7 @@ let oauth2 = require('simple-oauth2').create(credentials);
 //queue to callback Auth Token (prevents multiple calls)
 var authTokenQueue = new Queue(function(user_id,callback){
   console.log('Redis Key');
+  console.log('Commit test!');
   console.log('token_'+String(user_id));
   redis_client.get('token_'+String(user_id), async function(err, token_string) {
     if (err){
@@ -112,8 +113,6 @@ var checkUser = function(req, res, next) {
     console.log('ERROR: COOKIES NOT SET');
     res.status(500).render('cookieError');
   } else {
-    console.log('Session Test: Course-ID');
-    console.log(req.session.course_id);
     req.connection.encrypted = true;
     if (req.query.login_success=='1'){
       next();

@@ -65,7 +65,6 @@ app.use('/launch',launch)
 
 // static file display
 app.get("/coach-information", function(req, res) {
-  console.log("Just before!");
   mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
     res.sendFile(path.join(__dirname, "/views/static/"+page));
   });
@@ -78,19 +77,39 @@ app.post("/coach-information", function(req, res) {
 });
 
 app.get("/welcome", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
+  mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.post("/welcome", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/welcome.html"));
+  mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.get("/life-on-grounds", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
+  mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.post("/life-on-grounds", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/life-on-grounds.html"));
+  mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
+});
+
+app.get("/post-test", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
+});
+
+app.post("/post-test", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
+    res.sendFile(path.join(__dirname, "/views/static/"+page));
+  });
 });
 
 app.get("/missing-resource", function(req, res) {
@@ -109,14 +128,6 @@ app.post("/not-open", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/static/not-open.html"));
 });
 
-app.get("/post-test", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/post-test/" + req.query.filename));
-});
-
-app.post("/post-test", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/post-test/" + req.query.filename));
-});
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -124,15 +135,20 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  console.log("404 Error:");
+  console.log(err.message);
+
   // render the error page
   res.status(err.status || 500);
   //res.render('error');
+
   res.sendFile(path.join(__dirname, "/views/static/404.html"));
 });
 
