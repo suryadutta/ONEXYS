@@ -3,6 +3,12 @@ const mongo = require("../models/mongo");
 const canvas = require("../models/canvas");
 const config = require('../bin/config');
 
+
+//
+router.get("/launchtest/:module", (req, res, next) => {
+    res.redirect("https://" + config.herokuAppName + ".herokuapp.com/modules/" + req.params.module);
+});
+
 /* GET home page. */
 router.get("/", (req, res, next) => {
   res.render("admin", {
@@ -164,7 +170,8 @@ router.get("/modules", (req, res, next) => {
       post_test: post_test,
       post_test_filename: post_test_filename,
       post_test_button_background: post_test_button_background,
-      pre_test_button_background: pre_test_button_background
+      pre_test_button_background: pre_test_button_background,
+      test_app: config.testApp
     });
   });
 });
