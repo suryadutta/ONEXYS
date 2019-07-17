@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+    br
+    .container
+        .row
+            .form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course_title + ' modules'
+    hr
+    br
+    .container
+        .row
+            table(class="admin_table")
+                tr
+                    th ID
+                    th Primary Title
+                    th Secondary Title
+                    th Open?
+                    th Practice Link
+                    th Quiz Link
+                    th Reflections Link
+                    th Preview
+                each module, i in modules
+                    tr
+                        td=module._id
+                        td=module.primary_title
+                        td=module.secondary_title
+                        td=module.open
+                        td=module.practice_link
+                        td=module.quiz_link
+                        td=module.reflection_link
+                        td
+                            a.btn.btn-primary(href="https://" + test_app + ".herokuapp.com/modules/" + (i + 1), target="_blank") Live View

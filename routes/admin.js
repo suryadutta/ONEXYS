@@ -5,8 +5,17 @@ const config = require('../bin/config');
 
 
 //
-router.get("/launchtest/:module", (req, res, next) => {
-    res.redirect("https://" + config.herokuAppName + ".herokuapp.com/modules/" + req.params.module);
+router.get("/liveview", (req, res, next) => {
+    mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
+      res.render("admin/liveview", {
+        title: "Live View",
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id,
+        modules: modulesInfo,
+        test_app: config.testApp
+      });
+    });
 });
 
 /* GET home page. */
