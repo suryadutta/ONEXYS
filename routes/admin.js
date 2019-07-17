@@ -6,6 +6,7 @@ const config = require('../bin/config');
 
 //
 router.get("/liveview", (req, res, next) => {
+    console.log("Loading liveview");
     mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
       res.render("admin/liveview", {
         title: "Live View",
