@@ -69,6 +69,7 @@ router.use("/", (req, res, next) => {
           daily_yalie
         ) => {
           console.log("Lucky?");
+          req.session.lucky = {point_value: 666, image_name: "luckycavman1.png"};
           console.log(req.session.lucky);
           res.render("home", {
             title: "Home | " + config.herokuAppName,
@@ -91,7 +92,7 @@ router.use("/", (req, res, next) => {
             heroku_app: config.herokuAppName,
             masquerade: false,
             students,
-            lucky: {point_value: 666, image_name: "luckycavman1.png"}
+            lucky: req.session.lucky
           });
         }
       );
