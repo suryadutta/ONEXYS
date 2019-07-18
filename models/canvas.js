@@ -140,7 +140,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
         //lucky bulldog
         lucky_bulldog_points = 100;
-        var d = new Date();
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
@@ -752,7 +751,6 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
         //lucky bulldog
         lucky_bulldog_points = 100;
-        var d = new Date();
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
@@ -1290,8 +1288,9 @@ function getGradebook(courseID, courseName, callback) {
 }
 
 var awardLuckies = function(req, res, next) {
+    var d = new Date();
+    var studentID = parseInt(req.session.user_id);
     req.session.lucky = false;
-    studentID = parseInt(req.session.user_id);
 
     mongo.getData(req.session.course_id, 'lucky_bulldogs', function(err, luckies){
         console.log(luckies);
