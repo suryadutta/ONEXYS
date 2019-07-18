@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('client-sessions');
 
+var canvas = require('./models/canvas');
 var mongo = require('./models/mongo');
 var config = require('./bin/config');
 var auth = require('./bin/auth');
