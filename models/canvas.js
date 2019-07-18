@@ -1291,14 +1291,14 @@ function getGradebook(courseID, courseName, callback) {
 
 var awardLuckies = function(req, res, next) {
     req.session.lucky = false;
-    mongo.getData(courseID, 'lucky_bulldogs', function(luckies){
+    mongo.getData(req.session.course_id, 'lucky_bulldogs', function(luckies){
         if (luckies.length>0){
             for (lucky_bulldog of luckies){
                 if(lucky_bulldog.awarded_ids.length>0){
                     // If student not already on list AND within a minute of the assigned time...
                     if (!lucky_bulldog.awarded_ids.includes(studentID) && ((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
                         lucky_bulldog.awarded_ids.push(studentID);
-                        mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
+                        mongo.updateData(req.session.course_id,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                         req.session.lucky = lucky_bulldog;
                     }
                 }
