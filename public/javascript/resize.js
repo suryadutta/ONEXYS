@@ -31,7 +31,7 @@ $(document).ready(function() {
     $("textarea").on('keyup', function() {
         //console.log("Live height increase");
         $(this).animate({
-            height: (Math.max(120, this.scrollHeight + 20) + 'px')
+            height: (Math.max(120, this.scrollHeight + 1) + 'px')
         }, {
             duration: 250,
             easing: 'swing',
