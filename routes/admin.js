@@ -92,7 +92,7 @@ router.get("/home/videos/add", (req, res, next) => {
         title: "Add Home Video",
         course_title: req.session.course_title,
         course_id: req.session.course_id,
-        user_id: req.session.user_id,
+        user_id: req.session.user_id
     });
 });
 
@@ -102,6 +102,7 @@ router.post("/home/videos/add", (req, res, next) => {
     vidData._id = makeid();
     vidData.type = "video";
     vidData.created = new Date();
+    console.log("New video_img: " + vidData.vid_img);
     mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
         res.redirect("/admin/home");
     });
