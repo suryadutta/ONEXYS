@@ -101,6 +101,7 @@ router.post("/home/videos/add", (req, res, next) => {
   vidData = req.body;
   vidData._id = makeid();
   vidData.type = "video";
+  vidData.created = new Date();
   mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
     res.redirect("/admin/home");
   });
