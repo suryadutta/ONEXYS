@@ -125,7 +125,7 @@ block content
                                 td
                                     div.onexys_video
                                         a.colorbox(href=video.video_src)
-                                            if(video.video_img || video.video_img == '')
+                                            if(video.video_img && video.video_img != '')
                                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
                                             else
                                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
