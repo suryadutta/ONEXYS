@@ -1291,7 +1291,8 @@ function getGradebook(courseID, courseName, callback) {
 
 var awardLuckies = function(req, res, next) {
     req.session.lucky = false;
-    mongo.getData(req.session.course_id, 'lucky_bulldogs', function(luckies){
+    mongo.getData(req.session.course_id, 'lucky_bulldogs', function(err, luckies){
+        console.log(luckies);
         if (luckies.length>0){
             for (lucky_bulldog of luckies){
                 if(lucky_bulldog.awarded_ids.length>0){
