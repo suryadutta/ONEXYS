@@ -79,8 +79,8 @@ function getHomeContent(courseID, callback){
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
         console.log("Home vids array");
-        console.log(home_vids);
-        home_vids.sort((a, b) => {
+        console.log(home_videos);
+        home_videos.sort((a, b) => {
             var aDate = new Date(a.created),
                 bDate = new Date(b.created);
             if(aDate < bDate) return -1;
@@ -88,7 +88,7 @@ function getHomeContent(courseID, callback){
             return 1;
         });
         console.log("Sorted home vids array");
-        console.log(home_vids);
+        console.log(home_videos);
         callback(err, home_updates, home_videos, home_links);
     });
 }
