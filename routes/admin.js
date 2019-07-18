@@ -57,6 +57,13 @@ router.get("/home", (req, res, next) => {
 //Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
     mongo.getHomeContent(req.session.course_id, (err, home_updates, home_vids) => {
+        home_vids.sort((a, b) => {
+            var aDate = new Date(a.created),
+                bDate = new Date(b.created);
+            if(aDate < bDate) return -1;
+            else if(aDate == bDate) return 0;
+            return 1;
+        });
         res.render("admin/home", {
             title: "home",
             course_title: req.session.course_title,
@@ -112,10 +119,6 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
     mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
         home_vid = home_vids.find(video => video._id == req.params.id);
         if (home_vid) {
-            if(!home_vid.created) {
-                console.log("Creating date in edit-get");
-                home_vid.created = new Date();
-            }
             res.render("admin/homeVidEdit", {
                 title: "Edit Home Video",
                 course_title: req.session.course_title,
@@ -135,10 +138,6 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
 router.post("/home/videos/edit/:id", (req, res, next) => {
     home_vid = req.body
     home_vid._id = req.params.id
-    if(!home_vid.created) {
-        console.log("Creating date in edit-post");
-        home_vid.created = new Date();
-    }
     res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
         course_title: req.session.course_title,
@@ -165,10 +164,7 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-    if(!req.body.created) {
-        console.log("Creating date in confirmUpdates-post");
-        req.body.created = new Date();
-    }
+    if(!req.body.created) req.body.created = new Date();
     mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
         res.redirect("/admin/home");
     });
