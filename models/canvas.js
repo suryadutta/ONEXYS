@@ -219,9 +219,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
-                        //console.log("Practice Object");
-                        //console.log(practice_object);
-                        //console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
 
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
@@ -628,7 +625,6 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             fillerArray = Array(3-combinedArray.length).fill({'Name': '', 'Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        console.log("Admin leaderboard here: " + combinedArray);
         return combinedArray;
     }
 
@@ -677,12 +673,10 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                //console.log("Points: " + studentPoints);
                 for(var i = 0; i < studentPoints.length; i++){
                     studentPoints[i] /= studentIdsArrays[i].length;
                     studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
-                //console.log("Points 2: " + studentPoints);
                 callback2(null, studentPoints, groupNames);
             });
         });
