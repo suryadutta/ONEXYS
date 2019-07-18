@@ -55,11 +55,11 @@ app.use(session({
 app.get('/callback',auth.oath2_callback);
 
 app.get('/',index);
-app.use('/home',[auth.updateCookies,auth.checkUser],home)
-app.use('/badges',[auth.updateCookies,auth.checkUser],badges)
-app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
+app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
+app.use('/badges',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],badges)
+app.use('/admin',[auth.updateCookies,auth.checkAdmin,canvas.awardLuckies],admin)
 
-app.use('/modules',auth.updateCookies,modules)
+app.use('/modules',[auth.updateCookies,canvas.awardLuckies],modules)
 
 app.use('/launch',launch)
 
