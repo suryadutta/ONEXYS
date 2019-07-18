@@ -8,110 +8,131 @@ const config = require('../bin/config');
 router.use("/liveview", (req, res, next) => {
     console.log("Loading liveview");
     mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
-      res.render("admin/liveview", {
-        title: "Live View",
-        course_title: req.session.course_title,
-        course_id: req.session.course_id,
-        user_id: req.session.user_id,
-        modules: modulesInfo,
-        test_app: config.testApp
-      });
+        res.render("admin/liveview", {
+            title: "Live View",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            modules: modulesInfo,
+            test_app: config.testApp
+        });
     });
 });
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
-  res.render("admin", {
-    title: "Express",
-    course_title: req.session.course_title,
-    course_id: req.session.course_id,
-    user_id: req.session.user_id
-  });
+    res.render("admin", {
+        title: "Express",
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id
+    });
 });
 
 /* POST home page. */
 router.post("/", (req, res, next) => {
-  res.render("admin", {
-    title: "Express",
-    course_title: req.session.course_title,
-    course_id: req.session.course_id,
-    user_id: req.session.user_id
-  });
+    res.render("admin", {
+        title: "Express",
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id
+    });
 });
 
 //Get Home Page Updates
 router.get("/home", (req, res, next) => {
-  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
-    res.render("admin/home", {
-      title: "home",
-      course_title: req.session.course_title,
-      course_id: req.session.course_id,
-      user_id: req.session.user_id,
-      home_updates,
-      home_vids,
-      heroku_app: config.herokuAppName
+    mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
+        res.render("admin/home", {
+            title: "home",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            home_updates,
+            home_vids,
+            heroku_app: config.herokuAppName
+        });
     });
-  });
 });
 
 //Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
-  mongo.getHomeContent(req.session.course_id, (err, home_updates, home_vids) => {
-    res.render("admin/home", {
-      title: "home",
-      course_title: req.session.course_title,
-      course_id: req.session.course_id,
-      user_id: req.session.user_id,
-      home_updates: req.body,
-      home_vids,
-      heroku_app: config.herokuAppName
+    mongo.getHomeContent(req.session.course_id, (err, home_updates, home_vids) => {
+        res.render("admin/home", {
+            title: "home",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            home_updates: req.body,
+            home_vids,
+            heroku_app: config.herokuAppName
+        });
     });
-  });
 });
 
 //Preview Home Page Updates
 router.post("/home/preview", (req, res, next) => {
-  res.render('admin/homeConfirmUpdates', {
-    course_title: req.session.course_title,
-    course_id: req.session.course_id,
-    user_id: req.session.user_id,
-    home_updates: req.body
-  });
+    res.render('admin/homeConfirmUpdates', {
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id,
+        home_updates: req.body
+    });
 });
 
 //Update changes to MongoDB
 router.post("/home/confirmUpdates", (req, res, next) => {
-  mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
-    res.redirect("/admin");
-  });
+    mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
+        res.redirect("/admin");
+    });
 });
 
 //add home video
 router.get("/home/videos/add", (req, res, next) => {
-  res.render("admin/homeVidAdd", {
-    title: "Add Home Video",
-    course_title: req.session.course_title,
-    course_id: req.session.course_id,
-    user_id: req.session.user_id,
-  });
+    res.render("admin/homeVidAdd", {
+        title: "Add Home Video",
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id
+    });
 });
 
 //add home video
 router.post("/home/videos/add", (req, res, next) => {
-  vidData = req.body;
-  vidData._id = makeid();
-  vidData.type = "video";
-  mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
-    res.redirect("/admin/home");
-  });
+    vidData = req.body;
+    vidData._id = makeid();
+    vidData.type = "video";
+    vidData.created = new Date();
+    console.log("New video_img: " + vidData.vid_img);
+    mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
+        res.redirect("/admin/home");
+    });
 });
 
 //edit home video
 router.get("/home/videos/edit/:id", (req, res, next) => {
-  mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
-    home_vid = home_vids.find(video => video._id == req.params.id);
-    if (home_vid) {
-      res.render("admin/homeVidEdit", {
+    mongo.getHomeContent(req.session.course_id,(err, home_updates, home_vids) => {
+        home_vid = home_vids.find(video => video._id == req.params.id);
+        if (home_vid) {
+            res.render("admin/homeVidEdit", {
+                title: "Edit Home Video",
+                course_title: req.session.course_title,
+                course_id: req.session.course_id,
+                user_id: req.session.user_id,
+                video: home_vid,
+                life_on_grounds_title: req.query.life_on_grounds_title,
+                life_on_grounds_thumbnail: req.query.life_on_grounds_thumbnail
+            });
+        } else {
+            res.send("ERROR: Video Not Found");
+        }
+    });
+});
+
+//POST handler to edit home video
+router.post("/home/videos/edit/:id", (req, res, next) => {
+    home_vid = req.body
+    home_vid._id = req.params.id
+    res.render("admin/homeVidEdit", {
         title: "Edit Home Video",
         course_title: req.session.course_title,
         course_id: req.session.course_id,
@@ -119,66 +140,48 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
         video: home_vid,
         life_on_grounds_title: req.query.life_on_grounds_title,
         life_on_grounds_thumbnail: req.query.life_on_grounds_thumbnail
-      });
-    } else {
-      res.send("ERROR: Video Not Found");
-    }
-  });
-});
-
-//POST handler to edit home video
-router.post("/home/videos/edit/:id", (req, res, next) => {
-  home_vid = req.body
-  home_vid._id = req.params.id
-  res.render("admin/homeVidEdit", {
-    title: "Edit Home Video",
-    course_title: req.session.course_title,
-    course_id: req.session.course_id,
-    user_id: req.session.user_id,
-    video: home_vid,
-    life_on_grounds_title: req.query.life_on_grounds_title,
-    life_on_grounds_thumbnail: req.query.life_on_grounds_thumbnail
-  });
+    });
 });
 
 //POST handler to preview video changes
 router.post('/home/videos/preview/:id', (req,res,next) => {
-  res.render("admin/homeConfirmVideos", {
-    title: "Edit Home Video",
-    course_title: req.session.course_title,
-    course_id: req.session.course_id,
-    user_id: req.session.user_id,
-    video: req.body,
-    video_id: req.params.id,
-    heroku_app: config.herokuAppName
-  });
+    res.render("admin/homeConfirmVideos", {
+        title: "Edit Home Video",
+        course_title: req.session.course_title,
+        course_id: req.session.course_id,
+        user_id: req.session.user_id,
+        video: req.body,
+        video_id: req.params.id,
+        heroku_app: config.herokuAppName
+    });
 });
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-  mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
-    res.redirect("/admin/home");
-  });
+    if(!req.body.created) req.body.created = new Date();
+    mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
+        res.redirect("/admin/home");
+    });
 });
 
 //delete home video
 router.post("/home/videos/delete/:id", (req, res, next) => {
-  mongo.deleteData(req.session.course_id, "home", { _id: req.params.id }, (err, result) => {
-    res.redirect("/admin/home");
-  });
+    mongo.deleteData(req.session.course_id, "home", { _id: req.params.id }, (err, result) => {
+        res.redirect("/admin/home");
+    });
 });
 
 //Get Navigation page
 router.get("/navigation", (req, res, next) => {
-  mongo.getNavigationData(req.session.course_id, (err, nav_info) => {
-    res.render("admin/navigation", {
-      title: "Navigation",
-      course_title: req.session.course_title,
-      course_id: req.session.course_id,
-      user_id: req.session.user_id,
-      nav_info: nav_info
+    mongo.getNavigationData(req.session.course_id, (err, nav_info) => {
+        res.render("admin/navigation", {
+            title: "Navigation",
+            course_title: req.session.course_title,
+            course_id: req.session.course_id,
+            user_id: req.session.user_id,
+            nav_info: nav_info
+        });
     });
-  });
 });
 
 //Post Navigation information
