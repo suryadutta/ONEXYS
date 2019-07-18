@@ -68,6 +68,8 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("Lucky?");
+          console.log(req.session.lucky);
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,
