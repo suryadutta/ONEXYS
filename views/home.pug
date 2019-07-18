@@ -1,10 +1,10 @@
 extends layout
 
-block variables
-  - var lucky = lucky;
-  - console.log(lucky);
-
 block content
+  if lucky
+    include lucky-overlay
+  - console.log(lucky.point_value);
+
   if admin
     if masquerade
       a(href='/home?login_success=1') Back to Home
