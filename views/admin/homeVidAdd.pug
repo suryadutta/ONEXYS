@@ -27,13 +27,13 @@ block content
                 hr
             .row
                 .form-group
-                    label(for='video_desc') Video Description:
-                    textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;")="Edit this text"
-                hr
-            .row
-                .form-group
                     label(for='video_thumb') Video Thumbnail (leave blank to use default):
                     input#video_thumb.form-control.inlined-input(type='text', name='video_img')
+                        hr
+            .row
+                .form-group
+                    label(for='video_desc') Video Description:
+                    textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;")="Edit this text"
                 hr
             .row
                 button.btn.btn-success(type='submit') Add Video
