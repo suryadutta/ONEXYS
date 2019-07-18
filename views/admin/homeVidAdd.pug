@@ -7,30 +7,33 @@ block content
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 
     br
-    div.container
-        div.row
-            div.form.form-inline
+    .container
+        .row
+            .form.form-inline
                 a.btn.btn-lg(href='/admin/home?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
                 h2='Add a Video to ' + course_title + '\'s Home Page'
     hr
 
-    div.container
+    .container
         form(method='POST' action='')
             input(type='hidden', value=course_id, name='course-id')
             input(type='hidden', value=course_title, name='course-title')
             input(type='hidden', value=user_id, name='user-id')
-            div.row
-                div.form-group.form-inline
+            .row
+                .form-group.form-inline
                     label(for='video_src') Video Source:
                     input#video_src.form-control.inlined-input(type='text', name='video_src', required)
                 hr
-
-            div.row
-                div.form-group
+            .row
+                .form-group
                     label(for='video_desc') Video Description:
                     textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;")="Edit this text"
                 hr
-
-            div.row
+            .row
+                .form-group
+                    label(for='video_thumb') Video Thumbnail (leave blank to use default):
+                    input#video_thumb.form-control-inlined-input(type='text', name='video_thumb')
+                hr
+            .row
                 button.btn.btn-success(type='submit') Add Video
