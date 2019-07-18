@@ -139,8 +139,6 @@ block content
                                             input(type='hidden', value=course_id, name='course-id')
                                             input(type='hidden', value=course_title, name='course-title')
                                             input(type='hidden', value=user_id, name='user-id')
-                                            //input(type='hidden', value=home_updates.life_on_grounds_title, name='life_on_grounds_title')
-                                            //input(type='hidden', value=home_updates.life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
                                             button.btn.btn-dark(type='submit') Edit
                                         form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
                                             input(type='hidden', value=course_id, name='course-id')
