@@ -91,7 +91,7 @@ router.use("/", (req, res, next) => {
             heroku_app: config.herokuAppName,
             masquerade: false,
             students,
-            lucky: req.session.lucky
+            lucky: {point_value: 666, image_name: "luckycavman1.png"}
           });
         }
       );
