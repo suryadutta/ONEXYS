@@ -131,6 +131,7 @@ router.get("/home/videos/edit/:id", (req, res, next) => {
 router.post("/home/videos/edit/:id", (req, res, next) => {
   home_vid = req.body
   home_vid._id = req.params.id
+  if(!home_vid.created) home_vid.created = new Date(); // Give the video a creation date if it lacks one
   res.render("admin/homeVidEdit", {
     title: "Edit Home Video",
     course_title: req.session.course_title,
