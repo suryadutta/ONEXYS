@@ -57,13 +57,6 @@ router.get("/home", (req, res, next) => {
 //Go back to home page with recent edits
 router.post("/home", (req, res, next) => {
     mongo.getHomeContent(req.session.course_id, (err, home_updates, home_vids) => {
-        home_vids.sort((a, b) => {
-            var aDate = new Date(a.created),
-                bDate = new Date(b.created);
-            if(aDate < bDate) return -1;
-            else if(aDate == bDate) return 0;
-            return 1;
-        });
         res.render("admin/home", {
             title: "home",
             course_title: req.session.course_title,

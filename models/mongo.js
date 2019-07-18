@@ -78,6 +78,17 @@ function getHomeContent(courseID, callback){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
+        console.log("Home vids array");
+        console.log(home_vids);
+        home_vids.sort((a, b) => {
+            var aDate = new Date(a.created),
+                bDate = new Date(b.created);
+            if(aDate < bDate) return -1;
+            else if(aDate == bDate) return 0;
+            return 1;
+        });
+        console.log("Sorted home vids array");
+        console.log(home_vids);
         callback(err, home_updates, home_videos, home_links);
     });
 }
