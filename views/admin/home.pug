@@ -8,117 +8,117 @@ block content
     script(src='/javascript/fade.js')
 
     br
-    div.container
-        div.row
-            div.form.form-inline
+    .container
+        .row
+            .form.form-inline
                 a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
                 h2='Editing home page for ' + course_title
     hr
-    div.container
-        div.row
-            div.col-md-1
-            div.col-md-10
+    .container
+        .row
+            .col-md-1
+            .col-md-10
                 form(method='POST' action='home/preview')
                     input(type='hidden', value=course_id, name='course-id')
                     input(type='hidden', value=course_title, name='course-title')
                     input(type='hidden', value=user_id, name='user-id')
-                    div.row
-                        div.col-md-9
+                    .row
+                        .col-md-9
                             button.btn.btn-dark(id='btn-existing', style='margin-right:5px;', type='button', onclick='doExistingUpdates();return false;') Edit Existing Updates
                             button.btn.btn-secondary(id='btn-single', type='button', onclick='doSingleUpdate();return false;') Add a New Update
-                        div.col-md-3
+                        .col-md-3
                             button.btn.btn-success(type='submit') Preview Changes
-                    div.row
-                        div.col-md-12
+                    .row
+                        .col-md-12
                             hr
-                            div.form-group.form-inline
+                            .form-group.form-inline
                                 label(for='main_header') Main Header:
                                 input#main_header.form-control.inlined-input(type='text', value=home_updates.main_header, name='main_header')
 
-                            div.form-group
+                            .form-group
                                 label(for='main_text') Main Text:
                                 textarea#main_text.form-control(rows=15, name='main_text',style="width: 750px;")=home_updates.main_text
                         hr
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(id='lbl0' for='header2') Header 2:
                                 input#header2.form-control.inlined-input(type='text', value=home_updates.header2, name='header2')
 
-                            div.form-group
+                            .form-group
                                 label(id='lbl1' for='text2') Text 2:
                                 textarea#text2.form-control(rows=15, name='text2',style="width: 750px;")=home_updates.text2
                         hr(id='hr1')
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(id='lbl2' for='header3') Header 3:
                                 input#header3.form-control.inlined-input(type='text', value=home_updates.header3, name='header3')
 
-                            div.form-group
+                            .form-group
                                 label(id='lbl3' for='text3') Text 3:
                                 textarea#text3.form-control(rows=15, name='text3',style="width: 750px;")=home_updates.text3
                         hr(id='hr2')
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(for='badges_link') Badges URL (Link to Canvas page or tool):
                                 input#badges_link.form-control.inlined-input(type='text', name='badges_link', value=home_updates.badges_link)
                         hr
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(for='life_on_grounds_title') Life on Campus Title (Life at UVA, Yale, etc):
                                 input#life_on_grounds_title.form-control.inlined-input(type='text', name='life_on_grounds_title', value=home_updates.life_on_grounds_title)
                         hr
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(for='life_on_grounds_link') Life on Campus URL (Link to the Canvas page or tool):
                                 input#life_on_grounds_link.form-control.inlined-input(type='text', name='life_on_grounds_link', value=home_updates.life_on_grounds_link)
                         hr
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(for='life_on_grounds_thumbnail') Life on Campus Default Thumbnail:
                                 input#life_on_grounds_thumbnail.form-control.inlined-input(type='text', name='life_on_grounds_thumbnail', value=home_updates.life_on_grounds_thumbnail)
                         hr
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(for='daily_task_img') Daily Task Flag:
                                 input#daily_task_img.form-control.inlined-input(type='text', name='daily_task_img', value=home_updates.daily_task_img)
                         hr
 
-                    div.row
-                        div.col-md-12
-                            div.form-group.form-inline
+                    .row
+                        .col-md-12
+                            .form-group.form-inline
                                 label(for='coach_information') Coach Information Filename:
                                 input#coach_information.form-control.inlined-input(type='text', name='coach_information', value=home_updates.coach_information)
                         hr
 
-                    div.row
-                        div.col-md-12
+                    .row
+                        .col-md-12
                             button.btn.btn-success(type='submit') Preview Changes
                     hr
 
-                div.row
+                .row
                     h2='Home Page Videos'
-                div.row
+                .row
                     form(method='GET',action='home/videos/add')
                         input(type='hidden', value=course_id, name='course-id')
                         input(type='hidden', value=course_title, name='course-title')
                         input(type='hidden', value=user_id, name='user-id')
                         button.btn.btn-dark(type='submit') Add Video
-                div.row
+                .row
                     table
                         for video in home_vids
                             tr
