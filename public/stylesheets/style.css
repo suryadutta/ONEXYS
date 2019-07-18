@@ -349,6 +349,8 @@
   width: 92px;
 }
 
+
+/*
 .lucky_bulldog {
 	position: absolute;
 	top: -35px;
@@ -377,6 +379,28 @@
 	background-color: rgb(34, 92, 203);
 	border-radius: 0px 8px 0px 0px;
 	cursor: pointer;
+}
+*/
+
+.full_background {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(115, 115, 115, 0.7);
+}
+.lucky_img {
+  height: 80%;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.lucky_text{
+  height: 25px;
+	padding: 8px 10px 0px 30px;
+	font-size: 20px;
+
+	font-weight: bold;
+	color: white;
+	border-radius: 0px 8px 0px 0px;
 }
 
 #leaderboard {
