@@ -20,7 +20,8 @@ router.use('/', function(req, res, next) {
       res.render('badges', {
         title: 'Badges | CONEX',
         badges: badges,
-        heroku_app: config.herokuAppName
+        heroku_app: config.herokuAppName,
+        lucky: req.session.lucky
       });
     });
   }else{
@@ -28,7 +29,8 @@ router.use('/', function(req, res, next) {
       res.render('badges', {
         title: 'Badges | CONEX',
         badges: badges,
-        heroku_app: config.herokuAppName
+        heroku_app: config.herokuAppName,
+        lucky: req.session.lucky
       });
     });
   }

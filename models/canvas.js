@@ -138,15 +138,15 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var daily_done = 0;
         var reflections_done = 0;
 
-        var d = new Date();
+        //lucky bulldog
+        lucky_bulldog_points = 100;
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                // If within a minute of assigned time AND doesn't already have the award
-                if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)) < 1 && !lucky_bulldog.awarded_ids.includes(studentID)){
-                    //LUCKY AWARDED
-                    lucky_bulldog.awarded_ids.push(studentID);
-                    mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
+                if(lucky_bulldog.awarded_ids.length>0){
+                    if (lucky_bulldog.awarded_ids.includes(studentID)){
+                        totalPoints += parseInt(lucky_bulldog_points);
+                    }
                 }
                 if (lucky_bulldog.awarded_ids.includes(studentID)){
                     totalPoints += parseInt(lucky_bulldog.point_value);
@@ -222,9 +222,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                         //practice objectives proficient
                         var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
-                        //console.log("Practice Object");
-                        //console.log(practice_object);
-                        //console.log("Practice link: " + (mongo_data.modules[i]).practice_link);
 
                         if (practice_object){
                             var practice_grade = parseFloat(practice_object.grade);
@@ -631,7 +628,6 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
             fillerArray = Array(3-combinedArray.length).fill({'Name': '', 'Score': 0});
             combinedArray = combinedArray.concat(fillerArray);
         }
-        console.log("Admin leaderboard here: " + combinedArray);
         return combinedArray;
     }
 
@@ -680,12 +676,10 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
                     }
                 }
                 var studentPoints = studentIdsArrays.map(studentIds => ((studentIds.map(studentId => getPointValue(studentId))).reduce((a, b) => a + b, 0)));
-                //console.log("Points: " + studentPoints);
                 for(var i = 0; i < studentPoints.length; i++){
                     studentPoints[i] /= studentIdsArrays[i].length;
                     studentPoints[i] = parseInt(studentPoints[i], 10);
                 }
-                //console.log("Points 2: " + studentPoints);
                 callback2(null, studentPoints, groupNames);
             });
         });
@@ -752,18 +746,12 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
         var daily_done = 0;
         var reflections_done = 0;
 
-        var d = new Date();
-
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                // If within a minute of assigned time AND doesn't already have the award
-                if (((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)) < 1 && !lucky_bulldog.awarded_ids.includes(studentID)){
-                    //LUCKY AWARDED
-                    lucky_bulldog.awarded_ids.push(studentID);
-                    mongo.updateData(courseID,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
-                }
-                if (lucky_bulldog.awarded_ids.includes(studentID)){
-                    totalPoints += parseInt(lucky_bulldog.point_value);
+                if(lucky_bulldog.awarded_ids.length>0){
+                    if (lucky_bulldog.awarded_ids.includes(studentID)){
+                        totalPoints += parseInt(lucky_bulldog_points);
+                    }
                 }
             }
         }
@@ -1293,6 +1281,29 @@ function getGradebook(courseID, courseName, callback) {
 
 }
 
+var awardLuckies = function(req, res, next) {
+    var d = new Date();
+    var studentID = parseInt(req.session.user_id);
+    req.session.lucky = false;
+
+    mongo.getData(req.session.course_id, 'lucky_bulldogs', function(err, luckies){
+        console.log(luckies);
+        if (luckies.length>0){
+            for (lucky_bulldog of luckies){
+                if(lucky_bulldog.awarded_ids.length>0){
+                    // If student not already on list AND within a minute of the assigned time...
+                    if (!lucky_bulldog.awarded_ids.includes(studentID) && ((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
+                        lucky_bulldog.awarded_ids.push(studentID);
+                        mongo.updateData(req.session.course_id,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
+                        req.session.lucky = lucky_bulldog;
+                    }
+                }
+            }
+        }
+    });
+    next();
+}
+
 module.exports = {
     getRequest,
     postRequest,
@@ -1311,4 +1322,5 @@ module.exports = {
     getLeaderboardScores_masquerade,
     daily_task_url,
     getGradebook,
+    awardLuckies,
 }

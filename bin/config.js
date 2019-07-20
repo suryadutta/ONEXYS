@@ -42,5 +42,6 @@ config.mongo_db_name = process.env.MONGO_DB_NAME;
 config.cookieduration = 1000 * 60 * 60 * 24;
 
 config.herokuAppName = process.env.HEROKU_APP_NAME;
+config.testApp = process.env.TEST_SERVER;
 
 module.exports = config;

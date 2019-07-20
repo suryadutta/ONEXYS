@@ -65,7 +65,8 @@ block content
                     th Quiz Link
                     th Reflections Link
                     th Edit Module
-                each module in modules
+                    //th Preview
+                each module, i in modules
                     tr
                         td=module._id
                         td=module.primary_title
@@ -80,3 +81,5 @@ block content
                                 input(type='hidden', value=course_title, name='course-title')
                                 input(type='hidden', value=user_id, name='user-id')
                                 button.btn.btn-dark(type='submit') Edit
+                        //td
+                            a.btn.btn-primary(href="https://" + test_app + ".herokuapp.com/modules/" + (i + 1), target="_blank") Live View

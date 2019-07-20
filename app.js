@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('client-sessions');
 
+var canvas = require('./models/canvas');
 var mongo = require('./models/mongo');
 var config = require('./bin/config');
 var auth = require('./bin/auth');
@@ -55,11 +56,12 @@ app.use(session({
 app.get('/callback',auth.oath2_callback);
 
 app.get('/',index);
-app.use('/home',[auth.updateCookies,auth.checkUser],home)
-app.use('/badges',[auth.updateCookies,auth.checkUser],badges)
+app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
+app.use('/badges',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],badges)
+// Admins don't need to earn luckies, so no canvas.awardLuckies
 app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 
-app.use('/modules',auth.updateCookies,modules)
+app.use('/modules',[auth.updateCookies,canvas.awardLuckies],modules)
 
 app.use('/launch',launch)
 

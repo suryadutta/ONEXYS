@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  if lucky
+    include lucky-overlay
   if admin
     if masquerade
       a(href='/home?login_success=1') Back to Home
@@ -128,9 +130,6 @@ block content
           .module_11.module_background_00
             a.progress_box.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_2.png);')  Post-Test
     .left(style='width: 500px !important; margin-top: -10px;')
-      .lucky_bulldog
-        img(src='', alt='Lucky Bulldog')
-        .lucky_bulldog_text +500pts!
       br
       .clear
       #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
