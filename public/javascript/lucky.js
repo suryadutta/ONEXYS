@@ -1,5 +1,8 @@
 // Manages the display of luckies!
 
+console.log("Worked!");
+alert("hi!");
+
 $(document).ready(function() {
     $(".full_background").classList.remove('hide');
     alert("Fade in!");

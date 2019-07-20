@@ -387,11 +387,11 @@
   transition: 1s;
 }
 .full_background {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   background-color: rgba(115, 115, 115, 0.7);
-  z-index: 2;
+  z-index: 3;
 }
 .lucky_img {
   height: 75vh;
