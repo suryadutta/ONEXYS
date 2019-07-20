@@ -387,7 +387,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(115, 115, 115, 0.7);
-  z-index: 3;
+  z-index: 4;
   display: none;
 }
 .lucky_img {
@@ -1268,7 +1268,7 @@
 }
 .badge_points {
 	position: relative;
-		z-index: 3;
+	z-index: 3;
 	float: right;
 	right: 0px;
 	top: 0px;

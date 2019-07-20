@@ -1301,6 +1301,8 @@ var awardLuckies = function(req, res, next) {
             }
         }
     });
+    // Override the value of lucky
+    req.session.lucky = {point_value: 500, image_name: "luckycavman1.png"};
     next();
 }
 
