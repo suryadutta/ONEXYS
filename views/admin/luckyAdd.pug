@@ -17,9 +17,17 @@ block content
                 input(type='hidden', value=course_id, name='course-id')
                 input(type='hidden', value=course_title, name='course-title')
                 input(type='hidden', value=user_id, name='user-id')
+
                 div.form-group.form-inline
                     label(for='badge_points') Date and Time of Lucky Bonus:
                     input#badge_points.form-control(type='datetime-local', name='date_time')
+                    hr
+                    label(for='point_value') Point value of Lucky Bulldog:
+                    input#point_value.form-control(type='numeric', value=lucky_bonus.point_value, name='point_value')
+                    hr
+                    label(for='image_name') Image to display:
+                    input#image_name.form-control(type='numeric', value=lucky_bonus.image_name, name='image_name')
+
                 hr
 
                 button.btn.btn-success(type='submit') Save Changes

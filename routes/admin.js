@@ -570,7 +570,9 @@ router.post("/lucky/edit/:id", (req, res, next) => {
     req.session.course_id,
     "lucky_bulldogs",
     { _id: parseInt(req.params.id) },
-    { time: req.body.date_time },
+    { time: req.body.date_time,
+      point_value: req.body.point_value,
+      image_name: req.body.image_name },
     (err, result) => {
       res.redirect("/admin/lucky");
     }
@@ -599,9 +601,6 @@ router.get("/lucky/add", (req, res, next) => {
 
 router.post("/lucky/add", (req, res, next) => {
   mongo.getData(req.session.course_id,"lucky_bulldogs", (err, lucky_data) => {
-    console.log("Largest ID: " + Math.max(...lucky_data.map(data => data._id)));
-    console.log(lucky_data);
-    console.log(lucky_data.map(data => data._id));
     if (lucky_data.length > 0) {
       // ... is a JS operator which splits array into list of parameters
       // so that it is compatable with Math.max
@@ -609,13 +608,14 @@ router.post("/lucky/add", (req, res, next) => {
     } else {
       new_id = 1;
     }
-    console.log("New id: " + new_id);
     mongo.insertData(
       req.session.course_id,
       "lucky_bulldogs",
       {
         _id: new_id,
         time: req.body.date_time,
+        point_value: req.body.point_value,
+        image_name: req.body.image_name,
         awarded_ids: []
       },
       (err, result) => {

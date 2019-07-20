@@ -148,6 +148,9 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                         totalPoints += parseInt(lucky_bulldog_points);
                     }
                 }
+                if (lucky_bulldog.awarded_ids.includes(studentID)){
+                    totalPoints += parseInt(lucky_bulldog.point_value);
+                }
             }
         }
 
@@ -742,9 +745,6 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
         var quizzes_attempted = 0;
         var daily_done = 0;
         var reflections_done = 0;
-
-        //lucky bulldog
-        lucky_bulldog_points = 100;
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
