@@ -1301,8 +1301,6 @@ var awardLuckies = function(req, res, next) {
             }
         }
     });
-    console.log("Got lucky???");
-    console.log(req.session.lucky);
     next();
 }
 

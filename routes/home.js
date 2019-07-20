@@ -68,9 +68,6 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
-          console.log("Lucky?");
-          req.session.lucky = {point_value: 500, image_name: "luckycavman1.png"};
-          console.log(req.session.lucky);
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,

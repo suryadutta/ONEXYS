@@ -58,7 +58,8 @@ app.get('/callback',auth.oath2_callback);
 app.get('/',index);
 app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
 app.use('/badges',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],badges)
-app.use('/admin',[auth.updateCookies,auth.checkAdmin,canvas.awardLuckies],admin)
+// Admins don't need to earn luckies, so no canvas.awardLuckies
+app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 
 app.use('/modules',[auth.updateCookies,canvas.awardLuckies],modules)
 
