@@ -382,6 +382,10 @@
 }
 */
 
+.hide {
+  opacity: 0;
+  transition: 1s;
+}
 .full_background {
   position: absolute;
   width: 100%;
