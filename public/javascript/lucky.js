@@ -5,5 +5,6 @@ $(document).ready(function() {
 });
 
 $(".full_background").click(function(){
+    console.log("Hide!");
     $(".full_background").addClass('hide');
 });

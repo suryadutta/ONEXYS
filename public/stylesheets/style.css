@@ -384,7 +384,7 @@
 
 .hide {
   opacity: 0;
-  transition: 1s;
+  transition: 10s;
 }
 .full_background {
   position: fixed;
