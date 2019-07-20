@@ -4,7 +4,7 @@ $(document).ready(function() {
     $(".full_background").removeClass('hide');
 });
 
-$("*").click(function(else){
+$("*").click(function(e){
     console.log(e);
 });
 
