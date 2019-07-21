@@ -1235,6 +1235,7 @@ function getGradebook(courseID, courseName, callback) {
 
                         // Now populate those grades
                         user_assignments.forEach( (assignment) => {
+                            console.log(assignment);
                             // We are looking for assignments which are in the module list as either a practice or quiz.
                             // These have to be separate because they use different fields :(
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
