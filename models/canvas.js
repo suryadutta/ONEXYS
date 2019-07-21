@@ -1229,13 +1229,13 @@ function getGradebook(courseID, courseName, callback) {
                                 module_id: module._id,
                                 module_name: (module.primary_title + ' ' + module.secondary_title),
                                 practice_grade: '',
-                                quiz_grade: ''
+                                quiz_grade: '',
+                                due: '',
                             });
                         });
 
                         // Now populate those grades
                         user_assignments.forEach( (assignment) => {
-                            console.log(assignment);
                             // We are looking for assignments which are in the module list as either a practice or quiz.
                             // These have to be separate because they use different fields :(
                             var thisPracticeModule = (mongo_data.modules).find(module => parseInt(module.practice_link) == parseInt(assignment.assignment_id));
@@ -1248,13 +1248,17 @@ function getGradebook(courseID, courseName, callback) {
                             // If the current assignment was flagged as a "practice" module, locate the module in the
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id)).practice_grade = score;
+                                var obj = grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id));
+                                obj.practice_grade = score;
+                                obj.due = assignment.cached_due_date;
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
                             // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
-                                grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id)).quiz_grade = score;
+                                var obj = grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id));
+                                obj.quiz_grade = score;
+                                obj.due = assignment.cached_due_date;
                             }
                         });
 
@@ -1271,9 +1275,7 @@ function getGradebook(courseID, courseName, callback) {
                             grades: grades
                         });
 
-                        if(gradebook.length == completed_gradebook_size) {
-                            gradebook_done();
-                        }
+                        if(gradebook.length == completed_gradebook_size) gradebook_done();
                     });
                 });
             });

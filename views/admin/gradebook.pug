@@ -26,7 +26,7 @@ block content
                     a.btn.btn-primary#export(download=course_title + ".csv", type="text/csv") Build CSV
                 th
                 each obj in gradebook[0].grades
-                    th=obj.module_name
+                    th(due=obj.due)=obj.module_name
         table
             tbody(id="gradebook", style="border-bottom: 2px double black;")
                 tr(id="first", style="border-bottom: 2px double black;")
