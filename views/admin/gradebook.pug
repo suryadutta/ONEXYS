@@ -21,12 +21,12 @@ block content
     hr
     div
         table
-            tr(class="tdata-header")
+            tr#gradebook-table-header(class="tdata-header")
                 th(class="spacer")
                     a.btn.btn-primary#export(download=course_title + ".csv", type="text/csv") Build CSV
                 th
                 each obj in gradebook[0].grades
-                    th(due=obj.due)=obj.module_name
+                    th.module-title(due=obj.due)=obj.module_name
         table
             tbody(id="gradebook", style="border-bottom: 2px double black;")
                 tr(id="first", style="border-bottom: 2px double black;")

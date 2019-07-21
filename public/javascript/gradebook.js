@@ -14,7 +14,7 @@ function sortTable(column) {
 	var teamLock = (lockProgression == 3);
 	var aText, bText, r;
 
-	rows.sort(function(a, b) {
+	rows.sort( (a, b) => {
 		if(teamLock) {
 			aText = $(a).find('td').eq(teamCol).text();
 			bText = $(b).find('td').eq(teamCol).text();
@@ -73,9 +73,9 @@ function swapDirection() {
 	sortTable(lastSorted);
 }
 
-$(document).ready(function() {
+$(document).ready( () => {
 	var i = 0;
-	$('#gradebook').first('tr').find('th').each(function() {
+	$('#gradebook').first('tr').find('th').each( () => {
 		// Assign column values to track which head was clicked.
 		$(this).attr('col', i);
 
@@ -86,8 +86,8 @@ $(document).ready(function() {
 			teamCol = i;
 			$(this).addClass('bg-info');
 			$(this).removeClass('bg-light');
-			$(this).click(function() {
-				$('#gradebook').first('tr').find('th').each(function() {
+			$(this).click( () => {
+				$('#gradebook').first('tr').find('th').each( () => {
 					$(this).removeClass('bg-info');
 					$(this).addClass('bg-light');
 				});
@@ -120,13 +120,13 @@ $(document).ready(function() {
 		} else {
 			// Assign sorting and highlighting functionality
 			// to each column header.
-			$(this).click(function() {
+			$(this).click( () => {
 				// If this box is already highlighted, the user
 				// has asked to swap sorting order. We also don't
 				// need to run highlighting code.
 				if($(this).hasClass('bg-info')) swapDirection();
 				else {
-					$('#gradebook').first('tr').find('th').each(function() {
+					$('#gradebook').first('tr').find('th').each( () => {
 						$(this).removeClass('bg-info');
 						$(this).addClass('bg-light');
 					});
@@ -142,12 +142,12 @@ $(document).ready(function() {
 
 	// When hovering over a row, it should be outlined
 	// with a border to make following a row easier.
-	$('#gradebook tr').each(function() {
+	$('#gradebook tr').each( () => {
 		if($(this).attr('id') != 'first') {
-			$(this).hover(function() {
+			$(this).hover( () => {
 				$(this).css('border', '1px dashed black');
 			},
-			function() {
+			() => {
 				$(this).css('border', '');
 			});
 		}
@@ -160,9 +160,9 @@ $(document).ready(function() {
 // Functionality to create CSV from grade table
 function exportcsv() {
 	var exp = [];
-	$("#gradebook tr").each(function() {
+	$("#gradebook tr").each( () => {
 		var row = [];
-		$(this).children().each(function() {
+		$(this).children().each( () => {
 			row.push($(this).text());
 		});
 		exp.push(row);
@@ -183,4 +183,14 @@ function exportcsv() {
 	$("#export").attr({
 		"href": csvdata,
 	});
+}
+
+function hideFutureAssignments() {
+	var head = $("#gradebook-table-header th");
+	head.each( () => {
+		console.log($(this).attr('due'));
+		if($(this).attr('due')) {
+			console.log('Found date!');
+		}
+	})
 }
