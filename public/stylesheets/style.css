@@ -391,10 +391,9 @@
   display: none;
 }
 .lucky_img {
-  height: 75vh;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  max-height: 75vh;
+  height: auto;
+  width: auto;
 }
 .lucky_text{
   height: 50px;
