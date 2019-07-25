@@ -1290,26 +1290,23 @@ var awardLuckies = function(req, res, next) {
     req.session.lucky = false;
 
     mongo.getData(req.session.course_id, 'lucky_bulldogs', function(err, luckies){
-        console.log(luckies);
-        console.log("Student: " + studentID);
         if (luckies.length>0){
             for (lucky_bulldog of luckies){
+                // Show difference in times
+                //console.log("Time difference: ");
+                //console.log(Math.abs((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)));
+
                 // If student not already on list AND within a minute of the assigned time...
-                console.log(lucky_bulldog.awarded_ids.includes(studentID));
-                console.log("Time difference: ");
-                console.log(Math.abs((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)));
                 if (!lucky_bulldog.awarded_ids.includes(studentID) && Math.abs((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<1){
                     lucky_bulldog.awarded_ids.push(studentID);
                     mongo.updateData(req.session.course_id,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                     req.session.lucky = lucky_bulldog;
-                    console.log("Lucky Assigned!!!");
                 }
             }
         }
     });
     // Override the value of lucky
     // req.session.lucky = {point_value: 500, image_name: "luckycavman1.png"};
-    console.log(req.session.lucky);
     next();
 }
 
