@@ -1,6 +1,7 @@
 div.full_background.hide
-  img.lucky_img(src='https://'+heroku_app+'.herokuapp.com/images/lucky/'+lucky.image_name)
-  p.lucky_text= 'You got '+lucky.point_value+' points!'
+  div.centered
+    img.lucky_img(src='https://'+heroku_app+'.herokuapp.com/images/lucky/'+lucky.image_name)
+    p.lucky_text= 'You got '+lucky.point_value+' points!'
 
   script.
     $(".full_background").fadeIn(2000).delay(4000).fadeOut(1000);

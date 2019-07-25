@@ -1302,6 +1302,7 @@ var awardLuckies = function(req, res, next) {
                     lucky_bulldog.awarded_ids.push(studentID);
                     mongo.updateData(req.session.course_id,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                     req.session.lucky = lucky_bulldog;
+                    console.log("Lucky Assigned!!!");
                 }
             }
         }
