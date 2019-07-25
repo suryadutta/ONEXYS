@@ -20,7 +20,7 @@ block content
 
                 div.form-group.form-inline
                     label(for='badge_points') Date and Time of Lucky Bonus:
-                    input#badge_points.form-control(type='datetime-local', name='date_time')
+                    input#badge_points.form-control(type='datetime-local', value=lucky_bonus.time, name='date_time')
                 div.form-group.form-inline
                     label(for='point_value') Point value of Lucky Bulldog:
                     input#point_value.form-control(type='numeric', value=lucky_bonus.point_value, name='point_value')
