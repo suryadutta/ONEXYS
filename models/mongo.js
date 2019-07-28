@@ -77,9 +77,8 @@ function getHomeContent(courseID, callback){
         console.log("Home vids array");
         console.log(home_videos);
         home_videos.sort((a, b) => {
-            console.log("Sorting " + a.placement + " and " + b.placement);
-            const a_spot = parseInt(a.placement),
-                  b_spot = parseInt(b.placement);
+            const a_spot = parseInt(a.position),
+                  b_spot = parseInt(b.position);
             if(a_spot < b_spot) return 1;
             else if(a_spot == b_spot) return 0;
             return -1;
