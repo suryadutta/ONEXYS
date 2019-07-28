@@ -4,9 +4,8 @@ $(document).ready(function() {
         $("#home-videos-container").sortable({ // Initialize jQuery UI 'sortability' (allows rearragement of items)
             revert: true, // Have items glide back into place if not dropped perfectly
             update: (event, ui) => { // Whenever the order is changed, post changes via AJAX
-                $("#home-videos-container").children().each(function(i) {
-                    if(heroku) {
-                        console.log(i);
+                if(heroku) {
+                    $("#home-videos-container").children().each(function(i) {
                         $.get("https://" + heroku + ".herokuapp.com/updateVideo", {
                             id: $(this).attr("id"),
                             position: i,
@@ -14,8 +13,8 @@ $(document).ready(function() {
                             console.log(data);
                             console.log(status);
                         });
-                    } else alert("Rearrangement of videos has not been saved due to a server error. Try reloading the page.");
-                });
+                    });
+                } else alert("Rearrangement of videos has not been saved due to a server error. Try reloading the page.");
             }
         });
     }

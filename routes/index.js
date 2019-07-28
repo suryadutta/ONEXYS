@@ -3,7 +3,7 @@ var router = express.Router();
 var assert = require('assert');
 
 // AJAX uses this route to dynamically apply video reordering support
-router.use('updateVideo', (req, res) => {
+router.use('/updateVideo', (req, res) => {
     try {
         console.log(req.session);
         //assert.notEqual(req.session.user, null);
