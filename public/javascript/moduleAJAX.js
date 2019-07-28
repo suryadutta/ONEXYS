@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-    if(heroku) { // Only do this stuff if the heroku server's name is defined
+    if(heroku != undefined) { // Only do this stuff if the heroku server's name is defined
         $(".moduleEditor").change(function() { // Attach to all module editing checkboxes
             console.log("ID " + $(this).attr("id"));
             var submit = {}; submit.id = $(this).attr('id'); // Set ID

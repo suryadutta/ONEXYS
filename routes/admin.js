@@ -272,7 +272,7 @@ router.get("/modules", (req, res, next) => {
       post_test_filename: post_test_filename,
       post_test_button_background: post_test_button_background,
       pre_test_button_background: pre_test_button_background,
-      test_app: config.testApp
+      heroku_app: config.herokuAppName,
     });
   });
 });

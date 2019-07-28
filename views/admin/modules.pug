@@ -3,17 +3,17 @@ extends ../layout
 block content
     script(src="/javascript/moduleAJAX.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
+    .container
+        .row
+            .form.form-inline
                 a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
                     i.fa.fa-chevron-left
                 h2='Editing ' + course_title + ' modules'
     hr
     br
 
-    div.container
-        div.row
+    .container
+        .row
             form(method='POST' action='modules')
                 input(type='hidden', value=course_id, name='course-id')
                 input(type='hidden', value=course_title, name='course-title')
@@ -21,31 +21,31 @@ block content
 
                 label Post Test Open?
 
-                div.form-inline
+                .form-inline
                     input#post_test_open_true.form-control(type='radio', value='true', checked=post_test=='true', name='post_test')
                     label(for='post_test_open_true') Yes
 
-                div.form-inline
+                .form-inline
                     input#post_test_open_false.form-control(type='radio', value='false', checked=post_test=='false', name='post_test')
                     label(for='post_test_open_false') No
 
-                div.row
-                    div.col-md-12
-                        div.form-group.form-inline
+                .row
+                    .col-md-12
+                        .form-group.form-inline
                             label(for='post_test_filename') Post Test Filename (located in views/static/post-test folder):
                             input#post_test_filename.form-control.inlined-input(type='text', name='post_test_filename', value=post_test_filename)
                     hr
 
-                div.row
-                    div.col-md-12
-                        div.form-group.form-inline
+                .row
+                    .col-md-12
+                        .form-group.form-inline
                             label(for='post_test_button_background') Post Test Button Background (located in public/images/progress_bar folder):
                             input#post_test_button_background.form-control.inlined-input(type='text', name='post_test_button_background', value=post_test_button_background)
                     hr
 
-                div.row
-                    div.col-md-12
-                        div.form-group.form-inline
+                .row
+                    .col-md-12
+                        .form-group.form-inline
                             label(for='pre_test_button_background') Pre Test Button Background (located in public/images/progress_bar folder):
                             input#pre_test_button_background.form-control.inlined-input(type='text', name='pre_test_button_background', value=pre_test_button_background)
                     hr
@@ -53,8 +53,10 @@ block content
                 button.btn.btn-success(type='submit') Save Pre/Post Test Changes
             hr
     br
-    div.container
-        div.row
+    .container
+        .row
+            script.
+                var heroku = "!{heroku_app}";
             table(class="admin_table")
                 tr
                     th ID
@@ -90,5 +92,3 @@ block content
                                 input(type='hidden', value=course_title, name='course-title')
                                 input(type='hidden', value=user_id, name='user-id')
                                 button.btn.btn-dark(type='submit') Edit
-                        //td
-                            a.btn.btn-primary(href="https://" + test_app + ".herokuapp.com/modules/" + (i + 1), target="_blank") Live View
