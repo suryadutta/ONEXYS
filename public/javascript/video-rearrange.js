@@ -6,7 +6,7 @@ $(document).ready(function() {
             update: (event, ui) => { // Whenever the order is changed, post changes via AJAX
                 if(heroku) {
                     $("#home-videos-container").children().each(function(i) {
-                        $.get("https://" + heroku + ".herokuapp.com/updateVideo", {
+                        $.get("https://" + heroku + ".herokuapp.com/admin/updateVideo", {
                             id: $(this).attr("id"),
                             position: i,
                         }, (data, status) => {
