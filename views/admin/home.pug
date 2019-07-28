@@ -119,23 +119,18 @@ block content
                         input(type='hidden', value=user_id, name='user-id')
                         button.btn.btn-dark(type='submit') Add Video
                 .row
-                    table
+                    #home-videos-container.col-md-12
                         for video in home_vids
-                            tr
-                                td
-                                    .onexys_video
+                            .row
+                                .col-md-8
+                                    .onexys_video(id=video._id)
                                         a.colorbox(href=video.video_src)
                                             if(video.video_img && video.video_img != '')
                                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
                                             else
                                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
                                             img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
-                                    br
-                                    br
-                                    span(style='font-size: 12pt;')
-                                        strong!=video.video_desc
-                                    hr
-                                td
+                                .col-md-4
                                     .form.form-inline
                                         form(method='GET' action='home/videos/edit/'+video._id)
                                             input(type='hidden', value=course_id, name='course-id')
@@ -149,4 +144,10 @@ block content
                                             input(type='hidden', value=course_title, name='course-title')
                                             input(type='hidden', value=user_id, name='user-id')
                                             button.btn.btn-danger(type='submit') Delete
+                            .row
+                                .col-md-8
+                                    span(style='font-size: 12pt;')
+                                        strong!=video.video_desc
+                                .col-md-12
+                                        hr
             .col-md-1

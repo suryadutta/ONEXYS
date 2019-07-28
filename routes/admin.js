@@ -101,7 +101,7 @@ router.post("/home/videos/add", (req, res, next) => {
     vidData = req.body;
     vidData._id = makeid();
     vidData.type = "video";
-    vidData.created = new Date();
+    vidData.position = -1; // New videos will start at the top of the list
     console.log("New video_img: " + vidData.vid_img);
     mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
         res.redirect("/admin/home");
@@ -158,7 +158,6 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-    if(!req.body.created) req.body.created = new Date();
     mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
         res.redirect("/admin/home");
     });

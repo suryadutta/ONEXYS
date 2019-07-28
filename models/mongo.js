@@ -77,8 +77,8 @@ function getHomeContent(courseID, callback){
         console.log("Home vids array");
         console.log(home_videos);
         home_videos.sort((a, b) => {
-            var aDate = new Date(a.created),
-                bDate = new Date(b.created);
+            var aDate = parseInt(a.placement),
+                bDate = parseInt(b.placement);
             if(aDate < bDate) return 1;
             else if(aDate == bDate) return 0;
             return -1;
