@@ -37,11 +37,11 @@ router.get('/updateModule', (req, res) => {
         var updates = {};
         if(req.query.open) {
             assert(/(true|false)/.test(req.query.open)); // Open must be a valid boolean
-            updates.open = (req.query.open == 'true');
+            updates.open = req.query.open;
         }
         if(req.query.due) {
             assert(/(true|false)/.test(req.query.due)); // Due must be a valid boolean
-            updates.due = (req.query.due == 'true');
+            updates.due = req.query.due;
         }
 
         if(req.session.admin) {
