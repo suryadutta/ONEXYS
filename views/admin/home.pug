@@ -125,10 +125,10 @@ block content
                 .row
                     #home-videos-container.col-md-12
                         for video in home_vids
-                            .vid-obj
+                            .vid-obj(id=video._id)
                                 .row
                                     .col-md-8
-                                        .onexys_video(id=video._id)
+                                        .onexys_video
                                             a.colorbox(href=video.video_src)
                                                 if(video.video_img && video.video_img != '')
                                                     img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
