@@ -1,3 +1,14 @@
+.vid-obj:hover {
+	box-shadow: 1px 1px 5px #999;
+}
+
+.vid-obj {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 15px;
+	border-radius: 10px;
+}
+
 ::-webkit-scrollbar {
     display: none !important;
 }
