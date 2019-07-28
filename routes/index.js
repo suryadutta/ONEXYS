@@ -3,12 +3,11 @@ var router = express.Router();
 var assert = require('assert');
 
 // AJAX uses this route to dynamically apply video reordering support
-router.use('/updateVideo', (req, res) => {
+router.get('/updateVideo', (req, res) => {
     try {
         console.log(req.session);
         //assert.notEqual(req.session.user, null);
-        assert.equals(req.method, 'GET');
-        mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, parseInt(req.params.position), (err, result) => {
+        mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, {position: parseInt(req.params.position)}, (err, result) => {
             if(err) {
                 res.status(500);
                 res.send("Encountered error saving video info.");
@@ -18,8 +17,8 @@ router.use('/updateVideo', (req, res) => {
             }
         });
     } catch(e) {
-        res.status(400);
-        res.send("400 - Bad Request. The given method, syntax, or protocol is not currently supported.");
+        res.status(406);
+        res.send("406 - Not acceptable. You must provide querystring arguments 'id' and 'position', the latter of which should be an integer value.");
     }
 });
 
