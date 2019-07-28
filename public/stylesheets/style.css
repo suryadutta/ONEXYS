@@ -390,11 +390,19 @@
   z-index: 4;
   display: none;
 }
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .lucky_img {
-  height: 75vh;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  max-height: 75vh;
+  height: auto;
+  width: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 .lucky_text{
   height: 50px;
