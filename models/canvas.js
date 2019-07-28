@@ -1225,13 +1225,14 @@ function getGradebook(courseID, courseName, callback) {
                         // For each student on a given team, we need to go a couple of things.
                         var grades = [];
                         (mongo_data.modules).forEach( (module) => {
-                            grades.push({
-                                module_id: module._id,
-                                module_name: (module.primary_title + ' ' + module.secondary_title),
-                                practice_grade: '',
-                                quiz_grade: '',
-                                due: '',
-                            });
+                            if(module.due == 'true') { // The gradebook is only concerned with modules which are due
+                                grades.push({
+                                    module_id: module._id,
+                                    module_name: (module.primary_title + ' ' + module.secondary_title),
+                                    practice_grade: '',
+                                    quiz_grade: ''
+                                });
+                            }
                         });
 
                         // Now populate those grades
@@ -1250,7 +1251,6 @@ function getGradebook(courseID, courseName, callback) {
                             if(thisPracticeModule != undefined) {
                                 var obj = grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id));
                                 obj.practice_grade = score;
-                                obj.due = assignment.cached_due_date;
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
@@ -1258,7 +1258,6 @@ function getGradebook(courseID, courseName, callback) {
                             if(thisQuizModule != undefined) {
                                 var obj = grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id));
                                 obj.quiz_grade = score;
-                                obj.due = assignment.cached_due_date;
                             }
                         });
 
