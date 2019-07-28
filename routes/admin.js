@@ -30,22 +30,22 @@ router.get('/updateVideo', (req, res) => {
 });
 
 // AJAX uses this route to dynamically open/close and mark modules as due
-router.get('/updateModule', (req, res) => {
+router.post('/updateModule', (req, res) => {
     try {
-        assert(/\d+/.test(req.query.id)); // IDs must be an integer
+        assert(/\d+/.test(req.body.id)); // IDs must be an integer
 
         var updates = {};
-        if(req.query.open) {
-            assert(/(true|false)/.test(req.query.open)); // Open must be a valid boolean
-            updates.open = req.query.open;
+        if(req.body.open) {
+            assert(/(true|false)/.test(req.body.open)); // Open must be a valid boolean
+            updates.open = req.body.open;
         }
-        if(req.query.due) {
-            assert(/(true|false)/.test(req.query.due)); // Due must be a valid boolean
-            updates.due = req.query.due;
+        if(req.body.due) {
+            assert(/(true|false)/.test(req.body.due)); // Due must be a valid boolean
+            updates.due = req.body.due;
         }
 
         if(req.session.admin) {
-            mongo.updateData(req.session.course_id, "modules", { _id: parseInt(req.query.id) }, updates, (err, data) => {
+            mongo.updateData(req.session.course_id, "modules", { _id: parseInt(req.body.id) }, updates, (err, data) => {
                 if(err) {
                     res.status(500);
                     res.send("500 - Internal Server Error. Encountered error saving module info.");
@@ -60,7 +60,7 @@ router.get('/updateModule', (req, res) => {
         }
     } catch(e) {
         res.status(406);
-        res.send("406 - Not acceptable. You must provide querystring arguments 'id' (a positive integer), and 'open' and/or 'due' (booleans).")
+        res.send("406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans).")
     }
 });
 
