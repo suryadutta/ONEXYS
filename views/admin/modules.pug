@@ -61,17 +61,26 @@ block content
                     th Primary Title
                     th Secondary Title
                     th Open?
+                    th Due?
                     th Practice Link
                     th Quiz Link
                     th Reflections Link
                     th Edit Module
-                    //th Preview
                 each module, i in modules
                     tr
                         td=module._id
                         td=module.primary_title
                         td=module.secondary_title
-                        td=module.open
+                        td
+                            if(module.open == "true")
+                                input.moduleEditor(type="checkbox", edit="open" checked)
+                            else
+                                input.moduleEditor(type="checkbox" edit="open")
+                        td
+                            if(module.due == "true")
+                                input.moduleEditor(type="checkbox" edit="due" checked)
+                            else
+                                input.moduleEditor(type="checkbox" edit="due")
                         td=module.practice_link
                         td=module.quiz_link
                         td=module.reflection_link

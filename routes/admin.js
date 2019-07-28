@@ -13,7 +13,7 @@ router.get('/updateVideo', (req, res) => {
             mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.query.id }, { position: parseInt(req.query.position) }, (err, result) => {
                 if(err) {
                     res.status(500);
-                    res.send("Encountered error saving video info.");
+                    res.send("500 - Internal Server Error. Encountered error saving video info.");
                 } else {
                     res.status(200);
                     res.send("200 - OK");
@@ -26,6 +26,41 @@ router.get('/updateVideo', (req, res) => {
     } catch(e) {
         res.status(406);
         res.send("406 - Not acceptable. You must provide querystring arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else).");
+    }
+});
+
+// AJAX uses this route to dynamically open/close and mark modules as due
+router.get('/updateModule', (req, res) => {
+    try {
+        assert(/[A-Z\d]{16}/.test(req.query.id)); // IDs must be a 16 character alphanumeric string
+
+        var updates = {};
+        if(req.query.open) {
+            assert(/(true|false)/.test(req.query.open)); // Open must be a valid boolean
+            updates.open = (req.query.open == 'true');
+        }
+        if(req.query.due) {
+            assert(/(true|false)/.test(req.query.due)); // Due must be a valid boolean
+            updates.due = (req.query.due == 'true');
+        }
+
+        if(req.session.admin) {
+            mongo.updateData(req.session.course_id, "modules", { _id: parseInt(req.query.id) }, updates, (err, data) => {
+                if(err) {
+                    res.status(500);
+                    res.send("500 - Internal Server Error. Encountered error saving module info.");
+                } else {
+                    res.status(200);
+                    res.send("200 - OK");
+                }
+            });
+        } else {
+            res.status(401);
+            res.send("401 - Unauthorized. In order to change modules, you must be a system administrator.");
+        }
+    } catch(e) {
+        res.status(406);
+        res.send("406 - Not acceptable. You must provide querystring arguments '' (), '' (), and '' ().")
     }
 });
 
