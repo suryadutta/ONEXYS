@@ -124,6 +124,8 @@ block content
                         hr
                 .row
                     #home-videos-container.col-md-12
+                        script.
+                            var heroku = !{heroku_app};
                         for video in home_vids
                             .vid-obj(id=video._id)
                                 .row
