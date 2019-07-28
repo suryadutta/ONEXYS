@@ -7,10 +7,9 @@ const router = require("express").Router(),
 // AJAX uses this route to dynamically apply video reordering support
 router.get('/updateVideo', (req, res) => {
     try {
-        // Validate input
         assert(/[A-Z\d]{16}/.test(req.query.id)); // IDs must be a 16 character alphanumeric string
         assert(/\d+/.test(req.query.position)); // Positions consist at least 1 digit, and nothing else
-        if(req.session.admin) { // if the user is an admin, fulfill the req
+        if(req.session.admin) { // If the user is an admin, fulfill the req
             mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.query.id }, { position: parseInt(req.query.position) }, (err, result) => {
                 if(err) {
                     res.status(500);
@@ -20,7 +19,7 @@ router.get('/updateVideo', (req, res) => {
                     res.send("200 - OK");
                 }
             });
-        } else { // if the user is not an admin, terminate the req with status 401
+        } else { // If the user is not an admin, terminate the req with status 401
             res.status(401);
             res.send("401 - Unauthorized. In order to change videos, you must be a system administrator.");
         }
