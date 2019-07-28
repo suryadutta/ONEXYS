@@ -7,17 +7,21 @@ const router = require("express").Router(),
 // AJAX uses this route to dynamically apply video reordering support
 router.get('/updateVideo', (req, res) => {
     try {
-        console.log(req.session);
-        //assert.notEqual(req.session.user, null);
-        mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, {position: parseInt(req.params.position)}, (err, result) => {
-            if(err) {
-                res.status(500);
-                res.send("Encountered error saving video info.");
-            } else {
-                res.status(200);
-                res.send("200 - OK");
-            }
-        });
+        assert(!isNaN(parseInt(req.query.position)));
+        if(req.session.admin) {
+            mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.query.id }, { position: parseInt(req.query.position) }, (err, result) => {
+                if(err) {
+                    res.status(500);
+                    res.send("Encountered error saving video info.");
+                } else {
+                    res.status(200);
+                    res.send("200 - OK");
+                }
+            });
+        } else {
+            res.status(401);
+            res.send("401 - Unauthorized. In order to change videos, you must be a system administrator.");
+        }
     } catch(e) {
         res.status(406);
         res.send("406 - Not acceptable. You must provide querystring arguments 'id' and 'position', the latter of which should be an integer value.");

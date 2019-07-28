@@ -10,11 +10,10 @@ $(document).ready(function() {
                             id: $(this).attr("id"),
                             position: i,
                         }, (data, status) => {
-                            console.log(data);
-                            console.log(status);
+                            if(status != 'success') alert("Rearrangement of videos failed due to a server error. Try again later.");
                         });
                     });
-                } else alert("Rearrangement of videos has not been saved due to a server error. Try reloading the page.");
+                } else alert("You're changes are not being saved because the local pointer to heroku was not set by the server or has been modified.");
             }
         });
     }
