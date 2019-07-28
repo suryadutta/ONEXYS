@@ -7,9 +7,9 @@ const router = require("express").Router(),
 // AJAX uses this route to dynamically apply video reordering support
 router.get('/updateVideo', (req, res) => {
     try {
-        // Run basic input validation
-        assert(!isNaN(parseInt(req.query.position))); // must be a number
-        assert(req.params.id); // must exist
+        // Validate input
+        assert(/[A-Z\d]{16}/.test(req.query.id)); // IDs must be a 16 character alphanumeric string
+        assert(/\d+/.test(req.query.position)); // Positions consist at least 1 digit, and nothing else
         if(req.session.admin) { // if the user is an admin, fulfill the req
             mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.query.id }, { position: parseInt(req.query.position) }, (err, result) => {
                 if(err) {
