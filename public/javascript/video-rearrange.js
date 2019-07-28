@@ -8,16 +8,15 @@ $(document).ready(function() {
                 if(heroku) {
                     var end = $("#home-videos-container").children().length - 1, failed = "";
                     $("#home-videos-container").children().each(function(i) { // Make AJAX req to update each video
-                        $.get("https://" + heroku + ".herokuapp.com/admin/updateVideo", {
+                        $.post("https://" + heroku + ".herokuapp.com/admin/updateVideo", {
                             id: $(this).attr("id"),
                             position: i,
-                            complete: (data, status) => {
-                                if(status && status != 'success') {
-                                    failed += $(this).attr('id') + " ";
-                                    $("#home-videos-container").sortable('cancel');
-                                }
-                                if(i == end && failed.length > 0) alert("Rearrangement of videos " + failed + "failed due to a server error. Try again later.");
+                        }).always((data, status) => {
+                            if(status && status != 'success') {
+                                failed += $(this).attr('id') + " ";
+                                $("#home-videos-container").sortable('cancel');
                             }
+                            if(i == end && failed.length > 0) alert("Rearrangement of videos " + failed + "failed due to a server error. Try again later.");
                         });
                     });
 
