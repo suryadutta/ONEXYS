@@ -32,7 +32,7 @@ router.get('/updateVideo', (req, res) => {
 // AJAX uses this route to dynamically open/close and mark modules as due
 router.get('/updateModule', (req, res) => {
     try {
-        assert(/[A-Z\d]{16}/.test(req.query.id)); // IDs must be a 16 character alphanumeric string
+        assert(/\d+/.test(req.query.id)); // IDs must be an integer
 
         var updates = {};
         if(req.query.open) {
@@ -60,7 +60,7 @@ router.get('/updateModule', (req, res) => {
         }
     } catch(e) {
         res.status(406);
-        res.send("406 - Not acceptable. You must provide querystring arguments '' (), '' (), and '' ().")
+        res.send("406 - Not acceptable. You must provide querystring arguments 'id' (a positive integer), and 'open' and/or 'due' (booleans).")
     }
 });
 
