@@ -77,10 +77,11 @@ function getHomeContent(courseID, callback){
         console.log("Home vids array");
         console.log(home_videos);
         home_videos.sort((a, b) => {
-            var aDate = parseInt(a.placement),
-                bDate = parseInt(b.placement);
-            if(aDate < bDate) return 1;
-            else if(aDate == bDate) return 0;
+            console.log("Sorting " + a.placement + " and " + b.placement);
+            const a_spot = parseInt(a.placement),
+                  b_spot = parseInt(b.placement);
+            if(a_spot < b_spot) return 1;
+            else if(a_spot == b_spot) return 0;
             return -1;
         });
         console.log("Sorted home vids array");

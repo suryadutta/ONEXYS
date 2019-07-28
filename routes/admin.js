@@ -26,7 +26,7 @@ router.get('/updateVideo', (req, res) => {
         }
     } catch(e) {
         res.status(406);
-        res.send("406 - Not acceptable. You must provide querystring arguments 'id' and 'position', the latter of which should be an integer value.");
+        res.send("406 - Not acceptable. You must provide querystring arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else).");
     }
 });
 
