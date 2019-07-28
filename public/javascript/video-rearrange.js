@@ -12,7 +12,10 @@ $(document).ready(function() {
                             id: $(this).attr("id"),
                             position: i,
                             complete: (data, status) => {
-                                if(status != 'success') failed += $(this).attr('id') + " ";
+                                if(status != 'success') {
+                                    failed += $(this).attr('id') + " ";
+                                    $("#home-videos-container").sortable('cancel');
+                                }
                                 if(i == end && failed.length > 0) alert("Rearrangement of videos " + failed + "failed due to a server error. Try again later.");
                             }
                         });
