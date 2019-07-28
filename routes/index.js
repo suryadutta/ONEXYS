@@ -10,7 +10,8 @@ router.use('updateVideo', (req, res) => {
         assert.equals(req.method, 'GET');
         mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, parseInt(req.params.position), (err, result) => {
             if(err) {
-                res.status()
+                res.status(500);
+                res.send("Encountered error saving video info.");
             } else {
                 res.status(200);
                 res.send("200 - OK");

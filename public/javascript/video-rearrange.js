@@ -1,6 +1,5 @@
 
 $(document).ready(function() {
-    console.log("https://" + heroku + ".herokuapp.com/updateVideo");
     if(heroku) { // If the server was unable to serve this, we cannot submit AJAXes, so don't even make them movable
         $("#home-videos-container").sortable({ // Initialize jQuery UI 'sortability' (allows rearragement of items)
             revert: true, // Have items glide back into place if not dropped perfectly
