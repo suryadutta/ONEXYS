@@ -75,14 +75,14 @@ block content
                         td=module.secondary_title
                         td
                             if(module.open == "true")
-                                input.moduleEditor(type="checkbox", edit="open" checked)
+                                input.moduleEditor(id=module._id type="checkbox", edit="open" checked)
                             else
-                                input.moduleEditor(type="checkbox" edit="open")
+                                input.moduleEditor(id=module._id type="checkbox" edit="open")
                         td
                             if(module.due == "true")
-                                input.moduleEditor(type="checkbox" edit="due" checked)
+                                input.moduleEditor(id=module._id type="checkbox" edit="due" checked)
                             else
-                                input.moduleEditor(type="checkbox" edit="due")
+                                input.moduleEditor(id=module._id type="checkbox" edit="due")
                         td=module.practice_link
                         td=module.quiz_link
                         td=module.reflection_link

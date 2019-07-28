@@ -10,7 +10,7 @@ $(document).ready(function() {
             console.log(submit.open + " " + submit.due);
             submit.complete = (data, status) => { // This function fires after the GET req
                 console.log(status);
-                if(status && status != 'success') { // If unsuccessful, handle the failure
+                if(status != 'success') { // If unsuccessful, handle the failure
                     alert("Update failed. Try again later."); // Notify the user
                     $(this).prop("checked", !$(this).is(":checked")); // Reverse the change
                 }
