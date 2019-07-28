@@ -12,7 +12,7 @@ $(document).ready(function() {
                             id: $(this).attr("id"),
                             position: i,
                             complete: (data, status) => {
-                                if(status != 'success') {
+                                if(status && status != 'success') {
                                     failed += $(this).attr('id') + " ";
                                     $("#home-videos-container").sortable('cancel');
                                 }
