@@ -73,9 +73,9 @@ function swapDirection() {
 	sortTable(lastSorted);
 }
 
-$(document).ready( () => {
+$(document).ready(function() {
 	var i = 0;
-	$('#first th').each( () => {
+	$('#first th').each(function() {
 		// Assign column values to track which head was clicked.
 		$(this).attr('col', i);
 
@@ -86,8 +86,8 @@ $(document).ready( () => {
 			teamCol = i;
 			$(this).addClass('bg-info');
 			$(this).removeClass('bg-light');
-			$(this).click( () => {
-				$('#gradebook').first('tr').find('th').each( () => {
+			$(this).click(function() {
+				$('#gradebook').first('tr').find('th').each(function() {
 					$(this).removeClass('bg-info');
 					$(this).addClass('bg-light');
 				});
@@ -120,13 +120,13 @@ $(document).ready( () => {
 		} else {
 			// Assign sorting and highlighting functionality
 			// to each column header.
-			$(this).click( () => {
+			$(this).click(function() {
 				// If this box is already highlighted, the user
 				// has asked to swap sorting order. We also don't
 				// need to run highlighting code.
 				if($(this).hasClass('bg-info')) swapDirection();
 				else {
-					$('#gradebook').first('tr').find('th').each( () => {
+					$('#gradebook').first('tr').find('th').each(function() {
 						$(this).removeClass('bg-info');
 						$(this).addClass('bg-light');
 					});
@@ -142,9 +142,9 @@ $(document).ready( () => {
 
 	// When hovering over a row, it should be outlined
 	// with a border to make following a row easier.
-	$('#gradebook tr').each( () => {
+	$('#gradebook tr').each(function() {
 		if($(this).attr('id') != 'first') {
-			$(this).hover( () => {
+			$(this).hover(function() {
 				$(this).css('border', '1px dashed black');
 			},
 			() => {
@@ -160,9 +160,9 @@ $(document).ready( () => {
 // Functionality to create CSV from grade table
 function exportcsv() {
 	var exp = [];
-	$("#gradebook tr").each( () => {
+	$("#gradebook tr").each(function() {
 		var row = [];
-		$(this).children().each( () => {
+		$(this).children().each(function() {
 			row.push($(this).text());
 		});
 		exp.push(row);
