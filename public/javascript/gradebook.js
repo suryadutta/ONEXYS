@@ -75,7 +75,7 @@ function swapDirection() {
 
 $(document).ready( () => {
 	var i = 0;
-	$('#gradebook').first('tr').find('th').each( () => {
+	$('#first th').each( () => {
 		// Assign column values to track which head was clicked.
 		$(this).attr('col', i);
 
