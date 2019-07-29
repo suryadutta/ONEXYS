@@ -184,13 +184,3 @@ function exportcsv() {
 		"href": csvdata,
 	});
 }
-
-function hideFutureAssignments() {
-	var head = $("#gradebook-table-header th");
-	head.each( () => {
-		console.log($(this).attr('due'));
-		if($(this).attr('due')) {
-			console.log('Found date!');
-		}
-	})
-}
