@@ -17,6 +17,7 @@ $(document).ready(function() {
         });
     });
 
+    /* As requested, remove the focusout shrinking (7/22/19)
     $("textarea").focusout(function() {
         //console.log("Shrinking to non-focused size");
         $(this).animate({
@@ -26,6 +27,7 @@ $(document).ready(function() {
             easing: 'swing',
         });
     });
+    */
 
     // This last method is a little buggy. Still working on it - gmf
     $("textarea").on('keyup', function() {

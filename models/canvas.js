@@ -1225,13 +1225,14 @@ function getGradebook(courseID, courseName, callback) {
                         // For each student on a given team, we need to go a couple of things.
                         var grades = [];
                         (mongo_data.modules).forEach( (module) => {
-                            grades.push({
-                                module_id: module._id,
-                                module_name: (module.primary_title + ' ' + module.secondary_title),
-                                practice_grade: '',
-                                quiz_grade: '',
-                                due: '',
-                            });
+                            if(module.due == 'true') { // The gradebook is only concerned with modules which are due
+                                grades.push({
+                                    module_id: module._id,
+                                    module_name: (module.primary_title + ' ' + module.secondary_title),
+                                    practice_grade: '',
+                                    quiz_grade: ''
+                                });
+                            }
                         });
 
                         // Now populate those grades
@@ -1249,16 +1250,14 @@ function getGradebook(courseID, courseName, callback) {
                             // grades array and update the proper field (practice grade in this case).
                             if(thisPracticeModule != undefined) {
                                 var obj = grades.find(item => parseInt(item.module_id) == parseInt(thisPracticeModule._id));
-                                obj.practice_grade = score;
-                                obj.due = assignment.cached_due_date;
+                                if(obj) obj.practice_grade = score; // If the obj is undefined, the module is not yet open (because it's not in the grades array)
                             }
 
                             // If the current assignment was flagged as an "apply" module, locate the module in the
                             // grades array and update the proper field (quiz grade in this case).
                             if(thisQuizModule != undefined) {
                                 var obj = grades.find(item => parseInt(item.module_id) == parseInt(thisQuizModule._id));
-                                obj.quiz_grade = score;
-                                obj.due = assignment.cached_due_date;
+                                if(obj) obj.quiz_grade = score;  // If the obj is undefined, the module is not yet open (because it's not in the grades array)
                             }
                         });
 

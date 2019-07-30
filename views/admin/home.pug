@@ -5,8 +5,9 @@ block content
     //script(type='text/javascript', src='/javascript/nic-edit.js')
     //script(type='text/javascript').
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')
     script(src='/javascript/fade.js')
-
+    script(src='/javascript/video-rearrange.js')
     br
     .container
         .row
@@ -17,7 +18,7 @@ block content
     hr
     .container
         .row
-            .col-md-1
+            .col
             .col-md-10
                 form(method='POST' action='home/preview')
                     input(type='hidden', value=course_id, name='course-id')
@@ -111,42 +112,47 @@ block content
                     hr
 
                 .row
-                    h2='Home Page Videos'
+                    .col
+                        h2='Home Page Videos'
+                    .col
+                        form(method='GET',action='home/videos/add')
+                            input(type='hidden', value=course_id, name='course-id')
+                            input(type='hidden', value=course_title, name='course-title')
+                            input(type='hidden', value=user_id, name='user-id')
+                            button.btn.btn-dark(type='submit') Add Video
+                    .col-md-12
+                        hr
                 .row
-                    form(method='GET',action='home/videos/add')
-                        input(type='hidden', value=course_id, name='course-id')
-                        input(type='hidden', value=course_title, name='course-title')
-                        input(type='hidden', value=user_id, name='user-id')
-                        button.btn.btn-dark(type='submit') Add Video
-                .row
-                    table
+                    script.
+                        var heroku = "!{heroku_app}";
+                    #home-videos-container.col-md-12
                         for video in home_vids
-                            tr
-                                td
-                                    .onexys_video
-                                        a.colorbox(href=video.video_src)
-                                            if(video.video_img && video.video_img != '')
-                                                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
-                                            else
-                                                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
-                                            img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
-                                    br
-                                    br
-                                    span(style='font-size: 12pt;')
-                                        strong!=video.video_desc
-                                    hr
-                                td
-                                    .form.form-inline
-                                        form(method='GET' action='home/videos/edit/'+video._id)
-                                            input(type='hidden', value=course_id, name='course-id')
-                                            input(type='hidden', value=course_title, name='course-title')
-                                            input(type='hidden', value=user_id, name='user-id')
-                                            input(type='hidden', value=home_updates.life_on_grounds_title, name='life_on_grounds_title')
-                                            input(type='hidden', value=home_updates.life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
-                                            button.btn.btn-dark(type='submit') Edit
-                                        form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                                            input(type='hidden', value=course_id, name='course-id')
-                                            input(type='hidden', value=course_title, name='course-title')
-                                            input(type='hidden', value=user_id, name='user-id')
-                                            button.btn.btn-danger(type='submit') Delete
-            .col-md-1
+                            .vid-obj(id=video._id)
+                                .row
+                                    .col-md-8
+                                        .onexys_video
+                                            a.colorbox(href=video.video_src)
+                                                if(video.video_img && video.video_img != '')
+                                                    img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
+                                                else
+                                                    img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
+                                                img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
+                                    .col-md-4
+                                        .form.form-inline
+                                            form(method='GET' action='home/videos/edit/'+video._id)
+                                                input(type='hidden', value=course_id, name='course-id')
+                                                input(type='hidden', value=course_title, name='course-title')
+                                                input(type='hidden', value=user_id, name='user-id')
+                                                input(type='hidden', value=home_updates.life_on_grounds_title, name='life_on_grounds_title')
+                                                input(type='hidden', value=home_updates.life_on_grounds_thumbnail, name='life_on_grounds_thumbnail')
+                                                button.btn.btn-dark(type='submit') Edit
+                                            form(method='POST' action='home/videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
+                                                input(type='hidden', value=course_id, name='course-id')
+                                                input(type='hidden', value=course_title, name='course-title')
+                                                input(type='hidden', value=user_id, name='user-id')
+                                                button.btn.btn-danger(type='submit') Delete
+                                .row
+                                    .col-md-8
+                                        span(style='font-size: 12pt;')
+                                            strong!=video.video_desc
+            .col

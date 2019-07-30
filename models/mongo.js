@@ -74,17 +74,13 @@ function getHomeContent(courseID, callback){
         home_updates = data.find(document => document.type == 'updates');
         home_videos = data.filter(document => document.type == 'video');
         home_links = data.filter(document => document.type == 'links')[0];
-        console.log("Home vids array");
-        console.log(home_videos);
         home_videos.sort((a, b) => {
-            var aDate = new Date(a.created),
-                bDate = new Date(b.created);
-            if(aDate < bDate) return 1;
-            else if(aDate == bDate) return 0;
-            return -1;
+            const a_spot = parseInt(a.position),
+                  b_spot = parseInt(b.position);
+            if(a_spot < b_spot) return -1;
+            else if(a_spot == b_spot) return 0;
+            return 1;
         });
-        console.log("Sorted home vids array");
-        console.log(home_videos);
         callback(err, home_updates, home_videos, home_links);
     });
 }

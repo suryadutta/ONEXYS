@@ -1,8 +1,68 @@
-const router = require("express").Router();
-const mongo = require("../models/mongo");
-const canvas = require("../models/canvas");
-const config = require('../bin/config');
+const router = require("express").Router(),
+      mongo = require("../models/mongo"),
+      canvas = require("../models/canvas"),
+      config = require('../bin/config'),
+      assert = require('assert');
 
+// AJAX uses this route to dynamically apply video reordering support
+router.post('/updateVideo', (req, res) => {
+    try {
+        assert(/[A-Z\d]{16}/.test(req.body.id)); // IDs must be a 16 character alphanumeric string
+        assert(/\d+/.test(req.body.position)); // Positions consist at least 1 digit, and nothing else
+        if(req.session.admin) { // If the user is an admin, fulfill the req
+            mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.body.id }, { position: parseInt(req.body.position) }, (err, result) => {
+                if(err) {
+                    res.status(500);
+                    res.send("500 - Internal Server Error. Encountered error saving video info.");
+                } else {
+                    res.status(200);
+                    res.send("200 - OK");
+                }
+            });
+        } else { // If the user is not an admin, terminate the req with status 401
+            res.status(401);
+            res.send("401 - Unauthorized. In order to change videos, you must be a system administrator.");
+        }
+    } catch(e) {
+        res.status(406);
+        res.send("406 - Not acceptable. You must provide querystring arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else).");
+    }
+});
+
+// AJAX uses this route to dynamically open/close and mark modules as due
+router.post('/updateModule', (req, res) => {
+    try {
+        assert(/\d+/.test(req.body.id)); // IDs must be an integer
+
+        var updates = {};
+        if(req.body.open) {
+            assert(/(true|false)/.test(req.body.open)); // Open must be a valid boolean
+            updates.open = req.body.open;
+        }
+        if(req.body.due) {
+            assert(/(true|false)/.test(req.body.due)); // Due must be a valid boolean
+            updates.due = req.body.due;
+        }
+
+        if(req.session.admin) {
+            mongo.updateData(req.session.course_id, "modules", { _id: parseInt(req.body.id) }, updates, (err, data) => {
+                if(err) {
+                    res.status(500);
+                    res.send("500 - Internal Server Error. Encountered error saving module info.");
+                } else {
+                    res.status(200);
+                    res.send("200 - OK");
+                }
+            });
+        } else {
+            res.status(401);
+            res.send("401 - Unauthorized. In order to change modules, you must be a system administrator.");
+        }
+    } catch(e) {
+        res.status(406);
+        res.send("406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans).")
+    }
+});
 
 //
 router.use("/liveview", (req, res, next) => {
@@ -101,7 +161,7 @@ router.post("/home/videos/add", (req, res, next) => {
     vidData = req.body;
     vidData._id = makeid();
     vidData.type = "video";
-    vidData.created = new Date();
+    vidData.position = -1; // New videos will start at the top of the list
     console.log("New video_img: " + vidData.vid_img);
     mongo.insertData(req.session.course_id,"home", vidData, (err, result) => {
         res.redirect("/admin/home");
@@ -158,7 +218,6 @@ router.post('/home/videos/preview/:id', (req,res,next) => {
 
 //POST handler to confirm videos updates
 router.post("/home/videos/confirmUpdates/:id", (req, res, next) => {
-    if(!req.body.created) req.body.created = new Date();
     mongo.updateData(req.session.course_id, "home", { _id: req.params.id }, req.body, (err, result) => {
         res.redirect("/admin/home");
     });
@@ -213,7 +272,7 @@ router.get("/modules", (req, res, next) => {
       post_test_filename: post_test_filename,
       post_test_button_background: post_test_button_background,
       pre_test_button_background: pre_test_button_background,
-      test_app: config.testApp
+      heroku_app: config.herokuAppName,
     });
   });
 });
