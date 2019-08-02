@@ -473,7 +473,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                 console.log('No User Assignments recorded');
                 callback(null, moduleProgress, false);
             } else {
-                var postTest = {open: (mongo_data.home.post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
+                var postTest = {open: (mongo_data.home.find(document => document.type == 'updates').post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
                 if(postTest.open) postTest.tooltip = "Click to take the Post Test!";
                 else postTest.tooltip = "Your instructors have not yet opened the Post Test!"
                 //get quiz and aleks progress
@@ -1066,7 +1066,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                 console.log('No User Assignments recorded');
                 callback(null, moduleProgress, false);
             } else {
-                var postTest = {open: (mongo_data.home.post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
+                var postTest = {open: (mongo_data.home.find(document => document.type == 'updates').post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
                 if(postTest.open) postTest.tooltip = "Click to take the Post Test!";
                 else postTest.tooltip = "Your instructors have not yet opened the Post Test!"
                 //get quiz and aleks progress
