@@ -100,7 +100,7 @@ function homepageAdminQuery(courseID, course_title, callback){
             mongo.getHomeContent(courseID, callback);
         }),
         asyncStuff.reflect(callback => {
-            canvas.getStudents(studentID, courseID, course_title, callback);
+            canvas.getStudents(courseID, callback);
         }),
         asyncStuff.reflect(callback => {
             canvas.getNextDailyYalie(courseID, callback);
