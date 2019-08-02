@@ -504,6 +504,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                         (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
                     } else {
                         (moduleProgress[i]).quiz_progress = false;
+                    }
+                    if(!(moduleProgress[i]).quiz_progress){
                         postTest.locked = true;
                     }
                 }
@@ -1098,6 +1100,8 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                         (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
                     } else {
                         (moduleProgress[i]).quiz_progress = false;
+                    }
+                    if(!(moduleProgress[i]).quiz_progress){
                         postTest.locked = true;
                     }
                 }
@@ -1297,8 +1301,8 @@ var awardLuckies = function(req, res, next) {
         if (luckies.length>0){
             for (lucky_bulldog of luckies){
                 // Show difference in times
-                console.log("Time difference: ");
-                console.log(Math.abs((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)));
+                // console.log("Time difference: ");
+                // console.log(Math.abs((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60)));
 
                 // If student not already on list AND within a minute of the assigned time...
                 if (!lucky_bulldog.awarded_ids.includes(studentID) && Math.abs((d.getTime() - Date.parse(lucky_bulldog.time))/(1000*60))<15){
