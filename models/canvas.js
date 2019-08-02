@@ -462,17 +462,20 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             moduleProgress = mongo_data.modules;
             if (err){
                 console.log(err);
-                callback(null, moduleProgress);
+                callback(null, moduleProgress, false);
             } else if (user_assignments.status == "unauthorized"){
                 console.log('User unauthorized');
-                callback(null, moduleProgress);
+                callback(null, moduleProgress, false);
             } else if (user_assignments.error>0){
                 console.log(data.error);
-                callback(null, 0, moduleProgress);
+                callback(null, 0, moduleProgress, false);
             } else if (user_assignments.length<1) {
                 console.log('No User Assignments recorded');
-                callback(null, moduleProgress);
+                callback(null, moduleProgress, false);
             } else {
+                var postTest = {open: (mongo_data.home.post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
+                if(postTest.open) postTest.tooltip = "Click to take the Post Test!";
+                else postTest.tooltip = "Your instructors have not yet opened the Post Test!"
                 //get quiz and aleks progress
                 for (var i = 0; i < moduleProgress.length; i++) {
                     var module_object = mongo_data.modules.find(module => module._id == i + 1);
@@ -491,29 +494,22 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                     practice_objects.forEach(function(practice_object){
                         if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
                             (moduleProgress[i]).practice_progress = false;
+                            postTest.locked = true;
                         }
                     });
 
-                    /* Original Code
-                    if(practice_objects.every(practice_object => parseFloat(practice_object.grade) >= parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + '']))){
-                        (moduleProgress[i]).practice_progress = true;
-                    } else {
-                        (moduleProgress[i]).practice_progress = false;
-                    }
-                    */
-
-                    //quiz progress
+                    // Quiz progress
                     var quiz_object = user_assignments.find(assignment => assignment.assignment_id == module_object.quiz_link);
                     if(quiz_object){
                         (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
                     } else {
                         (moduleProgress[i]).quiz_progress = false;
+                        postTest.locked = true;
                     }
-
-
-
                 }
-                callback(null, moduleProgress);
+                if(postTest.locked) postTest.tooltip = "Complete all Practices and Applications in order to be eligible for the Post Test!";
+                console.log(postTest);
+                callback(null, moduleProgress, postTest);
             }
         });
     });
@@ -1059,17 +1055,20 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
             moduleProgress = mongo_data.modules;
             if (err){
                 console.log(err);
-                callback(null, moduleProgress);
+                callback(null, moduleProgress, false);
             } else if (user_assignments.status == "unauthorized"){
                 console.log('User unauthorized');
-                callback(null, moduleProgress);
+                callback(null, moduleProgress, false);
             } else if (user_assignments.error>0){
                 console.log(data.error);
-                callback(null, 0, moduleProgress);
+                callback(null, 0, moduleProgress, false);
             } else if (user_assignments.length<1) {
                 console.log('No User Assignments recorded');
-                callback(null, moduleProgress);
+                callback(null, moduleProgress, false);
             } else {
+                var postTest = {open: (mongo_data.home.post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
+                if(postTest.open) postTest.tooltip = "Click to take the Post Test!";
+                else postTest.tooltip = "Your instructors have not yet opened the Post Test!"
                 //get quiz and aleks progress
                 for (var i = 0; i < moduleProgress.length; i++) {
                     var module_object = mongo_data.modules.find(module => module._id == i + 1);
@@ -1087,6 +1086,7 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                     practice_objects.forEach(function(practice_object){
                         if(practice_object == undefined || practice_object.grade == null || parseFloat(practice_object.grade) < parseFloat(practiceId_cutoff_obj[practice_object.assignment_id + ''])) {
                             (moduleProgress[i]).practice_progress = false;
+                            postTest.locked = true;
                         }
                     });
 
@@ -1096,10 +1096,12 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                         (moduleProgress[i]).quiz_progress = parseFloat(quiz_object.grade) >= parseFloat(module_object.quiz_cutoff);
                     } else {
                         (moduleProgress[i]).quiz_progress = false;
+                        postTest.locked = true;
                     }
-
                 }
-                callback(null, moduleProgress);
+                if(postTest.locked) postTest.tooltip = "Complete all Practices and Applications in order to be eligible for the Post Test!";
+                console.log(postTest);
+                callback(null, moduleProgress, postTest);
             }
         });
     });
@@ -1280,7 +1282,6 @@ function getGradebook(courseID, courseName, callback) {
             });
         });
     });
-
 }
 
 var awardLuckies = function(req, res, next) {
