@@ -1102,6 +1102,8 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                     }
                 }
                 if(postTest.locked) postTest.tooltip = "Complete all Practices and Applications in order to be eligible for the Post Test!";
+                console.log("User assignments");
+                console.log(user_assignments);
                 console.log(postTest);
                 callback(null, [moduleProgress, postTest]);
             }
