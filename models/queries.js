@@ -5,150 +5,136 @@ var canvas = require('./canvas');
 var mongo = require('./mongo');
 
 function homepageQuery(studentID, courseID, course_title, callback){
-  asyncStuff.parallel([
-    function(callback) {
-      canvas.getStudentProgress(studentID, courseID, callback);
-    },
-    function(callback){
-      canvas.getIndScoreAndBadges(studentID, courseID, callback);
-    },
-    function(callback){
-      canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
-    },
-    function(callback){
-      mongo.getHomeContent(courseID, callback);
-    },
-    function(callback){
-      canvas.getNextDailyYalie(courseID, callback);
-    }
-  ],
+    asyncStuff.parallel([
+        asyncStuff.reflect(callback => {
+            canvas.getStudentProgress(studentID, courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getIndScoreAndBadges(studentID, courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            mongo.getHomeContent(courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getNextDailyYalie(courseID, callback);
+        })
+    ], (err, data) => {
+        var module_progress = data[0].value[0],
+            post_test_status = data[0].value[1],
+            score = data[1].value[0],
+            badges =  data[1].value[1],
+            leaderboard = data[2].value[0],
+            my_team = data[2].value[1],
+            home_updates = data[3].value[0],
+            home_vids = data[3].value[1],
+            home_links = data[3].value[2],
+            daily_yalie = data[4].value;
 
-  function(err, data) {
-    var module_progress = data[0],
-        score = data[1][0],
-        badges =  data[1][1],
-        leaderboard = data[2][0],
-        my_team = data[2][1],
-        home_updates = data[3][0],
-        home_vids = data[3][1],
-        home_links = data[3][2],
-        daily_yalie = data[4];
+        function orderBadges(a,b) {
+            if (a.Points < b.Points) return 1;
+            if (a.Points > b.Points) return -1;
+            return 0;
+        }
 
-    function orderBadges(a,b) {
-      if (a.Points < b.Points)
-        return 1;
-      if (a.Points > b.Points)
-        return -1;
-      return 0;
-    }
+        var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
+        if (awarded_badges.length>3) awarded_badges = awarded_badges.slice(0,3);
 
-    var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    if (awarded_badges.length>3){
-      awarded_badges = awarded_badges.slice(0,3);
-    }
-
-    callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
-  });
+        callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+    });
 }
 
 function homepageQueryMasquerade(studentID, courseID, course_title, callback){
-  asyncStuff.parallel([
-    function(callback) {
-      canvas.getStudentProgress_masquerade(studentID, courseID, callback);
-    },
-    function(callback){
-      canvas.getIndScoreAndBadges_masquerade(studentID, courseID, callback);
-    },
-    function(callback){
-      canvas.getLeaderboardScores_masquerade(studentID, courseID, course_title, callback);
-    },
-    function(callback){
-      mongo.getHomeContent(courseID, callback);
-    },
-    function(callback){
-      canvas.getNextDailyYalie(courseID, callback);
-    }
-  ],
+    asyncStuff.parallel([
+        asyncStuff.reflect(callback => {
+            canvas.getStudentProgress_masquerade(studentID, courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getIndScoreAndBadges_masquerade(studentID, courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getLeaderboardScores_masquerade(studentID, courseID, course_title, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            mongo.getHomeContent(courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getNextDailyYalie(courseID, callback);
+        })
+    ], (err, data) => {
+        var module_progress = data[0].value[0],
+        post_test_status = data[0].value[1],
+        score = data[1].value[0],
+        badges =  data[1].value[1],
+        leaderboard = data[2].value[0],
+        my_team = data[2].value[1],
+        home_updates = data[3].value[0],
+        home_vids = data[3].value[1],
+        home_links = data[3].value[2],
+        daily_yalie = data[4].value;
 
-  function(err, data) {
+        function orderBadges(a,b) {
+            if (a.Points < b.Points) return 1;
+            if (a.Points > b.Points) return -1;
+            return 0;
+        }
 
-    var module_progress = data[0],
-        score = data[1][0],
-        badges =  data[1][1],
-        leaderboard = data[2][0],
-        my_team = data[2][1],
-        home_updates = data[3][0],
-        home_vids = data[3][1],
-        home_links = data[3][2],
-        daily_yalie = data[4];
+        var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
+        if (awarded_badges.length>3) awarded_badges = awarded_badges.slice(0,3);
 
-    function orderBadges(a,b) {
-      if (a.Points < b.Points)
-        return 1;
-      if (a.Points > b.Points)
-        return -1;
-      return 0;
-    }
-
-    var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-    if (awarded_badges.length>3){
-      awarded_badges = awarded_badges.slice(0,3);
-    }
-
-    callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
-  });
+        callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+    });
 }
 
 function homepageAdminQuery(courseID, course_title, callback){
-  asyncStuff.parallel([
-    function(callback) {
-      mongo.getAllData(courseID, function(mongo_data){
-        callback(null, mongo_data.modules)
-      });
-    },
-    function(callback){
-      canvas.getAdminLeaderboardScores(courseID, course_title, callback);
-    },
-    function(callback){
-      mongo.getHomeContent(courseID, callback);
-    },
-    function(callback){
-      canvas.getStudents(courseID, callback);
-    },
-    function(callback){
-      canvas.getNextDailyYalie(courseID, callback);
-    }
-  ],
-
-  function(err, data) {
-    var module_progress = data[0],
-        leaderboard = data[1],
-        home_updates = data[2][0],
-        home_vids = data[2][1],
-        home_links = data[2][2],
-        students = data[3],
-        daily_yalie = data[4];
-    //console.log("Leaderboard: " + leaderboard);
-    callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
-  });
+    asyncStuff.parallel([
+        asyncStuff.reflect(callback => {
+            mongo.getAllData(courseID, mongo_data => callback(null, mongo_data.modules));
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getAdminLeaderboardScores(courseID, course_title, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            mongo.getHomeContent(courseID, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getStudents(studentID, courseID, course_title, callback);
+        }),
+        asyncStuff.reflect(callback => {
+            canvas.getNextDailyYalie(courseID, callback);
+        })
+    ], (err, data) => {
+        var module_progress = data[0].value[0],
+            post_test_status = data[0].value[1],
+            leaderboard = data[1].value,
+            home_updates = data[2].value[0],
+            home_vids = data[2].value[1],
+            home_links = data[2].value[2],
+            students = data[3],
+            daily_yalie = data[4].value;
+        //console.log("Leaderboard: " + leaderboard);
+        callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
+    });
 }
 
 function badgesQuery(studentID, courseID, callback) {
-  canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
-    callback(badges);
-  });
+    canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
+        callback(badges);
+    });
 }
 
 function badgesAdminQuery(courseID, callback) {
-  mongo.getAllData(courseID, function(mongo_data){
-    callback(mongo_data.badges);
-  });
+    mongo.getAllData(courseID, function(mongo_data){
+        callback(mongo_data.badges);
+    });
 }
 
 module.exports = {
-  homepageQuery,
-  homepageQueryMasquerade,
-  homepageAdminQuery,
-  badgesQuery,
-  badgesAdminQuery
+    homepageQuery,
+    homepageQueryMasquerade,
+    homepageAdminQuery,
+    badgesQuery,
+    badgesAdminQuery
 }
