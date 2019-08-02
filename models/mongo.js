@@ -137,6 +137,9 @@ function getAllData(courseID, callback_main){
         'lucky_bulldogs': function(callback) {
             getData(courseID, 'lucky_bulldogs', callback)
         },
+        'home': function(callback) {
+            getData(courseID, 'home', callback)
+        }
     }, function(err, results) {
         callback_main(results);
     });
