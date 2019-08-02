@@ -80,7 +80,7 @@ app.use("/welcome", function(req, res) {
 
 app.use("/life-on-grounds", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/life-on-grounds/"+page));
+    res.sendFile(path.join(__dirname, "/views/static/life-on-campus/"+page));
   });
 });
 
