@@ -507,6 +507,8 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                         postTest.locked = true;
                     }
                 }
+                console.log("User assignments");
+                console.log(user_assignments);
                 if(postTest.locked) postTest.tooltip = "Complete all Practices and Applications in order to be eligible for the Post Test!";
                 console.log(postTest);
                 callback(null, moduleProgress, postTest);
@@ -1067,8 +1069,6 @@ function getStudentProgress_masquerade(studentID, courseID, callback) { // Get s
                 callback(null, moduleProgress, false);
             } else {
                 var postTest = {open: (mongo_data.home.find(document => document.type == 'updates').post_test == 'true'), locked: false}; // If the instructors have opened the post test, start it out as true.
-                console.log("Post-test open?");
-                console.log(mongo_data.home.find(document => document.type == 'updates').post_test);
                 if(postTest.open) postTest.tooltip = "Click to take the Post Test!";
                 else postTest.tooltip = "Your instructors have not yet opened the Post Test!"
                 //get quiz and aleks progress
