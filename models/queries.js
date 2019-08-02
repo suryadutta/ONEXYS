@@ -106,8 +106,7 @@ function homepageAdminQuery(courseID, course_title, callback){
             canvas.getNextDailyYalie(courseID, callback);
         })
     ], (err, data) => {
-        var module_progress = data[0].value[0],
-            post_test_status = data[0].value[1],
+        var module_progress = data[0].value,
             leaderboard = data[1].value,
             home_updates = data[2].value[0],
             home_vids = data[2].value[1],
@@ -115,7 +114,7 @@ function homepageAdminQuery(courseID, course_title, callback){
             students = data[3],
             daily_yalie = data[4].value;
         //console.log("Leaderboard: " + leaderboard);
-        callback(module_progress, post_test_status, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
+        callback(module_progress, {open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks."}, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
     });
 }
 
