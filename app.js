@@ -66,68 +66,36 @@ app.use('/modules',[auth.updateCookies,canvas.awardLuckies],modules)
 app.use('/launch',launch)
 
 // static file display
-app.get("/coach-information", function(req, res) {
+app.use("/coach-information", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
+    res.sendFile(path.join(__dirname, "/views/static/coach-info/"+page));
   });
 });
 
-app.post("/coach-information", function(req, res) {
-  mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
-  });
-});
-
-app.get("/welcome", function(req, res) {
+app.use("/welcome", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
+    res.sendFile(path.join(__dirname, "/views/static/welcome/"+page));
   });
 });
 
-app.post("/welcome", function(req, res) {
-  mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
-  });
-});
-
-app.get("/life-on-grounds", function(req, res) {
+app.use("/life-on-grounds", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
+    res.sendFile(path.join(__dirname, "/views/static/life-on-grounds/"+page));
   });
 });
 
-app.post("/life-on-grounds", function(req, res) {
-  mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
-  });
-});
-
-app.get("/post-test", function(req, res) {
+app.use("/post-test", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
+    res.sendFile(path.join(__dirname, "/views/static/post-test/"+page));
   });
 });
 
-app.post("/post-test", function(req, res) {
-  mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/"+page));
-  });
+app.use("/missing-resource", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/error/404.html"));
 });
 
-app.get("/missing-resource", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/404.html"));
-});
-
-app.post("/missing-resource", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/404.html"));
-});
-
-app.get("/not-open", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/not-open.html"));
-});
-
-app.post("/not-open", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/static/not-open.html"));
+app.use("/not-open", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/error/not-open.html"));
 });
 
 // catch 404 and forward to error handler
