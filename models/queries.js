@@ -42,7 +42,7 @@ function homepageQuery(studentID, courseID, course_title, callback){
         var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
         if (awarded_badges.length>3) awarded_badges = awarded_badges.slice(0,3);
 
-        callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+        callback(module_progress, post_test_status, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
     });
 }
 
@@ -84,7 +84,7 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback){
         var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
         if (awarded_badges.length>3) awarded_badges = awarded_badges.slice(0,3);
 
-        callback(module_progress, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+        callback(module_progress, post_test_status, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
     });
 }
 
@@ -115,7 +115,7 @@ function homepageAdminQuery(courseID, course_title, callback){
             students = data[3],
             daily_yalie = data[4].value;
         //console.log("Leaderboard: " + leaderboard);
-        callback(module_progress, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
+        callback(module_progress, post_test_status, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
     });
 }
 

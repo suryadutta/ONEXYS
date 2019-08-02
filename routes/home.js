@@ -25,6 +25,7 @@ router.use("/", (req, res, next) => {
         req.session.course_title,
         (
           module_progress,
+          post_test_status,
           score,
           awarded_badges,
           leaderboard,
@@ -38,6 +39,7 @@ router.use("/", (req, res, next) => {
             title: "Home | " + config.herokuAppName,
             courseID,
             module_progress,
+            post_test_status,
             score,
             awarded_badges,
             leaderboard,
@@ -61,6 +63,7 @@ router.use("/", (req, res, next) => {
         req.session.course_title,
         (
           module_progress,
+          post_test_status,
           leaderboard,
           home_updates,
           home_vids,
@@ -72,6 +75,7 @@ router.use("/", (req, res, next) => {
             title: "Home | " + config.herokuAppName,
             courseID,
             module_progress,
+            post_test_status,
             score: 0,
             awarded_badges: [],
             leaderboard,
@@ -101,6 +105,7 @@ router.use("/", (req, res, next) => {
       req.session.course_title,
       (
         module_progress,
+        post_test_status,
         score,
         awarded_badges,
         leaderboard,
@@ -114,6 +119,7 @@ router.use("/", (req, res, next) => {
           title: "Home | " + config.herokuAppName,
           courseID,
           module_progress,
+          post_test_status,
           score,
           awarded_badges,
           leaderboard,
