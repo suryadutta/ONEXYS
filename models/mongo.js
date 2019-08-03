@@ -90,12 +90,16 @@ function getModules(courseID, callback){
     getData(courseID, "home", function(err, data){
         var updates = data.find(document => document.type == 'updates');
         post_test = updates.post_test;
-        post_test_filename = updates.post_test_filename;
         post_test_button_background = updates.post_test_button_background;
         pre_test_button_background = updates.pre_test_button_background;
 
-        getData(courseID, "modules", function(err, data){
-            callback(err, data, post_test, post_test_filename, post_test_button_background, pre_test_button_background);
+        getData(courseID, "navigation", function(err, data){
+          var nav = data.find(document => document.type == 'navigation');
+          post_test_filename = nav.post_test;
+
+          getData(courseID, "modules", function(err, data){
+              callback(err, data, post_test, post_test_filename, post_test_button_background, pre_test_button_background);
+          });
         });
     });
 }

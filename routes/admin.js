@@ -279,8 +279,10 @@ router.get("/modules", (req, res, next) => {
 
 //Post Modules Home Page (for changing if the post-test is available)
 router.post("/modules", (req, res, next) => {
-  mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
-    res.redirect("/admin");
+  mongo.updateData(req.session.course_id, "navigation", { type: "navigation" }, { post_test: req.body.post_test_filename }, (err, result) => {
+    mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
+      res.redirect("/admin");
+    });
   });
 });
 
