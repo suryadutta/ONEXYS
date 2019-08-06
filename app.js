@@ -119,7 +119,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   //res.render('error');
 
-  res.sendFile(path.join(__dirname, "/views/static/error/404.html"));
+  res.sendFile(path.join(__dirname, "/views/static/error/not-open.html"));
 });
 
 module.exports = app;

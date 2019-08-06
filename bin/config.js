@@ -1,5 +1,10 @@
 var config = {};
 
+if(!process.env.NODE_ENV) {
+    require('dotenv').config(); // If we have no node env, load env config
+    console.log("Running in " + process.env.NODE_ENV + " mode.");
+}
+
 config.port = process.env.PORT || '3000';
 config.host = process.env.HOST || 'localhost';
 
