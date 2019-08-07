@@ -1,8 +1,4 @@
-
-// Replace the logo in the top left of Canvas with a custom one
-//$('.ic-app-header__logomark').css("background-image", "url(https://i.gyazo.com/46410a59a873b83687e1c83ae7064582.png)");
-$('.ic-app-header__logomark').css("background-image", "url(https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/logo/institutionIcon.png?raw=true");
-$('.ic-app-header__logomark').css("background-color", "white"); 
+$("a.home").hide(); // Hide the "Home" button on the left navigation bar
 
 // URL of the canvas site used for the course
 var canvasURL = 'https://curryvirginia.instructure.com';
@@ -24,16 +20,29 @@ var externalHomePageRedirects = {
     3559:227
 };
 
-var homeRegex = new RegExp('^/courses/([0-9]+)/?$');
-if (homeRegex.test(window.location.pathname)) {
-    // On the course homepage
+var homeRegex = new RegExp('^/courses/([0-9]+)/{0,1}.*$'), courseId = null;
+if(homeRegex.test(window.location.pathname)) {
+    console.log("Setting ID");
     var matches = homeRegex.exec(window.location.pathname);
-    var courseId = matches[1];
-    if(courseId in externalHomePageRedirects){
-        console.log("Found id: " + courseId)
-        window.location.replace(canvasURL+'/courses/'+courseId+'/external_tools/'+externalHomePageRedirects[courseId]);
+    courseId = matches[1]; // Get course ID
+
+    if($("a.home").hasClass("active") && courseId in externalHomePageRedirects) {
+        console.log("Active");
+        window.location.replace('https://' + window.location.hostname + '/courses/' + courseId + '/external_tools/' + externalHomePageRedirects[courseId]);
     }
 }
+
+// Replace the logo in the top left of Canvas with a custom one
+$('.ic-app-header__logomark').css("background-color", "white"); // Set logo background to white (for transparent images)
+$('.ic-app-header__logomark').css("background-image", ""); // Clear image (prevent color flashing on page loading)
+
+if(courseId == 3559){
+    $('.ic-app-header__logomark').css("background-image", "url(https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/logo/smithLogoWhiteTransparent2.png?raw=true");
+} else {
+    $('.ic-app-header__logomark').css("background-image", "url(https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/logo/institutionIcon.png?raw=true");
+}
+
+console.log($("form.hide").prop("action"));
 
 /*
 *
