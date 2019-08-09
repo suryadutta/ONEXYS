@@ -16,7 +16,6 @@ var config = require('./bin/config');
 var auth = require('./bin/auth');
 
 var index = require('./routes/index');
-var home = require('./routes/home');
 var modules = require('./routes/modules');
 var badges = require('./routes/badges');
 var admin = require('./routes/admin');

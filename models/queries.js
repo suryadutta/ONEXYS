@@ -4,16 +4,19 @@ var asyncStuff = require('async');
 var canvas = require('./canvas');
 var mongo = require('./mongo');
 
-function homepageQuery(studentID, courseID, course_title, callback){
+function homepageQuery(studentID, courseID, course_title, masquerade, callback){
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
-            canvas.getStudentProgress(studentID, courseID, callback);
+            if(masquerade) canvas.getStudentProgress_masquerade(studentID, courseID, callback);
+            else canvas.getStudentProgress(studentID, courseID, callback);
         }),
         asyncStuff.reflect(callback => {
-            canvas.getIndScoreAndBadges(studentID, courseID, callback);
+            if(masquerade) canvas.getIndScoreAndBadges_masquerade(studentID, courseID, callback);
+            else canvas.getIndScoreAndBadges(studentID, courseID, callback);
         }),
         asyncStuff.reflect(callback => {
-            canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
+            if(masquerade) canvas.getLeaderboardScores_masquerade(studentID, courseID, course_title, callback);
+            else canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
         }),
         asyncStuff.reflect(callback => {
             mongo.getHomeContent(courseID, callback);
@@ -22,69 +25,11 @@ function homepageQuery(studentID, courseID, course_title, callback){
             canvas.getNextDailyYalie(courseID, callback);
         })
     ], (err, data) => {
-        var module_progress = data[0].value[0],
-            post_test_status = data[0].value[1],
-            score = data[1].value[0],
-            badges =  data[1].value[1],
-            leaderboard = data[2].value[0],
-            my_team = data[2].value[1],
-            home_updates = data[3].value[0],
-            home_vids = data[3].value[1],
-            home_links = data[3].value[2],
-            daily_yalie = data[4].value;
-
-        function orderBadges(a,b) {
-            if (a.Points < b.Points) return 1;
-            if (a.Points > b.Points) return -1;
-            return 0;
-        }
-
-        var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
+        var awarded_badges = data[1].value[1].filter(badge => badge.Awarded == true).sort( (a, b) => {
+            return (a.Points < b.Points) ? 1 : ( (a.Points > b.Points) ? -1 : 0);
+        });
         if (awarded_badges.length>3) awarded_badges = awarded_badges.slice(0,3);
-
-        callback(module_progress, post_test_status, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
-    });
-}
-
-function homepageQueryMasquerade(studentID, courseID, course_title, callback){
-    asyncStuff.parallel([
-        asyncStuff.reflect(callback => {
-            canvas.getStudentProgress_masquerade(studentID, courseID, callback);
-        }),
-        asyncStuff.reflect(callback => {
-            canvas.getIndScoreAndBadges_masquerade(studentID, courseID, callback);
-        }),
-        asyncStuff.reflect(callback => {
-            canvas.getLeaderboardScores_masquerade(studentID, courseID, course_title, callback);
-        }),
-        asyncStuff.reflect(callback => {
-            mongo.getHomeContent(courseID, callback);
-        }),
-        asyncStuff.reflect(callback => {
-            canvas.getNextDailyYalie(courseID, callback);
-        })
-    ], (err, data) => {
-        var module_progress = data[0].value[0],
-        post_test_status = data[0].value[1],
-        score = data[1].value[0],
-        badges =  data[1].value[1],
-        leaderboard = data[2].value[0],
-        my_team = data[2].value[1],
-        home_updates = data[3].value[0],
-        home_vids = data[3].value[1],
-        home_links = data[3].value[2],
-        daily_yalie = data[4].value;
-
-        function orderBadges(a,b) {
-            if (a.Points < b.Points) return 1;
-            if (a.Points > b.Points) return -1;
-            return 0;
-        }
-
-        var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
-        if (awarded_badges.length>3) awarded_badges = awarded_badges.slice(0,3);
-
-        callback(module_progress, post_test_status, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+        callback(data[0].value[0], data[0].value[1], data[1].value[0], awarded_badges, data[2].value[0], data[2].value[1], data[3].value[0], data[3].value[1], data[3].value[2], data[4].value);
     });
 }
 
@@ -106,26 +51,18 @@ function homepageAdminQuery(courseID, course_title, callback){
             canvas.getNextDailyYalie(courseID, callback);
         })
     ], (err, data) => {
-        var module_progress = data[0].value,
-            leaderboard = data[1].value,
-            home_updates = data[2].value[0],
-            home_vids = data[2].value[1],
-            home_links = data[2].value[2],
-            students = data[3].value,
-            daily_yalie = data[4].value;
-        //console.log("Leaderboard: " + leaderboard);
-        callback(module_progress, {open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks."}, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
+        callback(data[0].value, {open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks."}, data[1].value, data[2].value[0], data[2].value[1], data[2].value[2], data[3].value, data[4].value);
     });
 }
 
 function badgesQuery(studentID, courseID, callback) {
-    canvas.getIndScoreAndBadges(studentID, courseID, function(err, totalPoints, badges) {
+    canvas.getIndScoreAndBadges(studentID, courseID, (err, totalPoints, badges) => {
         callback(badges);
     });
 }
 
 function badgesAdminQuery(courseID, callback) {
-    mongo.getAllData(courseID, function(mongo_data){
+    mongo.getData(courseID, "badges", (err, mongo_data) => {
         callback(mongo_data.badges);
     });
 }
