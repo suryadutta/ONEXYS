@@ -41,6 +41,9 @@ config.mongoDBs = {
   '48038': 'yale-white',
 };
 
+// If we're in a development environment, use the development database
+if(process.env.NODE_ENV == 'development') config.mongoDBs["3559"] = "development";
+
 //the name of the mongo db to connect to
 config.mongo_db_name = process.env.MONGO_DB_NAME;
 
