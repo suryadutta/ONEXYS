@@ -138,14 +138,11 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var daily_done = 0;
         var reflections_done = 0;
 
-        //lucky bulldog
-        lucky_bulldog_points = 100;
-
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
-                        totalPoints += parseInt(lucky_bulldog_points);
+                        totalPoints += parseInt(lucky_bulldog.point_value);
                     }
                 }
                 if (lucky_bulldog.awarded_ids.includes(studentID)){
@@ -754,7 +751,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
-                        totalPoints += parseInt(lucky_bulldog_points);
+                        totalPoints += parseInt(lucky_bulldog.point_value);
                     }
                 }
             }
