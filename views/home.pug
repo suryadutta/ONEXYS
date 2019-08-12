@@ -7,28 +7,30 @@ block content
         if masquerade
             a(href='/home?login_success=1') Back to Home
         else
-            form(action='')
-                select(name='masquerade')
+            //
+            form.form-inline(action='')
+                select.form-control(name='masquerade')
                     each val in students
                         option(value=val.id)=val.sortable_name
                 input(type='hidden', name='login_success', value='1')
-                input(type='submit' value='Masquerade as Student')
+                input.form-control.btn.btn-secondary(type='submit' value='Masquerade as Student')
     .onexys_styling.o_hompage
         .left(style='width: 360px; margin-top: -10px;')
             #points.standard_box.left
                 h2 My Points
                 p#point_count=score
                 #flag.blue
-                    if daily_yalie.id == null
+                    if daily_task.id == null
                         a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/404', target='_blank')
                             img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
                     else
-                        if daily_yalie.id == -1
+                        if daily_task.id == -1
                             // An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
                             a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/not-open', target='_blank')
                                 img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
                         else
-                            a(title='Open Daily Task', href=canvasURL+'/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
+                            // 
+                            a(title='Open Daily Task', href=canvasURL+'/courses/'+courseID+'/assignments/'+daily_task.id, target='_blank')
                                 img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
             #leaderboard.standard_home_box.left
                 h2 Leaderboard
@@ -59,30 +61,19 @@ block content
             #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
                 h2 Recent Badges
                 each badge in awarded_badges
-                    #recent_badge1.badge_container.completed(class='badge'+badge._id, style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
-                        .badge_descriptor.badge_box
-                            h3
-                            p
-                        .badge_points.badge_box
-                            p
+                    #recent_badge1.badge_container.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
                         .badge_portrait(style='width: 80px; height: 100px; background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
                         .badge_portrait.front_portrait(style='width: 80px; height: 100px; background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedURL+')')
-                        .badge_label.badge_box
-                            h3
-                            p
                 br
-                .clear
                 p#badges_link_sentence
                     a(id='', title='info_Badges', href=home_updates.badges_link, target='_blank') Click here to see all your badges.
             #progress.standard_home_box.left(style='width: 324px;')
                 h2 My Progress So Far
-                .module_0.module_background_0
-                    a.progress_box.single_line.completed(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.pre_test_button_background+'_1.png);')  Pre-Test
+                a.progress_box.single_line.completed(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.pre_test_button_background+'_1.png);')  Pre-Test
                 #progress_labels(style='margin-left: 15px !important;')
                     p Pract.
                     p Apply
                 br
-                .clear
                 each module, index in module_progress
                     div
                         if module.open == 'true'
@@ -114,7 +105,6 @@ block content
                             //
                             div(class='onexys_checkbox quiz_checkbox')
                     br
-                    .clear
                       
                 if(post_test_status.open && !post_test_status.locked)
                     .module_11.module_background_00
@@ -125,7 +115,6 @@ block content
                     a.progress_box.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_2.png);', title=post_test_status.tooltip)  Post-Test
         .left(style='width: 500px !important; margin-top: -10px;')
             br
-            .clear
             #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
                 h2 Updates
                 .entry.clear
@@ -148,8 +137,9 @@ block content
                             if video.video_img
                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
                             else
+                                //
                                 img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
                             img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
-                        p
-                            span(style='font-size: 12pt;')
-                                strong!=video.video_desc
+                    p
+                        span(style='font-size: 12pt;')
+                            strong!=video.video_desc

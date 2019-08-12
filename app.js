@@ -56,15 +56,15 @@ app.use(session({
 app.get('/callback',auth.oath2_callback);
 app.use('/api', api);
 
-app.get('/',index);
-app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
+//app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
 app.use('/badges',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],badges)
 // Admins don't need to earn luckies, so no canvas.awardLuckies
 app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 
 app.use('/modules',[auth.updateCookies,canvas.awardLuckies],modules)
-
 app.use('/launch',launch)
+
+app.use('/',[auth.updateCookies, auth.checkUser, canvas.awardLuckies], index);
 
 // static file display
 app.use("/coach-information", function(req, res) {

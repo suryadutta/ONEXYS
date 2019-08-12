@@ -9,9 +9,18 @@ router.use('/home', (req, res) => {
         userID = parseInt(req.session.user_id),
         is_physics = Boolean(courseID == 48039);
 
+    queries.getHomepage(req.session.admin, req.session.masquerade, courseID, req.session.course_title, data => {
+
+    });
+
+
+
+
+
+
     if (req.session.admin) {
         if (req.query.masquerade) {
-            queries.homepageQueryMasquerade(parseInt(req.query.masquerade), courseID, req.session.course_title, dataArray => {
+            queries.homepageQuery(parseInt(req.query.masquerade), courseID, req.session.course_title, (req.query.masquerade == 'true'), dataArray => {
                 res.render("home", {
                     title: "Home | " + config.herokuAppName,
                     module_progress: dataArray[0],
@@ -30,7 +39,6 @@ router.use('/home', (req, res) => {
                     heroku_app: config.herokuAppName,
                     lucky: req.session.lucky,
                     courseID,
-                    is_physics,
                 });
             });
         } else {
@@ -43,23 +51,22 @@ router.use('/home', (req, res) => {
                     awarded_badges: [],
                     leaderboard: dataArray[2],
                     my_team: {Name: "Admin", Score: 0},
-                    home_updates: dataArray[2],
-                    home_vids: dataArray[3],
-                    home_links: dataArray[4],
-                    students: dataArray[5],
-                    daily_yalie: dataArray[6],
+                    home_updates: dataArray[3],
+                    home_vids: dataArray[4],
+                    home_links: dataArray[5],
+                    students: dataArray[6],
+                    daily_yalie: dataArray[7],
                     canvasURL: config.canvasURL,
                     admin: req.session.admin,
                     heroku_app: config.herokuAppName,
                     masquerade: false,
-                    lucky: req.session.lucky
+                    lucky: req.session.lucky,
                     courseID,
-                    is_physics,
                 });
             });
         }
     } else {
-        queries.homepageQuery(userID, courseID, req.session.course_title, dataArray => {
+        queries.homepageQuery(userID, courseID, req.session.course_title, false, dataArray => {
             res.render("home", {
                 title: "Home | " + config.herokuAppName,
                 courseID: dataArray[0],
@@ -72,12 +79,11 @@ router.use('/home', (req, res) => {
                 home_updates: dataArray[7],
                 home_vids: dataArray[8],
                 home_links: dataArray[9],
-                daily_yalie: dataArray[10],
+                daily_task: dataArray[10],
                 canvasURL: config.canvasURL,
                 admin: req.session.admin,
                 heroku_app: config.herokuAppName,
                 lucky: req.session.lucky,
-                is_physics,
             });
         });
     }
@@ -85,7 +91,7 @@ router.use('/home', (req, res) => {
 
 // Serve index page
 router.use('/', function(req, res, next) {
-  res.render('index', { title: 'System Index' });
+    res.render('index', { title: 'System Index' });
 });
 
 module.exports = router;
