@@ -215,20 +215,11 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
                 // Award Inspirer Badge if there's an entry in the gradebook
                 var inspirer = mongo_data.badges.find(badge => badge._id == 32);
-                console.log("Inspirer Badge:");
-                console.log(inspirer);
                 if(inspirer && inspirer.assignment_id) { // Without an ID, just stop
                     var inspirerAsn = data.find(asn => asn.assignment_id == inspirer.assignment_id);
-                    console.log("Inspirer Assignment:");
-                    console.log(inspirerAsn);
                     if(inspirerAsn) { // Without a valid assignment, just stop
-                        console.log(inspirerAsn.grade);
                         inspirerAsn.grade = parseFloat(inspirerAsn.grade);
-                        console.log(inspirerAsn.grade);
-                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) { // Verify they have some score
-                            console.log("Awarding badge 32");
-                            awardBadge(32);
-                        }
+                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) awardBadge(32); // Verify they have some score
                     }
                 }
 
@@ -830,20 +821,11 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
 
                 // Award Inspirer Badge if there's an entry in the gradebook
                 var inspirer = mongo_data.badges.find(badge => badge._id == 32);
-                console.log("Inspirer Badge:");
-                console.log(inspirer);
                 if(inspirer && inspirer.assignment_id) { // Without an ID, just stop
                     var inspirerAsn = data.find(asn => asn.assignment_id == inspirer.assignment_id);
-                    console.log("Inspirer Assignment:");
-                    console.log(inspirerAsn);
                     if(inspirerAsn) { // Without a valid assignment, just stop
-                        console.log(inspirerAsn.grade);
                         inspirerAsn.grade = parseFloat(inspirerAsn.grade);
-                        console.log(inspirerAsn.grade);
-                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) { // Verify they have some score
-                            console.log("Awarding badge 32");
-                            awardBadge(32);
-                        }
+                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) awardBadge(32); // Verify they have some score
                     }
                 }
 
