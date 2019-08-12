@@ -218,7 +218,7 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 console.log("Inspirer Badge:");
                 console.log(inspirer);
                 if(inspirer && inspirer.assignment_id) { // Without an ID, just stop
-                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer._id);
+                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer.assignment_id);
                     console.log("Inspirer Assignment:");
                     console.log(inspirerAsn);
                     if(inspirerAsn) { // Without a valid assignment, just stop
@@ -833,7 +833,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                 console.log("Inspirer Badge:");
                 console.log(inspirer);
                 if(inspirer && inspirer.assignment_id) { // Without an ID, just stop
-                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer._id);
+                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer.assignment_id);
                     console.log("Inspirer Assignment:");
                     console.log(inspirerAsn);
                     if(inspirerAsn) { // Without a valid assignment, just stop
