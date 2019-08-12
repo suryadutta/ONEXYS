@@ -217,6 +217,25 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                     awardBadge(6);
                 }
 
+                // Award Inspirer Badge if there's an entry in the gradebook
+                var inspirer = mongo_data.badges.find(badge => badge._id == 32);
+                console.log("Inspirer Badge:");
+                console.log(inspirer);
+                if(inspirer && inspirer.assignment_id) {
+                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer._id);
+                    console.log("Inspirer Assignment:");
+                    console.log(inspirerAsn);
+                    if(inspirerAsn) {
+                        console.log(inspirerAsn.grade);
+                        inspirerAsn.grade = parseFloat(inspirerAsn.grade);
+                        console.log(inspirerAsn.grade);
+                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) {
+                            console.log("Awarding badge 32");
+                            awardBadge(32);
+                        }
+                    }
+                }
+
                 for (var i = 0; i < mongo_data.modules.length; i++) {
                     if (mongo_data.modules[i].open=='true'){
 

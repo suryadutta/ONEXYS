@@ -32,6 +32,12 @@ block content
             label(for='badge_points') Points:
             input#badge_points.form-control(type='numeric', value=badge.Points, name='Points')
         hr
+        
+        if(badge._id == 32)
+            // For inspirer badge only
+            .form-group.form-inline
+                label(for='badge_id') Inspirer Assignment ID:
+                input#badge_id.form-control(type='numeric', value=badge.assignment_id, name='inspirer_id')
 
         div.form-group.form-inline
             label(for='portrait') Portrait:
