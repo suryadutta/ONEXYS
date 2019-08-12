@@ -25,7 +25,7 @@ block content
         div.form-group
             label(for='description') Description:
             br
-            textarea(rows=3)#description.form-control(name='Description')=badge.Description
+            textarea#description.form-control(rows=3 name='Description')=badge.Description
         hr
 
         div.form-group.form-inline
@@ -47,7 +47,7 @@ block content
         div.form-group
             label(for='portraitdescription') Portrait Description:
             br
-            textarea(rows=3)#portraitdescription.form-control(name='PortraitDescription')=badge.PortraitDescription
+            textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')=badge.PortraitDescription
             small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
         hr
 
