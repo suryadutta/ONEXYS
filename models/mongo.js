@@ -154,6 +154,18 @@ function getDailyTasks(courseID, callback) {
     getData(courseID, 'dailies', callback);
 }
 
+// Used to retrieve static course information (logo image, etc)
+// selectorDict is used to specify which course you're referring to
+function getCourseInfo(selectorDict, callback) {
+    MongoClient.connect(config.mongoURL, (err, client) => {
+        assert(!err); // Assert the nonexistence of any error
+        var db = client.db("shared");
+        db.collection("staticInfo").findOne(selectorDict, (err, data) => {
+            callback(err, data);
+        });
+    });
+}
+
 module.exports = {
     getData,
     getAllData,
@@ -166,4 +178,5 @@ module.exports = {
     getModules,
     getModule,
     getDailyTasks,
+    getCourseInfo,
 }

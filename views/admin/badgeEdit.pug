@@ -25,13 +25,19 @@ block content
         div.form-group
             label(for='description') Description:
             br
-            textarea(rows=3)#description.form-control(name='Description')=badge.Description
+            textarea#description.form-control(rows=3 name='Description')=badge.Description
         hr
 
         div.form-group.form-inline
             label(for='badge_points') Points:
             input#badge_points.form-control(type='numeric', value=badge.Points, name='Points')
         hr
+        
+        if(badge._id == 32)
+            // For inspirer badge only
+            .form-group.form-inline
+                label(for='badge_id') Inspirer Assignment ID:
+                input#badge_id.form-control(type='numeric', value=badge.assignment_id, name='assignment_id')
 
         div.form-group.form-inline
             label(for='portrait') Portrait:
@@ -41,7 +47,7 @@ block content
         div.form-group
             label(for='portraitdescription') Portrait Description:
             br
-            textarea(rows=3)#portraitdescription.form-control(name='PortraitDescription')=badge.PortraitDescription
+            textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')=badge.PortraitDescription
             small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
         hr
 

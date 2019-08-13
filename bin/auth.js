@@ -11,8 +11,9 @@ var redis = require("redis"),
 var store = new RedisNonceStore(config.client_id, redis_client);
 
 if (!provider) {
-  var provider = new lti.Provider(config.client_id, config.client_secret);
-  console.log('Generating new provider...')
+    console.log('Generating new provider...')
+    var provider = new lti.Provider(config.client_id, config.client_secret);
+    console.log("Providing generated.");
 }
 
 // Set the configuration settings
@@ -33,7 +34,6 @@ let oauth2 = require('simple-oauth2').create(credentials);
 //queue to callback Auth Token (prevents multiple calls)
 var authTokenQueue = new Queue(function(user_id,callback){
   console.log('Redis Key');
-  console.log('Commit test!');
   console.log('token_'+String(user_id));
   redis_client.get('token_'+String(user_id), async function(err, token_string) {
     if (err){
@@ -68,105 +68,100 @@ var authTokenQueue = new Queue(function(user_id,callback){
 //middleware to check if admin
 var checkAdmin = function(req, res, next) {
     if (typeof req.session.admin == 'undefined' && !req.session.admin) {
-      console.log('Err authenticating admin');
-      res.send('Err authenticating admin');
+        console.log('Err authenticating admin');
+        res.send('Err authenticating admin');
     } else {
-      next();
+        next();
     }
 }
 
 //middleware to update course information
 var updateCookies = function(req, res, next){
+    // Looks for passed url parameter 'course-id', updates cookie appropriately
+    // Keeps admin pages set to proper course across multiple tabs
+    if(typeof req.params["course-id"] !== 'undefined') {
+        console.log("Assigning Admin Cookies");
+        console.log("Assigned course id: " + req.param('course-id'));
+        req.session.course_id = req.param('course-id');
+        req.session.course_title = req.param('course-title');
+        req.session.user_id = req.param('user-id');
+    }
 
-  // Looks for passed url parameter 'course-id', updates cookie appropriately
-  // Keeps admin pages set to proper course across multiple tabs
-  if(typeof req.param('course-id') !== 'undefined'){
-    console.log("Assigning Admin Cookies");
-    console.log("Assigned course id: " + req.param('course-id'));
-    req.session.course_id = req.param('course-id');
-    req.session.course_title = req.param('course-title');
-    req.session.user_id = req.param('user-id');
-  }
-
-  // Manages cookies for other pages
-  if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1){
-    console.log('Assigning Cookies');
-    console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
-    console.log("Provider admin before cookies set? " + provider.admin);
-    req.session.course_id = req.body.custom_canvas_course_id;
-    req.session.course_title = req.body.context_title;
-    req.session.user_id = req.body.custom_canvas_user_id;
-    req.session.admin = req.body.roles.includes('Instructor');
-    next();
-  } else if (typeof(req.session.course_id)!='string'){
-    console.log('ERROR: COOKIES NOT SET');
-    res.status(500).render('cookieError');
-  } else {
-    next();
-  }
+    // Manages cookies for other pages
+    if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1) {
+        console.log('Assigning Cookies');
+        console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
+        console.log("Provider admin before cookies set? " + provider.admin);
+        req.session.course_id = req.body.custom_canvas_course_id;
+        req.session.course_title = req.body.context_title;
+        req.session.user_id = req.body.custom_canvas_user_id;
+        req.session.admin = req.body.roles.includes('Instructor') || req.body.roles.includes('TeachingAssistant'); // Mark either Teachers or TAs as admins, which enables them to modify certain things in the Admin Panel
+        next();
+    } else if(typeof(req.session.course_id)!='string') {
+        console.log('ERROR: COOKIES NOT SET');
+        res.status(500).render('cookieError');
+    } else {
+        next();
+    }
 };
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) {
-
-  if (typeof(req.session.course_id)!='string'){
-    console.log('ERROR: COOKIES NOT SET');
-    res.status(500).render('cookieError');
-  } else {
-    req.connection.encrypted = true;
-    if (req.query.login_success=='1'){
-      next();
+    if (typeof(req.session.course_id)!='string'){
+        console.log('ERROR: COOKIES NOT SET');
+        res.status(500).render('cookieError');
     } else {
-      provider.valid_request(req, function(err, is_valid) {
-        if (!is_valid) {
-          console.log('Unverified User:');
-          console.log(provider);
-          res.send('Unverified User');
+        req.connection.encrypted = true;
+        if (req.query.login_success=='1') {
+            next();
         } else {
-          //check if auth token already exists in Redis
-          console.log('Redis Key (Check User)');
-          console.log('token_'+String(req.session.user_id));
-          redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {
-            if (token_exists==0){
-              // generate auth token
-              let authorizationUri = oauth2.authorizationCode.authorizeURL({
-                redirect_uri: config.redirectURL,
-                state: String(req.session.user_id),
-              });
-              res.redirect(authorizationUri);
-            } else {
-              // auth token exists
-              next();
-            }
-          });
+            provider.valid_request(req, function(err, is_valid) {
+                // Request is INVALID iff the provider expressed invalidity and we're not in development mode
+                if (!is_valid && process.env.NODE_ENV !== "development") {
+                    console.log('Unverified User:');
+                    res.send('Unverified User');
+                } else {
+                    //check if auth token already exists in Redis
+                    console.log('Redis Key (Check User)');
+                    console.log('token_'+String(req.session.user_id));
+                    redis_client.exists('token_'+String(req.session.user_id), function(err, token_exists) {
+                        if (token_exists == 0) {
+                            let authorizationUri = oauth2.authorizationCode.authorizeURL({ // generate auth token
+                                redirect_uri: config.redirectURL,
+                                state: String(req.session.user_id),
+                            });
+                            res.redirect(authorizationUri);
+                        } else {
+                            next(); // auth token exists
+                        }
+                    });
+                }
+            });
         }
-      });
     }
-  }
 }
 
 //path for oauth2 callback from Canvas server
 var oath2_callback = async function(req, res, next){
+    console.log('Query');
+    console.log(req.query);
 
-  console.log('Query');
-  console.log(req.query);
+    let code = req.query.code;
+    let options = {
+        code,
+    };
 
-  let code = req.query.code;
-  let options = {
-    code,
-  };
-  try {
-    // create new access token from Canvas API
-    let result = await oauth2.authorizationCode.getToken(options);
-    let accessToken = await oauth2.accessToken.create(result);
-    console.log(accessToken);
-    // save access token to Redis
-    redis_client.set('token_'+req.query.state, JSON.stringify(accessToken));
-    return res.redirect('/home?login_success=1')
-  } catch(error) {
-    console.error('Access Token Error', error.message);
-    return res.status(500).json('Authentication failed');
-  }
+    try {
+        let result = await oauth2.authorizationCode.getToken(options); // create new access token from Canvas API
+        let accessToken = await oauth2.accessToken.create(result);
+        console.log("Access token");
+        console.log(accessToken);
+        redis_client.set('token_'+req.query.state, JSON.stringify(accessToken)); // save access token to Redis
+        return res.redirect('/home?login_success=1')
+    } catch(error) {
+        console.error('Access Token Error', error.message);
+        return res.status(500).json('Authentication failed');
+    }
 }
 
 module.exports = {

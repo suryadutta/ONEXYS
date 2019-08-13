@@ -138,9 +138,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var daily_done = 0;
         var reflections_done = 0;
 
-        //lucky bulldog
-        lucky_bulldog_points = 100;
-
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 if (lucky_bulldog.awarded_ids.includes(studentID)){
@@ -177,10 +174,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 console.log('No Assignment Data Recorded');
                 callback(null, 0, badges);
             } else {
-                //Daily Yalie questions
-                //console.log(data);
-
-                console.log("-------------------------");
                 for (var i = 0; i < mongo_data.dailies.length; i++) {
                     var daily_obj = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
 
@@ -210,6 +203,16 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 }
                 if (daily_done >= 25) {
                     awardBadge(6);
+                }
+
+                // Award Inspirer Badge if there's an entry in the gradebook
+                var inspirer = mongo_data.badges.find(badge => badge._id == 32);
+                if(inspirer && inspirer.assignment_id) { // Without an ID, just stop
+                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer.assignment_id);
+                    if(inspirerAsn) { // Without a valid assignment, just stop
+                        inspirerAsn.grade = parseFloat(inspirerAsn.grade);
+                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) awardBadge(32); // Verify they have some score
+                    }
                 }
 
                 for (var i = 0; i < mongo_data.modules.length; i++) {
@@ -743,7 +746,7 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 if(lucky_bulldog.awarded_ids.length>0){
                     if (lucky_bulldog.awarded_ids.includes(studentID)){
-                        totalPoints += parseInt(lucky_bulldog_points);
+                        totalPoints += parseInt(lucky_bulldog.point_value);
                     }
                 }
             }
@@ -806,6 +809,16 @@ function computeScoreAndBadges_masquerade(studentID, courseID, callback){ // Ret
                 }
                 if (daily_done >= 25) {
                     awardBadge(6);
+                }
+
+                // Award Inspirer Badge if there's an entry in the gradebook
+                var inspirer = mongo_data.badges.find(badge => badge._id == 32);
+                if(inspirer && inspirer.assignment_id) { // Without an ID, just stop
+                    var inspirerAsn = data.find(asn => asn.assignment_id == inspirer.assignment_id);
+                    if(inspirerAsn) { // Without a valid assignment, just stop
+                        inspirerAsn.grade = parseFloat(inspirerAsn.grade);
+                        if(!isNaN(inspirerAsn.grade) && inspirerAsn.grade > 0) awardBadge(32); // Verify they have some score
+                    }
                 }
 
                 for (var i = 0; i < mongo_data.modules.length; i++) {

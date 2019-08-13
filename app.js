@@ -20,6 +20,7 @@ var home = require('./routes/home');
 var modules = require('./routes/modules');
 var badges = require('./routes/badges');
 var admin = require('./routes/admin');
+var api = require('./routes/api');
 var app = express();
 
 var launch = require('./routes/canvasLaunch');
@@ -54,6 +55,7 @@ app.use(session({
 }));
 
 app.get('/callback',auth.oath2_callback);
+app.use('/api', api);
 
 app.get('/',index);
 app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
@@ -119,7 +121,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   //res.render('error');
 
-  res.sendFile(path.join(__dirname, "/views/static/404.html"));
+  res.sendFile(path.join(__dirname, "/views/static/error/not-open.html"));
 });
 
 module.exports = app;

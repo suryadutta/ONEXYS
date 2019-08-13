@@ -502,21 +502,18 @@ router.post("/badges/confirmUpdates", (req, res, next) => {
   //update badges info
   console.log("Description: " + req.body.Description);
   console.log("Course id: " + req.session.course_id);
-  mongo.updateData(
-    req.session.course_id,
-    "badges",
-    { _id: parseInt(req.body.badge_id) },
-    {
-      Title: req.body.Title,
-      Description: req.body.Description,
-      Points: req.body.Points,
-      Portrait: req.body.Portrait,
-      PortraitDescription: req.body.PortraitDescription,
-      UnearnedURL: req.body.UnearnedURL,
-      EarnedURL: req.body.EarnedURL,
-      EarnedHoverURL: req.body.EarnedHoverURL
-    },
-    (err, result) => {
+  var updates = {
+    Title: req.body.Title,
+    Description: req.body.Description,
+    Points: req.body.Points,
+    Portrait: req.body.Portrait,
+    PortraitDescription: req.body.PortraitDescription,
+    UnearnedURL: req.body.UnearnedURL,
+    EarnedURL: req.body.EarnedURL,
+    EarnedHoverURL: req.body.EarnedHoverURL
+  };
+  if(req.body.badge_id == 32) updates.assignment_id = parseInt(req.body.assignment_id);
+  mongo.updateData(req.session.course_id, "badges", { _id: parseInt(req.body.badge_id) }, updates, () => {
       res.redirect("/admin/badges");
     }
   );
