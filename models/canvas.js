@@ -139,12 +139,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
         var daily_done = 0;
         var reflections_done = 0;
 
-        if (req.session.lucky){
-            totalPoints += parseInt(req.session.lucky.point_value);
-            console.log("Hackfix!");
-            console.log(totalPoints);
-        }
-
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
                 if (lucky_bulldog.awarded_ids.includes(studentID)){

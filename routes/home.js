@@ -115,6 +115,10 @@ router.use("/", (req, res, next) => {
         home_links,
         daily_yalie
       ) => {
+        if (req.session.lucky){
+          console.log("Hackfix!");
+          score += parseInt(req.session.lucky.point_value);
+        }
         res.render("home", {
           title: "Home | " + config.herokuAppName,
           courseID,
