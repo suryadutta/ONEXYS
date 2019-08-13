@@ -143,11 +143,6 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
 
         if (mongo_data.lucky_bulldogs.length>0){
             for (lucky_bulldog of mongo_data.lucky_bulldogs){
-                if(lucky_bulldog.awarded_ids.length>0){
-                    if (lucky_bulldog.awarded_ids.includes(studentID)){
-                        totalPoints += parseInt(lucky_bulldog_points);
-                    }
-                }
                 if (lucky_bulldog.awarded_ids.includes(studentID)){
                     totalPoints += parseInt(lucky_bulldog.point_value);
                 }
