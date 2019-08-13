@@ -130,6 +130,7 @@ function putAdminRequest(url, parameters, callback) {
 } //admin PUT request
 
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
+    console.log("Getting Scores!");
     mongo.getAllData(courseID, function(mongo_data){
         var badges = mongo_data.badges;
         var totalPoints = 0;
@@ -1313,6 +1314,7 @@ var awardLuckies = function(req, res, next) {
                     lucky_bulldog.awarded_ids.push(studentID);
                     mongo.updateData(req.session.course_id,'lucky_bulldogs',{ _id: parseInt(lucky_bulldog._id) },{awarded_ids: lucky_bulldog.awarded_ids}, function(err,result){});
                     req.session.lucky = lucky_bulldog;
+                    console.log("Posted Scores!");
                 }
             }
         }
