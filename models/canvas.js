@@ -2,6 +2,7 @@ var config = require('../bin/config');
 var auth = require('../bin/auth');
 var request = require('request');
 var asyncStuff = require('async');
+var async = require('async');
 var mongo = require('./mongo');
 
 // The number of points granted to a student for each
@@ -129,6 +130,62 @@ function putAdminRequest(url, parameters, callback) {
     });
 } //admin PUT request
 
+function calculateScore(studentID, courseID, callback) {
+    async.parallel([ // In order to calculate scores and award badges, we need...
+        async.reflect(callback => { // Modules -- data[0].value
+            mongo.getData(courseID, "modules", (err, data) => callback(err, data));
+        }),
+        async.reflect(callback => { // Daily tasks -- data[1].value
+            mongo.getData(courseID, "daily_task", (err, data) => callback(err, data));
+        }),
+        async.reflect(callback => { // Lucky bonuses -- data[2].value
+            mongo.getData(courseID, "lucky_bonuses", (err, data) => callback(err, data));
+        }),
+        async.reflect(callback => { // Badges -- data[3].value
+            mongo.getData(courseID, "badges", (err, data) => callback(err, data));
+        }),
+        async.reflect(callback => { // User's assignments -- data[4].value
+            getRequest(assignment_user_url(studentID, courseID), studentID, (err, data) => callback(err, data));
+        }),
+    ], (err, data) => {
+        var points = 0, dailyDone = 0;
+
+        function awardBadge(id) {
+            var badge = data[3].value.find(badge => badge._id == id);
+            assert(badge); // Ensure the badge exists
+            badge.Awarded = true;
+            points += badge.Points;
+        }
+
+        //
+        // Calculate points, badges from Module progress
+        assert(data[0].value.length); // Verify we can do the for each loop
+        for(moduleItem in data[0].value) {
+
+        }
+
+        //==========================================
+        // Calculate points, badges from Daily Tasks
+        assert(data[1].value.length); // Verify we can do the for each loop
+        for(daily_task in data[1].value) {
+            var dyAsn = data.find(asn => asn.assignment_id == daily_task.assignment_id); // Get daily assignment (dyAsn)
+            assert(dyAsn);
+            if(parseFloat(daily_task.grade) > 0) dailyDone++;
+        }
+        dailyDone += 4; dailyDone = Math.floor(dailyDone / 5); // Format dailyDone
+        while(dailyDone > 0) { // Award the relevant badges
+            awardBadge(dailyDone);
+            dailyDone--;
+        }
+
+        //============================================
+        // Calculate points, badges from Lucky Bonuses
+        assert(data[2].value.length); // Verify we can do the for each loop
+        for(luckyBonus in data[2].value) if(luckyBonus.awarded_ids.includes(studentID)) totalPoints += parseInt(luckyBonus.points);
+
+    });
+}
+
 function computeScoreAndBadges(studentID, courseID, callback){ // Return score and badges
     console.log("Getting Scores!");
     mongo.getAllData(courseID, function(mongo_data){
@@ -187,6 +244,10 @@ function computeScoreAndBadges(studentID, courseID, callback){ // Return score a
                 }
                 totalPoints += (parseInt(daily_done) * daily_task_point_worth); //assign points for each daily
                 //assign points for each badge earned
+                // Take number of daily tasks done.. add 5, divide by 5, take floor
+
+                // 2 -> 1.....  2 + 7 = 7 / 5 = 1.-- === 1
+
                 if (daily_done >= 1) {
                     awardBadge(1);
                 }
@@ -684,13 +745,13 @@ function getAdminLeaderboardScores(courseID, course_title, callback){
 }
 
 function getStudents(courseID, callback){
-    getAdminRequest(student_url(courseID),function(err,student_data){
+    getAdminRequest(student_url(courseID), (err, student_data) => {
         var student_data_sorted = student_data.sort(function(a, b) {
             var textA = a.sortable_name.toUpperCase();
             var textB = b.sortable_name.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
-        callback(err,student_data_sorted);
+        callback(err, student_data_sorted);
     });
 }
 

@@ -13,7 +13,7 @@ var store = new RedisNonceStore(config.client_id, redis_client);
 if (!provider) {
     console.log('Generating new provider...')
     var provider = new lti.Provider(config.client_id, config.client_secret);
-    console.log("Providing generated.");
+    console.log("Provider generated.");
 }
 
 // Set the configuration settings
@@ -91,7 +91,6 @@ var updateCookies = function(req, res, next){
     if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1) {
         console.log('Assigning Cookies');
         console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
-        console.log("Provider admin before cookies set? " + provider.admin);
         req.session.course_id = req.body.custom_canvas_course_id;
         req.session.course_title = req.body.context_title;
         req.session.user_id = req.body.custom_canvas_user_id;
