@@ -3,6 +3,7 @@ var router = express.Router();
 var config = require("../bin/config");
 var queries = require("../models/queries");
 
+
 router.use("/", (req, res, next) => {
   //console.log("Request session: " + req.session);
   //console.log("Course title: " + req.session.course_title);
