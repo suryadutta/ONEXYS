@@ -106,10 +106,8 @@ var updateCookies = function(req, res, next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) {
-    if (typeof(req.session.course_id)!='string'){
-        console.log('ERROR: COOKIES NOT SET');
-        res.status(500).render('cookieError');
-    } else {
+    console.log(req.session.course_id);
+    if (req.session.course_id){
         req.connection.encrypted = true;
         if (req.query.login_success=='1') {
             next();
@@ -130,36 +128,30 @@ var checkUser = function(req, res, next) {
                                 state: String(req.session.user_id),
                             });
                             res.redirect(authorizationUri);
-                        } else {
-                            next(); // auth token exists
-                        }
+                        } else next(); // auth token exists
                     });
                 }
             });
         }
+    } else {
+        console.log("No course ID cookie");
+        res.status(500).send("Course ID cookie was not set");
     }
 }
 
 //path for oauth2 callback from Canvas server
 var oath2_callback = async function(req, res, next){
-    console.log('Query');
-    console.log(req.query);
-
     let code = req.query.code;
-    let options = {
-        code,
-    };
+    let options = { code };
 
     try {
         let result = await oauth2.authorizationCode.getToken(options); // create new access token from Canvas API
         let accessToken = await oauth2.accessToken.create(result);
-        console.log("Access token");
-        console.log(accessToken);
         redis_client.set('token_'+req.query.state, JSON.stringify(accessToken)); // save access token to Redis
         return res.redirect('/home?login_success=1')
-    } catch(error) {
-        console.error('Access Token Error', error.message);
-        return res.status(500).json('Authentication failed');
+    } catch(e) {
+        console.log("Auth failed in /bin/auth.js/oauth2_callback", e);
+        return res.status(500).send("Authentication failed in oauth2_callback.");
     }
 }
 

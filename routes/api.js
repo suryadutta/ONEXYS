@@ -2,7 +2,90 @@ const router = require("express").Router(),
       mongo = require("../models/mongo"),
       canvas = require("../models/canvas"),
       config = require('../bin/config'),
+      async = require("async"),
       assert = require('assert');
+
+// Set return headers to prevent XSS data leakage
+const access = "Access-Control-Allow-Origin";
+function getDst(hostname) { return `https://${hostname}`; }
+
+
+
+// Retrieves home update information
+/** Requires the following input:
+ * @hostname
+ * @courseID
+**/
+router.get("/home/updates", (req, res) => {
+    if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+    else {
+        try {
+            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(req.query.hostname);
+            async.parallel([
+                async.reflect(callback => {
+                    mongo.getHomepageUpdates(req.session.course_id, (err, data) => {
+                        callback(err, data);
+                    });
+                }),
+                async.reflect(callback => {
+                    //canvas.getDailyTask(req.session.course_id, (err, data) => {
+                    //});
+                    callback(null, {id: 123});
+                }),
+            ], (err, data) => {
+                console.log(data[1]);
+                if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+                else res.status(200).header(access, getDst(req.query.hostname)).send({updates: data[0].value, daily: data[1].value});
+            });
+        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+    }
+});
+
+router.get("/home/videos", (req, res) => {
+    if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+    else {
+        try {
+            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(req.query.hostname);
+            mongo.getHomepageVideos(req.session.course_id, (err, data) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+                else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+            });
+        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+    }
+});
+
+router.get("/modules", (req, res) => {
+    if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+    else {
+        try {
+            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(req.query.hostname);
+            mongo.getModules(req.session.course_id, (err, data) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+                else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+            });
+        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+    }
+});
+
+router.get("/users/progress", (req, res) => {
+    if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+    else {
+        try {
+            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(req.query.hostname);
+            mongo.getUserProgress(req.session.course_id, req.session.user_id, (err, data) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+                else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+            });
+        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+    }
+});
+
+
+
 
 // Access static information about the given site (track)
 router.get("/site-info", (req, res) => {
