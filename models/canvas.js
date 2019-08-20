@@ -21,16 +21,14 @@ function getDailyTask(courseID, callback) {
             getAdminRequest(dailyTaskUrl(courseID), (err, data) => callback(err, data));
         }),
     ], (err, data) => {
-        console.log(data[1]);
-        var daily = {id: null, due: new Date(8640000000000000)}, // create max date
+        var daily = {id: null, due: new Date(86400000000000)}, // create max date
             now = new Date();
         try {
             data[1].value.forEach(asn => {
-                console.log(asn.assignment_id);
-                if(data[0].value.includes(asn.assignment_id)) { // If it's not a daily assignment, forget it
-                    var asn_date = new Date(asn.due_date);
+                if(data[0].value.includes(asn.id)) { // If it's not a daily assignment, forget it
+                    var asn_date = new Date(asn.due_at);
                     if(asn_date <= daily.due && asn_date > now) { // Make it the new daily assignment if it's due sooner than the previous daily assignment, but still due in the future
-                        daily.id = asn.assignment_id;
+                        daily.id = asn.id;
                         daily.due = asn_date;
                     }
                 }
@@ -147,7 +145,6 @@ function putRequest(url, userID, parameters, callback) {
 }
 function getAdminRequest(url, callback) {
     url = add_page_number(url);
-    console.log(url);
     request.get({
         url: url,
         headers: {

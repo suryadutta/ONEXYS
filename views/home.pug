@@ -23,23 +23,10 @@ block content
         .left(style='width: 360px; margin-top: -10px;')
             #points.standard_box.left
                 h2 My Points
-                p#point_count=score
+                p#point_count
                 #flag.blue
                     a#dailyTaskLink(title="Open Daily Task" target="_blank")
-                        img#dailyTaskImg
-                //
-                    if daily_task.id == null
-                        a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/404', target='_blank')
-                            img#dailyTaskImg
-                    else
-                        if daily_task.id == -1
-                            // An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
-                            a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/not-open', target='_blank')
-                                img#dailyTaskImg
-                        else
-                            // 
-                            a(title='Open Daily Task', href=canvasURL+'/courses/'+courseID+'/assignments/'+daily_task.id, target='_blank')
-                                img#dailyTaskImg
+                        img#dailyTaskImg(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif" style="height:35px;")
             .standard_home_box.left
                 h2 Leaderboard
                 table
@@ -53,17 +40,14 @@ block content
                         tr.leader_me
                             td
                                 #myteam_head MY TEAM
-                            td=my_team.Name
-                            td=my_team.Score
+                            td#teamName
+                            td#teamScore
             #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
                 h2 Recent Badges
-                each badge in awarded_badges
-                    #recent_badge1.badge_container.completed(style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
-                        .badge_portrait(style='width: 80px; height: 100px; background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
-                        .badge_portrait.front_portrait(style='width: 80px; height: 100px; background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedURL+')')
+                h4 Loading Badges
+                img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
                 br
-                p#badges_link_sentence
-                    a(id='', title='info_Badges', href="https://" + heroku_app + ".herokuapp.com/badges", target='_blank') Click here to see all your badges.
+                a(title='info_Badges' href="https://" + heroku_app + ".herokuapp.com/badges" target='_blank') Click here to view all badges
             #progress.standard_home_box.left(style='width: 324px;')
                 h2 My Progress So Far
                 a#pretest.progress_box.single_line.completed(style='width: 187.5px !important;')  Pre-Test
@@ -76,8 +60,12 @@ block content
         .left(style='width: 500px !important; margin-top: -10px;')
             br
             #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+                h2 Updates
+                img(style="margin-left:175px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
             #featured.standard_home_box.left(style='width: 458px !important;')
                 h2#LoG_title Loading Videos...
+                    br
+                    img(style="height:25px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
                 p
                     a#LoG_link(href="#" target='_blank')
                 #homepageVideos

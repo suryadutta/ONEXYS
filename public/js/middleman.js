@@ -24,13 +24,14 @@ $(document).ready(function() {
         if(data.updates.post_test == "true") $("#posttest").addClass("available");
 
         // Daily task data
-        $("#dailyTaskImg").prop("src", data.updates.daily_task_img); // Set daily task image source
+        $("#dailyTaskImg").prop("src", data.updates.daily_task_img).css("height", ""); // Set daily task image source
+        //$("#dailyTaskImg").css("height", ""); // Set back to default height
         if(data.daily.id == null) $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}missing-resource`);
         else if(data.daily.id == -1) $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}not-open`);
         else $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}assignments/${data.daily.id}`);
     }).catch( err => {
         console.log(err);
-        $("#updates").html(`<h2>Updates</h2><div class="entry"><p class="entry_header"><strong>Updates could not be retrieved.</strong></p></div>`); // Write updates to DOM
+        $("#updates").append(`<h2>Updates</h2><div class="entry"><p class="entry_header"><strong>Updates could not be retrieved.</strong></p></div>`); // Write updates to DOM
         $("#LoG_title").text("Available Videos"); // Write Life on Grounds name to DOM
         $("#LoG_link").text(""); // Write Life on Grounds name to DOM
         $("#LoG_link").prop("href", "#"); // Write Life on Grounds link to DOM
@@ -66,7 +67,7 @@ $(document).ready(function() {
     });
 
     //
-    var addProgress = false, progress = null;
+    var addModuleProgress = false, badges = null, progress = null;
 
     // Gets the user's progress, including finished modules and badge status
     var getUserProgress = new Promise((resolve, reject) => {
@@ -79,7 +80,7 @@ $(document).ready(function() {
             reject(err);
         });
     }).then( data => {
-        if(addProgress) { // Modules have been written to DOM. Add in the user's progress
+        if(addModuleProgress) { // Modules have been written to DOM. Add in the user's progress
             var modules = $("#modules .module").length;
             $("#modules .module").each(function() {
                 var progObj = progress.modules[$(this).find("#moduleID").attr("mID")],
@@ -101,14 +102,19 @@ $(document).ready(function() {
         // 1. Figure out the user's 3 most recent badges
         // 2. Use the API to request info on those three badges
         // 3. Write those three badges to the DOM
-
+        if(badges) {
+            // Write badge progress to DOM
+            console.log("Adding badges from getUserProgress");
+        } else progress = data;
         //==============================================================
+        $("#point_count").text(data.score);
+        $("#teamName").text(data.team);
+        $("#teamScore").text("...");
     }).catch( err => {
         console.log("Failed to retrieve user progress. The page has been loaded, but omitting this data.")
     });
 
     var loadModules = new Promise((resolve, reject) => {
-        console.log("Making call for module data");
         $.get(herokuAPI + "/modules", {
             hostname: window.location.hostname,
             courseID: 3559, // eventually, pull from URL
@@ -129,6 +135,8 @@ $(document).ready(function() {
 
         if(progress) { // If user progress has been fetched, go ahead and fill it in
             console.log("Filling in user progress from loadModules");
+
+            // Add Module progress
             var modules = $("#modules .module").length;
             $("#modules .module").each(function() {
                 var progObj = progress.modules[$(this).find("#moduleID").attr("mID")],
@@ -145,9 +153,58 @@ $(document).ready(function() {
                 $("#posttest").prop("title", "You're ready for the Post Test. Click here to begin!")
             }
         } else { // Otherwise, mark that progress needs to be added
-            addProgress = true;
+            addModuleProgress = true;
             console.log("User progress has not been retrieved yet. It has been flagged for completion later.")
         }
+    });
+
+    var loadBadges = new Promise((resolve, reject) => {
+        $.get(herokuAPI + "/badges", {
+            hostname: window.location.hostname,
+            courseID: 3559, // eventually, pull from URL
+        }).done( (data, status) => {
+            resolve(data);
+        }).fail( err => {
+            reject(err);
+        });
+    }).then( data => {
+        if(progress) {
+            console.log("Writing badges from loadBadges");
+            // Write badge progress into DOM
+            var defaultBadge = {id: null, earned: new Date(0)},
+                recents = [defaultBadge, defaultBadge, defaultBadge];
+
+            function leastRecent() {
+                return recents.reduce((min, badge, i) => {
+                    if(isNaN(min)) return 0; // start the min at the 0th element
+                    return (badge.earned < recents[min].earned) ? i : min;
+                });
+            }
+            Object.keys(progress.badges).forEach(key => {
+                progress.badges[key].id = key;
+                recents[leastRecent()] = progress.badges[key];
+            });
+
+            // Display the 3 most recent badges (stored in recents)
+            var badgeHTML = `<h2>Recent Badges</h2>`;
+            recents.forEach(recentBadge => {
+                if(recentBadge.id) {
+                    var badge = data.find(item => item._id == recentBadge.id)
+                    badgeHTML += `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
+                                    <div class="badge_portrait" style="width: 80px; height: 100px; background-image: url(${badge.EarnedHoverURL})"></div>
+                                    <div class="badge_portrait front_portrait" style="width: 80px; height: 100px; background-image: url(${badge.EarnedURL})"></div>
+                                  </div>`;
+                }
+            });
+
+            $("#recent_badges").html(badgeHTML + `<br><div class="clear"><p><a href="/badges" target="_blank">Click here to view all badges</a></p>`);
+
+        } else {
+            badges = data;
+            console.log("Badge progress has not been retrieved yet. Display badge progress has been flagged for completion later.")
+        }
+    }).catch( err => {
+        // TODO
     });
 
     // Retrieves the leaderboard of a given course

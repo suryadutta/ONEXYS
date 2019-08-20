@@ -29,12 +29,12 @@ router.get("/home/updates", (req, res) => {
                     });
                 }),
                 async.reflect(callback => {
-                    //canvas.getDailyTask(req.session.course_id, (err, data) => {
-                    //});
-                    callback(null, {id: 123});
+                    canvas.getDailyTask(req.session.course_id, (err, data) => {
+                        callback(null, data);
+                    });
+                    //callback(null, {id: 123});
                 }),
             ], (err, data) => {
-                console.log(data[1]);
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send({updates: data[0].value, daily: data[1].value});
             });
@@ -63,6 +63,20 @@ router.get("/modules", (req, res) => {
             assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
             assert(req.query.hostname);
             mongo.getModules(req.session.course_id, (err, data) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+                else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+            });
+        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+    }
+});
+
+router.get("/badges", (req, res) => {
+    if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+    else {
+        try {
+            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(req.query.hostname);
+            mongo.getBadges(req.session.course_id, (err, data) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send(data);
             });

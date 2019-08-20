@@ -46,6 +46,31 @@ function getDailyTasks(courseID, callback) {
     db.collection("daily_task").find().toArray().then( data => callback(null, data)).catch( err => callback(err, null));
 }
 
+function getModules(courseID, callback) {
+    var db = client.db(config.mongoDBs[courseID]);
+    db.collection("modules").find().sort({_id: 1}).toArray().then( data => callback(null, data)).catch( err => callback(err, null));
+}
+
+function getModule(courseID, moduleID, callback) {
+    var db = client.db(config.mongoDBs[courseID]);
+    db.collection('modules').findOne({"_id":parseInt(moduleID)}, (err, data) => {
+        if (data.videos) {
+            data.videos = data.videos.sort( (a, b) => { return (a.position < b.position) ? -1 : 1; });
+        }
+        callback(err,data);
+    });
+}
+
+function getUserProgress(courseID, userID, callback) {
+    var db = client.db(config.mongoDBs[courseID]);
+    db.collection("user_progress").findOne({user: parseInt(userID)}, (err, data) => callback(err, data));
+}
+
+function getBadges(courseID, callback) {
+    var db = client.db(config.mongoDBs[courseID]);
+    db.collection("badges").find().toArray().then(data => callback(null, data)).catch(err => callback(err, null));
+}
+
 function getNavigationData(courseID, callback) {
     getData(courseID, 'navigation', (err, data) => {
         nav_info = data.find(document => document.type == 'navigation');
@@ -60,26 +85,6 @@ function getStaticPage(courseID, targetPage, callback) {
     });
 }
 
-function getModules(courseID, callback) {
-    var db = client.db(config.mongoDBs[courseID]);
-    db.collection("modules").find().sort({_id: 1}).toArray().then( data => callback(null, data)).catch( err => callback(err, null));
-}
-
-function getUserProgress(courseID, userID, callback) {
-    var db = client.db(config.mongoDBs[courseID]);
-    db.collection("user_progress").findOne({user: parseInt(userID)}, (err, data) => callback(err, data));
-}
-
-function getModule(courseID, moduleID, callback) {
-    var db = client.db(config.mongoDBs[courseID]);
-    db.collection('modules').findOne({"_id":parseInt(moduleID)}, (err, data) => {
-        if (data.videos) {
-            data.videos = data.videos.sort( (a, b) => { return (a.position < b.position) ? -1 : 1; });
-        }
-        callback(err,data);
-    });
-}
-
 
 
 module.exports = {
@@ -89,4 +94,5 @@ module.exports = {
     getDailyTasks,
     getModules,
     getUserProgress,
+    getBadges,
 }
