@@ -24,6 +24,7 @@ function getDailyTask(courseID, callback) {
         var daily = {id: null, due: new Date(86400000000000)}, // create max date
             now = new Date();
         try {
+            console.log("DATA", data[1].value);
             data[1].value.forEach(asn => {
                 if(data[0].value.includes(asn.id)) { // If it's not a daily assignment, forget it
                     var asn_date = new Date(asn.due_at);
@@ -35,6 +36,26 @@ function getDailyTask(courseID, callback) {
             });
         } catch(e) { console.log(e); }
         callback(err, daily);
+    });
+}
+
+function registerWebhook(courseID, callback) {
+    request.post({
+        url: addWebhookURL,
+        headers: {
+            "Authorization": " Bearer " + config.canvasAdminAuthToken
+        },
+        ContextID: courseID,
+        ContextType: "course",
+        EventTypes: ["GRADE_CHANGE"],
+        Format: "live-event",
+        TransportMetadata: {Url: "sqs.exmaple"},
+        TransportType: "https",
+    }, function(error, response, body) {
+        console.log("Error", error);
+        //console.log("Response", response);
+        console.log("Body", body);
+        callback(error, body);
     });
 }
 
@@ -69,8 +90,7 @@ function getDailyTask(courseID, callback) {
 
 
 
-
-
+const addWebhookURL = config.canvasURL + "/api/lti/subscriptions";
 
 var add_page_number = (url) => {
     if(url.indexOf("?")>-1){
@@ -181,4 +201,6 @@ function putAdminRequest(url, parameters, callback) {
 
 module.exports = {
     getDailyTask,
+    registerWebhook,
+
 }

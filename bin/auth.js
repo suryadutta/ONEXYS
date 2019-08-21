@@ -65,38 +65,18 @@ var authTokenQueue = new Queue(function(user_id,callback){
   });
 });
 
-//middleware to check if admin
-var checkAdmin = function(req, res, next) {
-    if (typeof req.session.admin == 'undefined' && !req.session.admin) {
-        console.log('Err authenticating admin');
-        res.send('Err authenticating admin');
-    } else {
-        next();
-    }
-}
-
 //middleware to update course information
-var updateCookies = function(req, res, next){
-    // Looks for passed url parameter 'course-id', updates cookie appropriately
-    // Keeps admin pages set to proper course across multiple tabs
-    if(typeof req.params["course-id"] !== 'undefined') {
-        console.log("Assigning Admin Cookies");
-        console.log("Assigned course id: " + req.param('course-id'));
-        req.session.course_id = req.param('course-id');
-        req.session.course_title = req.param('course-title');
-        req.session.user_id = req.param('user-id');
-    }
+var updateCookies = function(req, res, next) {
 
     // Manages cookies for other pages
-    if (typeof(req.body.custom_canvas_course_id)=='string' && req.query.login_success != 1) {
-        console.log('Assigning Cookies');
-        console.log('Assigned course id: ' + req.body.custom_canvas_course_id);
-        req.session.course_id = req.body.custom_canvas_course_id;
-        req.session.course_title = req.body.context_title;
+    if (req.body.custom_canvas_course_id && req.query.login_success != 1) {
+        console.log(`Validating access to course ${req.body.custom_canvas_course_id}`);
+        if(typeof(req.session.course_id) !== Object) req.session.course_id = {};
+        req.session.course_id[req.body.custom_canvas_course_id] = req.body.context_title;
         req.session.user_id = req.body.custom_canvas_user_id;
         req.session.admin = req.body.roles.includes('Instructor') || req.body.roles.includes('TeachingAssistant'); // Mark either Teachers or TAs as admins, which enables them to modify certain things in the Admin Panel
         next();
-    } else if(typeof(req.session.course_id)!='string') {
+    } else if(!req.session.course_id) {
         console.log('ERROR: COOKIES NOT SET');
         res.status(500).render('cookieError');
     } else {
@@ -106,7 +86,7 @@ var updateCookies = function(req, res, next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) {
-    console.log(req.session.course_id);
+    console.log("", req.session.course_id);
     if (req.session.course_id){
         req.connection.encrypted = true;
         if (req.query.login_success=='1') {
@@ -160,5 +140,4 @@ module.exports = {
     updateCookies,
     authTokenQueue,
     checkUser,
-    checkAdmin
 };

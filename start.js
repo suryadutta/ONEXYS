@@ -42,7 +42,7 @@ app.use(session({
 }));
 
 app.use('/api', api);
-app.use('/admin', admin)
+app.use('/admin', [auth.updateCookies, auth.checkUser, admin.requireAdmin], admin.router)
 app.use('/badges', badges)
 app.use('/modules', modules)
 app.get('/callback', auth.oath2_callback);

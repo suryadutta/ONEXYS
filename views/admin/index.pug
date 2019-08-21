@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+    br
+    script.
+        const herokuAPI = "http://localhost:3000/api";
+              needs = ["courseTitle"]; // Define what AJAX needs to retrieve
+    script(src="/js/middleman_admin.js")
+    .container
+        h1#adminPanelTitle(class='display-4')='Loading admin panel...'
+        .row
+            .col-md-12
+                hr
+        .row
+            .col-md-12
+                a(href='/admin/homepageEdit', class='btn btn-dark', role='button', style='margin:4px') Home Page
+                a(href='/admin/navigation', class='btn btn-dark', role='button', style='margin:4px') Navigation
+                a(href='/admin/modules', class='btn btn-dark', role='button', style='margin:4px') Modules
+                a(href='/admin/badges', class='btn btn-dark', role='button', style='margin:4px') Badges
+                a(href='/admin/dailies', class='btn btn-dark', role='button', style='margin:4px') Daily Tasks
+                a(href='/admin/lucky', class='btn btn-dark', role='button', style='margin:4px') Lucky Bonuses
+                a(href='/admin/gradebook', class='btn btn-dark', role='button', style='margin:4px') Unified Gradebook

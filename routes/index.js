@@ -5,15 +5,12 @@ var express = require('express'),
     auth = require("../bin/auth.js");
 
 router.post("/home", [auth.updateCookies, auth.checkUser], (req, res) => {
-    console.log("POST to /home");
     res.redirect("/home");
 });
 
 router.get("/home", (req, res) => {
-    console.log("GET on /home");
     // Assume not lucky for now
     res.render("home", {
-        // These will remain here
         title: "Home",
         lucky: false,
         admin: false,
@@ -22,14 +19,6 @@ router.get("/home", (req, res) => {
         heroku_app: config.herokuAppName,
         courseID: req.session.courseID,
         canvasURL: config.canvasURL,
-        // Everything else goes into AJAX
-        my_team: {Name: "Developers", Score: "420"},
-        awarded_badges: [],
-        post_test_status: {
-            open: false,
-            locked: false,
-            tooltip: "Post test tooltip"
-        },
     });
 });
 

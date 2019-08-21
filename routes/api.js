@@ -9,7 +9,17 @@ const router = require("express").Router(),
 const access = "Access-Control-Allow-Origin";
 function getDst(hostname) { return `https://${hostname}`; }
 
-
+router.get("/authorize/getCourseTitle", (req, res) => {
+    try {
+        assert(req.query.hostname);
+        assert(req.query.courseID);
+        assert(req.session.course_id);
+        console.log(req.session.course_id);
+        const title = req.session.course_id[req.query.courseID];
+        if(title) res.status(200).header(access, getDst(req.query.hostname)).send(title);
+        else res.status(403).send("403 - Forbidden. You have not been authorized to access that courseID.");
+    } catch(e) { console.log(e); res.status(400).send("400 - Bad Request."); }
+});
 
 // Retrieves home update information
 /** Requires the following input:
@@ -20,7 +30,7 @@ router.get("/home/updates", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
-            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             async.parallel([
                 async.reflect(callback => {
@@ -38,7 +48,7 @@ router.get("/home/updates", (req, res) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send({updates: data[0].value, daily: data[1].value});
             });
-        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+        } catch(e) { console.log("E", e); res.status(406).send("406 - Your request could not be processed."); }
     }
 });
 
@@ -98,7 +108,12 @@ router.get("/users/progress", (req, res) => {
     }
 });
 
-
+router.get("/webhooks/create", (req, res) => {
+    canvas.registerWebhook(3559, (err, body) => {
+        //console.log("Body", body);
+        res.send(body);
+    });
+});
 
 
 // Access static information about the given site (track)

@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+
+    //script(type='text/javascript', src='/javascript/nic-edit.js')
+    //script(type='text/javascript').
+    //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+    script.
+        const herokuAPI = "http://localhost:3000/api";
+              needs = ["courseTitle", "homepageData"];
+    script(src="/js/middleman_admin.js")
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')
+    script(src='/javascript/fade.js')
+    script(src='/javascript/video-rearrange.js')
+    br
+    .container
+        .row
+            .col-md-1
+                
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+    hr
+    .container
+        .row
+            .col
+            .col-md-10
+                
+            .col
