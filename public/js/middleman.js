@@ -114,6 +114,7 @@ $(document).ready(function() {
         }
     }).catch( err => {
         // TODO
+        console.log("Badge loading failed.");
     });
 
     // Retrieves the leaderboard of a given course
