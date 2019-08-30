@@ -2,6 +2,7 @@
 const MongoClient = require('mongodb').MongoClient,
       mongoSettings = {
           useNewUrlParser: true,
+          useUnifiedTopology: true,
           keepAlive: 1,
           connectTimeoutMS: 30000,
           reconnectTries: Number.MAX_VALUE,
