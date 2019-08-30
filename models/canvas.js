@@ -24,7 +24,6 @@ function getDailyTask(courseID, callback) {
         var daily = {id: null, due: new Date(86400000000000)}, // create max date
             now = new Date();
         try {
-            console.log("DATA", data[1].value);
             data[1].value.forEach(asn => {
                 if(data[0].value.includes(asn.id)) { // If it's not a daily assignment, forget it
                     var asn_date = new Date(asn.due_at);

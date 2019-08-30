@@ -34,12 +34,12 @@ router.get("/home/updates", (req, res) => {
             assert(req.query.hostname);
             async.parallel([
                 async.reflect(callback => {
-                    mongo.getHomepageUpdates(req.session.course_id, (err, data) => {
+                    mongo.getHomepageUpdates(req.query.courseID, (err, data) => {
                         callback(err, data);
                     });
                 }),
                 async.reflect(callback => {
-                    canvas.getDailyTask(req.session.course_id, (err, data) => {
+                    canvas.getDailyTask(req.query.courseID, (err, data) => {
                         callback(null, data);
                     });
                     //callback(null, {id: 123});
@@ -56,9 +56,9 @@ router.get("/home/videos", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
-            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
-            mongo.getHomepageVideos(req.session.course_id, (err, data) => {
+            mongo.getHomepageVideos(req.query.courseID, (err, data) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send(data);
             });
@@ -70,9 +70,9 @@ router.get("/modules", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
-            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
-            mongo.getModules(req.session.course_id, (err, data) => {
+            mongo.getModules(req.query.courseID, (err, data) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send(data);
             });
@@ -84,9 +84,9 @@ router.get("/badges", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
-            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
-            mongo.getBadges(req.session.course_id, (err, data) => {
+            mongo.getBadges(req.query.courseID, (err, data) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send(data);
             });
@@ -98,9 +98,9 @@ router.get("/users/progress", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
-            assert(req.query.courseID == req.session.course_id); // prevent cross track cookie usage
+            assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
-            mongo.getUserProgress(req.session.course_id, req.session.user_id, (err, data) => {
+            mongo.getUserProgress(req.query.courseID, req.session.user_id, (err, data) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send(data);
             });
