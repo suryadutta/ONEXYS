@@ -45,5 +45,16 @@ $(document).ready(function() {
 });
 
 function writeBadges(badges, progress) {
-    // TODO
+    var badgeHTML = ``;
+
+    badges.forEach(badge => {
+        let completed = (progress[badge._id] && progress[badge._id].has) ? "completed" : "";
+        badgeHTML += `<div class="badge_container ${completed}"><div class="badge_descriptor badge_box"><h3>${badge.Title}</h3><p>${badge.Description}</p></div><div class="badge_points badge_box"><p>${badge.Points}</p></div>`;
+
+        if(completed === "completed") badgeHTML += `<div class="badge_portrait" style="background-image: url(${badge.EarnedHoverURL})"></div><div class="badge_portrait front_portrait" style="background-image: url(${badge.EarnedURL})"></div>`;
+        else badgeHTML += `<div class="badge_portrait" style="background-image: url(${badge.UnearnedURL})"></div>`;
+
+        badgeHTML += `<div class="badge_label badge_box"><h3>${badge.Portrait}</h3><p>${badge.PortraitDescription}</p></div></div>`;
+    });
+    $("#badge_display").html(badgeHTML);
 }

@@ -13,12 +13,24 @@ router.get("/home", (req, res) => {
     res.render("home", {
         title: "Home",
         lucky: false,
-        admin: false,
+        admin: req.session.admin,
         masquerade: false,
         students: [],
         heroku_app: config.herokuAppName,
-        courseID: req.session.courseID,
-        canvasURL: config.canvasURL,
+    });
+});
+
+router.post("/badges", [auth.updateCookies, auth.checkUser], (req, res) => {
+    res.redirect("/badges");
+});
+
+router.get("/badges", (req, res) => {
+    res.render("badges", {
+        title: "Badges",
+        admin: req.session.admin,
+        masquerade: false,
+        students: [],
+        heroku_app: config.herokuAppName
     });
 });
 

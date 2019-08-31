@@ -9,7 +9,6 @@ var express = require('express'),
     modules = require('./routes/modules'),
     session = require('client-sessions'),
     canvas = require('./models/canvas'),
-    badges = require('./routes/badges'),
     bodyParser = require('body-parser'),
     index = require('./routes/index'),
     admin = require('./routes/admin'),
@@ -42,9 +41,8 @@ app.use(session({
 }));
 
 app.use('/api', api);
-app.use('/admin', [auth.updateCookies, auth.checkUser, admin.requireAdmin], admin.router)
-app.use('/badges', badges)
-app.use('/modules', modules)
+app.use('/admin', [auth.updateCookies, auth.checkUser, admin.requireAdmin], admin.router);
+app.use('/modules', modules);
 app.get('/callback', auth.oath2_callback);
 app.use('/', index);
 

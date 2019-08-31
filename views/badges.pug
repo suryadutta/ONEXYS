@@ -1,47 +1,21 @@
 extends layout
 
 block content
-  if lucky
-    include lucky-overlay
-
-  .onexys_styling
-    .standard_title_box.badge_title.title_mod.left
-      p All my sweet
-      h1 Badges
-    .badge_title_text.left
-      p
-        strong Badges are awarded for excellent work throughout the course.
-      p
-        | Collect them all to earn points for your team and to see some wacky pix of our faculty and staff!
-    #what_are
-      p So, what are badges?
-      #badgeline
-    .clear
-    #badge_display
-
-      each badge, index in badges
-
-        if badge.Awarded
-          div(class='badge_container badge'+(index+1)+' completed')
-            .badge_descriptor.badge_box
-              h3=badge.Title
-              p=badge.Description
-            .badge_points.badge_box
-              p=badge.Points
-            .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
-            .badge_portrait.front_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedURL+')')
-            .badge_label.badge_box
-              h3=badge.Portrait
-              p=badge.PortraitDescription
-
-        else
-          div(class='badge_container badge'+(index+1))
-            .badge_descriptor.badge_box
-              h3=badge.Title
-              p=badge.Description
-            .badge_points.badge_box
-              p=badge.Points
-            .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.UnearnedURL+')')
-            .badge_label.badge_box
-              h3=badge.Portrait
-              p=badge.PortraitDescription
+    script.
+        //var herokuAPI = "https://!{heroku_app}.herokuapp.com/api";
+        var herokuAPI = "http://localhost:3000/api";
+        var heroku = "!{heroku_app}";
+    script(src="/js/middleman_badges.js")
+    .onexys_styling
+        .standard_title_box.badge_title.title_mod.left
+            p All my sweet
+            h1 Badges
+        .badge_title_text.left
+            p
+                strong Badges are awarded for excellent work throughout the course.
+            p Collect them all to earn points for your team and to see some wacky pix of our faculty and staff!
+        #what_are
+            p So, what are badges?
+            #badgeline
+        .clear
+        #badge_display
