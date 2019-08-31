@@ -31,7 +31,7 @@ block content
             .standard_home_box.left
                 h2 Leaderboard
                 table
-                    thead
+                    thead#leaderboard-header
                         tr
                             th Place
                             th Team
@@ -51,13 +51,13 @@ block content
                 a(title='info_Badges' href="https://" + heroku_app + ".herokuapp.com/badges" target='_blank') Click here to view all badges
             #progress.standard_home_box.left(style='width: 324px;')
                 h2 My Progress So Far
-                a#pretest.progress_box.single_line.completed(style='width: 187.5px !important;')  Pre-Test
+                a#pretest.progress_box.single_line.completed Pre-Test
                 #progress_labels(style='margin-left: 15px !important;')
                     p Pract.
                     p Apply
                 br
                 #modules
-                a#posttest.progress_box.single_line(style='width: 187.5px !important;' title="The Post Test is not ready yet. Complete all Practices and Applications, then check back!") Post-Test
+                a#posttest.progress_box.single_line(title="The Post Test is not ready yet. Complete all Practices and Applications, then check back!") Post-Test
         .left(style='width: 500px !important; margin-top: -10px;')
             br
             #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')

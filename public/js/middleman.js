@@ -26,7 +26,6 @@ $(document).ready(function() {
         $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}missing-resource`);
         $("#pretest").css("background-image", "");
         $("#posttest").css("background-image", "");
-
     });
 
     var getHomeVideos = new Promise((resolve, reject) => {
