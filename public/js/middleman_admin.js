@@ -65,3 +65,37 @@ $(document).ready(function() {
         console.log("video retrieval failed");
     });
 });
+
+// Takes care of:
+//      the three headers;
+//      the three text bodies
+function writeHomeUpdates(updates) {
+
+}
+
+// Takes care of:
+//      writing all video data
+function writeHomeVideos(videos) {
+
+}
+
+// Takes care of:
+//      post_test boolean
+//      post_test_filename
+function writePostTestChanges(post_test) {
+
+}
+
+// Takes care of:
+//      badges_link
+function writeBadgeThings(badge_info) {
+
+}
+
+// Takes care of:
+//      life_on_grounds_link
+//      life_on_grounds_title
+//      life_on_grounds_thumbnail
+function writeLoGThings(LoG) {
+
+}
