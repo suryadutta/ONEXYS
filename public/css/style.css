@@ -1496,6 +1496,12 @@ Admin Portal
 
 */
 
+.vertical {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
 textarea .form-control{
 	resize: both;
 	overflow: auto;
@@ -1515,7 +1521,7 @@ textarea .form-control{
 
 .form-inline.spaced .form-control {
 	position: absolute;
-	right: 45px;
+	right: 35px;
 }
 
 /*

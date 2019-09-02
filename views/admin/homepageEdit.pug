@@ -8,6 +8,7 @@ block content
     script.
         const herokuAPI = "http://localhost:3000/api";
               needs = ["courseTitle", "homepageUpdates", "homepageVideos"];
+    script(src="/js/autosize.min.js")
     script(src="/js/middleman_admin.js")
     script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
@@ -26,7 +27,7 @@ block content
     .container
         .row
             .col
-            .col-md-10
+            .col-md-5
                 button.btn.btn-info(type="button" data-toggle="modal" data-target="#previewModal") Open Preview
                 #previewModal.modal.fade(role="dialog")
                     .modal-dialog.modal-xl
@@ -107,6 +108,8 @@ block content
                             .modal-footer
                                 small All changes are automatically saved.
                                 button.btn.btn-danger(type="button" data-dismiss="modal") Close Preview
+            .col-md-5(style="text-align:right;")
+                p All fields are automatically saved when clicking away from an input field.
             .col
         .row
             .col
@@ -118,27 +121,24 @@ block content
                 hr
                 .row
                     .col
-                        label Update 1 Title
+                        label(style="text-align:center;width:100%;") Update 1 (Top)
                         input#u1h.form-control(type="text" title="Header for the top update on the homepage")
-                    .col
-                        label Update 1 Text
                         textarea#u1t.form-control(type="text" rows="3" title="Text body for the top update on the homepage")
-                | &nbsp;
-                .row
                     .col
-                        label Update 2 Title
+                        label(style="text-align:center;width:100%;") Update 2 (Middle)
                         input#u2h.form-control(type="text" title="Header for the middle update on the homepage")
-                    .col
-                        label Update 2 Text
                         textarea#u2t.form-control(type="text" rows="3" title="Text body for the middle update on the homepage")
                 | &nbsp;
                 .row
                     .col
-                        label Update 3 Title
+                        label(style="text-align:center;width:100%;") Update 3 (Bottom)
                         input#u3h.form-control(type="text" title="Header for the bottom update on the homepage")
-                    .col
-                        label Update 3 Text
                         textarea#u3t.form-control(type="text" rows="3" title="Text body for the bottom update on the homepage")
+                    .col
+                        ul.vertical
+                            li Each update has a title and a body.
+                            li Update 1's title is automatically put in bold.
+                            li All update fields allow HTML tags to style parts of your text.
                 hr
                 .row
                     .col
@@ -146,32 +146,37 @@ block content
                             label Post Test Open?
                             input#poto.form-control(type="checkbox")
                         .form-inline.spaced
-                            label Post-Test Background
-                            input#potb.form-control(type="text") 
-                        .form-inline.spaced
                             label Pre-Test Background
                             input#prtb.form-control(type="text") 
+                        .form-inline.spaced
+                            label Post-Test Background
+                            input#potb.form-control(type="text")
+                        .form-inline.spaced
+                            label Post Test Page
+                            input#ptp.form-control(type="text")
+                    .col
+                        .form-inline.spaced
+                            label Life on Grounds Title
+                            input#logt.form-control(type="text") 
+                        .form-inline.spaced
+                            label LoG Tool Link
+                            input#logl.form-control(type="text")
+                        .form-inline.spaced
+                            label LoG Default Thumbnail
+                            input#logdt.form-control(type="text")
+                        .form-inline.spaced
+                            label LoG Playbutton
+                            input#logpb.form-control(type="text")
+                | &nbsp;
+                .row
                     .col    
                         .form-inline.spaced
                             label Badges Tool Link
                             input#btl.form-control(type="text")
-                                    
-                        .form-inline.spaced
-                            label Life on Grounds Tool Link
-                            input#logl.form-control(type="text")
-                                
-                            
+                    .col
                         .form-inline.spaced
                             label Daily Task Image
-                            input#dti.form-control(type="text") 
-                            
-                        .form-inline.spaced
-                            label Life on Grounds Title
-                            input#logt.form-control(type="text") 
-                            
-                        .form-inline.spaced
-                            label Life on Grounds Default Thumbnail
-                            input#logdt.form-control(type="text") 
+                            input#dti.form-control(type="text")
             .col
     br
     br
