@@ -30,7 +30,7 @@ $(document).ready(function() {
         writeDailyTaskInfo({id: homepage.daily.id, img: homepage.updates.daily_task_img});
         writeHomeUpdates({h1: homepage.updates.main_header, b1: homepage.updates.main_text, h2: homepage.updates.header2, b2: homepage.updates.text2, h3: homepage.updates.header3, b3: homepage.updates.text3});
         writeLoGThings({title: homepage.updates.life_on_grounds_title, link: homepage.updates.life_on_grounds_link});
-        writePostTestChanges({bool: homepage.updates.post_test == true, pre_img: homepage.updates.pre_test_button_background, post_img: homepage.updates.post_test_button_background, page: homepage.updates.post_test_filename});
+        writePostTestChanges({bool: homepage.updates.post_test == "true", pre_img: homepage.updates.pre_test_button_background, post_img: homepage.updates.post_test_button_background, page: homepage.updates.post_test_filename});
     }).catch(err => {
         //$("#previewBtn").remove(); $("#previewModal").remove();
         //alert("Homepage preview was unable to load. You will be unable to preview changes.");
@@ -107,6 +107,9 @@ function writePostTestChanges(post_test) {
         $("#posttest").addClass("available");
         $("#poto").prop("checked", "true");
     }
+    $("#poto").change(() => {
+        postAJAXHome("post_test", $("#poto").is(":checked"));
+    });
     $("#prtb").val(post_test.pre_img).focusout(event => { // Fill form, add autosave listener
         postAJAXHome("pre_test_button_background", $(event.currentTarget).val());
     });
@@ -154,8 +157,9 @@ function writeDailyTaskInfo(daily) {
 
 // Homepage AJAX POSTers
 function postAJAXHome(field, value) {
+    //console.log(field, value);
     $.post(herokuAPI + "/admin/updateHome", {
-        courseID: 3559,
+        courseID: courseIDFromURL,
         field,
         value,
     }).done(res => {

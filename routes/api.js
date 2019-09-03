@@ -137,7 +137,8 @@ var validHomeElements = ["main_header", "main_text", "header2", "text2", "header
 router.post('/admin/updateHome', (req, res) => {
     if(req.session.admin) {
         try {
-            assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+            if(req.body.courseID === "" && config.NODE_ENV === "development") req.body.courseID = 3559;
+            else assert(Object.keys(req.session.course_id).includes(req.body.courseID));
             assert(validHomeElements.includes(req.body.field));
             assert(req.body.value);
             mongo.updateHomepageUpdates(req.body.courseID, req.body.field, req.body.value, err => {
