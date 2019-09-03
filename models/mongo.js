@@ -17,6 +17,13 @@ const MongoClient = require('mongodb').MongoClient,
 //          Methods
 // --------------------------
 
+function updateHomepageUpdates(courseID, field, value, callback) {
+    var db = client.db(config.mongoDBs[courseID]);
+    let submit = {};
+    submit[field] = value;
+    db.collection("home").findOneAndUpdate({type: "updates"}, {$set: submit}).then(() => callback(null)).catch(err => callback(err));
+}
+
 function getHomepageUpdates(courseID, callback) {
     var db = client.db(config.mongoDBs[courseID]);
     db.collection("home").findOne({type: "updates"}, (err, data) => callback(err, data));
@@ -90,6 +97,7 @@ function getStaticPage(courseID, targetPage, callback) {
 
 module.exports = {
     client, // Allows start.js to create a shared connection pool
+    updateHomepageUpdates,
     getHomepageUpdates,
     getHomepageVideos,
     getDailyTasks,

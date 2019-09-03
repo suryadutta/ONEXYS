@@ -58,12 +58,24 @@ $(document).ready(function() {
 //      the three text bodies
 function writeHomeUpdates(updates) {
     $("#updates").html(`<h2>Updates</h2><div class="entry"><p class="entry_header"><strong>${updates.h1}</strong></p><p class="entry_text">${updates.b1}</p></div><div class="entry"><p class="entry_header"><strong>${updates.h2}</strong></p><p class="entry_text">${updates.b2}</p></div><div class="entry"><p class="entry_header"><strong>${updates.h3}</strong></p><p class="entry_text">${updates.b3}</p></div>`);
-    $("#u1h").val(updates.h1);
-    $("#u1t").val(updates.b1);
-    $("#u2h").val(updates.h2);
-    $("#u2t").val(updates.b2);
-    $("#u3h").val(updates.h3);
-    $("#u3t").val(updates.b3);
+    $("#u1h").val(updates.h1).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("main_header", $(event.currentTarget).val());
+    });
+    $("#u1t").val(updates.b1).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("main_text", $(event.currentTarget).val());
+    });
+    $("#u2h").val(updates.h2).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("header2", $(event.currentTarget).val());
+    });
+    $("#u2t").val(updates.b2).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("text2", $(event.currentTarget).val());
+    });
+    $("#u3h").val(updates.h3).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("header3", $(event.currentTarget).val());
+    });
+    $("#u3t").val(updates.b3).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("text3", $(event.currentTarget).val());
+    });
     autosize(document.querySelectorAll("textarea"));
 }
 
@@ -95,15 +107,23 @@ function writePostTestChanges(post_test) {
         $("#posttest").addClass("available");
         $("#poto").prop("checked", "true");
     }
-    $("#prtb").val(post_test.pre_img);
-    $("#potb").val(post_test.post_img);
-    $("#ptp").val(post_test.page);
+    $("#prtb").val(post_test.pre_img).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("pre_test_button_background", $(event.currentTarget).val());
+    });
+    $("#potb").val(post_test.post_img).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("post_test_button_background", $(event.currentTarget).val());
+    });
+    $("#ptp").val(post_test.page).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("post_test_filename", $(event.currentTarget).val());
+    });
 }
 
 // Takes care of:
 //      badges_link
 function writeBadgeThings(badge_info) {
-    $("#btl").val(badge_info.link);
+    $("#btl").val(badge_info.link).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("badges_link", $(event.currentTarget).val());
+    });
 }
 
 // Takes care of:
@@ -114,8 +134,12 @@ function writeLoGThings(log) {
     $("#LoG_title").text(log.title); // Write Life on Grounds name to DOM
     $("#LoG_link").text(`Click here to see all ${log.title} videos!`); // Write Life on Grounds name to DOM
     $("#LoG_link").prop("href", log.link); // Write Life on Grounds link to DOM
-    $("#logt").val(log.title);
-    $("#logl").val(log.link);
+    $("#logt").val(log.title).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("life_on_grounds_title", $(event.currentTarget).val());
+    });
+    $("#logl").val(log.link).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("life_on_grounds_link", $(event.currentTarget).val());
+    });
 }
 
 function writeDailyTaskInfo(daily) {
@@ -123,11 +147,36 @@ function writeDailyTaskInfo(daily) {
     else if(daily.id == -1) $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}not-open`);
     else $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}assignments/${daily.id}`);
     $("#dailyTaskImg").prop("src", daily.img);
-    $("#dti").val(daily.img);
+    $("#dti").val(daily.img).focusout(event => { // Fill form, add autosave listener
+        postAJAXHome("daily_task_img", $(event.currentTarget).val());
+    });
 }
 
 // Homepage AJAX POSTers
+function postAJAXHome(field, value) {
+    $.post(herokuAPI + "/admin/updateHome", {
+        courseID: 3559,
+        field,
+        value,
+    }).done(res => {
+        console.log("done");
+    }).fail(res => {
+        console.log("fail");
+    });
+}
+
+function postAJAXVideoUpdate() {
+
+}
+
+function postAJAXVideoDefaults(field, value) {
+
+}
 
 // Build AJAX request creator(s) here.
 // Bind .on('focus-lost') to each form element
 // On the focus loss, build the request and POST to the API
+
+
+// After all that, update the homepage prevew in the modal if the POST was successful.
+// If it failed, alert the user and do nothing.

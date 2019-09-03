@@ -128,6 +128,31 @@ router.get("/site-info", (req, res) => {
     } catch(e) { console.log(e); res.status(500).send("API request could not be processed."); }
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////
+// ADMIN PANEL ROUTES
+// / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+
+// Update homepage data
+var validHomeElements = ["main_header", "main_text", "header2", "text2", "header3", "text3", "badges_link", "daily_task_img", "post_test", "post_test_filename", "pre_test_button_background", "post_test_button_background", "life_on_grounds_link", "life_on_grounds_title", "life_on_grounds_thumbnail"];
+router.post('/admin/updateHome', (req, res) => {
+    if(req.session.admin) {
+        try {
+            assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+            assert(validHomeElements.includes(req.body.field));
+            assert(req.body.value);
+            mongo.updateHomepageUpdates(req.body.courseID, req.body.field, req.body.value, err => {
+                if(err) res.status(500).send("500. Update failed.");
+                else res.status(200).send("200 - OK. Update succeeded.");
+            });
+        } catch(e) {
+            console.log(e);
+            res.status(406);
+            res.send("406 - Not acceptable. You must provide a valid field and a value.");
+        }
+    } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+
 // AJAX uses this route to dynamically apply video reordering support
 router.post('/admin/updateVideo', (req, res) => {
     if(req.session.admin) {
