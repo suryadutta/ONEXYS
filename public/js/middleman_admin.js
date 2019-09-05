@@ -31,6 +31,11 @@ $(document).ready(function() {
         writeHomeUpdates({h1: homepage.updates.main_header, b1: homepage.updates.main_text, h2: homepage.updates.header2, b2: homepage.updates.text2, h3: homepage.updates.header3, b3: homepage.updates.text3});
         writeLoGThings({title: homepage.updates.life_on_grounds_title, link: homepage.updates.life_on_grounds_link});
         writePostTestChanges({bool: homepage.updates.post_test == "true", pre_img: homepage.updates.pre_test_button_background, post_img: homepage.updates.post_test_button_background, page: homepage.updates.post_test_filename});
+        $("#fullscr-loading").animate({
+            opacity: 0,
+        }, 750, "swing", () => {
+            $("#fullscr-loading").remove();
+        });
     }).catch(err => {
         //$("#previewBtn").remove(); $("#previewModal").remove();
         //alert("Homepage preview was unable to load. You will be unable to preview changes.");

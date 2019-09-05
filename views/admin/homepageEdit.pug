@@ -13,9 +13,12 @@ block content
     script(src="/js/middleman_admin.js")
     script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src='/javascript/fade.js')
+    script(src='/js/homepageUpdateSwap.js')
     script(src='/javascript/video-rearrange.js')
     br
+    #fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
     .container
         .row
             .col-md-1
@@ -118,28 +121,26 @@ block content
                 .row(style="margin-top:30px;")
                     .col(style="display:inline;")
                         h2.left Updates
-                        button.btn.btn-dark(style="float:right;" title="Click to switch update editing mode!") Add an Update
+                        button#updateToggle.btn.btn-dark(style="float:right;" title="Click to switch update editing mode!" onclick="toggleUpdateEditMode();return false;") Click to add a single update
                 hr
                 .row
-                    .col
-                        label(style="text-align:center;width:100%;") Update 1 (Top)
+                    .col-md-6
+                        label#u1l(style="text-align:center;width:100%;") Update 1 (Top)
                         input#u1h.form-control(type="text" title="Header for the top update on the homepage")
                         textarea#u1t.form-control(type="text" rows="3" title="Text body for the top update on the homepage")
-                    .col
-                        label(style="text-align:center;width:100%;") Update 2 (Middle)
-                        input#u2h.form-control(type="text" title="Header for the middle update on the homepage")
-                        textarea#u2t.form-control(type="text" rows="3" title="Text body for the middle update on the homepage")
-                | &nbsp;
-                .row
-                    .col
-                        label(style="text-align:center;width:100%;") Update 3 (Bottom)
-                        input#u3h.form-control(type="text" title="Header for the bottom update on the homepage")
-                        textarea#u3t.form-control(type="text" rows="3" title="Text body for the bottom update on the homepage")
-                    .col
+                    .col-md-6
                         ul.vertical
                             li Each update has a title and a body.
                             li Update 1's title is automatically put in bold.
                             li All update fields allow HTML tags to style parts of your text.
+                    .col-md-6(style="margin-top:10px;")
+                        label#u2l(style="text-align:center;width:100%;") Update 2 (Middle)
+                        input#u2h.form-control(type="text" title="Header for the middle update on the homepage")
+                        textarea#u2t.form-control(type="text" rows="3" title="Text body for the middle update on the homepage")
+                    .col-md-6(style="margin-top:10px;")
+                        label#u3l(style="text-align:center;width:100%;") Update 3 (Bottom)
+                        input#u3h.form-control(type="text" title="Header for the bottom update on the homepage")
+                        textarea#u3t.form-control(type="text" rows="3" title="Text body for the bottom update on the homepage")
                 hr
                 .row
                     .col

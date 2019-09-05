@@ -12,7 +12,7 @@ function requireAdmin(req, res, next) {
 
 router.get("/homepageEdit", (req, res) => {
     res.render("admin/homepageEdit", {
-        
+        heroku: config.herokuAppName,
     })
 });
 
@@ -21,7 +21,10 @@ router.get("/navigation", (req, res) => {
 });
 
 router.get("/modules", (req, res) => {
-
+    res.render("admin/modules", {
+        heroku: config.herokuAppName,
+        
+    });
 });
 
 router.get("/badges", (req, res) => {

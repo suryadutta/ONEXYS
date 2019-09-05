@@ -1,3 +1,26 @@
+#fullscr-loading {
+	top: -10px;
+	position: fixed;
+	height: calc(100% + 10px);
+	width: 100%;
+	z-index: 99;
+}
+
+#fullscr-loading div {
+	background-color: black;
+	opacity: .9;
+	width: 100%;
+	height: 100%;
+}
+
+#fullscr-loading img {
+	position: absolute;
+	opacity: 1;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .vid-obj:hover {
 	box-shadow: 1px 1px 5px #999;
 }

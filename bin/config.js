@@ -21,9 +21,8 @@ config.redisURL = process.env.REDIS_URL || '';
 
 config.mongo_username = process.env.MONGO_USERNAME || 'localhost',
 config.mongo_password = process.env.MONGO_PASSWORD || '',
-config.local_mongo_database = 'mongodb://localhost:27017/oneyxs_dev'
 
-config.disableLeaderboard = process.env.DISABLE_LEADERBOARD.toLowerCase() == 'false' ? true : false || false;
+config.disableLeaderboard = process.env.DISABLE_LEADERBOARD.toLowerCase() === 'true' ? true : false;
 
 //configure MongoDB urls here - course ID to mongoDB URL
 config.mongoURL = 'mongodb://'+config.mongo_username+':'+config.mongo_password+'@conexcluster-shard-00-00-bgeoe.mongodb.net:27017,conexcluster-shard-00-01-bgeoe.mongodb.net:27017,conexcluster-shard-00-02-bgeoe.mongodb.net:27017/test?ssl=true&replicaSet=ConexCluster-shard-0&authSource=admin&retryWrites=true';
