@@ -32,8 +32,9 @@ block content
         .row
             .col
             .col-md-5
-                button.btn.btn-info(type="button" data-toggle="modal" data-target="#previewModal") Open Preview
+                button.btn.btn-info(type="button" data-toggle="modal" data-target="#previewModal" onclick="copyToPreview()") Open Preview
                 #previewModal.modal.fade(role="dialog")
+                    
                     .modal-dialog.modal-xl
                         .modal-content
                             .modal-header
@@ -110,10 +111,12 @@ block content
                                     END HOMEPAGE CONTENT
                                     / / / / / / / / / / / / / / / / / / / / / /
                             .modal-footer
-                                small All changes are automatically saved.
-                                button.btn.btn-danger(type="button" data-dismiss="modal") Close Preview
+                                small Changes saved when "Go Live" is pressed.
+                                button.btn.btn-success(type="button" data-dismiss="modal" title="Close preview WITHOUT saving changes") Close Preview
+                                button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;" title="Close preview AND save changes") Go Live
+                button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;") Go Live
             .col-md-5(style="text-align:right;")
-                p All fields are automatically saved when clicking away from an input field.
+                p All fields are saved when "Go Live" is clicked. Until then, you can test changes using "Open Preview".
             .col
         .row
             .col

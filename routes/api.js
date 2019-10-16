@@ -160,23 +160,29 @@ router.post('/admin/updateVideo', (req, res) => {
         try {
             assert(/[A-Z\d]{16}/.test(req.body.id)); // IDs must be a 16 character alphanumeric string
             assert(/\d+/.test(req.body.position)); // Positions consist at least 1 digit, and nothing else
-            if(req.session.admin) { // If the user is an admin, fulfill the req
-                mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.body.id }, { position: parseInt(req.body.position) }, (err, result) => {
-                    if(err) {
-                        res.status(500);
-                        res.send("500 - Internal Server Error. Encountered error saving video info.");
-                    } else {
-                        res.status(200);
-                        res.send("200 - OK");
-                    }
-                });
-            } else { // If the user is not an admin, terminate the req with status 401
-                res.status(401);
-                res.send("401 - Unauthorized. In order to change videos, you must be a system administrator.");
-            }
+
+            mongo.updateData(req.session.course_id, "home", { type: "video", _id: req.body.id }, { position: parseInt(req.body.position) }, (err, result) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Encountered error saving video info.");
+                else res.status(200).send("200 - OK");
+            });
         } catch(e) {
-            res.status(406);
-            res.send("406 - Not acceptable. You must provide querystring arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else).");
+            res.status(406).send("406 - Not acceptable. You must provide body arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else).");
+        }
+    } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.post('/admin/updateVideoDefaults', (req, res) => {
+    if(req.session.admin) {
+        try {
+            assert(/https?:\/\/.*/.test(req.body.thumbnail)); // Verify some sort of url-ness
+            assert(/https?:\/\/.*/.test(req.body.playbutton)); // ''
+
+            mongo.updateData(req.session.course_id, "home", { type: "all_vids" }, { thumbnail: req.body.thumbnail, playbutton: req.body.playbutton }, (err, result) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Encountered error saving video info.");
+                else res.status(200).send("200 - OK");
+            });
+        } catch(e) {
+            res.status(400).send("400 - Bad request. You must provide body arguments 'thumbnail' and 'playbutton', both strings, which are URLs to image assets.");
         }
     } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
