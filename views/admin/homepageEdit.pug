@@ -14,7 +14,7 @@ block content
     script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script(src='/js/homepageUpdateSwap.js')
-    script(src='/javascript/video-rearrange.js')
+    script(src='/js/video-rearrange.js')
     br
     #fullscr-loading
         div
@@ -113,7 +113,7 @@ block content
                             .modal-footer
                                 small Changes saved when "Go Live" is pressed.
                                 button.btn.btn-success(type="button" data-dismiss="modal" title="Close preview WITHOUT saving changes") Close Preview
-                                button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;" title="Close preview AND save changes") Go Live
+                                button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;" data-dismiss="modal" title="Close preview AND save changes") Go Live
                 button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;") Go Live
             .col-md-5(style="text-align:right;")
                 p All fields are saved when "Go Live" is clicked. Until then, you can test changes using "Open Preview".
@@ -133,8 +133,8 @@ block content
                         textarea#u1t.form-control(type="text" rows="3" title="Text body for the top update on the homepage")
                     .col-md-6
                         ul.vertical
-                            li Each update has a title and a body.
-                            li Update 1's title is automatically put in bold.
+                            li Each update has a header and a body.
+                            li Update headers are automatically put in bold.
                             li All update fields allow HTML tags to style parts of your text.
                     .col-md-6(style="margin-top:10px;")
                         label#u2l(style="text-align:center;width:100%;") Update 2 (Middle)

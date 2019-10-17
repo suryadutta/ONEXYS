@@ -1,3 +1,10 @@
+//////////////////////////////////////
+// TODO:
+//  - Move video rearrangement outside of modal (too glitchy inside :( ...)
+//  - Add support for editing the videos on this page
+//////////////////////////////////////
+
+
 
 $(document).ready(function() {
     // Get the course title
@@ -66,10 +73,10 @@ function writeHomeUpdates(updates) {
 function writeHomeVideos(videos) {
     var html = ``;
     videos.videos.forEach(video => {
-        html += `<div class="onexys_video"><a class="colorbox" href="${video.src}">`;
-        if(video.thumbnail) html += `<img class="onexys_thumbnail" src="${video.thumbnail}">`; // Use specified thumbnail
-        else html += `<img class="onexys_thumbnail" src="${videos.thumbnail}">`; // Use default thumbnail, found in other
-        html += `<img class="onexys_playbutton" src="${videos.playbutton}"></a></div><p><span style="font-size: 12pt;"><strong>${video.description}</strong></p>`;
+        html += `<div id=${video._id} class="video-element"><div class="onexys_video"><a class="colorbox" href="${video.src}">`;
+        if(video.thumbnail && video.thumbnail !== "") html += `<img class="onexys_thumbnail" src="${video.thumbnail}"/>`; // Use specified thumbnail
+        else html += `<img class="onexys_thumbnail default" src="${videos.thumbnail}"/>`; // Use default thumbnail, found in other
+        html += `<img class="onexys_playbutton" src="${videos.playbutton}"/></a></div><span style="font-size: 12pt;"><strong><p>${video.description}</p></strong></div>`;
     });
     $("#homepageVideos").html(html);
 
@@ -120,6 +127,7 @@ function writeDailyTaskInfo(daily) {
     $("#dti").val(daily.img);
 }
 
+// Makes all changes live (saves to Mongo)
 function goLive() {
     // Homepage updates
     updateHome("main_header", $("#u1h").val());
@@ -144,8 +152,7 @@ function goLive() {
     updateHome("badges_link", $("#btl").val());
 
     // Video defaults
-    updateVideoDefaults("thumbnail", $("#logdt").val(videos.thumbnail));
-    updateVideoDefaults("playbutton", $("#logpb").val(videos.playbutton));
+    updateVideoDefaults($("#logdt").val(), $("#logpb").val());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -156,21 +163,23 @@ function updateHome(field, value) {
         courseID: courseIDFromURL,
         field,
         value,
-    }).done(res => console.log("done"))
-    .fail(res => console.log("fail"));
+    }).done(res => console.log("[H] done"))
+    .fail(res => console.log("[H] fail"));
 }
 
 // Any parameters which eval to false (undefined/null/etc...) will be left unmodified
 function updateVideo(videoID, src, description, thumbnail, position) {
 
+    console.log(courseIDFromURL);
     $.post(herokuAPI + "/admin/updateVideo", {
         courseID: courseIDFromURL,
+        id: videoID,
         src,
         description,
         thumbnail,
         position,
-    }).done(res => console.log("done"))
-    .fail(res => console.log("fail"));
+    }).done(res => console.log("[V] done"))
+    .fail(res => console.log("[V] fail"));
 }
 
 function updateVideoDefaults(thumbnail, playbutton) {
@@ -179,10 +188,9 @@ function updateVideoDefaults(thumbnail, playbutton) {
         courseID: courseIDFromURL,
         thumbnail,
         playbutton,
-    }).done(res => console.log("done"))
-    .fail(res => console.log("fail"));
+    }).done(res => console.log("[VD] done"))
+    .fail(res => console.log("[VD] fail"));
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Keep the preview up to date
