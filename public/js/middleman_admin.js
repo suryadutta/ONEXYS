@@ -71,14 +71,31 @@ function writeHomeUpdates(updates) {
 // Takes care of:
 //      writing all video data
 function writeHomeVideos(videos) {
-    var html = ``;
-    videos.videos.forEach(video => {
-        html += `<div id=${video._id} class="video-element"><div class="onexys_video"><a class="colorbox" href="${video.src}">`;
-        if(video.thumbnail && video.thumbnail !== "") html += `<img class="onexys_thumbnail" src="${video.thumbnail}"/>`; // Use specified thumbnail
-        else html += `<img class="onexys_thumbnail default" src="${videos.thumbnail}"/>`; // Use default thumbnail, found in other
-        html += `<img class="onexys_playbutton" src="${videos.playbutton}"/></a></div><span style="font-size: 12pt;"><strong><p>${video.description}</p></strong></div>`;
-    });
-    $("#homepageVideos").html(html);
+
+    // Write the videos to the editing panel
+    $("#homepageVideosEdit").html((videos.videos.map(video =>
+        `<div class="col-md-6 vid-obj">
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="${video._id}" class="video-element">
+                        <div class="onexys_video">
+                            <a class="colorbox" target="_blank" href="${video.src}">
+                                <img class="onexys_thumbnail ${video.thumbnail ? `" src="${video.thumbnail}"` : `default" src="${videos.thumbnail}`}">
+                                <img class="onexys_playbutton" src="${videos.playbutton}">
+                            </a>
+                        </div>
+                        <span style="font-size: 12pt;">
+                            <p>${video.description}</p>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4" style="position: relative;">
+                    <button class="btn btn-dark" style="width: 80%; position: absolute; top: 25%; transform: translateY(-53%);">Edit Video</button>
+                    <button class="btn btn-danger" style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video</button>
+                </div>
+            </div>
+        </div>
+        `)).join(""));
 
     // Set form fields
     $("#logdt").val(videos.thumbnail);
@@ -170,7 +187,7 @@ function updateHome(field, value) {
 // Any parameters which eval to false (undefined/null/etc...) will be left unmodified
 function updateVideo(videoID, src, description, thumbnail, position) {
 
-    console.log(courseIDFromURL);
+    // console.log(position, description);
     $.post(herokuAPI + "/admin/updateVideo", {
         courseID: courseIDFromURL,
         id: videoID,
@@ -221,4 +238,19 @@ function copyToPreview() {
     // Video defaults
     $("#logdt").val();
     $("#logpb").val();
+
+    // Copy videos from the edit panel to the preview window
+    $("#homepageVideos").html(
+        $.map($("#homepageVideosEdit").find(".video-element"), videoElem =>
+            `<div class="onexys_video">
+                <a class="colorbox" target="_blank" href="${$(videoElem).find("a.colorbox").prop("href")}">
+                    <img class="onexys_thumbnail" src="${$(videoElem).find("img.onexys_thumbnail").prop("src")}">
+                    <img class="onexys_playbutton" src="${$(videoElem).find("img.onexys_playbutton").prop("src")}">
+                </a>
+            </div>
+            <span style="font-size: 12pt;">
+                <p>${$(videoElem).find("p").html()}</p>
+            </span>
+            `).join("")
+    );
 }

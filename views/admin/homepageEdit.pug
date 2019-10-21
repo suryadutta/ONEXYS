@@ -123,7 +123,7 @@ block content
             .col-md-10
                 .row(style="margin-top:30px;")
                     .col(style="display:inline;")
-                        h2.left Updates
+                        h3.left Homepage Updates
                         button#updateToggle.btn.btn-dark(style="float:right;" title="Click to switch update editing mode!" onclick="toggleUpdateEditMode();return false;") Click to add a single update
                 hr
                 .row
@@ -144,7 +144,10 @@ block content
                         label#u3l(style="text-align:center;width:100%;") Update 3 (Bottom)
                         input#u3h.form-control(type="text" title="Header for the bottom update on the homepage")
                         textarea#u3t.form-control(type="text" rows="3" title="Text body for the bottom update on the homepage")
-                hr
+                hr(style="margin-top:30px;")
+                .row
+                    .col-md-12
+                        h3 Homepage Fields
                 .row
                     .col
                         .form-inline.spaced
@@ -182,10 +185,14 @@ block content
                         .form-inline.spaced
                             label Daily Task Image
                             input#dti.form-control(type="text")
+                hr(style="margin-top:30px; margin-bottom:30px;")
+                .row
+                    .col-md-12
+                        h3 Homepage Videos
+                .row#homepageVideosEdit
             .col
     br
     br
     br
     br
-    br
-                                    
+    br                        
