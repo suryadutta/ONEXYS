@@ -9,13 +9,21 @@ const router = require("express").Router(),
 const access = "Access-Control-Allow-Origin";
 function getDst(hostname) { return `https://${hostname}`; }
 
+function authorize(req) {
+    if(req.query.courseID === "" && config.NODE_ENV === "development") {
+        req.body.courseID = "3559";
+        req.query.courseID = "3559";
+        req.session.course_id[3559] = "CONEX Development Course";
+    }
+}
+
 router.get("/authorize/getCourseTitle", (req, res) => {
     try {
+        authorize(req);
         assert(req.query.hostname);
         assert(req.query.courseID);
         assert(req.session.course_id);
-        console.log(req.session.course_id);
-        const title = req.session.course_id[req.query.courseID];
+        let title = req.session.course_id[req.query.courseID];
         if(title) res.status(200).header(access, getDst(req.query.hostname)).send(title);
         else res.status(403).send("403 - Forbidden. You have not been authorized to access that courseID.");
     } catch(e) { console.log(e); res.status(400).send("400 - Bad Request."); }
@@ -30,6 +38,8 @@ router.get("/home/updates", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
+            authorize(req);
+            console.log(Object.keys(req.session.course_id), req.query.courseID);
             assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             async.parallel([
@@ -56,6 +66,7 @@ router.get("/home/videos", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
+            authorize(req);
             assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             mongo.getHomepageVideos(req.query.courseID, (err, data) => {
@@ -70,6 +81,7 @@ router.get("/modules", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
+            authorize(req);
             assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             mongo.getModules(req.query.courseID, (err, data) => {
@@ -84,6 +96,7 @@ router.get("/badges", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
+            authorize(req);
             assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             mongo.getBadges(req.query.courseID, (err, data) => {
@@ -98,9 +111,25 @@ router.get("/users/progress", (req, res) => {
     if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
     else {
         try {
+            authorize(req);
             assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             mongo.getUserProgress(req.query.courseID, req.session.user_id, (err, data) => {
+                if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+                else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+            });
+        } catch(e) { console.log(e); res.status(406).send("406 - Your request could not be processed."); }
+    }
+});
+
+router.get("/navigation", (req, res) => {
+    if(!req.session.user_id) res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+    else {
+        try {
+            authorize(req);
+            assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+            assert(req.query.hostname);
+            mongo.getNavigationData(req.query.courseID, (err, data) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
                 else res.status(200).header(access, getDst(req.query.hostname)).send(data);
             });
@@ -114,7 +143,6 @@ router.get("/webhooks/create", (req, res) => {
         res.send(body);
     });
 });
-
 
 // Access static information about the given site (track)
 router.get("/site-info", (req, res) => {
@@ -133,12 +161,13 @@ router.get("/site-info", (req, res) => {
 // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 
 // Update homepage data
-var validHomeElements = ["main_header", "main_text", "header2", "text2", "header3", "text3", "badges_link", "daily_task_img", "post_test", "post_test_filename", "pre_test_button_background", "post_test_button_background", "life_on_grounds_link", "life_on_grounds_title", "life_on_grounds_thumbnail"];
+const validHomeElements = ["main_header", "main_text", "header2", "text2", "header3", "text3", "badges_link", "daily_task_img", "post_test", "post_test_filename", "pre_test_button_background", "post_test_button_background", "life_on_grounds_link", "life_on_grounds_title", "life_on_grounds_thumbnail"];
+
 router.post('/admin/updateHome', (req, res) => {
     if(req.session.admin) {
         try {
-            if(req.body.courseID === "" && config.NODE_ENV === "development") req.body.courseID = 3559;
-            else assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+            authorize(req);
+            assert(Object.keys(req.session.course_id).includes(req.body.courseID));
             assert(validHomeElements.includes(req.body.field));
             assert(req.body.value);
             mongo.updateHomepageUpdates(req.body.courseID, req.body.field, req.body.value, err => {
@@ -153,13 +182,12 @@ router.post('/admin/updateHome', (req, res) => {
     } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
-
 // AJAX uses this route to dynamically apply video reordering support
 router.post('/admin/updateVideo', (req, res) => {
     if(req.session.admin) {
         try {
-            if(req.body.courseID === "" && config.NODE_ENV === "development") req.body.courseID = 3559;
-            else assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+            authorize(req);
+            assert(Object.keys(req.session.course_id).includes(req.body.courseID));
             assert(/[A-Z\d]{16}/.test(req.body.id)); // IDs must be a 16 character alphanumeric string
             assert(/\d+/.test(req.body.position)); // Positions consist at least 1 digit, and nothing else
             assert(/.+/.test(req.body.description)); // Description must be provided
@@ -184,10 +212,13 @@ router.post('/admin/updateVideo', (req, res) => {
 router.post('/admin/updateVideoDefaults', (req, res) => {
     if(req.session.admin) {
         try {
+            authorize(req);
             assert(/https?:\/\/.*/.test(req.body.thumbnail)); // Verify some sort of url-ness
             assert(/https?:\/\/.*/.test(req.body.playbutton)); // ''
 
-            mongo.updateData(req.session.course_id, "home", { type: "all_vids" }, { thumbnail: req.body.thumbnail, playbutton: req.body.playbutton }, (err, result) => {
+            mongo.updateData(req.session.course_id, "home", { type: "all_vids" },
+                            { thumbnail: req.body.thumbnail, playbutton: req.body.playbutton },
+                            (err, result) => {
                 if(err) res.status(500).send("500 - Internal Server Error. Encountered error saving video info.");
                 else res.status(200).send("200 - OK");
             });
@@ -201,9 +232,10 @@ router.post('/admin/updateVideoDefaults', (req, res) => {
 router.post('/admin/updateModule', (req, res) => {
     if(req.session.admin) {
         try {
+            authorize(req);
             assert(/\d+/.test(req.body.id)); // IDs must be an integer
 
-            var updates = {};
+            let updates = {};
             if(req.body.open) {
                 assert(/(true|false)/.test(req.body.open)); // Open must be a valid boolean
                 updates.open = req.body.open;
@@ -213,20 +245,11 @@ router.post('/admin/updateModule', (req, res) => {
                 updates.due = req.body.due;
             }
 
-            if(req.session.admin) {
-                mongo.updateData(req.session.course_id, "modules", { _id: parseInt(req.body.id) }, updates, (err, data) => {
-                    if(err) {
-                        res.status(500);
-                        res.send("500 - Internal Server Error. Encountered error saving module info.");
-                    } else {
-                        res.status(200);
-                        res.send("200 - OK");
-                    }
-                });
-            } else {
-                res.status(401);
-                res.send("401 - Unauthorized. In order to change modules, you must be a system administrator.");
-            }
+            mongo.updateData(req.session.course_id, "modules", { _id: parseInt(req.body.id) }, updates, (err, data) => {
+                if(err) {
+                    res.status(500).send("500 - Internal Server Error. Encountered error saving module info.");
+                } else res.status(200).send("200 - OK");
+            });
         } catch(e) {
             res.status(406);
             res.send("406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans).")
@@ -234,8 +257,29 @@ router.post('/admin/updateModule', (req, res) => {
     } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+// Asynchronously update navigation options
+const navigationLocations = ["welcome", "coach_information", "life_on_grounds", "post_test"];
+router.post('/admin/updateNavigation', (req, res) => {
+    if(req.session.admin) {
+        try {
+            authorize(req);
+            assert(navigationLocations.includes(req.body.location));
+            assert(/https?:\/\/.+/.test(req.body.link));
+
+            mongo.updateData(req.session.course_id, "navigation", { page: req.body.location },
+                            { src: req.body.link },
+                            (err, data) => {
+                if(err) {
+                    res.status(500).send("500 - Internal Server Error. Encountered error saving module info.");
+                } else res.status(200).send("200 - OK");
+            });
+        } catch(e) {
+            res.status(406);
+            res.send("406 - Not acceptable. You must provide POST body parameters 'location' (a valid navigation location), and link (a url).")
+        }
+    } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
 //
-
-
 
 module.exports = router;

@@ -4,14 +4,20 @@
 //  - Add support for editing the videos on this page
 //////////////////////////////////////
 
+function hideLoadingBar() {
+    $("#fullscr-loading").animate({
+        opacity: 0,
+    }, 750, "swing", () => {
+        $("#fullscr-loading").remove();
+    });
+}
 
-
-$(document).ready(function() {
+$(document).ready(async function() {
     // Get the course title
     if(needs.includes("courseTitle")) {
         $.get(herokuAPI + "/authorize/getCourseTitle", {
             hostname: window.location.hostname,
-            courseID: 3559 // Eventually, pull this from URL
+            courseID: courseIDFromURL // Eventually, pull this from URL
         }).done((title, status) => {
             $("#adminPanelTitle").text(`Admin Panel for ${title}`);
         }).fail((err, status) => {
@@ -22,35 +28,39 @@ $(document).ready(function() {
     if(needs.includes("homepageUpdates")) {
         $.get(herokuAPI + "/home/updates", {
             hostname: window.location.hostname,
-            courseID: 3559 // Eventually, pull this from URL
+            courseID: courseIDFromURL // Eventually, pull this from URL
         }).done((homepage, status) => {
             writeBadgeThings({link: homepage.updates.badges_link});
             writeDailyTaskInfo({id: homepage.daily.id, img: homepage.updates.daily_task_img});
             writeHomeUpdates({h1: homepage.updates.main_header, b1: homepage.updates.main_text, h2: homepage.updates.header2, b2: homepage.updates.text2, h3: homepage.updates.header3, b3: homepage.updates.text3});
             writeLoGThings({title: homepage.updates.life_on_grounds_title, link: homepage.updates.life_on_grounds_link});
             writePostTestChanges({bool: homepage.updates.post_test == "true", pre_img: homepage.updates.pre_test_button_background, post_img: homepage.updates.post_test_button_background, page: homepage.updates.post_test_filename});
-            $("#fullscr-loading").animate({
-                opacity: 0,
-            }, 750, "swing", () => {
-                $("#fullscr-loading").remove();
-            });
         }).catch(err => {
             console.log("homepage update retrieval failed", err);
             // alert("Failed to load update information. Try again later");
             $("#previewBtn").remove(); $("#previewModal").remove();
             alert("Homepage preview was unable to load. You will be unable to preview changes.");
-        });
+        }).always(() => hideLoadingBar());
     }
 
     if(needs.includes("homepageVideos")) {
         $.get(herokuAPI + "/home/videos", {
             hostname: window.location.hostname,
-            courseID: 3559 // Eventually, pull this from URL
+            courseID: courseIDFromURL // Eventually, pull this from URL
         }).done((videos, status) => {
             writeHomeVideos(videos);
         }).catch(err => {
             console.log("video retrieval failed");
         });
+    }
+
+    if(needs.includes("navigationData")) {
+        $.get(herokuAPI + "/navigation", {
+            hostname: window.location.hostname,
+            courseID: courseIDFromURL
+        }).done(data => writeNavigationData(data))
+        .fail(err => console.log("navigation retrieval failed"))
+        .always(() => hideLoadingBar());
     }
 });
 
@@ -253,4 +263,23 @@ function copyToPreview() {
             </span>
             `).join("")
     );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+// AJAX shortcut helper
+function updateNavigation(location, link) {
+
+    $.post(herokuAPI + "/admin/updateNavigation", {
+        courseID: courseIDFromURL,
+        location,
+        link
+    }).done(res => console.log("[N] done"))
+    .fail(res => console.log("[N] fail"));
+}
+
+function writeNavigationData(data) {
+    $("#coachinfo").val(data[0].src);
+    $("#lifeongrounds").val(data[1].src);
+    $("#posttest").val(data[2].src);
+    $("#welcome").val(data[3].src);
 }

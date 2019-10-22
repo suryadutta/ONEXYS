@@ -17,13 +17,15 @@ router.get("/homepageEdit", (req, res) => {
 });
 
 router.get("/navigation", (req, res) => {
-
+    res.render("admin/navigation", {
+        heroku: config.herokuAppName,
+    });
 });
 
 router.get("/modules", (req, res) => {
     res.render("admin/modules", {
         heroku: config.herokuAppName,
-        
+
     });
 });
 

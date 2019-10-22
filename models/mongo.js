@@ -17,11 +17,9 @@ const MongoClient = require('mongodb').MongoClient,
 //          Methods
 // --------------------------
 
-function updateVideo(courseID, videoID, setDict, callback) {
+function getHomepageUpdates(courseID, callback) {
     let db = client.db(config.mongoDBs[courseID]);
-    db.collection("home").findOneAndUpdate({_id: videoID, type: "video"}, {$set: setDict})
-    .then(() => callback(null))
-    .catch(err => callback(err));
+    db.collection("home").findOne({type: "updates"}, (err, data) => callback(err, data));
 }
 
 function updateHomepageUpdates(courseID, field, value, callback) {
@@ -31,11 +29,6 @@ function updateHomepageUpdates(courseID, field, value, callback) {
     db.collection("home").findOneAndUpdate({type: "updates"}, {$set: submit})
     .then(() => callback(null))
     .catch(err => callback(err));
-}
-
-function getHomepageUpdates(courseID, callback) {
-    let db = client.db(config.mongoDBs[courseID]);
-    db.collection("home").findOne({type: "updates"}, (err, data) => callback(err, data));
 }
 
 function getHomepageVideos(courseID, callback) {
@@ -57,6 +50,13 @@ function getHomepageVideos(courseID, callback) {
     ], (err, data) => {
         callback(null, {thumbnail: data[1].value.thumbnail, playbutton: data[1].value.playbutton, videos: data[0].value});
     })
+}
+
+function updateVideo(courseID, videoID, setDict, callback) {
+    let db = client.db(config.mongoDBs[courseID]);
+    db.collection("home").findOneAndUpdate({_id: videoID, type: "video"}, {$set: setDict})
+    .then(() => callback(null))
+    .catch(err => callback(err));
 }
 
 function getDailyTasks(courseID, callback) {
@@ -94,10 +94,17 @@ function getBadges(courseID, callback) {
 }
 
 function getNavigationData(courseID, callback) {
-    getData(courseID, 'navigation', (err, data) => {
-        nav_info = data.find(document => document.type == 'navigation');
-        callback(err, nav_info);
-    });
+    let db = client.db(config.mongoDBs[courseID]);
+    db.collection("navigation").find().sort({page: 1}).toArray()
+    .then( data => callback(null, data))
+    .catch(err => callback(err, null));
+}
+
+function updateNavigation(courseID, location, link, callback) {
+    let db = client.db(config.mongoDBs[courseID]);
+    db.collection("navigation").findOneAndUpdate({page: location}, {$set: {src: link}})
+    .then(() => callback(null))
+    .catch(err => callback(err));
 }
 
 function getStaticPage(courseID, targetPage, callback) {
@@ -117,4 +124,6 @@ module.exports = {
     getModules,
     getUserProgress,
     getBadges,
+    getNavigationData,
+    updateNavigation,
 }
