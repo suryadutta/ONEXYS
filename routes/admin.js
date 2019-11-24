@@ -23,26 +23,35 @@ router.get("/navigation", (req, res) => {
 });
 
 router.get("/modules", (req, res) => {
-    res.render("admin/modules", {
-        heroku: config.herokuAppName,
-
-    });
+    res.send("This page has not yet been implemented.");
+    // res.render("admin/modules", {
+    //     heroku: config.herokuAppName,
+    // });
 });
 
 router.get("/badges", (req, res) => {
+    res.render("admin/badges", {
+        heroku: config.herokuAppName,
+    });
+});
 
+router.get("/badges/edit/:id", (req, res) => {
+    res.render("admin/badgeEdit", {
+        heroku: config.herokuAppName,
+        id: req.params.id
+    })
 });
 
 router.get("/dailyTasks", (req, res) => {
-
+    res.send("This page has not yet been implemented.");
 });
 
 router.get("/luckyBonuses", (req, res) => {
-
+    res.send("This page has not yet been implemented.");
 });
 
 router.get("/unifiedGradebook", (req, res) => {
-
+    res.send("This page has not yet been implemented.");
 });
 
 router.post("/", (req, res) => {

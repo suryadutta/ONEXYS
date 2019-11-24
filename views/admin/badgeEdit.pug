@@ -1,65 +1,45 @@
 extends ../layout
 
 block content
-
+    script.
+        const herokuAPI = "http://localhost:3000/api",
+              badgeID = #{id},
+              edit = true;
+        needs=["courseTitle", "badges"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
-                a.btn.btn-lg(href='/admin/badges?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+    //#fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                h2='Editing ' + course_title + ': Badge ' + badge._id
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
     hr
-
-    form(method='POST' action='/admin/badges/preview')
-        input(type='hidden', value=course_id, name='course-id')
-        input(type='hidden', value=course_title, name='course-title')
-        input(type='hidden', value=user_id, name='user-id')
-        input(type='hidden', value=badge._id, name='badge_id')
-
-        div.form-group.form-inline
-            label(for='title') Title:
-            input#title.form-control(type='text', value=badge.Title, name='Title')
-        hr
-
-        div.form-group
-            label(for='description') Description:
-            br
-            textarea#description.form-control(rows=3 name='Description')=badge.Description
-        hr
-
-        div.form-group.form-inline
-            label(for='badge_points') Points:
-            input#badge_points.form-control(type='numeric', value=badge.Points, name='Points')
-        hr
-        
-        if(badge._id == 32)
-            // For inspirer badge only
-            .form-group.form-inline
+    .container
+        .row
+            .col
+                label(for='title') Title:
+                input#title.form-control(type='text', value="", name='Title')
+                label(for='description') Description:
+                textarea#description.form-control(rows=3 name='Description')
+                label(for='badge_points') Points:
+                input#badge_points.form-control(type='numeric', value="", name='Points')
                 label(for='badge_id') Inspirer Assignment ID:
-                input#badge_id.form-control(type='numeric', value=badge.assignment_id, name='assignment_id')
-
-        div.form-group.form-inline
-            label(for='portrait') Portrait:
-            input#portrait.form-control(type='text', value=badge.Portrait, name='Portrait')
-        hr
-
-        div.form-group
-            label(for='portraitdescription') Portrait Description:
-            br
-            textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')=badge.PortraitDescription
-            small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
-        hr
-
-        div.form-group
-            label(for='unearned_url') Unearned URL:
-            input#unearned_url.form-control(type='text', value=badge.UnearnedURL, name='UnearnedURL')
-            br
-            label(for='earned_url') Earned URL:
-            input#earned_url.form-control(type='text', value=badge.EarnedURL, name='EarnedURL')
-            br
-            label(for='earned_hover_url') Earned Hover URL:
-            input#earned_hover_url.form-control(type='text', value=badge.EarnedHoverURL, name='EarnedHoverURL')
-        hr
-
-        button.btn.btn-success(type='submit') Save Changes
+                input#badge_id.form-control(type='numeric', value="", name='assignment_id')
+                label(for='portrait') Portrait:
+                input#portrait.form-control(type='text', value="", name='Portrait')
+                label(for='portraitdescription') Portrait Description:
+                textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')
+                small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
+                label(for='unearned_url') Unearned URL:
+                input#unearned_url.form-control(type='text', value="", name='UnearnedURL')
+                label(for='earned_url') Earned URL:
+                input#earned_url.form-control(type='text', value="", name='EarnedURL')
+                label(for='earned_hover_url') Earned Hover URL:
+                input#earned_hover_url.form-control(type='text', value="", name='EarnedHoverURL')

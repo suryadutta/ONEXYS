@@ -62,6 +62,15 @@ $(document).ready(async function() {
         .fail(err => console.log("navigation retrieval failed"))
         .always(() => hideLoadingBar());
     }
+
+    if(needs.includes("badges")) {
+        $.get(herokuAPI + "/badges", {
+            hostname: window.location.hostname,
+            courseID: courseIDFromURL
+        }).done(data => writeBadges(data))
+        .fail(err => console.log("badges retrieval failed"))
+        .always(() => hideLoadingBar());
+    }
 });
 
 // Takes care of:
@@ -282,4 +291,35 @@ function writeNavigationData(data) {
     $("#lifeongrounds").val(data[1].src);
     $("#posttest").val(data[2].src);
     $("#welcome").val(data[3].src);
+}
+
+function writeBadges(badges) {
+    if(edit) {
+        let badgeToEdit = badges.filter(badge => badge._id == badgeID)[0];
+        console.log(badgeToEdit);
+    } else {
+        let content = badges.reduce((content, badge) => {
+            return content +    `<tr>
+                                    <td>${badge._id}</td>
+                                    <td>${badge.Title}</td>
+                                    <td>${badge.Description}</td>
+                                    <td>${badge.Points}</td>
+                                    <td>${badge.Portrait}</td>
+                                    <td>${badge.PortraitDescription}</td>
+                                    <td>
+                                        <a  class="btn btn-dark"
+                                            href="badges/edit/${badge._id}">
+                                            Edit
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a  class="btn btn-danger"
+                                            href="badges/delete/${badge._id}">
+                                            Delete
+                                    </a>
+                                    </td>
+                                </tr>`;
+        }, ``);
+        $("#badgeTable").append(content);
+    }
 }

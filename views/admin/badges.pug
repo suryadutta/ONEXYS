@@ -1,44 +1,41 @@
 extends ../layout
 
 block content
-
+    script.
+        const herokuAPI = "http://localhost:3000/api";
+        needs=["courseTitle", "badges"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
-                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+    style.
+        td {
+            padding: 3px
+        }
+        tr {
+            border-bottom: 2px solid #777777
+        }
+    #fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                h2='Editing ' + course_title + ' badges'
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
     hr
-    div.container
-        div.row
-            table(class="admin_table")
-                tr
-                    th ID
-                    th Title
-                    th Description
-                    th Points
-                    th Portrait
-                    th Portrait Description
-                    th Edit Badge
-                    th Delete Badge
-                each badge in badges
+    .container
+        .row
+            .col
+                table#badgeTable(style="margin-bottom: 100px;")
                     tr
-                        td=badge._id
-                        td=badge.Title
-                        td=badge.Description
-                        td=badge.Points
-                        td=badge.Portrait
-                        td=badge.PortraitDescription
-                        td
-                            form(method='GET' action='badges/edit/'+badge._id)
-                                input(type='hidden', value=course_id, name='course-id')
-                                input(type='hidden', value=course_title, name='course-title')
-                                input(type='hidden', value=user_id, name='user-id')
-                                button.btn.btn-dark(type='submit') Edit
-                        td
-                                form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
-                                    input(type='hidden', value=course_id, name='course-id')
-                                    input(type='hidden', value=course_title, name='course-title')
-                                    input(type='hidden', value=user_id, name='user-id')
-                                    button.btn.btn-danger(type='submit') Delete
+                        th ID
+                        th Title
+                        th Description
+                        th Points
+                        th Portrait
+                        th Portrait Description
+                        th Edit
+                        th Delete
