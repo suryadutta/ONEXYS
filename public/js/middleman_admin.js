@@ -295,7 +295,44 @@ function writeNavigationData(data) {
 
 function writeBadges(badges) {
     if(edit) {
+        // Filter out the badge we want
         let badgeToEdit = badges.filter(badge => badge._id == badgeID)[0];
+
+        // Preload form fields and bind automatic copy functions
+        $("#title").val(badgeToEdit.Title).change(event => {
+            $("h3.previewTitle").html($(event.target).val());
+        });
+        $("#description").val(badgeToEdit.Description).change(event => {
+            $("p.previewDescription").html($(event.target).val());
+        });
+        $("#badge_points").val(badgeToEdit.Points).change(event => {
+            $("h3.previewPoints").html($(event.target).val());
+        });
+        // $("#assignment_id").val(badgeToEdit.);
+        $("#portrait").val(badgeToEdit.Portrait).change(event => {
+            $("h3.previewName").html($(event.target).val());
+        });
+        $("#portraitdescription").val(badgeToEdit.PortraitDescription).change(event => {
+            $("p.previewPortraitDescription").html($(event.target).val());
+        });
+        $("#unearned_url").val(badgeToEdit.UnearnedURL).change(event => {
+
+        });
+        $("#earned_url").val(badgeToEdit.EarnedURL).change(event => {
+
+        });
+        $("#earned_hover_url").val(badgeToEdit.EarnedHoverURL).change(event => {
+
+        });
+
+        // Preload badge content
+        $("h3.previewTitle").html(badgeToEdit.Title);
+        $("p.previewDescription").html(badgeToEdit.Description);
+        $("h3.previewPoints").html(badgeToEdit.Points);
+        $("h3.previewName").html(badgeToEdit.Portrait);
+        $("p.previewPortraitDescription").html(badgeToEdit.PortraitDescription);
+
+
         console.log(badgeToEdit);
     } else {
         let content = badges.reduce((content, badge) => {
@@ -311,12 +348,6 @@ function writeBadges(badges) {
                                             href="badges/edit/${badge._id}">
                                             Edit
                                         </a>
-                                    </td>
-                                    <td>
-                                        <a  class="btn btn-danger"
-                                            href="badges/delete/${badge._id}">
-                                            Delete
-                                    </a>
                                     </td>
                                 </tr>`;
         }, ``);

@@ -2,7 +2,8 @@ extends ../layout
 
 block content
     script.
-        const herokuAPI = "http://localhost:3000/api";
+        const herokuAPI = "http://localhost:3000/api",
+              edit = false;
         needs=["courseTitle", "badges"];
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
@@ -38,4 +39,3 @@ block content
                         th Portrait
                         th Portrait Description
                         th Edit
-                        th Delete

@@ -9,37 +9,107 @@ block content
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
     br
-    //#fullscr-loading
+    style.
+        .badgeInputRow {
+            padding-bottom: 8px;
+            /* border-bottom: 1px dotted #777777; */
+            margin-bottom: 10px;
+        }
+    #fullscr-loading
         div
         img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
     .container(style="margin-top: 25px;")
         .row
             .col-md-1
             .col.form-inline
-                a.btn.btn-lg(href='/admin')
+                a.btn.btn-lg(href='/admin/badges')
                     i.fa.fa-chevron-left
                 h2#adminPanelTitle='Loading title...'
             .col-md-1
     hr
     .container
         .row
-            .col
-                label(for='title') Title:
-                input#title.form-control(type='text', value="", name='Title')
-                label(for='description') Description:
-                textarea#description.form-control(rows=3 name='Description')
-                label(for='badge_points') Points:
-                input#badge_points.form-control(type='numeric', value="", name='Points')
-                label(for='badge_id') Inspirer Assignment ID:
-                input#badge_id.form-control(type='numeric', value="", name='assignment_id')
-                label(for='portrait') Portrait:
-                input#portrait.form-control(type='text', value="", name='Portrait')
-                label(for='portraitdescription') Portrait Description:
-                textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')
-                small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
-                label(for='unearned_url') Unearned URL:
-                input#unearned_url.form-control(type='text', value="", name='UnearnedURL')
-                label(for='earned_url') Earned URL:
-                input#earned_url.form-control(type='text', value="", name='EarnedURL')
-                label(for='earned_hover_url') Earned Hover URL:
-                input#earned_hover_url.form-control(type='text', value="", name='EarnedHoverURL')
+            .col-md-8(style="border-right:1px solid black;")
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Title:
+                    .col
+                        input#title.form-control(type='text', value="", name='Title')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Description:
+                    .col
+                        textarea#description.form-control(rows=3 name='Description')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Points:
+                    .col
+                        input#badge_points.form-control(type='numeric', value="", name='Points')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Inspirer Assignment ID:
+                    .col
+                        input#assignment_id.form-control(type='numeric', value="", name='assignment_id')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Portrait:
+                    .col
+                        input#portrait.form-control(type='text', value="", name='Portrait')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Portrait Description:
+                    .col
+                        textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')
+                        small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Unearned URL:
+                    .col
+                        input#unearned_url.form-control(type='text', value="", name='UnearnedURL')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Earned URL:
+                    .col
+                        input#earned_url.form-control(type='text', value="", name='EarnedURL')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Earned Hover URL:
+                    .col
+                        input#earned_hover_url.form-control(type='text', value="", name='EarnedHoverURL')
+            .col-md-4
+                .row
+                    .col
+                        p Preview of Unearned Badge
+                        .badge_container
+                            .badge_descriptor.badge_box
+                                h3.previewTitle
+                                p.previewDescription
+                            .badge_points.badge_box
+                                p.previewPoints
+                            .badge_portrait#previewUnearnedImage
+                            .badge_label.badge_box
+                                h3.previewName
+                                p.previewPortraitDescription
+                .row
+                    .col
+                        p Preview of Earned Badge
+                        .badge_container.completed
+                            .badge_descriptor.badge_box
+                                h3.previewTitle
+                                p.previewDescription
+                            .badge_points.badge_box
+                                p.previewPoints
+                            .badge_portrait#previewEarnedImage
+                            .badge_portrait.front_portrait#previewEarnedHoverImage
+                            .badge_label.badge_box
+                                h3.previewName
+                                p.previewPortraitDescription
+
+    //
+        let completed = (progress[badge._id] && progress[badge._id].has) ? "completed" : "";
+        badgeHTML += `<div class="badge_container ${completed}"><div class="badge_descriptor badge_box"><h3>${badge.Title}</h3><p>${badge.Description}</p></div><div class="badge_points badge_box"><p>${badge.Points}</p></div>`;
+
+        if(completed === "completed") badgeHTML += `<div class="badge_portrait" style="background-image: url(${badge.EarnedHoverURL})"></div><div class="badge_portrait front_portrait" style="background-image: url(${badge.EarnedURL})"></div>`;
+        else badgeHTML += `<div class="badge_portrait" style="background-image: url(${badge.UnearnedURL})"></div>`;
+
+        badgeHTML += `<div class="badge_label badge_box"><h3>${badge.Portrait}</h3><p>${badge.PortraitDescription}</p></div></div>`;
