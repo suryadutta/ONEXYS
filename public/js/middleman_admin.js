@@ -295,6 +295,10 @@ function writeNavigationData(data) {
 
 function writeBadges(badges) {
     if(edit) {
+        if(badgeID !== 32) {
+            $("#assignment_id").parent().parent().remove();
+        }
+
         // Filter out the badge we want
         let badgeToEdit = badges.filter(badge => badge._id == badgeID)[0];
 
@@ -306,7 +310,7 @@ function writeBadges(badges) {
             $("p.previewDescription").html($(event.target).val());
         });
         $("#badge_points").val(badgeToEdit.Points).change(event => {
-            $("h3.previewPoints").html($(event.target).val());
+            $("p.previewPoints").html($(event.target).val());
         });
         // $("#assignment_id").val(badgeToEdit.);
         $("#portrait").val(badgeToEdit.Portrait).change(event => {
@@ -316,25 +320,28 @@ function writeBadges(badges) {
             $("p.previewPortraitDescription").html($(event.target).val());
         });
         $("#unearned_url").val(badgeToEdit.UnearnedURL).change(event => {
-
+            $("#previewUnearnedImage").css("background-image", `url(${$(event.target).val()})`);
+            $("#previewUnearnedImage").css("background-color", "red");
+            console.log("here");
         });
         $("#earned_url").val(badgeToEdit.EarnedURL).change(event => {
-
+            $("#previewEarnedImage").css("background-image", `url(${$(event.target).val()})`);
         });
         $("#earned_hover_url").val(badgeToEdit.EarnedHoverURL).change(event => {
-
+            $("#previewEarnedHoverImage").css("background-image", `url(${$(event.target).val()})`);
         });
 
         // Preload badge content
         $("h3.previewTitle").html(badgeToEdit.Title);
         $("p.previewDescription").html(badgeToEdit.Description);
-        $("h3.previewPoints").html(badgeToEdit.Points);
+        $("p.previewPoints").html(badgeToEdit.Points);
         $("h3.previewName").html(badgeToEdit.Portrait);
         $("p.previewPortraitDescription").html(badgeToEdit.PortraitDescription);
 
 
         console.log(badgeToEdit);
     } else {
+        badges.sort((a, b) => a._id - b._id);
         let content = badges.reduce((content, badge) => {
             return content +    `<tr>
                                     <td>${badge._id}</td>
@@ -353,4 +360,22 @@ function writeBadges(badges) {
         }, ``);
         $("#badgeTable").append(content);
     }
+}
+
+function updateBadge() {
+    let submit = {
+        courseID: courseIDFromURL,
+        title: $("#title").val(),
+        description: $("#description").val(),
+        points: $("#badge_points").val(),
+        portrait: $("#portrait").val(),
+        portraitdescription: $("#portraitdescription").val(),
+        unearned_url: $("#unearned_url").val(),
+        earned_url: $("#earned_url").val(),
+        earned_hover_url: $("#earned_hover_url").val(),
+    }
+    if(badgeID === 32) submit.assignment_id = $("#assignment_id").val();
+    $.post(herokuAPI + `/admin/updateBadge/${badgeID}`, submit)
+    .done(res => console.log("[N] done"))
+    .fail(res => console.log("[N] fail"));
 }

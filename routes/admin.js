@@ -12,12 +12,14 @@ function requireAdmin(req, res, next) {
 
 router.get("/homepageEdit", (req, res) => {
     res.render("admin/homepageEdit", {
+        title: `Edit Course Homepage`,
         heroku: config.herokuAppName,
     })
 });
 
 router.get("/navigation", (req, res) => {
     res.render("admin/navigation", {
+        title: `Edit Navigation Links`,
         heroku: config.herokuAppName,
     });
 });
@@ -31,12 +33,14 @@ router.get("/modules", (req, res) => {
 
 router.get("/badges", (req, res) => {
     res.render("admin/badges", {
+        title: `Course Badges`,
         heroku: config.herokuAppName,
     });
 });
 
 router.get("/badges/edit/:id", (req, res) => {
     res.render("admin/badgeEdit", {
+        title: `Editing badge ${req.params.id}`,
         heroku: config.herokuAppName,
         id: req.params.id
     })
@@ -55,7 +59,7 @@ router.get("/unifiedGradebook", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    res.redirect("/admin");
+    res.redirect("/");
 });
 
 router.get("/", (req, res) => {

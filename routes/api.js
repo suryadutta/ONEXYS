@@ -39,7 +39,6 @@ router.get("/home/updates", (req, res) => {
     else {
         try {
             authorize(req);
-            console.log(Object.keys(req.session.course_id), req.query.courseID);
             assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
             assert(req.query.hostname);
             async.parallel([
@@ -276,6 +275,51 @@ router.post('/admin/updateNavigation', (req, res) => {
         } catch(e) {
             res.status(406);
             res.send("406 - Not acceptable. You must provide POST body parameters 'location' (a valid navigation location), and link (a url).")
+        }
+    } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.post('/admin/updateBadge/:id', (req, res) => {
+    if(req.session.admin) {
+        try {
+            req.query.courseID = req.body.courseID;
+            authorize(req);
+            console.log(Object.keys(req.session.course_id));
+            assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+            let id = parseInt(req.params.id);
+            assert(id > -1 && id < 33); // The ID should be between 0 and 32 (inclusive)
+            // If the badge ID (req.params.id) is 32, we need an assignment id also, which should be only digits.
+            assert( (id !== 32 && !req.body.assignment_id) || (id === 32 && parseInt(req.body.assignment_id)) );
+            assert(req.body.title); // Title should exist
+            assert(req.body.description); // Description should exist
+            assert(/\d+/.test(req.body.points)); // Points should be only digits.
+            assert(req.body.portrait); // Portrait name should exist
+            assert(req.body.portraitdescription); // Portrait description should exist
+            assert(/https?:\/\/.+/.test(req.body.unearned_url));// Unearned_url should be a URL
+            assert(/https?:\/\/.+/.test(req.body.earned_url)); // Earned_url should be a URL
+            assert(/https?:\/\/.+/.test(req.body.earned_hover_url));// Unearned_hover_url should be a URL
+
+            let submit = {
+                _id: req.params.id,
+                Title: req.body.title,
+                Description: req.body.description,
+                Points: req.body.points,
+                Portrait: req.body.portrait,
+                PortraitDescription: req.body.portraitdescription,
+                EarnedHoverURL: req.body.earned_hover_url,
+                EarnedURL: req.body.earned_url,
+                UnearnedURL: req.body.unearned_url,
+            }
+            if(id === 32) submit.assignment_id = parseInt(req.body.assignment_id);
+
+            mongo.updateBadge(req.body.courseID, submit, err => {
+                if(err) res.status(500).send("500 - Internal Server Error. Request could not be processed.");
+                else res.status(200).send("200 - OK");
+            });
+        } catch(e) {
+            res.status(406);
+            res.send("406 - Not acceptable. You must provide all fields of a badge in POST parameters. ");
+            console.log(e);
         }
     } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });

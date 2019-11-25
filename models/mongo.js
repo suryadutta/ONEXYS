@@ -114,6 +114,17 @@ function getStaticPage(courseID, targetPage, callback) {
     });
 }
 
+function updateBadge(courseID, badge, callback) {
+    let db = client.db(config.mongoDBs[courseID]);
+    db.collection("badges").findOneAndUpdate({
+        _id: badge._id,
+    }, {
+        $set: badge,
+    })
+    .then(() => callback(null))
+    .catch(err => callback(err));
+}
+
 module.exports = {
     client, // Allows start.js to create a shared connection pool
     updateVideo,
@@ -126,4 +137,5 @@ module.exports = {
     getBadges,
     getNavigationData,
     updateNavigation,
+    updateBadge,
 }
