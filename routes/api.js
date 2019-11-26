@@ -300,7 +300,7 @@ router.post('/admin/updateBadge/:id', (req, res) => {
             assert(/https?:\/\/.+/.test(req.body.earned_hover_url));// Unearned_hover_url should be a URL
 
             let submit = {
-                _id: req.params.id,
+                _id: id,
                 Title: req.body.title,
                 Description: req.body.description,
                 Points: req.body.points,

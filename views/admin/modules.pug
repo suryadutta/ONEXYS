@@ -1,60 +1,77 @@
 extends ../layout
 
 block content
-    script(src="/javascript/moduleAJAX.js")
+    script.
+        const herokuAPI = "http://localhost:3000/api",
+              edit = false;
+        needs=["courseTitle", "modules", "testInfo"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
     br
-    .container
+    //#fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container(style="margin-top: 25px;")
         .row
-            .form.form-inline
-                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                h2='Editing ' + course_title + ' modules'
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
     hr
-    br
-
     .container
-        .row
-            form(method='POST' action='modules')
-                input(type='hidden', value=course_id, name='course-id')
-                input(type='hidden', value=course_title, name='course-title')
-                input(type='hidden', value=user_id, name='user-id')
-
-                label Post Test Open?
-
-                .form-inline
-                    input#post_test_open_true.form-control(type='radio', value='true', checked=post_test=='true', name='post_test')
-                    label(for='post_test_open_true') Yes
-
-                .form-inline
-                    input#post_test_open_false.form-control(type='radio', value='false', checked=post_test=='false', name='post_test')
-                    label(for='post_test_open_false') No
-
+        .row(style="margin-bottom:25px;padding-bottom:5px;border-bottom:3px solid #777777;")
+            .col-md-5(style="padding-right:45px;border-right:1px solid #777777;")
                 .row
-                    .col-md-12
-                        .form-group.form-inline
-                            label(for='post_test_filename') Post Test Filename (located in views/static/post-test folder):
-                            input#post_test_filename.form-control.inlined-input(type='text', name='post_test_filename', value=post_test_filename)
-                    hr
-
+                    .col-md-3
+                        p Post Test Link
+                    .col
+                        input.form-control.vertical(type='text' value="")
                 .row
-                    .col-md-12
-                        .form-group.form-inline
-                            label(for='post_test_button_background') Post Test Button Background (located in public/images/progress_bar folder):
-                            input#post_test_button_background.form-control.inlined-input(type='text', name='post_test_button_background', value=post_test_button_background)
-                    hr
-
+                    .col-md-3
+                        p Post Test Open?
+                    .col
+                        input.vertical(type='checkbox')
                 .row
-                    .col-md-12
-                        .form-group.form-inline
-                            label(for='pre_test_button_background') Pre Test Button Background (located in public/images/progress_bar folder):
-                            input#pre_test_button_background.form-control.inlined-input(type='text', name='pre_test_button_background', value=pre_test_button_background)
-                    hr
-
-                button.btn.btn-success(type='submit') Save Pre/Post Test Changes
+                    .col(style="position:absolute;bottom:10px;")
+                        button.btn.btn-success Save Pre/Post Test Changes
+            .col
+                .row
+                    .col-md-3
+                        p Pre-Test Button Background
+                    .col
+                        input.form-control.vertical(type='text')
+                .row
+                    .col-md-3
+                        p Pre-Test Button Preview
+                    .col
+                        p Todo
+                .row
+                    .col-md-3
+                        p Post-Test Button Background
+                    .col
+                        input.form-control.vertical(type='text')
+                .row
+                    .col-md-3
+                        p Post-Test Button Preview
+                    .col
+                        p Todo
+        .row(style="")
+            .col
+                table#moduleTable.admin_table(style="margin-bottom:100px;")
+                    tr
+                        th ID
+                        th Primary Title
+                        th Secondary Title
+                        th Open?
+                        th Due?
+                        th Practice Link
+                        th Quiz Link
+                        th Reflections Link
+                        th Edit
             hr
-    br
-    .container
-        .row
+        //.row
             script.
                 var heroku = "!{heroku_app}";
             table(class="admin_table")

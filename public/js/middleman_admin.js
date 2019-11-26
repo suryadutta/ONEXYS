@@ -1,6 +1,5 @@
 //////////////////////////////////////
 // TODO:
-//  - Move video rearrangement outside of modal (too glitchy inside :( ...)
 //  - Add support for editing the videos on this page
 //////////////////////////////////////
 
@@ -15,9 +14,9 @@ function hideLoadingBar() {
 $(document).ready(async function() {
     // Get the course title
     if(needs.includes("courseTitle")) {
-        $.get(herokuAPI + "/authorize/getCourseTitle", {
+        $.get(`${herokuAPI}/authorize/getCourseTitle`, {
             hostname: window.location.hostname,
-            courseID: courseIDFromURL // Eventually, pull this from URL
+            courseID: courseIDFromURL,
         }).done((title, status) => {
             $("#adminPanelTitle").text(`Admin Panel for ${title}`);
         }).fail((err, status) => {
@@ -26,7 +25,7 @@ $(document).ready(async function() {
     }
 
     if(needs.includes("homepageUpdates")) {
-        $.get(herokuAPI + "/home/updates", {
+        $.get(`${herokuAPI}/home/updates`, {
             hostname: window.location.hostname,
             courseID: courseIDFromURL // Eventually, pull this from URL
         }).done((homepage, status) => {
@@ -44,7 +43,7 @@ $(document).ready(async function() {
     }
 
     if(needs.includes("homepageVideos")) {
-        $.get(herokuAPI + "/home/videos", {
+        $.get(`${herokuAPI}/home/videos`, {
             hostname: window.location.hostname,
             courseID: courseIDFromURL // Eventually, pull this from URL
         }).done((videos, status) => {
@@ -55,7 +54,7 @@ $(document).ready(async function() {
     }
 
     if(needs.includes("navigationData")) {
-        $.get(herokuAPI + "/navigation", {
+        $.get(`${herokuAPI}/navigation`, {
             hostname: window.location.hostname,
             courseID: courseIDFromURL
         }).done(data => writeNavigationData(data))
@@ -64,12 +63,29 @@ $(document).ready(async function() {
     }
 
     if(needs.includes("badges")) {
-        $.get(herokuAPI + "/badges", {
+        $.get(`${herokuAPI}/badges`, {
             hostname: window.location.hostname,
             courseID: courseIDFromURL
         }).done(data => writeBadges(data))
         .fail(err => console.log("badges retrieval failed"))
         .always(() => hideLoadingBar());
+    }
+
+    if(needs.includes("modules")) {
+        $.get(`${herokuAPI}/modules`, {
+            hostname: window.location.hostname,
+            courseID: courseIDFromURL,
+        }).done(data => writeModules(data))
+        .fail(err => console.log("module retrieval failed"))
+        .always(() => hideLoadingBar());
+    }
+
+    if(needs.includes("testInfo")) {
+        $.get(`${herokuAPI}/testInfo`, {
+            hostname: window.location.hostname,
+            courseID: courseIDFromURL,
+        }).done(data => writeTestInfo(data))
+        .fail(err => console.log("test info retrieval failed"));
     }
 });
 
@@ -295,12 +311,13 @@ function writeNavigationData(data) {
 
 function writeBadges(badges) {
     if(edit) {
+        let badgeToEdit = badges.filter(badge => badge._id == badgeID)[0];
+
         if(badgeID !== 32) {
             $("#assignment_id").parent().parent().remove();
-        }
+        } else $("#assignment_id").val(badgeToEdit.assignment_id);
 
         // Filter out the badge we want
-        let badgeToEdit = badges.filter(badge => badge._id == badgeID)[0];
 
         // Preload form fields and bind automatic copy functions
         $("#title").val(badgeToEdit.Title).change(event => {
@@ -321,8 +338,6 @@ function writeBadges(badges) {
         });
         $("#unearned_url").val(badgeToEdit.UnearnedURL).change(event => {
             $("#previewUnearnedImage").css("background-image", `url(${$(event.target).val()})`);
-            $("#previewUnearnedImage").css("background-color", "red");
-            console.log("here");
         });
         $("#earned_url").val(badgeToEdit.EarnedURL).change(event => {
             $("#previewEarnedImage").css("background-image", `url(${$(event.target).val()})`);
@@ -337,6 +352,9 @@ function writeBadges(badges) {
         $("p.previewPoints").html(badgeToEdit.Points);
         $("h3.previewName").html(badgeToEdit.Portrait);
         $("p.previewPortraitDescription").html(badgeToEdit.PortraitDescription);
+        $("#previewUnearnedImage").css("background-image", `url(${badgeToEdit.UnearnedURL})`);
+        $("#previewEarnedImage").css("background-image", `url(${badgeToEdit.EarnedURL})`);
+        $("#previewEarnedHoverImage").css("background-image", `url(${badgeToEdit.EarnedHoverURL})`);
 
 
         console.log(badgeToEdit);
@@ -376,6 +394,38 @@ function updateBadge() {
     }
     if(badgeID === 32) submit.assignment_id = $("#assignment_id").val();
     $.post(herokuAPI + `/admin/updateBadge/${badgeID}`, submit)
-    .done(res => console.log("[N] done"))
-    .fail(res => console.log("[N] fail"));
+    .done(res => {
+        console.log("[B] done");
+        alert("Badge successfully updated.");
+    })
+    .fail(res => {
+        console.log("[B] fail");
+        alert("Badge update failed.");
+    });
+}
+
+function writeModules(modules) {
+    let content = modules.reduce((content, module) => {
+        return content +    `<tr>
+                                <td>${module._id}</td>
+                                <td>${module.primary_title}</td>
+                                <td>${module.secondary_title}</td>
+                                <td>
+                                    <input type='checkbox' ${module.open === "true" ? "checked": ""}/>
+                                </td>
+                                <td>
+                                    <input type='checkbox' ${module.due === "true" ? "checked" : ""}/>
+                                </td>
+                                <td>${module.practice_link}</td>
+                                <td>${module.quiz_link}</td>
+                                <td>${module.reflection_link}</td>
+                                <td>
+                                    <a  class="btn btn-dark"
+                                        href="modules/edit/${module._id}">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>`;
+    }, ``);
+    $("#moduleTable").append(content);
 }

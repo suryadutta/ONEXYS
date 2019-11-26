@@ -25,10 +25,11 @@ router.get("/navigation", (req, res) => {
 });
 
 router.get("/modules", (req, res) => {
-    res.send("This page has not yet been implemented.");
-    // res.render("admin/modules", {
-    //     heroku: config.herokuAppName,
-    // });
+    // res.send("This page has not yet been implemented.");
+    res.render("admin/modules", {
+        title: `Course Modules`,
+        heroku: config.herokuAppName,
+    });
 });
 
 router.get("/badges", (req, res) => {
@@ -59,7 +60,7 @@ router.get("/unifiedGradebook", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    res.redirect("/");
+    res.redirect("/admin");
 });
 
 router.get("/", (req, res) => {
