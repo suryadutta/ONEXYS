@@ -1,4 +1,3 @@
-// Test signing 3
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').load();
 }
