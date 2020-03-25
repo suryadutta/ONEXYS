@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy', true);
 
-app.use(cookieParser(config.client_secret));
+app.use(cookieParser(config.client_secret, { sameSite: 'none' }));
 
 app.use(session({
   cookieName: 'session',
