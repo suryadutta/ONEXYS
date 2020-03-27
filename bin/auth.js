@@ -119,6 +119,9 @@ var checkUser = function(req, res, next) {
                 // Request is INVALID iff the provider expressed invalidity and we're not in development mode
                 if (!is_valid && process.env.NODE_ENV !== "development") {
                     console.log('Unverified User:');
+                    if (err) {
+                        console.log(err)
+                    }
                     res.send('Unverified User');
                 } else {
                     //check if auth token already exists in Redis
