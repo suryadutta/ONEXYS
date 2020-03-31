@@ -71,25 +71,45 @@ app.use('/launch',launch)
 // static file display
 app.use("/coach-information", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/coach-info/"+page));
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/coach-info/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
   });
 });
 
 app.use("/welcome", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/welcome/"+page));
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/welcome/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
   });
 });
 
 app.use("/life-on-grounds", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/life-on-campus/"+page));
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/life-on-campus/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
   });
 });
 
 app.use("/post-test", function(req, res) {
   mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
-    res.sendFile(path.join(__dirname, "/views/static/post-test/"+page));
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/post-test/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
   });
 });
 
