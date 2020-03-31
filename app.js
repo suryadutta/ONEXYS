@@ -50,7 +50,8 @@ app.use(session({
     path: '/',
     ephemeral: false,
     httpOnly: true,
-    secure: false
+    secure: false,
+    sameSite: 'none'
   }
 }));
 
