@@ -50,7 +50,6 @@ app.use(session({
     path: '/',
     ephemeral: false,
     httpOnly: true,
-    secure: false,
     sameSite: 'none'
   }
 }));
@@ -70,6 +69,8 @@ app.use('/launch',launch)
 
 // static file display
 app.use("/coach-information", function(req, res) {
+  console.log("COURSE ID -- APP.js")
+  console.log(req.session)
   mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
     if (page !== null) {
       res.sendFile(path.join(__dirname, "/views/static/coach-info/"+page));
