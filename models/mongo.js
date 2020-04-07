@@ -4,6 +4,7 @@ var asyncStuff = require('async');
 var config = require('../bin/config');
 
 function getData(courseID, collection_name, callback) {
+    console.log("getData() courseID: " + courseID)
     // Use connect method to connect to the server
     var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function (err, client) {
@@ -65,6 +66,7 @@ function getNavigationData(courseID, callback) {
 }
 
 function getStaticPage(courseID, targetPage, callback) {
+    console.log("getStaticPage() course id: " + courseID)
     getData(courseID, 'navigation', function (err, data) {
         //prevent crashing by rerouting if data comes back empty
         if (data.length) {
