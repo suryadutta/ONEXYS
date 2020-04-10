@@ -98,7 +98,7 @@ var updateCookies = function(req, res, next){
         req.session.admin = req.body.roles.includes('Instructor') || req.body.roles.includes('TeachingAssistant'); // Mark either Teachers or TAs as admins, which enables them to modify certain things in the Admin Panel
         next();
     } else if(typeof(req.session.course_id)!='string') {
-        console.log('ERROR: COOKIES NOT SET');
+        console.log('Update Cookies ERROR: COOKIES NOT SET');
         res.status(500).render('cookieError');
     } else {
         next();
@@ -108,7 +108,7 @@ var updateCookies = function(req, res, next){
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) {
     if (typeof(req.session.course_id)!='string'){
-        console.log('ERROR: COOKIES NOT SET');
+        console.log('Check User ERROR: COOKIES NOT SET');
         res.status(500).render('cookieError');
     } else {
         req.connection.encrypted = true;
@@ -116,7 +116,7 @@ var checkUser = function(req, res, next) {
             next();
         } else {
             provider.valid_request(req, function(err, is_valid) {
-                // Request is INVALID iff the provider expressed invalidity and we're not in development mode
+                // Request is INVALID if the provider expressed invalidity and we're not in development mode
                 if (!is_valid && process.env.NODE_ENV !== "development") {
                     console.log('Unverified User:');
                     if (err) {
