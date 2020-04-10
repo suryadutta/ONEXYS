@@ -51,7 +51,7 @@ app.use(session({
     ephemeral: false,
     httpOnly: true,
     secure: false,
-    sameSite: 'none'
+    //sameSite: 'none'
   }
 }));
 
