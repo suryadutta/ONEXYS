@@ -77,6 +77,8 @@ var checkAdmin = function(req, res, next) {
 
 //middleware to update course information
 var updateCookies = function(req, res, next){
+    console.log('course_id:')
+    console.log(req.session.course_id);
     // Looks for passed url parameter 'course-id', updates cookie appropriately
     // Keeps admin pages set to proper course across multiple tabs
     if(typeof req.params["course-id"] !== 'undefined') {
@@ -107,6 +109,8 @@ var updateCookies = function(req, res, next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) {
+    console.log('course_id:')
+    console.log(req.session.course_id);
     if (typeof(req.session.course_id)!='string'){
         console.log('Check User ERROR: COOKIES NOT SET');
         res.status(500).render('cookieError');
