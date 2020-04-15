@@ -124,6 +124,7 @@ var checkUser = function(req, res, next) {
             provider.valid_request(req, function(err, is_valid) {
                 // Request is INVALID if the provider expressed invalidity and we're not in development mode
                 if (!is_valid && process.env.NODE_ENV !== "development") {
+                    console.log(provider);
                     console.log('Unverified User:');
                     if (err) {
                         console.log(err)
