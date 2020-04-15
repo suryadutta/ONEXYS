@@ -11,8 +11,8 @@ function getData(courseID, collection_name, callback) {
         assert.equal(null, err);
         var db = client.db(config.mongoDBs[courseID]);
         db.collection(collection_name).find().sort({ "_id": 1 }).toArray(function (error, data) {
-            console.log('DATA')
-            console.log(data)
+            // console.log('DATA')
+            // console.log(data)
             callback(error, data);
             client.close();
         });
