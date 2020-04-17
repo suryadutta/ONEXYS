@@ -27,6 +27,8 @@ var notes_column_url = (courseID) => {
 
 var get_update_url = (courseID, callback) => {
     getAdminRequest(notes_column_url(courseID), function(err, custom_columns){
+        console.log("CUSTOM COLUMNS")
+        console.log(custom_columns)
         var points_id = custom_columns.find(column => column.title='Notes').id;
         var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data';
         callback(update_url);
@@ -93,6 +95,8 @@ function putRequest(url, userID, parameters, callback) {
 
 function getAdminRequest(url, callback) {
     url = add_page_number(url);
+    console.log("URL")
+    console.log(url)
     request.get({
         url: url,
         headers: {
