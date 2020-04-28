@@ -39,6 +39,9 @@ jspm_packages
 # SQL dumps
 *.dump
 
+# Redis dumps
+dump.rdb
+
 # Yarn lock files
 *.lock
 
