@@ -113,7 +113,14 @@ function homepageAdminQuery(courseID, course_title, callback){
             home_links = data[2].value[2],
             students = data[3].value,
             daily_yalie = data[4].value;
-        //console.log("Leaderboard: " + leaderboard);
+        console.log("module_progress: " + module_progress);
+        console.log("leaderboard: " + leaderboard);
+        console.log("home updates: " + home_updates);
+        console.log("home vids: " + home_vids);
+        console.log("home links: " + home_links);
+        console.log("students: " + students);
+        console.log("daily yalie: " + daily_yalie);
+
         callback(module_progress, {open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks."}, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
     });
 }
