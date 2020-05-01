@@ -35,7 +35,7 @@ config.mongoDBs = {
   '3529': 'white',
   '3559': 'conexDemo',
   '4888': 'conexDemo20',
-  '5698': 'smithDemo20',
+  '5710': 'smithDemo20',
   '48080': 'smith',
   '48036': 'yale-blue',
   '48037': 'yale-gray',
