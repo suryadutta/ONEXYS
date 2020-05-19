@@ -77,8 +77,6 @@ var checkAdmin = function(req, res, next) {
 
 //middleware to update course information
 var updateCookies = function(req, res, next){
-    console.log("REQUEST BODY");
-    console.log(req.body);
     console.log('course_id:');
     console.log(req.session.course_id);
     // Looks for passed url parameter 'course-id', updates cookie appropriately
