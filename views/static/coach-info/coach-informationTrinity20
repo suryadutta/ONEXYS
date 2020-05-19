@@ -1,0 +1,103 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link href="../stylesheets/style.css" rel="stylesheet"> <!-- for heroku running -->
+		<link href="../../../public/stylesheets/style.css" rel="stylesheet"> <!-- for local running -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	</head>
+	<body>
+    <div class="user_content">
+    <div class="onexys_styling coachoverride">
+	
+    <div class="coach_packet">
+    <div id="name2" class="coach_header"></div>
+	<div class="coach_photo"><img src="https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/coachesBioPics/david_izquierdo.jpg?raw=true"
+    alt="david_izquierdo.jpg"  /></div>
+    <div class="coach_name left">David Izquierdo</div>
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><strong><br />Major:</strong></div>
+    <div class="coach_major">Neuroscience</div>
+    </div>
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><strong>Zoom:</strong></div>
+    <div class="coach_major"><a href="https://virginia.zoom.us/j/8575899625">https://virginia.zoom.us/j/8575<br />899625</a></div>
+    <div class="coach_college"><span class="coach_ital">Laredo, Texas; Class of 2023</span></div>
+    </div>
+    <div class="coach_bio">David Izquierdo (‘23) is a rising sophomore from Laredo, Texas. He is a Pre-Med student and intends to major in Neuroscience. On campus, David plays tenor saxophone in the Trinity Wind Ensemble and performs with a saxophone quartet. He also conducts research in Dr. Johnson’s herpetology lab, studying exercise’s effects on brain morphology in lizard species. David enjoys playing music, painting with Bob Ross, petting trinicats, and looks forward to welcoming incoming QBIT students to Trinity!</div>
+    </div>
+	
+    <div class="coach_packet">
+    <div id="name10" class="coach_header"></div>
+    <div class="coach_photo"><img src="https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/coachesBioPics/emma_kramer.jpg?raw=true"
+    alt="emma_kramer.jpg"  /></div>
+    <div class="coach_name left">Emma Kramer</div>
+    <br />
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><br /><br /><strong>Major:</strong></div>
+    <div class="coach_major">Biology</div>
+    </div>
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><strong>Zoom:</strong></div>
+    <div class="coach_major"><a href="https://virginia.zoom.us/j/2758688042">https://virginia.zoom.us/j/2758<br />688042</a></div>
+    <div class="coach_college"><span class="coach_ital">Thrall, Texas; Class of 2023</span></div>
+    </div>
+    <div class="coach_bio">Emma Kramer (‘23) is a rising sophomore from Thrall, Texas. She is currently on the Pre-Med track and intends to major in Biology. Aside from class, Emma participates in the Chemistry Club, Trinity Women in STEM, CAT Alliance, Animal Welfare Club, and plays French horn in the Symphonic Wind Ensemble. Emma enjoys exploring downtown San Antonio, studying with the Trinicats, and watching ocean documentaries on Netflix. Emma cannot wait to coach in Trinity’s first QBIT community!</div>
+    </div>
+	
+	<div class="coach_packet">
+    <div id="name11" class="coach_header"></div>
+    <div class="coach_photo"><img src="https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/coachesBioPics/faith_luensmann.jpg?raw=true"
+    alt="faith_luensmann.jpg"  /></div>
+    <div class="coach_name left">Faith Luensmann</div>
+    <br />
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><br /><br /><strong>Major:</strong></div>
+    <div class="coach_major">Biology</div>
+    </div>
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><strong>Zoom:</strong></div>
+    <div class="coach_major"><a href="https://virginia.zoom.us/j/4140889624">https://virginia.zoom.us/j/4140<br />889624</a></div>
+    <div class="coach_college"><span class="coach_ital">San Antonio, Texas; Class of 2023</span></div>
+    </div>
+    <div class="coach_bio">Faith Luensmann (‘23) is a rising sophomore from San Antonio, Texas. She intends to  major in Biology and is currently on the Pre-Med track. Faith is involved in multiple activities at Trinity including Cat Alliance, Reformed University Fellowship, Women in STEM, and Intramural Volleyball. (Will add and edit more later).</div>
+    </div>
+    
+    <div class="coach_packet">
+    <div id="name11" class="coach_header"></div>
+    <div class="coach_photo"><img src="https://github.com/UVAMobileDev/ONEXYS/blob/master/public/images/coachesBioPics/sarah_peacock.jpg?raw=true"
+    alt="sarah_peacock.jpg"  /></div>
+    <div class="coach_name left">Sarah Peacock</div>
+    <br />
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><br /><br /><strong>Major:</strong></div>
+    <div class="coach_major">Neuroscience and Music</div>
+    </div>
+    <div class="coach_prelim">
+    <div class="coach_major_strong"><strong>Zoom:</strong></div>
+    <div class="coach_major"><a href="https://virginia.zoom.us/j/4140889624">https://virginia.zoom.us/j/4140<br />889624</a></div>
+    <div class="coach_college"><span class="coach_ital">Beeville, Texas; Class of 2022</span></div>
+    </div>
+    <div class="coach_bio">Sarah Peacock (‘22) is a rising junior from Beeville, Texas. She is a neuroscience major and music minor. Sarah is a soprano in the Trinity Chamber Singers, a member of Dr. Matava’s vocal studio, a peer mentor for Bridge Math students, and was a peer tutor for the Science Fiction FYE. She has served on the officer boards for the National Society of Collegiate Scholars (NSCS) and the national academic honor society Alpha Lambda Delta, and she is also a member of the national leadership society Omicron Delta Kappa. Sarah enjoys writing, playing piano, and Broadway musicals. As a returning coach, Sarah is looking forward to working with the new QBIT students this year!</div>
+    </div>
+    
+    <div class="coach_veil1"></div>
+    <div class="coach_veil2"></div>
+    <div class="coach_title_shadow"></div>
+	
+    <div class="coaches_index">
+    <a href="#name1">David Izquierdo</a><br />
+    <a href="#name2">Emma Kramer</a><br />
+    <a href="#name3">Faith Luensmann</a><br />
+	<a href="#name4">Sarah Peacock</a><br />
+	</div>
+	
+    <div class="coach_title">
+    <p>Meet the</p>
+    <h1>Coaches!</h1>
+    </div>
+    <div class="coach_divider"></div>
+    <div class="coach_heading coach_whiteteam">Trinity</div>
+    </div>
+    </div>
+  </body>
+</html>
