@@ -1009,9 +1009,6 @@
 .lifeattitle h1{
 	font-size: 120px; /* Changed from 180px */
 }
-.lifeattitle-Trinity h1{
-	font-size: 100px;  /* original was 180 px */
-}
 .lifeatindex{
 	left: 10px;
 	top: 10px;
