@@ -89,6 +89,8 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
 }
 
 function homepageAdminQuery(courseID, course_title, callback) {
+    console.log("-----homepageAdminQuery course id-----")
+    console.log(courseID);
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
             mongo.getAllData(courseID, mongo_data => callback(null, mongo_data.modules));
