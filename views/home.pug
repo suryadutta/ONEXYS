@@ -123,7 +123,7 @@ block content
           br
           .clear
 
-        if(post_test_status.open && !post_test_status.locked)
+        if(post_test_status.open) 
           .module_11.module_background_00
             a.progress_box.available.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_0.png);', href='/post-test', title=post_test_status.tooltip)  Post-Test
         else

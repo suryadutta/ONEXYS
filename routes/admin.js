@@ -284,8 +284,6 @@ router.get("/modules", (req, res, next) => {
 router.post("/modules", (req, res, next) => {
   mongo.updateData(req.session.course_id, "navigation", { type: "navigation" }, { post_test: req.body.post_test_filename }, (err, result) => {
     mongo.updateData(req.session.course_id, "home", { type: "updates" }, req.body, (err, result) => {
-      console.log("/admin/modules request body:")
-      console.log(req.body)
       res.redirect("/admin");
     });
   });
