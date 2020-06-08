@@ -6,8 +6,6 @@ $(document).ready(function () {
             if ($(this).attr("edit") == "open") submit.open = $(this).is(":checked"); // Set either open or due
             else if ($(this).attr("edit") == "due") submit.due = $(this).is(":checked");
             $.post("https://" + heroku + ".herokuapp.com/admin/updateModule", submit).always((data, status) => { // This function fires after the GET req
-                console.log("moduleAJAX submit data:")
-                console.log(submit)
                 if (status != 'success') { // If unsuccessful, handle the failure
                     alert("Update failed. Try again later."); // Notify the user
                     $(this).prop("checked", !$(this).is(":checked")); // Reverse the change

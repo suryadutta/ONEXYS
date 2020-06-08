@@ -106,8 +106,6 @@ function homepageAdminQuery(courseID, course_title, callback) {
             canvas.getNextDailyYalie(courseID, callback);
         })
     ], (err, data) => {
-        console.log("homepageAdminQuery() DATA:")
-        console.log(data)
         var module_progress = data[0].value,
             post_test_status = data[0].value[1],
             leaderboard = data[1].value,
@@ -116,8 +114,6 @@ function homepageAdminQuery(courseID, course_title, callback) {
             home_links = data[2].value[2],
             students = data[3].value,
             daily_yalie = data[4].value;
-        console.log("POST TEST STATUS")
-        console.log(post_test_status)
         // Place the following code in the 2nd paramter in the callback below for
         // the post test to always be available for admins: 
         // { open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks." }
