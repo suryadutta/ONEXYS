@@ -71,6 +71,8 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("Post Test Status")
+          console.log(post_test_status)
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,

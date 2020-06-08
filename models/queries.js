@@ -121,7 +121,7 @@ function homepageAdminQuery(courseID, course_title, callback) {
         // Place the following code in the 2nd paramter in the callback below for
         // the post test to always be available for admins: 
         // { open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks." }
-        callback(module_progress, { open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks." }, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
+        callback(module_progress, post_test_status, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
     });
 }
 
