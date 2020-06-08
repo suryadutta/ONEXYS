@@ -74,7 +74,8 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
             home_vids = data[3].value[1],
             home_links = data[3].value[2],
             daily_yalie = data[4].value;
-
+        console.log("-----Masquerade Post Test Status-----")
+        console.log(post_test_status)
         function orderBadges(a, b) {
             if (a.Points < b.Points) return 1;
             if (a.Points > b.Points) return -1;
@@ -89,8 +90,6 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
 }
 
 function homepageAdminQuery(courseID, course_title, callback) {
-    console.log("-----homepageAdminQuery course id-----")
-    console.log(courseID);
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
             mongo.getAllData(courseID, mongo_data => callback(null, mongo_data.modules));
@@ -117,8 +116,8 @@ function homepageAdminQuery(courseID, course_title, callback) {
             home_links = data[2].value[2],
             students = data[3].value,
             daily_yalie = data[4].value;
-        console.log("-----post_test_status-----");
-        console.log(post_test_status);
+        console.log("-----home_updates-----");
+        console.log(home_updates);
         // Place the following code in the 2nd paramter in the callback below for
         // the post test to always be available for admins: 
         // { open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks." }
