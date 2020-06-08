@@ -106,6 +106,8 @@ function homepageAdminQuery(courseID, course_title, callback) {
             canvas.getNextDailyYalie(courseID, callback);
         })
     ], (err, data) => {
+        console.log("homepageAdminQuery() Data:");
+        console.log(data);
         var module_progress = data[0].value,
             post_test_status = data[0].value[1],
             leaderboard = data[1].value,
