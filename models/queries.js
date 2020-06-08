@@ -119,12 +119,13 @@ function homepageAdminQuery(courseID, course_title, callback) {
 
             //the code below (aside from the callback) was written to give admins the same post test view a student would have
             //if the post test is open, it will result in a different background from being shown on the home page
-            post_test_status.open = data[2].value[0].post_test;
-            post_test_status.tooltip = 'Complete all Practices and Applications in order to be eligible for the Post Test!';
+            post_test_status.open = data[2].value[0].post_test == 'true' ? true : false;
+            post_test_status.tooltip = '';
             if (post_test_status.open) {
                 post_test_status.locked = false;
             }
             else {
+                post_test_status.tooltip = 'Complete all Practices and Applications in order to be eligible for the Post Test!';
                 post_test_status.locked = true;
             }
 
