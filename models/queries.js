@@ -74,8 +74,9 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
             home_vids = data[3].value[1],
             home_links = data[3].value[2],
             daily_yalie = data[4].value;
-        console.log("-----Masquerade Post Test Status-----")
-        console.log(post_test_status)
+        
+        console.log('-----Masquerade Leaderboard-----')
+        console.log(leaderboard)
         function orderBadges(a, b) {
             if (a.Points < b.Points) return 1;
             if (a.Points > b.Points) return -1;
@@ -117,8 +118,11 @@ function homepageAdminQuery(courseID, course_title, callback) {
             students = data[3].value,
             daily_yalie = data[4].value;
 
-            //the code below (aside from the callback) was written to give admins the same post test view a student would have
-            //if the post test is open, it will result in a different background from being shown on the home page
+            console.log('-----Masquerade Leaderboard-----')
+            console.log(leaderboard)
+            // The code below (aside from the callback) was written to give admins the same post test view a student would have
+            // if the post test is open, it will result in a different background from being shown on the home page
+            // TODO: find a better way to parse the string to actual boolean
             post_test_status.open = data[2].value[0].post_test == 'true' ? true : false;
             post_test_status.tooltip = '';
             if (post_test_status.open) {
@@ -129,9 +133,6 @@ function homepageAdminQuery(courseID, course_title, callback) {
                 post_test_status.locked = true;
             }
 
-            
-        console.log("-----post_test_status-----");
-        console.log(post_test_status);
         // Place the following code in the 2nd paramter in the callback below for
         // the post test to always be available for admins: 
         // { open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks." }
