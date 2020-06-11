@@ -1165,7 +1165,8 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
     function getSections(course_title, callback) {
         function findIndexOfUser(studentIdsArrays, groupNames) {
-            for (var i = 0; i < studentIdsArrays.length; i++) {                
+            console.log(studentIdsArrays)
+            for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
                 if (index > -1 && groupNames[i] != course_title) {
                     return i;
@@ -1187,9 +1188,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                 callback(null, [], [], 0);
             } else {
                 groupNames = data.map(section => section.name);
-                studentIdsArrays = data.map((section, index) => {
-                    return section.students.map(studentInfo => studentInfo.id);
-                });
+                studentIdsArrays = data.map((section, index) => section.students.map(studentInfo => studentInfo.id));
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
