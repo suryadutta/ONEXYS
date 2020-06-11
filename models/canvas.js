@@ -1191,6 +1191,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
                 console.log(data)
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map((section, index) => {
+                    console.log(`section.students at index ${index}`)
                     if (section.students !== null) { // stop null students array from crashing the app
                         section.students.map(studentInfo => studentInfo.id)
                     }
