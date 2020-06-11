@@ -1165,10 +1165,12 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
     function getSections(course_title, callback){
         function findIndexOfUser(studentIdsArrays, groupNames) {
-            for (var i = 0; i < studentIdsArrays.length; i++) {
-                var index = studentIdsArrays[i].indexOf(parseInt(studentID));
-                if (index > -1 && groupNames[i] != course_title) {
-                    return i;
+            if (studentIdsArrays.length) {
+                for (var i = 0; i < studentIdsArrays.length; i++) {
+                    var index = studentIdsArrays[i].indexOf(parseInt(studentID));
+                    if (index > -1 && groupNames[i] != course_title) {
+                        return i;
+                    }
                 }
             }
             return -1;
