@@ -118,7 +118,7 @@ function homepageAdminQuery(courseID, course_title, callback) {
             students = data[3].value,
             daily_yalie = data[4].value;
 
-            console.log('-----Masquerade Leaderboard-----')
+            console.log('-----Admin Leaderboard-----')
             console.log(leaderboard)
             // The code below (aside from the callback) was written to give admins the same post test view a student would have
             // if the post test is open, it will result in a different background from being shown on the home page

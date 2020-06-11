@@ -1184,6 +1184,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             if (data.length<1 || config.disableLeaderboard){ //disable leaderboard until sections are made
                 callback(null,[],[],0);
             } else {
+                console.log(data)
                 groupNames = data.map(section => section.name);
                 studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
