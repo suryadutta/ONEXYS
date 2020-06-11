@@ -1190,12 +1190,15 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             } else {
                 console.log(data)
                 groupNames = data.map(section => section.name);
-                studentIdsArrays = data.map(section => {
-                    if (section.students) { // stop null students array from crashing the app
+                studentIdsArrays = data.map((section, index) => {
+                    if (section.students !== null) { // stop null students array from crashing the app
                         section.students.map(studentInfo => studentInfo.id)
                     }
-                    else return null;
+                    else {
+                        data.splice(index, 1)
+                    }
                 });
+                console.log(studentIdsArrays)
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
