@@ -1166,7 +1166,7 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
     function getSections(course_title, callback){
         function findIndexOfUser(studentIdsArrays, groupNames) {
             console.log("Student ID's Array's:")
-            console.leaderboard(studentIdsArrays)
+            console.log(studentIdsArrays)
             if (studentIdsArrays.length) {
                 for (var i = 0; i < studentIdsArrays.length; i++) {
                     var index = studentIdsArrays[i].indexOf(parseInt(studentID));
