@@ -4,7 +4,6 @@ var asyncStuff = require('async');
 var config = require('../bin/config');
 
 function getData(courseID, collection_name, callback) {
-    console.log("getData() courseID: " + courseID)
     // Use connect method to connect to the server
     var connectionURL = config.mongoURL;
     MongoClient.connect(connectionURL, function (err, client) {
