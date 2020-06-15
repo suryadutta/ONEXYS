@@ -1165,7 +1165,6 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
 
     function getSections(course_title, callback) {
         function findIndexOfUser(studentIdsArrays, groupNames) {
-            console.log(studentIdsArrays)
             for (var i = 0; i < studentIdsArrays.length; i++) {
                 var index = studentIdsArrays[i].indexOf(parseInt(studentID));
                 if (index > -1 && groupNames[i] != course_title) {
@@ -1179,16 +1178,14 @@ function getLeaderboardScores_masquerade(studentID, courseID, course_title, call
             // remove section with all students
             for (var i = 0; i < data.length; i++) {
                 if (data[i].students == null) {
-                    //if issues arise, remove the current splice and uncomment the other one
-                    //data.splice(i, 1);
-                    data.splice(i);
+                    data.splice(i, 1);
                 }
             }
             if (data.length < 1 || config.disableLeaderboard) { //disable leaderboard until sections are made
                 callback(null, [], [], 0);
             } else {
                 groupNames = data.map(section => section.name);
-                studentIdsArrays = data.map((section, index) => section.students.map(studentInfo => studentInfo.id));
+                studentIdsArrays = data.map(section => section.students.map(studentInfo => studentInfo.id));
                 studentIndex = findIndexOfUser(studentIdsArrays, groupNames);
                 callback(null, studentIdsArrays, groupNames, studentIndex);
             }
