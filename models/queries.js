@@ -5,6 +5,7 @@ var canvas = require('./canvas');
 var mongo = require('./mongo');
 
 function homepageQuery(studentID, courseID, course_title, callback) {
+    console.log("homepageQuery()")
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
             canvas.getStudentProgress(studentID, courseID, callback);
@@ -41,12 +42,13 @@ function homepageQuery(studentID, courseID, course_title, callback) {
 
         var awarded_badges = badges.filter(badge => badge.Awarded == true).sort(orderBadges);
         if (awarded_badges.length > 3) awarded_badges = awarded_badges.slice(0, 3);
-
         callback(module_progress, post_test_status, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+        console.log("homepageQuery() callback called")
     });
 }
 
 function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
+    console.log("homepageQueryMasquerade()")
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
             canvas.getStudentProgress_masquerade(studentID, courseID, callback);
@@ -75,8 +77,6 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
             home_links = data[3].value[2],
             daily_yalie = data[4].value;
         
-        console.log('-----Masquerade Leaderboard-----')
-        console.log(leaderboard)
         function orderBadges(a, b) {
             if (a.Points < b.Points) return 1;
             if (a.Points > b.Points) return -1;
@@ -87,10 +87,12 @@ function homepageQueryMasquerade(studentID, courseID, course_title, callback) {
         if (awarded_badges.length > 3) awarded_badges = awarded_badges.slice(0, 3);
 
         callback(module_progress, post_test_status, score, awarded_badges, leaderboard, my_team, home_updates, home_vids, home_links, daily_yalie);
+        console.log("homepageQueryMasquerade() callback called")
     });
 }
 
 function homepageAdminQuery(courseID, course_title, callback) {
+    console.log("homepageAdminQuery()")
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
             mongo.getAllData(courseID, mongo_data => callback(null, mongo_data.modules));
@@ -118,8 +120,6 @@ function homepageAdminQuery(courseID, course_title, callback) {
             students = data[3].value,
             daily_yalie = data[4].value;
 
-            console.log('-----Admin Leaderboard-----')
-            console.log(leaderboard)
             // The code below (aside from the callback) was written to give admins the same post test view a student would have
             // if the post test is open, it will result in a different background from being shown on the home page
             // TODO: find a better way to parse the string to actual boolean
@@ -137,6 +137,7 @@ function homepageAdminQuery(courseID, course_title, callback) {
         // the post test to always be available for admins: 
         // { open: true, locked: false, tooltip: "The Post Test is always open for Admins for testing purposes. Masquerade as a student to see how it normally looks." }
         callback(module_progress, post_test_status, leaderboard, home_updates, home_vids, home_links, students, daily_yalie);
+        console.log("homepageAdminQuery() callback called")
     });
 }
 

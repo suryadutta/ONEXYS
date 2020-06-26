@@ -4,6 +4,7 @@ var config = require("../bin/config");
 var queries = require("../models/queries");
 
 router.use("/", (req, res, next) => {
+  console.log("getting home page")
   //console.log("Request session: " + req.session);
   //console.log("Course title: " + req.session.course_title);
 
@@ -16,9 +17,14 @@ router.use("/", (req, res, next) => {
 
   var is_physics = Boolean(courseID == 48039);
   //var is_physics = false;
-
+  console.log("request session:")
+  console.log(req.session)
+  console.log("masquerade status:")
+  console.log(req.query.masquerade)
   if (req.session.admin) {
+    console.log("user is admin")
     if (req.query.masquerade) {
+      console.log('user is masquerading')
       queries.homepageQueryMasquerade(
         parseInt(req.query.masquerade),
         courseID,
@@ -35,6 +41,7 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie
         ) => {
+          console.log("rendering home page")
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,
@@ -71,6 +78,7 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("rendering home page")
           res.render("home", {
             title: "Home | " + config.herokuAppName,
             courseID,
@@ -115,6 +123,7 @@ router.use("/", (req, res, next) => {
         home_links,
         daily_yalie
       ) => {
+        console.log("rendering home page")
         if (req.session.lucky){
           console.log("Hackfix!");
           score += parseInt(req.session.lucky.point_value);
