@@ -8,21 +8,32 @@ function homepageQuery(studentID, courseID, course_title, callback) {
     console.log("homepageQuery()")
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
+            console.log("getStudentProgress()")
             canvas.getStudentProgress(studentID, courseID, callback);
+            console.log("getStudentProgress() complete")
         }),
         asyncStuff.reflect(callback => {
+            console.log("getIndScoreAndBadges()")
             canvas.getIndScoreAndBadges(studentID, courseID, callback);
+            console.log("getIndScoreAndBadges() complete")
         }),
         asyncStuff.reflect(callback => {
+            console.log("getLeaderboardScores()")
             canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
+            console.log("getLeaderboardScores() complete")
         }),
         asyncStuff.reflect(callback => {
+            console.log("getHomeContent()")
             mongo.getHomeContent(courseID, callback);
+            console.log("getHomeContent() complete")
         }),
         asyncStuff.reflect(callback => {
+            console.log("getNextDailyYalie()")
             canvas.getNextDailyYalie(courseID, callback);
+            console.log("getNextDailyYalie() complete")
         })
     ], (err, data) => {
+        console.log("asyncStuff.parallel() complete, beginning callback...")
         var module_progress = data[0].value[0],
             post_test_status = data[0].value[1],
             score = data[1].value[0],
