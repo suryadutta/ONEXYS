@@ -457,6 +457,7 @@ function getIndScoreAndBadges(studentID, courseID, callback) { // Get score and 
     computeScoreAndBadges(studentID, courseID, function (err, totalPoints, badges) { //compute scores
         updateCanvas(studentID, courseID, totalPoints, badges, callback); //update Canvas
     });
+    console.log("getIndScoreAndBadges() complete")
 }
 
 function getStudentProgress(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
@@ -518,6 +519,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
             }
         });
     });
+    console.log("getStudentProgress() complete")
 }
 
 function getLeaderboardScores(studentID, courseID, course_title, callback) { // get all leaderboard scores
@@ -612,6 +614,7 @@ function getLeaderboardScores(studentID, courseID, course_title, callback) { // 
             });
         })
     }
+    console.log("getLeaderboardScores() complete")
 }
 
 function getAdminLeaderboardScores(courseID, course_title, callback) {
@@ -736,6 +739,7 @@ function getNextDailyYalie(courseID, callback) {
         });
 
     });
+    console.log("getNextDailyYalie() complete")
 }
 
 function computeScoreAndBadges_masquerade(studentID, courseID, callback) { // Return score and badges

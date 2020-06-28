@@ -8,29 +8,29 @@ function homepageQuery(studentID, courseID, course_title, callback) {
     console.log("homepageQuery()")
     asyncStuff.parallel([
         asyncStuff.reflect(callback => {
-            console.log("getStudentProgress()")
+            console.log("async getStudentProgress()")
             canvas.getStudentProgress(studentID, courseID, callback);
-            console.log("getStudentProgress() complete")
+            console.log("async getStudentProgress() complete")
         }),
         asyncStuff.reflect(callback => {
-            console.log("getIndScoreAndBadges()")
+            console.log("async getIndScoreAndBadges()")
             canvas.getIndScoreAndBadges(studentID, courseID, callback);
-            console.log("getIndScoreAndBadges() complete")
+            console.log("async getIndScoreAndBadges() complete")
         }),
         asyncStuff.reflect(callback => {
-            console.log("getLeaderboardScores()")
+            console.log("async getLeaderboardScores()")
             canvas.getLeaderboardScores(studentID, courseID, course_title, callback);
-            console.log("getLeaderboardScores() complete")
+            console.log("async getLeaderboardScores() complete")
         }),
         asyncStuff.reflect(callback => {
-            console.log("getHomeContent()")
+            console.log("async getHomeContent()")
             mongo.getHomeContent(courseID, callback);
-            console.log("getHomeContent() complete")
+            console.log("async getHomeContent() complete")
         }),
         asyncStuff.reflect(callback => {
-            console.log("getNextDailyYalie()")
+            console.log("async getNextDailyYalie()")
             canvas.getNextDailyYalie(courseID, callback);
-            console.log("getNextDailyYalie() complete")
+            console.log("async getNextDailyYalie() complete")
         })
     ], (err, data) => {
         console.log("asyncStuff.parallel() complete, beginning callback...")

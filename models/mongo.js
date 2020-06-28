@@ -91,6 +91,7 @@ function getHomeContent(courseID, callback) {
             return 1;
         });
         callback(err, home_updates, home_videos, home_links);
+        console.log("getHomeContent() complete")
     });
 }
 
