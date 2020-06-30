@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
-
+require('newrelic');
 var express = require('express');
 var path = require('path');
 var config = require('./bin/config');
