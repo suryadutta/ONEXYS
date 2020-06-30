@@ -33,6 +33,8 @@ function homepageQuery(studentID, courseID, course_title, callback) {
             console.log("async getNextDailyYalie() complete")
         })
     ], (err, data) => {
+        console.log('HOMEPAGE QUERY ERROR')
+        console.log(err)
         console.log("asyncStuff.parallel() complete, beginning callback...")
         var module_progress = data[0].value[0],
             post_test_status = data[0].value[1],
