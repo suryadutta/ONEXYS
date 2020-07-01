@@ -77,6 +77,7 @@ var checkAdmin = function(req, res, next) {
 
 //middleware to update course information
 var updateCookies = function(req, res, next){
+    console.log("updateCookies()")
     // Looks for passed url parameter 'course-id', updates cookie appropriately
     // Keeps admin pages set to proper course across multiple tabs
     if(typeof req.params["course-id"] !== 'undefined') {
@@ -101,6 +102,7 @@ var updateCookies = function(req, res, next){
         console.log('Update Cookies ERROR: COOKIES NOT SET');
         res.status(500).render('cookieError');
     } else {
+        console.log("updateCookies() next()")
         next();
     }
 };
@@ -113,6 +115,7 @@ var checkUser = function(req, res, next) {
     } else {
         req.connection.encrypted = true;
         if (req.query.login_success=='1') {
+            console.log("checkUser() logging in. next()")
             next();
         } else {
             provider.valid_request(req, function(err, is_valid) {
@@ -136,8 +139,10 @@ var checkUser = function(req, res, next) {
                                 redirect_uri: config.redirectURL,
                                 state: String(req.session.user_id),
                             });
+                            console.log("auth token generated")
                             res.redirect(authorizationUri);
                         } else {
+                            console.log("auth token exists, next()")
                             next(); // auth token exists
                         }
                     });

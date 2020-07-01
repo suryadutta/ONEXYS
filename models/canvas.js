@@ -1306,6 +1306,7 @@ function getGradebook(courseID, courseName, callback) {
 }
 
 var awardLuckies = function (req, res, next) {
+    console.log("awardLuckies()")
     var d = new Date();
     var studentID = parseInt(req.session.user_id);
     req.session.lucky = false;
@@ -1329,6 +1330,7 @@ var awardLuckies = function (req, res, next) {
     });
     // Override the value of lucky
     // req.session.lucky = {point_value: 500, image_name: "luckycavman1.png"};
+    console.log("awardLuckies() complete")
     next();
 }
 
