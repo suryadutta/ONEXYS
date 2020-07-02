@@ -49,6 +49,7 @@ var daily_task_url = (courseID) => {
 
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
+    console.log("Get ", url);
     auth.authTokenQueue.push(userID, function (auth_token) {
         request.get({
             url: url,
@@ -56,6 +57,7 @@ function getRequest(url, userID, callback) {
                 "Authorization": " Bearer " + auth_token,
             },
         }, function (error, response, body) {
+            console.log("Get ", url, " Done");
             callback(null, JSON.parse(body));
         });
     });
