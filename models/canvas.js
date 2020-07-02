@@ -441,16 +441,17 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
 }
 
 function updateCanvas(studentID, courseID, totalPoints, badges, callback) { // Update Canvas custom points column
-    get_update_url(courseID, function (update_url) {
-        update_url = update_url + '/' + studentID;
-        putAdminRequest(update_url, {
-            column_data: {
-                content: totalPoints.toString()
-            }
-        }, function (err, body) {
-            callback(null, totalPoints, badges);
-        });
-    });
+    callback(null, totalPoints, badges);
+    //get_update_url(courseID, function (update_url) {
+       //update_url = update_url + '/' + studentID;
+        //putAdminRequest(update_url, {
+           //column_data: {
+                //content: totalPoints.toString()
+           // }
+      //  }, function (err, body) {
+            //callback(null, totalPoints, badges);
+       // });
+    //});
 }
 
 function getIndScoreAndBadges(studentID, courseID, callback) { // Get score and badge info for user
