@@ -166,7 +166,9 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 return -1;
             return 0;
         }
-
+        callback(null, totalPoints, badges);
+        return;
+        
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, data) {
             if (err) {
                 console.log(err);
