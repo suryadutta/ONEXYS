@@ -50,6 +50,8 @@ var daily_task_url = (courseID) => {
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
     console.log("Get ", url);
+    callback(null, null);
+    return;
     auth.authTokenQueue.push(userID, function (auth_token) {
         request.get({
             url: url,
