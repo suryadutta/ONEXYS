@@ -468,6 +468,10 @@ function getIndScoreAndBadges(studentID, courseID, callback) { // Get score and 
 
 function getStudentProgress(studentID, courseID, callback) { // Get student progress for quizzes and tests (checkboxes)
     mongo.getAllData(courseID, function (mongo_data) {
+        let moduleProgress = mongo_data.modules;
+        var postTest = { open: (mongo_data.home.find(document => document.type == 'updates').post_test == 'true'), locked: false }; // If the instructors have opened the post test, start it out as true.
+        callback(null, moduleProgress, postTest);
+        return;
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, user_assignments) {
             moduleProgress = mongo_data.modules;
             if (err) {
