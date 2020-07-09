@@ -67,9 +67,7 @@ router.post('/updateModule', (req, res) => {
   }
 });
 
-//
 router.use("/liveview", (req, res, next) => {
-  console.log("Loading liveview");
   mongo.getModules(req.session.course_id, (err, modulesInfo, post_test, post_test_filename, post_test_button_background, pre_test_button_background) => {
     res.render("admin/liveview", {
       title: "Live View",
@@ -77,7 +75,8 @@ router.use("/liveview", (req, res, next) => {
       course_id: req.session.course_id,
       user_id: req.session.user_id,
       modules: modulesInfo,
-      test_app: config.testApp
+      test_app: config.testApp,
+      app_name: config.herokuAppName
     });
   });
 });
