@@ -689,6 +689,8 @@ router.post("/lucky/add", (req, res, next) => {
 
 router.get('/gradebook', (req, res, next) => {
   canvas.getGradebook(req.session.course_id, req.session.course_title, (gradebook_data) => {
+    console.log("Gradebook data:")
+    console.log(gradebook_data)
     res.render("admin/gradebook", {
       title: 'Unified Gradebook',
       course_title: req.session.course_title,
