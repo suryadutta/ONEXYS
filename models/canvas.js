@@ -104,8 +104,8 @@ function getAdminRequest(url, callback) {
             "Authorization": " Bearer " + config.canvasAdminAuthToken
         },
     }, function (error, response, body) {
-        // console.log("getAdminRequest() body:")
-        // console.log(body)
+        console.log("getAdminRequest() body:")
+        console.log(body)
         callback(null, JSON.parse(body));
     });
 } //admin GET request
