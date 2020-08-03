@@ -49,9 +49,7 @@ app.use(session({
     path: '/',
     ephemeral: false,
     httpOnly: true,
-    secure: true,
-    secureProxy: true,
-    sameSite: 'none'
+    sameSite: 'none; secure'
   }
 }));
 
