@@ -175,6 +175,16 @@ function getCourseInfo(selectorDict, callback) {
     });
 }
 
+//Pull gradebook data down from db
+function getGradebook(courseID, courseName, callback) {
+    //TODO use current getData method to pull down gradebook data from mongo
+}
+
+//Update gradebook data
+function updateGradebook(courseID, collection_name, update_index, update_data, callback) {
+    //TODO use current updateData method to update data in mongo
+}
+
 module.exports = {
     getData,
     getAllData,
@@ -188,4 +198,6 @@ module.exports = {
     getModule,
     getDailyTasks,
     getCourseInfo,
+    getGradebook,
+    updateGradebook
 }
