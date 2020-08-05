@@ -167,10 +167,16 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 return -1;
             return 0;
         }
-        callback(null, totalPoints, badges);
-        return;
-        
+        // mongo.getStudentData(courseID, 'dailies', (err, data) => {
+        //     if (err) throw err;
+        //     console.log(courseID)
+        //     console.log(data);
+        // });
+        // callback(null, totalPoints, badges);
+        // return;
+
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, data) {
+            console.log(data)
             if (err) {
                 console.log(err);
                 callback(err, 0, badges);
@@ -437,7 +443,20 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                     awardBadge(31);
                 }
 
-
+                console.log("getRequest() totalPoints:")
+                console.log(totalPoints)
+                console.log("getRequest() badges:")
+                console.log(badges)
+                mongo.updateStudentData(courseID, {
+                    _id: studentID
+                },
+                {
+                    totalPoints: totalPoints, 
+                    badges: badges
+                }, (err, studentData) => {
+                    if (err) throw console.log(err);
+                    console.log(studentData)
+                })
                 callback(null, totalPoints, badges);
             }
 
@@ -448,14 +467,14 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
 function updateCanvas(studentID, courseID, totalPoints, badges, callback) { // Update Canvas custom points column
     callback(null, totalPoints, badges);
     //get_update_url(courseID, function (update_url) {
-       //update_url = update_url + '/' + studentID;
-        //putAdminRequest(update_url, {
-           //column_data: {
-                //content: totalPoints.toString()
-           // }
-      //  }, function (err, body) {
-            //callback(null, totalPoints, badges);
-       // });
+    //update_url = update_url + '/' + studentID;
+    //putAdminRequest(update_url, {
+    //column_data: {
+    //content: totalPoints.toString()
+    // }
+    //  }, function (err, body) {
+    //callback(null, totalPoints, badges);
+    // });
     //});
 }
 

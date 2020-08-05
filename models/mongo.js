@@ -175,14 +175,18 @@ function getCourseInfo(selectorDict, callback) {
     });
 }
 
-//Pull gradebook data down from db
-function getGradebook(courseID, courseName, callback) {
-    //TODO use current getData method to pull down gradebook data from mongo
+//Pull student data down from db
+function getStudentData(courseID, callback) {
+    getData(courseID, 'studentScoreAndBadges', callback)
 }
 
-//Update gradebook data
-function updateGradebook(courseID, collection_name, update_index, update_data, callback) {
-    //TODO use current updateData method to update data in mongo
+//Update student data
+function updateStudentData(courseID, update_index, update_data, callback) {
+    updateData(courseID, 'studentScoreAndBadges', update_index, update_data, callback)
+}
+
+function insertStudentData(courseID, data, callback) {
+    insertData(courseID, 'studentScoreAndBadges', data, callback)
 }
 
 module.exports = {
@@ -198,6 +202,7 @@ module.exports = {
     getModule,
     getDailyTasks,
     getCourseInfo,
-    getGradebook,
-    updateGradebook
+    getStudentData,
+    updateStudentData,
+    insertStudentData
 }
