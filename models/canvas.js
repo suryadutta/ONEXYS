@@ -50,16 +50,21 @@ var daily_task_url = (courseID) => {
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
     console.log("Get ", url);
-    console.log("callback", callback);
     auth.authTokenQueue.push(userID, function (auth_token) {
         request.get({
-            url: url,
+            url: url,//'http://httpstat.us/200?sleep=5001', //url for testing timeouts. Sleep parameter is the time before a response is sent.
+            timeout: 5000,
             headers: {
                 "Authorization": " Bearer " + auth_token,
             },
         }, function (error, response, body) {
-            console.log("Get ", url, " Done");
-            callback(null, JSON.parse(body));
+            if (error) {
+                if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
+                    console.log('canvas request timed out at: ', url)
+                    callback(error, null)
+                }
+            }
+            else callback(null, JSON.parse(body));
         });
     });
 } //user GET request
@@ -176,10 +181,18 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
         // return;
 
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, data) {
-            console.log(data)
+            //console.log(data)
             if (err) {
-                console.log(err);
-                callback(err, 0, badges);
+                //console.log(err);
+                mongo.getStudentData(courseID, (mongoErr, data) => {
+                    if (mongoErr) {
+                        callback(err, 0, badges);
+                    }
+                    else {
+                        let studentData = data.find(student => student._id == studentID);
+                        callback(null, studentData.totalPoints, studentData.badges)
+                    }
+                })
             } else if (data.status == "unauthorized") {
                 console.log('User unauthorized');
                 callback('User unauthorized', 0, badges);
@@ -450,13 +463,13 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 mongo.updateStudentData(courseID, {
                     _id: studentID
                 },
-                {
-                    totalPoints: totalPoints, 
-                    badges: badges
-                }, (err, studentData) => {
-                    if (err) throw console.log(err);
-                    console.log(studentData)
-                })
+                    {
+                        totalPoints: totalPoints,
+                        badges: badges
+                    }, (err, response) => {
+                        if (err) throw err;
+                        //console.log(response)
+                    })
                 callback(null, totalPoints, badges);
             }
 
