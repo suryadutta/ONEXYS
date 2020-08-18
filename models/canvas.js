@@ -52,8 +52,8 @@ function getRequest(url, userID, callback) {
     console.log("Get ", url);
     auth.authTokenQueue.push(userID, function (auth_token) {
         request.get({
-            url: url,//'http://httpstat.us/200?sleep=5001', //url for testing timeouts. Sleep parameter is the time before a response is sent.
-            timeout: 5000,
+            url: url,//'http://httpstat.us/200?sleep=15000', //url for testing timeouts. Sleep parameter is the time before a response is sent.
+            timeout: 10000,
             headers: {
                 "Authorization": " Bearer " + auth_token,
             },
@@ -61,6 +61,10 @@ function getRequest(url, userID, callback) {
             if (error) {
                 if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
                     console.log('canvas request timed out at: ', url)
+                    callback(error, null)
+                }
+                else {
+                    console.log('ERROR: ', error)
                     callback(error, null)
                 }
             }
@@ -461,7 +465,7 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                         totalPoints: totalPoints,
                         badges: badges
                     }, (err, response) => {
-                        if (err) console.log(err);
+                        if (err) throw err;
                         if (response.matchedCount === 0) { //if there is no student in mongo yet
                             mongo.insertStudentData(courseID, //insert student badges and total points
                                 {
