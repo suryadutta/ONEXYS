@@ -101,8 +101,6 @@ function putRequest(url, userID, parameters, callback) {
 
 function getAdminRequest(url, callback) {
     url = add_page_number(url);
-    console.log("URL")
-    console.log(url)
     request.get({
         url: url,
         headers: {
@@ -179,11 +177,10 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
         // });
         // callback(null, totalPoints, badges);
         // return;
-
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, data) {
-            //console.log(data)
+            //console.log('get asignment user data: ')
+            //console.log(data);
             if (err) {
-                //console.log(err);
                 mongo.getStudentData(courseID, (mongoErr, data) => {
                     if (mongoErr) {
                         callback(err, 0, badges);
@@ -455,21 +452,27 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 if (reflections_done >= 10) {
                     awardBadge(31);
                 }
-
-                console.log("getRequest() totalPoints:")
-                console.log(totalPoints)
-                console.log("getRequest() badges:")
-                console.log(badges)
-                mongo.updateStudentData(courseID, {
+                //post badges and points to mongo
+                mongo.updateStudentData(courseID, 
+                    {
                     _id: studentID
-                },
+                    },
                     {
                         totalPoints: totalPoints,
                         badges: badges
                     }, (err, response) => {
-                        if (err) throw err;
-                        //console.log(response)
-                    })
+                        if (err) console.log(err);
+                        if (response.matchedCount === 0) { //if there is no student in mongo yet
+                            mongo.insertStudentData(courseID, //insert student badges and total points
+                                {
+                                    _id: studentID,
+                                    totalPoints: totalPoints,
+                                    badges: badges
+                                }, (insertErr, insertRes) => {
+                                if (insertErr) throw err;
+                            });
+                        };
+                    });
                 callback(null, totalPoints, badges);
             }
 
