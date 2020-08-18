@@ -50,16 +50,25 @@ var daily_task_url = (courseID) => {
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
     console.log("Get ", url);
-    console.log("callback", callback);
     auth.authTokenQueue.push(userID, function (auth_token) {
         request.get({
-            url: url,
+            url: url,//'http://httpstat.us/200?sleep=15000', //url for testing timeouts. Sleep parameter is the time before a response is sent.
+            timeout: 10000,
             headers: {
                 "Authorization": " Bearer " + auth_token,
             },
         }, function (error, response, body) {
-            console.log("Get ", url, " Done");
-            callback(null, JSON.parse(body));
+            if (error) {
+                if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
+                    console.log('canvas request timed out at: ', url)
+                    callback(error, null)
+                }
+                else {
+                    console.log('ERROR: ', error)
+                    callback(error, null)
+                }
+            }
+            else callback(null, JSON.parse(body));
         });
     });
 } //user GET request
@@ -96,8 +105,6 @@ function putRequest(url, userID, parameters, callback) {
 
 function getAdminRequest(url, callback) {
     url = add_page_number(url);
-    console.log("URL")
-    console.log(url)
     request.get({
         url: url,
         headers: {
@@ -167,13 +174,26 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 return -1;
             return 0;
         }
-        callback(null, totalPoints, badges);
-        return;
-        
+        // mongo.getStudentData(courseID, 'dailies', (err, data) => {
+        //     if (err) throw err;
+        //     console.log(courseID)
+        //     console.log(data);
+        // });
+        // callback(null, totalPoints, badges);
+        // return;
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, data) {
+            //console.log('get asignment user data: ')
+            //console.log(data);
             if (err) {
-                console.log(err);
-                callback(err, 0, badges);
+                mongo.getStudentData(courseID, (mongoErr, data) => {
+                    if (mongoErr) {
+                        callback(err, 0, badges);
+                    }
+                    else {
+                        let studentData = data.find(student => student._id == studentID);
+                        callback(null, studentData.totalPoints, studentData.badges)
+                    }
+                })
             } else if (data.status == "unauthorized") {
                 console.log('User unauthorized');
                 callback('User unauthorized', 0, badges);
@@ -436,8 +456,27 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 if (reflections_done >= 10) {
                     awardBadge(31);
                 }
-
-
+                //post badges and points to mongo
+                mongo.updateStudentData(courseID, 
+                    {
+                    _id: studentID
+                    },
+                    {
+                        totalPoints: totalPoints,
+                        badges: badges
+                    }, (err, response) => {
+                        if (err) throw err;
+                        if (response.matchedCount === 0) { //if there is no student in mongo yet
+                            mongo.insertStudentData(courseID, //insert student badges and total points
+                                {
+                                    _id: studentID,
+                                    totalPoints: totalPoints,
+                                    badges: badges
+                                }, (insertErr, insertRes) => {
+                                if (insertErr) throw err;
+                            });
+                        };
+                    });
                 callback(null, totalPoints, badges);
             }
 
@@ -448,14 +487,14 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
 function updateCanvas(studentID, courseID, totalPoints, badges, callback) { // Update Canvas custom points column
     callback(null, totalPoints, badges);
     //get_update_url(courseID, function (update_url) {
-       //update_url = update_url + '/' + studentID;
-        //putAdminRequest(update_url, {
-           //column_data: {
-                //content: totalPoints.toString()
-           // }
-      //  }, function (err, body) {
-            //callback(null, totalPoints, badges);
-       // });
+    //update_url = update_url + '/' + studentID;
+    //putAdminRequest(update_url, {
+    //column_data: {
+    //content: totalPoints.toString()
+    // }
+    //  }, function (err, body) {
+    //callback(null, totalPoints, badges);
+    // });
     //});
 }
 
