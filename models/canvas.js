@@ -52,7 +52,7 @@ function getRequest(url, userID, callback) {
     console.log("Get ", url);
     auth.authTokenQueue.push(userID, function (auth_token) {
         request.get({
-            url: 'http://httpstat.us/200?sleep=15000', //url for testing timeouts. Sleep parameter is the time before a response is sent.
+            url: url,//'http://httpstat.us/200?sleep=15000', //url for testing timeouts. Sleep parameter is the time before a response is sent.
             timeout: 10000,
             headers: {
                 "Authorization": " Bearer " + auth_token,
