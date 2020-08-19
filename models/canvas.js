@@ -60,7 +60,7 @@ function getRequest(url, userID, callback) {
         }, function (error, response, body) {
             if (error) {
                 if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
-                    console.log('canvas request timed out at: ', url)
+                    console.log('Canvas request timed out at: ', url)
                     callback(error, null)
                 }
                 else {
@@ -174,18 +174,14 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                 return -1;
             return 0;
         }
-        // mongo.getStudentData(courseID, 'dailies', (err, data) => {
-        //     if (err) throw err;
-        //     console.log(courseID)
-        //     console.log(data);
-        // });
         // callback(null, totalPoints, badges);
         // return;
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, data) {
             //console.log('get asignment user data: ')
             //console.log(data);
             if (err) {
-                mongo.getStudentData(courseID, (mongoErr, data) => {
+                //rather than relying on Canvas, get data from Mongo
+                mongo.getStudentData(courseID, 'studentScoreAndBadges', (mongoErr, data) => {
                     if (mongoErr) {
                         callback(err, 0, badges);
                     }
@@ -457,7 +453,7 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                     awardBadge(31);
                 }
                 //post badges and points to mongo
-                mongo.updateStudentData(courseID, 
+                mongo.updateStudentData(courseID, 'studentScoreAndBadges',
                     {
                     _id: studentID
                     },
@@ -467,7 +463,7 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                     }, (err, response) => {
                         if (err) throw err;
                         if (response.matchedCount === 0) { //if there is no student in mongo yet
-                            mongo.insertStudentData(courseID, //insert student badges and total points
+                            mongo.insertStudentData(courseID, 'studentScoreAndBadges', //insert student badges and total points
                                 {
                                     _id: studentID,
                                     totalPoints: totalPoints,
@@ -509,13 +505,21 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
     mongo.getAllData(courseID, function (mongo_data) {
         let moduleProgress = mongo_data.modules;
         var postTest = { open: (mongo_data.home.find(document => document.type == 'updates').post_test == 'true'), locked: false }; // If the instructors have opened the post test, start it out as true.
-        callback(null, moduleProgress, postTest);
-        return;
+        // callback(null, moduleProgress, postTest);
+        // return;
         getRequest(assignment_user_url(studentID, courseID), studentID, function (err, user_assignments) {
             moduleProgress = mongo_data.modules;
             if (err) {
-                console.log(err);
-                callback(null, moduleProgress, false);
+                //rather than relying on Canvas, get data from Mongo
+                mongo.getStudentData(courseID, 'studentProgress', (mongoErr, data) => {
+                    if (mongoErr) {
+                        callback(err, moduleProgress, postTest);
+                    }
+                    else {
+                        let studentProgress = data.find(student => student._id == studentID);
+                        callback(null, studentProgress.moduleProgress, studentProgress.postTest)
+                    }
+                });
             } else if (user_assignments.status == "unauthorized") {
                 console.log('User unauthorized');
                 callback(null, moduleProgress, false);
@@ -563,7 +567,27 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                     }
                 }
                 if (postTest.locked) postTest.tooltip = "Complete all Practices and Applications in order to be eligible for the Post Test!";
-                console.log(postTest);
+                //post student data to mongo
+                mongo.updateStudentData(courseID, 'studentProgress',
+                    {
+                    _id: studentID
+                    },
+                    {
+                        postTest: postTest,
+                        moduleProgress: moduleProgress
+                    }, (err, response) => {
+                        if (err) throw err;
+                        if (response.matchedCount === 0) { //if there is no student in mongo yet
+                            mongo.insertStudentData(courseID, 'studentProgress', //insert student data
+                                {
+                                    _id: studentID,
+                                    postTest: postTest,
+                                    moduleProgress: moduleProgress
+                                }, (insertErr, insertRes) => {
+                                if (insertErr) throw err;
+                            });
+                        };
+                    });
                 callback(null, moduleProgress, postTest);
             }
         });
