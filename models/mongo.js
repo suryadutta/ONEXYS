@@ -176,17 +176,17 @@ function getCourseInfo(selectorDict, callback) {
 }
 
 //Pull student data down from db
-function getStudentData(courseID, callback) {
-    getData(courseID, 'studentScoreAndBadges', callback)
+function getStudentData(courseID, collection, callback) {
+    getData(courseID, collection, callback)
 }
 
 //Update student data
-function updateStudentData(courseID, update_index, update_data, callback) {
-    updateData(courseID, 'studentScoreAndBadges', update_index, update_data, callback)
+function updateStudentData(courseID, collection, update_index, update_data, callback) {
+    updateData(courseID, collection, update_index, update_data, callback)
 }
 
-function insertStudentData(courseID, data, callback) {
-    insertData(courseID, 'studentScoreAndBadges', data, callback)
+function insertStudentData(courseID, collection, data, callback) {
+    insertData(courseID, collection, data, callback)
 }
 
 module.exports = {
