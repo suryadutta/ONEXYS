@@ -189,6 +189,7 @@ function computeScoreAndBadges(studentID, courseID, callback) { // Return score 
                         let studentData = data.find(student => student._id == studentID);
                         callback(null, studentData.totalPoints, studentData.badges)
                     }
+                    return;
                 })
             } else if (data.status == "unauthorized") {
                 console.log('User unauthorized');
@@ -519,6 +520,7 @@ function getStudentProgress(studentID, courseID, callback) { // Get student prog
                         let studentProgress = data.find(student => student._id == studentID);
                         callback(null, studentProgress.moduleProgress, studentProgress.postTest)
                     }
+                    return;
                 });
             } else if (user_assignments.status == "unauthorized") {
                 console.log('User unauthorized');
