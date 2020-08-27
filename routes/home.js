@@ -17,10 +17,7 @@ router.use("/", (req, res, next) => {
 
   var is_physics = Boolean(courseID == 48039);
   //var is_physics = false;
-  console.log("request session:")
-  console.log(req.session)
-  console.log("masquerade status:")
-  console.log(req.query.masquerade)
+  
   if (req.session.admin) {
     console.log("user is admin")
     if (req.query.masquerade) {

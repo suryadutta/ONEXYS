@@ -50,23 +50,28 @@ var daily_task_url = (courseID) => {
 function getRequest(url, userID, callback) {
     url = add_page_number(url);
     console.log("Get ", url);
-    auth.authTokenQueue.push(userID, function (auth_token) {
+    auth.authTokenQueue.push(userID, function (authErr, auth_token) {
         request.get({
-            url: url,//'http://httpstat.us/200?sleep=15000', //url for testing timeouts. Sleep parameter is the time before a response is sent.
+            url: url, //'http://httpstat.us/200?sleep=15000', //url for testing timeouts. Sleep parameter is the time before a response is sent.
             timeout: 10000,
             headers: {
                 "Authorization": " Bearer " + auth_token,
             },
         }, function (error, response, body) {
-            if (error) {
-                if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
+            console.log('AUTH TOKEN ERROR: ', authErr)
+            if (error) { // make sure error is truthy before testing for error.code
+                if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') { //timeout codes
                     console.log('Canvas request timed out at: ', url)
                     callback(error, null)
                 }
-                else {
+                else { //other errors
                     console.log('ERROR: ', error)
                     callback(error, null)
                 }
+            }
+            else if (authErr) { //auth token related errors
+                console.log("Authentication Error: ", authErr);
+                callback(authErr, null)
             }
             else callback(null, JSON.parse(body));
         });

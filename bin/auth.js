@@ -2,6 +2,7 @@ var express = require('express');
 var config = require('./config');
 var request = require('request');
 var Queue = require('better-queue');
+var path = require('path');
 
 var lti = require('ims-lti');
 var RedisNonceStore = require('../node_modules/ims-lti/lib/redis-nonce-store.js');
@@ -38,8 +39,13 @@ var authTokenQueue = new Queue(function(user_id,callback){
   redis_client.get('token_'+String(user_id), async function(err, token_string) {
     if (err){
       console.log(err);
-      callback(false);
-    } else {
+      callback(err, null);
+    } 
+    else if (user_id === "$Canvas.user.id") {
+        console.log('ERROR: Problem setting user ID')
+        callback('ERROR: Problem setting user ID', null);
+    }
+    else {
       token_obj = JSON.parse(token_string);
       let accessToken = await oauth2.accessToken.create(token_obj.token);
       // Check if the token is expired. If expired it is refreshed.
@@ -53,13 +59,13 @@ var authTokenQueue = new Queue(function(user_id,callback){
           accessToken.token.refresh_token = refresh_token;
           // save new access token to Redis store
           redis_client.set('token_'+String(user_id), JSON.stringify(accessToken));
-          callback(accessToken.token.access_token)
+          callback(null, accessToken.token.access_token)
         } catch (error) {
           console.log('Error refreshing access token: ', error.message);
-          callback(false);
+          callback(error, null);
         }
       } else {
-        callback(accessToken.token.access_token);
+        callback(null, accessToken.token.access_token);
       }
     }
   });
@@ -109,10 +115,16 @@ var updateCookies = function(req, res, next){
 
 //middleware to check user and launch lti
 var checkUser = function(req, res, next) {
+    console.log('user_id: ', req.session.user_id)
     if (typeof(req.session.course_id)!='string'){
         console.log('Check User ERROR: COOKIES NOT SET');
         res.status(500).render('cookieError');
-    } else {
+    } 
+    else if (req.session.user_id === "$Canvas.user.id"){
+        console.log('Check User ERROR: PROBLEM WITH USER ID')
+        res.status(500).render('cookieError');
+    }
+    else {
         req.connection.encrypted = true;
         if (req.query.login_success=='1') {
             console.log("checkUser() logging in. next()")
