@@ -1,0 +1,92 @@
+extends ../layout
+
+block content
+
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Confirm changes for ' + course_title + '?'
+    hr
+
+    div(class='badge_container')
+      .badge_descriptor.badge_box
+        h3=badge.Title
+        p=badge.Description
+      .badge_points.badge_box
+        p=badge.Points
+      .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.UnearnedURL+')')
+      .badge_label.badge_box
+        h3=badge.Portrait
+        p=badge.PortraitDescription
+
+    div(class='badge_container completed')
+      .badge_descriptor.badge_box
+        h3=badge.Title
+        p=badge.Description
+      .badge_points.badge_box
+        p=badge.Points
+      .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
+      .badge_portrait.front_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedURL+')')
+      .badge_label.badge_box
+        h3=badge.Portrait
+        p=badge.PortraitDescription
+
+    div(class='badge_container completed')
+      .badge_descriptor.badge_box
+        h3=badge.Title
+        p=badge.Description
+      .badge_points.badge_box
+        p=badge.Points
+      .badge_portrait(style='background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
+      .badge_label.badge_box
+        h3=badge.Portrait
+        p=badge.PortraitDescription
+
+    br
+
+    form(method='POST', action='/admin/badges/edit/'+badge.badge_id)
+
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
+        input(type='hidden', value=badge.badge_id, name='badge_id')
+
+        input#title(type='hidden', value=badge.Title, name='Title')
+        input#description(type='hidden', value=badge.Description, name='Description')
+        input#badge_points(type='hidden', value=badge.Points, name='Points')
+        input#inspirer_id(type='hidden', value=badge.assignment_id, name='assignment_id')
+
+        input#portrait(type='hidden', value=badge.Portrait, name='Portrait')
+        input#portraitdescription(type='hidden', value=badge.PortraitDescription name='PortraitDescription')
+
+        input#unearned_url(type='hidden', value=badge.UnearnedURL, name='UnearnedURL')
+        input#earned_url(type='hidden', value=badge.EarnedURL, name='EarnedURL')
+        input#earned_hover_url(type='hidden', value=badge.EarnedHoverURL, name='EarnedHoverURL')
+
+
+        button.btn.btn-danger(type='submit') Back to Edits
+
+    form(method='POST' action='/admin/badges/confirmUpdates')
+
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
+        input(type='hidden', value=badge.badge_id, name='badge_id')
+
+        input#title(type='hidden', value=badge.Title, name='Title')
+        input#description(type='hidden', value=badge.Description, name='Description')
+        input#badge_points(type='hidden', value=badge.Points, name='Points')
+        input#inspirer_id(type='hidden', value=badge.assignment_id, name='assignment_id')
+
+        input#portrait(type='hidden', value=badge.Portrait, name='Portrait')
+        input#portraitdescription(type='hidden', value=badge.PortraitDescription name='PortraitDescription')
+
+        input#unearned_url(type='hidden', value=badge.UnearnedURL, name='UnearnedURL')
+        input#earned_url(type='hidden', value=badge.EarnedURL, name='EarnedURL')
+        input#earned_hover_url(type='hidden', value=badge.EarnedHoverURL, name='EarnedHoverURL')
+
+
+        button.btn.btn-success(type='submit') Save Changes

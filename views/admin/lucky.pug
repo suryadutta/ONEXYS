@@ -2,36 +2,44 @@ extends ../layout
 
 block content
 
-    a(href='/admin') Back to Admin Page
-
-    h1='Edit Lucky Bulldog Times'
-    h3=course
-
     br
-    
-    -function prettyDate(dateString){
-        
-        -var date = new Date(dateString);
-        -return date.toLocaleDateString("en-US", {weekday: "long", year: "numeric", month: "short",  day: "numeric", hour: "2-digit", minute: "2-digit"})
-    -}
-
-    
-    table
-        each lucky_bulldog, index in lucky_data
-
-            tr 
-                td
-                    h2="Lucky Bulldog "+(index+1)
-                    h4=prettyDate(lucky_bulldog.time)
-                td
-                    form(method='GET' action='lucky/edit/'+lucky_bulldog._id)
-                        button(type='submit') Edit
-                    form(method='POST' action='lucky/delete/'+lucky_bulldog._id, onsubmit="return confirm('Do you really want to delete this time?');")
-                        button(type='submit') Delete
-
-    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course_title + '\'s Lucky Bonuses'
     hr
+    div.container
+        div.row
+            -function prettyDate(dateString){
 
+                -var date = new Date(dateString);
+                -return date.toLocaleDateString("en-US", {weekday: "long", year: "numeric", month: "short",  day: "numeric", hour: "2-digit", minute: "2-digit"})
+            -}
 
-    form(method='GET' action='lucky/add')
-        button(type='submit') Add New Time
+            table
+                each lucky_bonus in lucky_data
+                    tr
+                        td
+                            h2="Bonus "+ lucky_bonus._id
+                            h4=prettyDate(lucky_bonus.time)
+                            hr
+                        td
+                            div.form.form-inline
+                                    form(method='GET' action='lucky/edit/'+lucky_bonus._id)
+                                        input(type='hidden', value=course_id, name='course-id')
+                                        input(type='hidden', value=course_title, name='course-title')
+                                        input(type='hidden', value=user_id, name='user-id')
+                                        button.btn.btn-dark(type='submit') Edit
+                                    form(method='POST' action='lucky/delete/'+lucky_bonus._id, onsubmit="return confirm('Do you really want to delete this time?');")
+                                        input(type='hidden', value=course_id, name='course-id')
+                                        input(type='hidden', value=course_title, name='course-title')
+                                        input(type='hidden', value=user_id, name='user-id')
+                                        button.btn.btn-danger(type='submit') Delete
+        div.row
+            form(method='GET' action='lucky/add')
+                input(type='hidden', value=course_id, name='course-id')
+                input(type='hidden', value=course_title, name='course-title')
+                input(type='hidden', value=user_id, name='user-id')
+                button.btn.btn-dark(type='submit') Add New Time

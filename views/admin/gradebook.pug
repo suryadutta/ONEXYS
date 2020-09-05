@@ -1,0 +1,54 @@
+extends ../layout
+
+block content
+    head
+        link(rel="stylesheet", href="/stylesheets/gradebook.css")
+        script(src="/javascript/gradebook.js")
+    br
+    .container
+        .row
+            .form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Viewing the Unified Gradebook for ' + course_title
+    hr
+    .container
+        .row
+            p To sort the table based on a particular column, click on that column's header (Student Name, Team Name, etc. - not the assignment name).
+            p Clicking on the same header after it is already selected will invert the sort direction.
+            p To separate sorting results by team, enable the Team Lock by clicking on the Team Name header until it turns yellow. Then, click on the column you'd like to sort by. The students will be sorted, but they will remain grouped by team. To disable the Team Lock, click the Team Name header again.
+            p Mousing over a row will create an outline around it, so you can keep track of the row as you scroll to the right or look into the middle of the table.
+    hr
+    div
+        table
+            tr#gradebook-table-header(class="tdata-header")
+                th(class="spacer")
+                    a.btn.btn-primary#export(download=course_title + ".csv", type="text/csv") Build CSV
+                th
+                each obj in gradebook[0].grades
+                    th.module-title(due=obj.due)=obj.module_name
+        table
+            tbody(id="gradebook", style="border-bottom: 2px double black;")
+                tr(id="first", style="border-bottom: 2px double black;")
+                    th(class="bg-light") Student Name
+                    th(class="bg-light") Student ID
+                    th(class="bg-light") Team Name
+                    each obj in gradebook[0].grades
+                        th(class="bg-light") Practice
+                        th(class="bg-light") Quiz
+                each student in gradebook
+                    tr(class="student", team=student.team)
+                        td=student.student_name
+                        td=student.student_id
+                        td=student.team
+                        each obj in student.grades
+                            td=obj.practice_grade
+                            td=obj.quiz_grade
+    br
+    .container
+        .row
+            small="Note: Some teams are removed from this list. Teams named \'Coaches\' or \'" + course_title + "\' have been removed. More obviously, teams with no students in them do not appear on this list."
+    br
+    hr
+    br
+    br

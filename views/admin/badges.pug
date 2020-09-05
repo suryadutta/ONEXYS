@@ -2,32 +2,43 @@ extends ../layout
 
 block content
 
-    a(href='/admin') Back to Home Page
-
-    h1 Edit ONEXYS Badges
-    h3=course
-    
-    table(class="admin_table")
-        tr 
-            th ID
-            th Title
-            th Description
-            th Points
-            th Portrait
-            th Portrait Description
-
-        each badge in badges
-            tr 
-                td=badge._id
-                td=badge.Title
-                td=badge.Description
-                td=badge.Points
-                td=badge.Portrait
-                td=badge.PortraitDescription
-                td
-                    form(method='GET' action='badges/edit/'+badge._id)
-                        button(type='submit') Edit
-                //
-                    td 
-                        form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
-                            button(type='submit') Delete
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course_title + ' badges'
+    hr
+    div.container
+        div.row
+            table(class="admin_table")
+                tr
+                    th ID
+                    th Title
+                    th Description
+                    th Points
+                    th Portrait
+                    th Portrait Description
+                    th Edit Badge
+                    th Delete Badge
+                each badge in badges
+                    tr
+                        td=badge._id
+                        td=badge.Title
+                        td=badge.Description
+                        td=badge.Points
+                        td=badge.Portrait
+                        td=badge.PortraitDescription
+                        td
+                            form(method='GET' action='badges/edit/'+badge._id)
+                                input(type='hidden', value=course_id, name='course-id')
+                                input(type='hidden', value=course_title, name='course-title')
+                                input(type='hidden', value=user_id, name='user-id')
+                                button.btn.btn-dark(type='submit') Edit
+                        td
+                                form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
+                                    input(type='hidden', value=course_id, name='course-id')
+                                    input(type='hidden', value=course_title, name='course-title')
+                                    input(type='hidden', value=user_id, name='user-id')
+                                    button.btn.btn-danger(type='submit') Delete

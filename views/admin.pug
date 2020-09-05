@@ -1,31 +1,16 @@
 extends layout
 
 block content
-
-    
-    
-    h1 ONEXYS Admin Portal
-    h3=course
-    
     br
-    
-    h2
-        a(href='/admin/home') Home Page
-    br
-
-    h2
-        a(href='/admin/modules') Modules
-    br
-    
-    h2
-        a(href='/admin/badges') Badges
-
-    br
-
-    h2
-        a(href='/admin/dailies') Daily Yalies
-
-    br
-
-    h2
-        a(href='/admin/lucky') Lucky Bulldog
+    h1(class='display-4')='Admin panel for ' + course_title
+    hr
+    div(class='container')
+        div(class='col')
+            div(class='form')
+                a(href='/admin/home?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Home Page
+                a(href='/admin/navigation?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Navigation
+                a(href='/admin/modules?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Modules
+                a(href='/admin/badges?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Badges
+                a(href='/admin/dailies?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Daily Tasks
+                a(href='/admin/lucky?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Lucky Bonuses
+                a(href='/admin/gradebook?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id, class='btn btn-dark', role='button', style='margin:4px') Unified Gradebook

@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
-
 var express = require('express');
 var path = require('path');
 var config = require('./bin/config');
@@ -10,17 +9,20 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('client-sessions');
 
+var canvas = require('./models/canvas');
+var mongo = require('./models/mongo');
 var config = require('./bin/config');
-var auth = require('./bin/auth')
+var auth = require('./bin/auth');
 
 var index = require('./routes/index');
 var home = require('./routes/home');
 var modules = require('./routes/modules');
 var badges = require('./routes/badges');
-var admin = require('./routes/admin')
+var admin = require('./routes/admin');
+var api = require('./routes/api');
 var app = express();
 
-var launch = require('./routes/canvasLaunch')
+var launch = require('./routes/canvasLaunch');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy', true);
 
-app.use(cookieParser(config.client_secret));
+app.use(cookieParser(config.client_secret, { sameSite: 'none' }));
 
 app.use(session({
   cookieName: 'session',
@@ -47,20 +49,78 @@ app.use(session({
     path: '/',
     ephemeral: false,
     httpOnly: true,
-    secure: false
+    secure: false,
+    //sameSite: 'none; secure'
   }
 }));
 
 app.get('/callback',auth.oath2_callback);
+app.use('/api', api);
 
 app.get('/',index);
-app.use('/home',[auth.updateCookies,auth.checkUser],home)
-app.use('/badges',[auth.updateCookies,auth.checkUser],badges)
+app.use('/home',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],home)
+app.use('/badges',[auth.updateCookies,auth.checkUser,canvas.awardLuckies],badges)
+// Admins don't need to earn luckies, so no canvas.awardLuckies
 app.use('/admin',[auth.updateCookies,auth.checkAdmin],admin)
 
-app.use('/modules',auth.updateCookies,modules)
+app.use('/modules',[auth.updateCookies,canvas.awardLuckies],modules)
 
 app.use('/launch',launch)
+
+// static file display
+app.use("/coach-information", function(req, res) {
+  console.log("COURSE ID -- APP.js")
+  console.log(req.session)
+  mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/coach-info/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
+  });
+});
+
+app.use("/welcome", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/welcome/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
+  });
+});
+
+app.use("/life-on-grounds", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/life-on-campus/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
+  });
+});
+
+app.use("/post-test", function(req, res) {
+  mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
+    if (page !== null) {
+      res.sendFile(path.join(__dirname, "/views/static/post-test/"+page));
+    }
+    else {
+      res.sendFile(path.join(__dirname, "/views/static/error/browser-error.html"));
+    }
+  });
+});
+
+app.use("/missing-resource", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/error/404.html"));
+});
+
+app.use("/not-open", function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/static/error/not-open.html"));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -69,15 +129,21 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  console.log("404 Error:");
+  console.log(err.message);
+
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+
+  res.sendFile(path.join(__dirname, "/views/static/error/not-open.html"));
 });
 
 module.exports = app;

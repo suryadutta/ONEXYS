@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+    br
+    .container
+        .row
+            .form.form-inline
+                h2='Live View ' + course_title + ' Modules'
+    hr
+    br
+    .container
+        .row
+            table(class="admin_table")
+                tr
+                    th ID
+                    th Primary Title
+                    th Secondary Title
+                    th Open?
+                    th Practice Link
+                    th Quiz Link
+                    th Reflections Link
+                    th Preview
+                each module, i in modules
+                    tr
+                        td=module._id
+                        td=module.primary_title
+                        td=module.secondary_title
+                        td=module.open
+                        td=module.practice_link
+                        td=module.quiz_link
+                        td=module.reflection_link
+                        td
+                            a.btn.btn-primary(href="https://" + app_name + ".herokuapp.com/modules/" + (i + 1), target="_blank") Live View

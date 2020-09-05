@@ -13,26 +13,26 @@ router.use('/', function(req, res, next) {
   console.log(courseID)
   console.log(userID)
 
-  if (courseID == 10184){
-    courseID = 38082;
-  }
+  console.log("Admin? " + req.session.admin);
 
   if (req.session.admin){
     queries.badgesAdminQuery(courseID, function(badges){
       res.render('badges', {
-        title: 'Badges | ONEXYS',
+        title: 'Badges | CONEX',
         badges: badges,
-       });
-     });
-  }
-  
-  else{
+        heroku_app: config.herokuAppName,
+        lucky: req.session.lucky
+      });
+    });
+  }else{
     queries.badgesQuery(userID, courseID, function(badges){
       res.render('badges', {
-        title: 'Badges | ONEXYS',
+        title: 'Badges | CONEX',
         badges: badges,
-       });
-     });
+        heroku_app: config.herokuAppName,
+        lucky: req.session.lucky
+      });
+    });
   }
 });
 

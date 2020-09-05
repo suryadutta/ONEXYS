@@ -4,31 +4,33 @@ var config = require("../bin/config");
 var queries = require("../models/queries");
 
 router.use("/", (req, res, next) => {
-  console.log(req.session);
+  console.log("getting home page")
+  //console.log("Request session: " + req.session);
+  //console.log("Course title: " + req.session.course_title);
 
   var courseID = parseInt(req.session.course_id);
   var userID = parseInt(req.session.user_id);
 
-  console.log("Course and User IDs");
+  //if (courseID == 10184) {
+    //courseID = 38082;
+  //}
 
-  console.log(courseID);
-  console.log(userID);
-
-  if (courseID == 10184) {
-    courseID = 38082;
-  }
-
-  var is_physics = Boolean(courseID == 38083);
-
+  var is_physics = Boolean(courseID == 48039);
+  //var is_physics = false;
+  
   if (req.session.admin) {
+    console.log("user is admin")
     if (req.query.masquerade) {
+      console.log('user is masquerading')
       queries.homepageQueryMasquerade(
         parseInt(req.query.masquerade),
         courseID,
+        req.session.course_title,
         (
           module_progress,
+          post_test_status,
           score,
-          awarded_badge_ids,
+          awarded_badges,
           leaderboard,
           my_team,
           home_updates,
@@ -36,12 +38,14 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie
         ) => {
+          console.log("rendering home page")
           res.render("home", {
-            title: "Home | ONEXYS",
+            title: "Home | " + config.herokuAppName,
             courseID,
             module_progress,
+            post_test_status,
             score,
-            awarded_badge_ids,
+            awarded_badges,
             leaderboard,
             my_team,
             home_updates,
@@ -49,16 +53,21 @@ router.use("/", (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
+            canvasURL: config.canvasURL,
             admin: req.session.admin,
-            masquerade: true
+            masquerade: true,
+            heroku_app: config.herokuAppName,
+            lucky: req.session.lucky
           });
         }
       );
     } else {
       queries.homepageAdminQuery(
         courseID,
+        req.session.course_title,
         (
           module_progress,
+          post_test_status,
           leaderboard,
           home_updates,
           home_vids,
@@ -66,12 +75,14 @@ router.use("/", (req, res, next) => {
           students,
           daily_yalie
         ) => {
+          console.log("rendering home page")
           res.render("home", {
-            title: "Home | ONEXYS",
+            title: "Home | " + config.herokuAppName,
             courseID,
             module_progress,
+            post_test_status,
             score: 0,
-            awarded_badge_ids: [],
+            awarded_badges: [],
             leaderboard,
             my_team: {
               Name: "Admin",
@@ -82,9 +93,12 @@ router.use("/", (req, res, next) => {
             home_links,
             daily_yalie,
             is_physics,
+            canvasURL: config.canvasURL,
             admin: req.session.admin,
+            heroku_app: config.herokuAppName,
             masquerade: false,
-            students
+            students,
+            lucky: req.session.lucky
           });
         }
       );
@@ -93,10 +107,12 @@ router.use("/", (req, res, next) => {
     queries.homepageQuery(
       userID,
       courseID,
+      req.session.course_title,
       (
         module_progress,
+        post_test_status,
         score,
-        awarded_badge_ids,
+        awarded_badges,
         leaderboard,
         my_team,
         home_updates,
@@ -104,12 +120,18 @@ router.use("/", (req, res, next) => {
         home_links,
         daily_yalie
       ) => {
+        console.log("rendering home page")
+        if (req.session.lucky){
+          console.log("Hackfix!");
+          score += parseInt(req.session.lucky.point_value);
+        }
         res.render("home", {
-          title: "Home | ONEXYS",
+          title: "Home | " + config.herokuAppName,
           courseID,
           module_progress,
+          post_test_status,
           score,
-          awarded_badge_ids,
+          awarded_badges,
           leaderboard,
           my_team,
           home_updates,
@@ -117,7 +139,10 @@ router.use("/", (req, res, next) => {
           home_links,
           daily_yalie,
           is_physics,
-          admin: req.session.admin
+          canvasURL: config.canvasURL,
+          admin: req.session.admin,
+          heroku_app: config.herokuAppName,
+          lucky: req.session.lucky
         });
       }
     );

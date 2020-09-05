@@ -2,43 +2,64 @@ extends ../layout
 
 block content
 
-    a(href='/admin/badges') Back to Badges
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin/badges?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course_title + ': Badge ' + badge._id
+    hr
 
-    h1='Edit ONEXYS Badge '+badge._id
-    h3=course
+    form(method='POST' action='/admin/badges/preview')
+        input(type='hidden', value=course_id, name='course-id')
+        input(type='hidden', value=course_title, name='course-title')
+        input(type='hidden', value=user_id, name='user-id')
+        input(type='hidden', value=badge._id, name='badge_id')
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+        div.form-group.form-inline
+            label(for='title') Title:
+            input#title.form-control(type='text', value=badge.Title, name='Title')
+        hr
 
         div.form-group
-        label(for='title') Title: 
-        input#title.form-control(type='text', value=badge.Title, name='title')
-        br
-        br
+            label(for='description') Description:
+            br
+            textarea#description.form-control(rows=3 name='Description')=badge.Description
+        hr
 
-        div.form-group
-        label(for='description') Description: 
-        br
-        textarea(rows=3)#description.form-control(name='description')=badge.Description
-        br
-        br
+        div.form-group.form-inline
+            label(for='badge_points') Points:
+            input#badge_points.form-control(type='numeric', value=badge.Points, name='Points')
+        hr
         
-        div.form-group
-        label(for='badge_points') Points: 
-        input#badge_points.form-control(type='numeric', value=badge.Points, name='badge_points')
-        br
-        br
+        if(badge._id == 32)
+            // For inspirer badge only
+            .form-group.form-inline
+                label(for='badge_id') Inspirer Assignment ID:
+                input#badge_id.form-control(type='numeric', value=badge.assignment_id, name='assignment_id')
+
+        div.form-group.form-inline
+            label(for='portrait') Portrait:
+            input#portrait.form-control(type='text', value=badge.Portrait, name='Portrait')
+        hr
 
         div.form-group
-        label(for='portrait') Portrait: 
-        input#portrait.form-control(type='text', value=badge.Portrait, name='portrait')
-        br
-        br
+            label(for='portraitdescription') Portrait Description:
+            br
+            textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')=badge.PortraitDescription
+            small(style='color:red')='Warning: long portrait descriptions may cause display issues on the badges page!'
+        hr
 
         div.form-group
-        label(for='portraitdescription') Portrait Description: 
-        br
-        textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
-        br
-        br
+            label(for='unearned_url') Unearned URL:
+            input#unearned_url.form-control(type='text', value=badge.UnearnedURL, name='UnearnedURL')
+            br
+            label(for='earned_url') Earned URL:
+            input#earned_url.form-control(type='text', value=badge.EarnedURL, name='EarnedURL')
+            br
+            label(for='earned_hover_url') Earned Hover URL:
+            input#earned_hover_url.form-control(type='text', value=badge.EarnedHoverURL, name='EarnedHoverURL')
+        hr
 
-        button.btn.btn-primary(type='submit') Save Changes
+        button.btn.btn-success(type='submit') Save Changes

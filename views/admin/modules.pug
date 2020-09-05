@@ -1,30 +1,94 @@
 extends ../layout
 
 block content
+    script(src="/javascript/moduleAJAX.js")
+    br
+    .container
+        .row
+            .form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Editing ' + course_title + ' modules'
+    hr
+    br
 
-    a(href='/admin') Back to Home Page
+    .container
+        .row
+            form(method='POST' action='modules')
+                input(type='hidden', value=course_id, name='course-id')
+                input(type='hidden', value=course_title, name='course-title')
+                input(type='hidden', value=user_id, name='user-id')
 
-    h1 Edit ONEXYS Modules
-    h3=course
-    table(class="admin_table")
-        tr 
-            th ID
-            th Primary Title
-            th Secondary Title
-            th Open?
-            th Practice Link
-            th Quiz Link
-            th Reflections Link
-        each module in modules
-            tr 
-                td=module._id
-                td=module.primary_title
-                td=module.secondary_title
-                td=module.open
-                td=module.practice_link
-                td=module.quiz_link
-                td=module.reflection_link
-                td
-                    form(method='GET' action='modules/'+module._id+'/edit')
-                        button(type='submit') Edit
-                    
+                label Post Test Open?
+
+                .form-inline
+                    input#post_test_open_true.form-control(type='radio', value='true', checked=post_test=='true', name='post_test')
+                    label(for='post_test_open_true') Yes
+
+                .form-inline
+                    input#post_test_open_false.form-control(type='radio', value='false', checked=post_test=='false', name='post_test')
+                    label(for='post_test_open_false') No
+
+                .row
+                    .col-md-12
+                        .form-group.form-inline
+                            label(for='post_test_filename') Post Test Filename (located in views/static/post-test folder):
+                            input#post_test_filename.form-control.inlined-input(type='text', name='post_test_filename', value=post_test_filename)
+                    hr
+
+                .row
+                    .col-md-12
+                        .form-group.form-inline
+                            label(for='post_test_button_background') Post Test Button Background (located in public/images/progress_bar folder):
+                            input#post_test_button_background.form-control.inlined-input(type='text', name='post_test_button_background', value=post_test_button_background)
+                    hr
+
+                .row
+                    .col-md-12
+                        .form-group.form-inline
+                            label(for='pre_test_button_background') Pre Test Button Background (located in public/images/progress_bar folder):
+                            input#pre_test_button_background.form-control.inlined-input(type='text', name='pre_test_button_background', value=pre_test_button_background)
+                    hr
+
+                button.btn.btn-success(type='submit') Save Pre/Post Test Changes
+            hr
+    br
+    .container
+        .row
+            script.
+                var heroku = "!{heroku_app}";
+            table(class="admin_table")
+                tr
+                    th ID
+                    th Primary Title
+                    th Secondary Title
+                    th Open?
+                    th Due?
+                    th Practice Link
+                    th Quiz Link
+                    th Reflections Link
+                    th Edit Module
+                each module, i in modules
+                    tr
+                        td=module._id
+                        td=module.primary_title
+                        td=module.secondary_title
+                        td
+                            if(module.open == "true")
+                                input.moduleEditor(id=module._id type="checkbox", edit="open" checked)
+                            else
+                                input.moduleEditor(id=module._id type="checkbox" edit="open")
+                        td
+                            if(module.due == "true")
+                                input.moduleEditor(id=module._id type="checkbox" edit="due" checked)
+                            else
+                                input.moduleEditor(id=module._id type="checkbox" edit="due")
+                        td=module.practice_link
+                        td=module.quiz_link
+                        td=module.reflection_link
+                        td
+                            form(method='GET' action='/admin/modules/'+module._id+'/edit')
+                                input(type='hidden', value=course_id, name='course-id')
+                                input(type='hidden', value=course_title, name='course-title')
+                                input(type='hidden', value=user_id, name='user-id')
+                                button.btn.btn-dark(type='submit') Edit

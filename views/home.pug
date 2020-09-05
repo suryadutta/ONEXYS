@@ -1,16 +1,19 @@
 extends layout
 
 block content
+  if lucky
+    include lucky-overlay
   if admin
-    if masquerade
-      a(href='/home?login_success=1') Back to Home
-    else
-      form(action='')
-        select(name='masquerade')
-          each val in students
-            option(value=val.id)=val.sortable_name
-        input(type='hidden', name='login_success', value='1')
-        input(type='submit' value='Masquerade as Student')
+    //- masquerade functionality can be re-enabled by uncommenting the code below
+    //- if masquerade
+    //-   a(href='/home?login_success=1') Back to Home
+    //- else
+    //-   form(action='')
+    //-     select(name='masquerade')
+    //-       each val in students
+    //-         option(value=val.id)=val.sortable_name
+    //-     input(type='hidden', name='login_success', value='1')
+    //-     input(type='submit' value='Masquerade as Student')
   .user_content(style='margin-top: 0px !important;')
   .onexys_styling.o_hompage
     .left(style='width: 360px; margin-top: -10px;')
@@ -18,8 +21,18 @@ block content
         h2 My Points
         p#point_count= score
         #flag.blue
-          a(title='Quiz List', href='https://yale.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
-            img(src='https://onexys.herokuapp.com/images/homepage/DY_Flag_2017.svg')
+          if daily_yalie.id == null
+            a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/404', target='_blank')
+              img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
+          else
+            if daily_yalie.id == -1
+              //
+                An assignment matching the Daily Task criteria is valid and does exist, but it is has not opened for students yet.
+              a(title='Open Daily Task', href='https://'+heroku_app+'.herokuapp.com/not-open', target='_blank')
+                img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
+            else
+              a(title='Open Daily Task', href=canvasURL+'/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
+                img(src='https://'+heroku_app+'.herokuapp.com/images/homepage/'+home_updates.daily_task_img)
       #leaderboard.standard_home_box.left
         h2 Leaderboard
         table
@@ -49,15 +62,16 @@ block content
       #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
         h2 Recent Badges
 
-        each badgeID in awarded_badge_ids
+        each badge in awarded_badges
 
-          #recent_badge1.onexys_badge.completed(class='badge'+badgeID,style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
+          #recent_badge1.badge_container.completed(class='badge'+badge._id, style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
             .badge_descriptor.badge_box
               h3
               p  
             .badge_points.badge_box
               p  
-            .badge_portrait(style='width: 80px; height: 100px;')
+            .badge_portrait(style='width: 80px; height: 100px; background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedHoverURL+')')
+            .badge_portrait.front_portrait(style='width: 80px; height: 100px; background-image: url(https://'+heroku_app+'.herokuapp.com/images/badgePics/'+badge.EarnedURL+')')
             .badge_label.badge_box
               h3s
               p  
@@ -65,12 +79,12 @@ block content
         br
         .clear
         p#badges_link_sentence
-          a(id='', title='info_Badges', href=home_links.badges, target='_blank') Click here to see all your badges.
+          a(id='', title='info_Badges', href=home_updates.badges_link, target='_blank') Click here to see all your badges.
       #progress.standard_home_box.left(style='width: 324px;')
-        h2 My Progress So Far 
+        h2 My Progress So Far
 
         .module_0.module_background_0
-          a.progress_box.single_line.completed(style='width: 187.5px !important;')  Pre-Test
+          a.progress_box.single_line.completed(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.pre_test_button_background+'_1.png);')  Pre-Test
         #progress_labels(style='margin-left: 15px !important;')
           p Pract.
           p Apply
@@ -78,21 +92,21 @@ block content
         .clear
 
         each module, index in module_progress
-        
-          div(class=module.button_background_image)
+
+          div
             if module.open == 'true'
               if module.practice_progress && module.quiz_progress
-                a.progress_box.completed(style='width: 187.5px !important;', href= '/modules/'+module._id)
+                a.progress_box.completed(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+module.button_background_image+'_1.png);', href= '/modules/'+module._id title="Nice one! You've completed this module!")
                   span= module.primary_title
                   br
                   span= module.secondary_title
               else
-                a.progress_box.available(style='width: 187.5px !important;', href= '/modules/'+module._id)
+                a.progress_box.available(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+module.button_background_image+'_0.png);', href= '/modules/'+module._id title="This module is now available. Click here to open it!")
                   span= module.primary_title
                   br
                   span= module.secondary_title
             else
-              a.progress_box(style='width: 187.5px !important;')
+              a.progress_box(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+module.button_background_image+'_2.png);' title="Your instructors have not opened this module yet!")
                 span= module.primary_title
                 br
                 span= module.secondary_title
@@ -110,16 +124,13 @@ block content
           br
           .clear
 
-        if home_updates.post_test == 'true'
+        if(post_test_status.open && !post_test_status.locked) 
           .module_11.module_background_00
-            a.progress_box.available.single_line(style='width: 187.5px !important;', href=home_updates.post_test_link, target="_blank")  Post-Test
+            a.progress_box.available.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_0.png);', href='/post-test', title=post_test_status.tooltip)  Post-Test
         else
           .module_11.module_background_00
-            a.progress_box(style='width: 187.5px !important;')  Post-Test
+            a.progress_box.single_line(style='width: 187.5px !important; background-image: url(https://'+heroku_app+'.herokuapp.com/images/progress_bar/'+home_updates.post_test_button_background+'_2.png);', title=post_test_status.tooltip)  Post-Test
     .left(style='width: 500px !important; margin-top: -10px;')
-      .lucky_bulldog
-        img(src='', alt='Lucky Bulldog')
-        .lucky_bulldog_text +500pts!
       br
       .clear
       #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
@@ -135,17 +146,17 @@ block content
           p.entry_header!=home_updates.header3
           p.entry_text!=home_updates.text3
       #featured.standard_home_box.left(style='width: 458px !important;')
-        h2 Life @ Yale Videos
+        h2= home_updates.life_on_grounds_title+" Videos"
         p
-          a(href=home_links.life_at_yale_videos, data-api-endpoint=home_links.life_at_yale_videos, data-api-returntype='Page', target='_blank') Click here to see all Life at Yale videos
+          a(href=home_updates.life_on_grounds_link, target='_blank')= "Click here to see all "+home_updates.life_on_grounds_title+" videos"
         each video in home_vids
           .onexys_video
             a.colorbox(href=video.video_src)
               if video.video_img
-                img.onexys_thumbnail(src=video.video_img)
+                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+video.video_img)
               else
-                img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-              img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
+                img.onexys_thumbnail(src='https://'+heroku_app+'.herokuapp.com/images/lifeAtYale/'+home_updates.life_on_grounds_thumbnail, alt='')
+              img.onexys_playbutton(src='https://'+heroku_app+'.herokuapp.com/images/icons/playbutton.png', alt='')
           p
             span(style='font-size: 12pt;')
               strong!=video.video_desc

@@ -1,0 +1,53 @@
+extends ../layout
+
+block content
+
+    br
+    div.container
+        div.row
+            div.form.form-inline
+                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                    i.fa.fa-chevron-left
+                h2='Editing navigation links for ' + course_title
+    hr
+    div.container
+        div.row
+            div.col-md-1
+            div.col-md-10
+                form(method='POST' action='navigation')
+                    input(type='hidden', value=course_id, name='course-id')
+                    input(type='hidden', value=course_title, name='course-title')
+                    input(type='hidden', value=user_id, name='user-id')
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='welcome_page') Welcome Page Filename:
+                                input#welcome_page.form-control.inlined-input(type='text', name='welcome_page', value=nav_info.welcome_page)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='coach_information') Coach Information Filename:
+                                input#coach_information.form-control.inlined-input(type='text', name='coach_information', value=nav_info.coach_information)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='life_on_grounds') Life on Grounds Filename:
+                                input#life_on_grounds.form-control.inlined-input(type='text', name='life_on_grounds', value=nav_info.life_on_grounds)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            div.form-group.form-inline
+                                label(for='post_test') Post Test Filename:
+                                input#post_test.form-control.inlined-input(type='text', name='post_test', value=nav_info.post_test)
+                        hr
+
+                    div.row
+                        div.col-md-12
+                            button.btn.btn-success(type='submit') Save Changes
+                    hr

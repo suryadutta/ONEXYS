@@ -39,6 +39,9 @@ jspm_packages
 # SQL dumps
 *.dump
 
+# Redis dumps
+dump.rdb
+
 # Yarn lock files
 *.lock
 
@@ -60,3 +63,6 @@ tmp/
 Icon?
 ehthumbs.db
 Thumbs.db
+
+#iCloud Files
+*.icloud
