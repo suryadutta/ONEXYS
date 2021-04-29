@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=development nodemon start.js"
+    "dev": "nodemon start.js"
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -37,7 +37,9 @@
   },
   "description": "Second version of ONEXYS app, with new API and admin interface",
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mrdutta27/ONEXYSapp.git"
