@@ -1,8 +1,10 @@
-var express = require('express'),
+var express = require("express"),
     router = express.Router(),
     config = require("../bin/config"),
     queries = require("../models/queries"),
-    auth = require("../bin/auth.js");
+    auth = require("../bin/auth.js"),
+    mongo = require("../models/mongo"),
+    path = require("path");
 
 router.post("/home", [auth.updateCookies, auth.checkUser], (req, res) => {
     res.redirect("/home");
@@ -30,40 +32,97 @@ router.get("/badges", (req, res) => {
         admin: req.session.admin,
         masquerade: false,
         students: [],
-        heroku_app: config.herokuAppName
+        heroku_app: config.herokuAppName,
     });
 });
 
-router.use("/coach-information", function(req, res) {
-  mongo.getStaticPage(req.session.course_id, "coach_information", function(err, page) {
-    res.sendFile("../views/static/coach-info/" + page);
-  });
+router.use("/coach-information", function (req, res) {
+    try {
+        mongo.getNavigationData(req.session.course_id, (err, data) => {
+            console.log(data);
+            if (err)
+                res.status(500).send(
+                    "500 - Internal Server Error. Coach information page could not be retrieved."
+                );
+            else
+                res.sendFile(
+                    path.resolve("./views/static/coach-info/" + data[0].page)
+                ); // see navigation collection
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(406).send("406 - Your request could not be processed.");
+    }
 });
-router.use("/welcome", function(req, res) {
-    mongo.getStaticPage(req.session.course_id, "welcome_page", function(err, page) {
-        res.sendFile("../views/static/welcome/" + page);
-    });
+
+router.use("/welcome", function (req, res) {
+    try {
+        mongo.getNavigationData(req.session.course_id, (err, data) => {
+            console.log(data);
+            if (err)
+                res.status(500).send(
+                    "500 - Internal Server Error. Coach information page could not be retrieved."
+                );
+            else
+                res.sendFile(
+                    path.resolve("./views/static/welcome/" + data[0].page)
+                );
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(406).send("406 - Your request could not be processed.");
+    }
 });
-router.use("/life-on-grounds", function(req, res) {
-    mongo.getStaticPage(req.session.course_id, "life_on_grounds", function(err, page) {
-        res.sendFile("../views/static/life-on-campus/" + page);
-    });
+
+router.use("/life-on-grounds", function (req, res) {
+    try {
+        mongo.getNavigationData(req.session.course_id, (err, data) => {
+            if (err)
+                res.status(500).send(
+                    "500 - Internal Server Error. Coach information page could not be retrieved."
+                );
+            else
+                res.sendFile(
+                    path.resolve(
+                        "./views/static/life-on-grounds/" + data[0].page
+                    )
+                );
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(406).send("406 - Your request could not be processed.");
+    }
 });
-router.use("/post-test", function(req, res) {
-    mongo.getStaticPage(req.session.course_id, "post_test", function(err, page) {
-        res.sendFile("../views/static/post-test/" + page);
-    });
+
+router.use("/post-test", function (req, res) {
+    try {
+        mongo.getNavigationData(req.session.course_id, (err, data) => {
+            if (err)
+                res.status(500).send(
+                    "500 - Internal Server Error. Coach information page could not be retrieved."
+                );
+            else
+                res.sendFile(
+                    path.resolve("./views/static/post-test/" + data[0].page)
+                );
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(406).send("406 - Your request could not be processed.");
+    }
 });
-router.use("/missing-resource", function(req, res) {
+
+router.use("/missing-resource", function (req, res) {
     res.send("Resource is missing!");
 });
-router.use("/not-open", function(req, res) {
+
+router.use("/not-open", function (req, res) {
     res.send("Assignment is not open!");
 });
 
 // Serve index page
-router.use('/', function(req, res, next) {
-    res.render('index', { title: 'System Index' });
+router.use("/", function (req, res, next) {
+    res.render("index", { title: "System Index" });
 });
 
 module.exports = router;
