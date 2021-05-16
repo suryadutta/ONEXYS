@@ -38,32 +38,12 @@ router.get("/badges", (req, res) => {
 
 router.use("/coach-information", function (req, res) {
   try {
-    mongo.getNavigationData(req.session.course_id, (err, data) => {
+    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
         res
           .status(500)
-          .send(
-            "500 - Internal Server Error. Coach information page could not be retrieved."
-          );
-      else
-        res.sendFile(path.resolve("./views/static/coach-info/" + data[0].page)); // see navigation collection
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
-  }
-});
-
-router.use("/welcome", function (req, res) {
-  try {
-    mongo.getNavigationData(req.session.course_id, (err, data) => {
-      if (err)
-        res
-          .status(500)
-          .send(
-            "500 - Internal Server Error. Coach information page could not be retrieved."
-          );
-      else res.sendFile(path.resolve("./views/static/welcome/" + data[0].page));
+          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+      else res.sendFile(path.resolve("./views/static/coach-info/" + data[0].src)); // see navigation collection
     });
   } catch (e) {
     console.log(e);
@@ -73,17 +53,12 @@ router.use("/welcome", function (req, res) {
 
 router.use("/life-on-grounds", function (req, res) {
   try {
-    mongo.getNavigationData(req.session.course_id, (err, data) => {
+    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
         res
           .status(500)
-          .send(
-            "500 - Internal Server Error. Coach information page could not be retrieved."
-          );
-      else
-        res.sendFile(
-          path.resolve("./views/static/life-on-grounds/" + data[0].page)
-        );
+          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+      else res.sendFile(path.resolve("./views/static/life-on-grounds/" + data[1].src));
     });
   } catch (e) {
     console.log(e);
@@ -93,15 +68,27 @@ router.use("/life-on-grounds", function (req, res) {
 
 router.use("/post-test", function (req, res) {
   try {
-    mongo.getNavigationData(req.session.course_id, (err, data) => {
+    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
         res
           .status(500)
-          .send(
-            "500 - Internal Server Error. Coach information page could not be retrieved."
-          );
-      else
-        res.sendFile(path.resolve("./views/static/post-test/" + data[0].page));
+          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+      else res.sendFile(path.resolve("./views/static/post-test/" + data[2].src));
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(406).send("406 - Your request could not be processed.");
+  }
+});
+
+router.use("/welcome", function (req, res) {
+  try {
+    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
+      if (err)
+        res
+          .status(500)
+          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+      else res.sendFile(path.resolve("./views/static/welcome/" + data[3].src));
     });
   } catch (e) {
     console.log(e);
