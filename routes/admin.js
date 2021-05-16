@@ -1,12 +1,12 @@
 const router = require("express").Router(),
-      mongo = require("../models/mongo"),
-      canvas = require("../models/canvas"),
-      config = require('../bin/config'),
-      auth = require("../bin/auth"),
-      assert = require('assert');
+    mongo = require("../models/mongo"),
+    canvas = require("../models/canvas"),
+    config = require("../bin/config"),
+    auth = require("../bin/auth"),
+    assert = require("assert");
 
 function requireAdmin(req, res, next) {
-    if(req.session.admin) next();
+    if (req.session.admin) next();
     else res.redirect("/home");
 }
 
@@ -14,7 +14,7 @@ router.get("/homepageEdit", (req, res) => {
     res.render("admin/homepageEdit", {
         title: `Edit Course Homepage`,
         heroku: config.herokuAppName,
-    })
+    });
 });
 
 router.get("/navigation", (req, res) => {
@@ -43,8 +43,8 @@ router.get("/badges/edit/:id", (req, res) => {
     res.render("admin/badgeEdit", {
         title: `Editing badge ${req.params.id}`,
         heroku: config.herokuAppName,
-        id: req.params.id
-    })
+        id: req.params.id,
+    });
 });
 
 router.get("/dailyTasks", (req, res) => {
