@@ -2,9 +2,8 @@
 // courseIDFromURL
 
 $(document).ready(function () {
-  var progress = null,
-    badges = null;
-  const hostname = document.referrer.split("/")[2],
+  const progress = {},
+    hostname = document.referrer.split("/")[2],
     courseID = document.referrer.split("/")[4];
 
   // Gets the user's progress, including finished modules and badge status
@@ -21,10 +20,9 @@ $(document).ready(function () {
       });
   })
     .then((data) => {
-      if (badges) {
-        //console.log("Adding badges from getUserProgress");
-        writeBadges(badges, data.badges);
-      } else progress = data.badges;
+      if (data) {
+        progress = data.badges;
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -44,12 +42,8 @@ $(document).ready(function () {
       .fail((err) => reject(err));
   })
     .then((data) => {
-      if (progress) {
-        writeBadges(data, progress);
-      } else {
-        badges = data;
-        //console.log("Badge progress has not been retrieved yet. Display badge progress has been flagged for completion later.")
-      }
+      writeBadges(data, progress);
+      // console.log("Badge progress has not been retrieved yet. Display badge progress has been flagged for completion later.")
     })
     .catch((err) => {
       // TODO
@@ -60,7 +54,7 @@ $(document).ready(function () {
 function writeBadges(badges, progress) {
   var badgeHTML = ``;
 
-  badges.forEach((badge) => {
+  badges.map((badge) => {
     let completed = progress[badge._id] && progress[badge._id].has ? "completed" : "";
     badgeHTML += `<div class="badge_container ${completed}"><div class="badge_descriptor badge_box"><h3>${badge.Title}</h3><p>${badge.Description}</p></div><div class="badge_points badge_box"><p>${badge.Points}</p></div>`;
 

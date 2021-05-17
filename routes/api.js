@@ -130,6 +130,7 @@ router.get("/badges", (req, res) => {
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
       mongo.getBadges(req.query.courseID, (err, data) => {
+        console.log(data);
         if (err)
           res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
         else res.status(200).header(access, getDst(req.query.hostname)).send(data);
