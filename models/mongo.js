@@ -165,6 +165,7 @@ module.exports = {
   getHomepageUpdates,
   getHomepageVideos,
   getDailyTasks,
+  getModule,
   getModules,
   getUserProgress,
   getBadges,

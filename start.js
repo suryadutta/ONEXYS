@@ -5,9 +5,8 @@ if (process.env.NODE_ENV !== "production") {
 var express = require("express"),
   config = require("./bin/config"),
   redis = require("redis").createClient(config.redisURL),
-  cookieParser = require("cookie-parser"),
   modules = require("./routes/modules"),
-  session = require("client-sessions"),
+  session = require("express-session"),
   canvas = require("./models/canvas"),
   bodyParser = require("body-parser"),
   index = require("./routes/index"),
@@ -25,28 +24,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.set("trust proxy", true);
-app.use(cookieParser(config.client_secret));
+
 app.use(
   session({
     cookieName: "session",
     secret: config.client_secret,
-    duration: 24 * 60 * 60 * 1000,
-    activeDuration: 1000 * 60 * 5,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       path: "/",
-      ephemeral: false,
+      sameSite: "none",
       httpOnly: true,
-      secure: false,
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
 
 app.use("/api", api);
-app.use(
-  "/admin",
-  [auth.updateCookies, auth.checkUser, admin.requireAdmin],
-  admin.router
-);
+app.use("/admin", [auth.updateCookies, auth.checkUser, admin.requireAdmin], admin.router);
 app.use("/modules", modules);
 app.get("/callback", auth.oath2_callback);
 app.use("/", index);

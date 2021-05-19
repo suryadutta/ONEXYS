@@ -177,7 +177,6 @@ $(document).ready(function () {
 
 // Write badge progress into DOM
 function writeBadges(badgeData) {
-  console.log(badgeData);
   var defaultBadge = { id: null, earned: new Date(0) },
     recents = [defaultBadge, defaultBadge, defaultBadge];
 
@@ -193,7 +192,6 @@ function writeBadges(badgeData) {
     badgeData[key].id = key;
     recents[leastRecent()] = badgeData[key];
   });
-  console.log(recents);
   // Display the 3 most recent badges (stored in recents)
   var badgeHTML = `<h2>Recent Badges</h2>`;
   recents.forEach((recentBadge) => {
