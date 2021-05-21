@@ -44,14 +44,14 @@ router.get("/homeVidEdit/:id", (req, res) => {
   });
 });
 
-// router.get("/modules/edit/:id", (req, res) => {
-//   res.render("admin/moduleEdit", {
-//     title: `Editing module ${req.params.id}`,
-//     heroku: config.herokuAppName,
-//     id: req.params.id,
-//     courseID: Object.keys(req.session.course_id)[0],
-//   });
-// });
+router.get("/modules/edit/:id", (req, res) => {
+  res.render("admin/moduleEdit", {
+    title: `Editing module ${req.params.id}`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
 
 router.get("/badges", (req, res) => {
   res.render("admin/badges", {
@@ -71,15 +71,36 @@ router.get("/badges/edit/:id", (req, res) => {
 });
 
 router.get("/dailyTasks", (req, res) => {
-  res.send("This page has not yet been implemented.");
+  res.render("admin/dailies", {
+    title: "Daily Tasks",
+    heroku: config.herokuAppName,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
+router.get("/dailyTasks/edit/:id", (req, res) => {
+  res.render("admin/dailyEdit", {
+    title: `Editing daily ${req.params.id}`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
 });
 
 router.get("/luckyBonuses", (req, res) => {
-  res.send("This page has not yet been implemented.");
+  res.render("admin/lucky", {
+    title: "Lucky Bonuses",
+    heroku: config.herokuAppName,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
 });
 
 router.get("/unifiedGradebook", (req, res) => {
-  res.send("This page has not yet been implemented.");
+  res.render("admin/gradebook", {
+    title: "Gradebook",
+    heroku: config.herokuAppName,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
 });
 
 router.post("/", (req, res) => {

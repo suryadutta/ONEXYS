@@ -1,14 +1,22 @@
 extends ../layout
 
 block content
-
+    script.
+        const herokuAPI = "/api",
+              edit = false,
+              courseID = "!{courseID}";
+        needs=["courseTitle", "daily", "testInfo"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
-                a.btn.btn-lg(href='/admin?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                h2='Editing ' + course_title + ' Daily Tasks'
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
             if fixed_id
                 script.
                     alert("The system detected you submitted a quiz ID. This was automatically corrected to the corresponding assignment ID (so what you typed may not be in the table).");
@@ -32,12 +40,12 @@ block content
                     p Watch the homepage as the next available daily task is linked to in the top left! If no daily task is found, the generic 404 / Missing resource page will be linked on the homepage. In the case that the next daily task is not open yet, the generic not-open page is displayed.
             hr
         div.row
-            table(class="admin_table")
+            table#dailyTable.admin_table(style="margin-bottom:100px;")
                 tr
                     th Row
                     th Assignment ID
                     th Edit Item
-                each daily in dailies
+                //each daily in dailies
                     if(daily._id == last_edited)
                         tr(style="background-color:#ff99cc;")
                             td=daily._id

@@ -76,6 +76,17 @@ function getDailyTasks(courseID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
   db.collection("daily_task")
     .find()
+    .sort({ _id: 1 })
+    .toArray()
+    .then((data) => callback(null, data))
+    .catch((err) => callback(err, null));
+}
+
+function getLuckyBonuses(courseID, callback) {
+  let db = client.db(config.mongoDBs[courseID]);
+  db.collection("lucky_bonuses")
+    .find()
+    .sort({ _id: 1 })
     .toArray()
     .then((data) => callback(null, data))
     .catch((err) => callback(err, null));
@@ -158,6 +169,7 @@ module.exports = {
   getHomepageUpdates,
   getHomepageVideos,
   getDailyTasks,
+  getLuckyBonuses,
   getModule,
   getModules,
   getUserProgress,

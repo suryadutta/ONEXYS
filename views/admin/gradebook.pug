@@ -25,9 +25,9 @@ block content
                 th(class="spacer")
                     a.btn.btn-primary#export(download=course_title + ".csv", type="text/csv") Build CSV
                 th
-                each obj in gradebook[0].grades
+                //each obj in gradebook[0].grades
                     th.module-title(due=obj.due)=obj.module_name
-        table
+        //table
             tbody(id="gradebook", style="border-bottom: 2px double black;")
                 tr(id="first", style="border-bottom: 2px double black;")
                     th(class="bg-light") Student Name

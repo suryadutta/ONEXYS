@@ -220,8 +220,7 @@ function writeBadges(badgeData) {
   }
 
   $("#recent_badges").html(
-    badgeHTML +
-      `<br><div class="clear"><p><a href="/badges" target="_blank">Click here to view all badges</a></p>`
+    badgeHTML + `<br><a href="#" target="_blank">Click here to view all badges</a>`
   );
 }
 
@@ -232,6 +231,8 @@ function writeUpdates(updates) {
   ); // Write updates to DOM
 
   // Life on Grounds information
+  $("#b_link").text(`Click here to view all badges!`); // Write Life on Grounds name to DOM
+  $("#b_link").prop("href", updates.badges_link); // Write Life on Grounds link to DOM
   $("#LoG_title").text(updates.life_on_grounds_title); // Write Life on Grounds name to DOM
   $("#LoG_link").text(`Click here to see all ${updates.life_on_grounds_title} videos!`); // Write Life on Grounds name to DOM
   $("#LoG_link").prop("href", updates.life_on_grounds_link); // Write Life on Grounds link to DOM

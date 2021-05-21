@@ -111,6 +111,24 @@ $(document).ready(async function () {
       .fail((err) => console.log("module retrieval failed"))
       .always(() => hideLoadingBar());
   }
+  if (needs.includes("daily")) {
+    $.get(`${herokuAPI}/dailies`, {
+      hostname: window.location.hostname,
+      courseID,
+    })
+      .done((data) => writeDailiesTaskInfo(data))
+      .fail((err) => console.log("dailies retrieval failed"))
+      .always(() => hideLoadingBar());
+  }
+  if (needs.includes("lucky")) {
+    $.get(`${herokuAPI}/lucky`, {
+      hostname: window.location.hostname,
+      courseID,
+    })
+      .done((data) => writeLuckyInfo(data))
+      .fail((err) => console.log("lucky retrieval failed"))
+      .always(() => hideLoadingBar());
+  }
 
   if (needs.includes("testInfo")) {
     $.get(`${herokuAPI}/testInfo`, {
@@ -246,6 +264,62 @@ function writeDailyTaskInfo(daily) {
   $("#dti").val(daily.img);
 }
 
+function writeDailiesTaskInfo(daily) {
+  if (edit) {
+    let dailyToEdit = daily.filter((daily) => daily._id == dailyID)[0];
+    $("#daily_id").text(`Editing Daily ${dailyToEdit._id}`);
+    $("#assignment_id").val(dailyToEdit.assignment_id);
+  } else {
+    let content = daily.reduce((content, daily) => {
+      return (
+        content +
+        `<tr>
+                                <td>${daily._id}</td>
+                                <td>${daily.assignment_id}</td>
+                                <td>
+                                    <a  class="btn btn-dark"
+                                        href="dailyTasks/edit/${daily._id}">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>`
+      );
+    }, ``);
+    $("#dailyTable").append(content);
+  }
+}
+
+function prettyDate(dateString) {
+  var date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function writeLuckyInfo(lucky) {
+  let content = lucky.reduce((content, lucky) => {
+    return (
+      content +
+      `<tr>
+                                  <td>Bonus ${lucky._id}</td>
+                                  <td>Date ${prettyDate(lucky.time)}</td>
+                                  <td>
+                                      <a  class="btn btn-dark"
+                                          href="lucky/edit/${lucky._id}">
+                                          Edit
+                                      </a>
+                                  </td>
+                              </tr>`
+    );
+  }, ``);
+  $("#luckyTable").append(content);
+}
+
 /**
  * Writes coachinfo, lifeongrounds, posttest, welcome information from Mongo
  * @param { [{page: string, src, string, _id: string,}, ...] } data
@@ -346,6 +420,39 @@ function writeBadges(badges) {
   }
 }
 
+function writeModules(modules) {
+  let content = modules.reduce((content, module) => {
+    return (
+      content +
+      `<tr>
+                                <td>${module._id}</td>
+                                <td>${module.primary_title}</td>
+                                <td>${module.secondary_title}</td>
+                                <td>
+                                    <input type='checkbox' ${
+                                      module.open === "true" ? "checked" : ""
+                                    }/>
+                                </td>
+                                <td>
+                                    <input type='checkbox' ${
+                                      module.due === "true" ? "checked" : ""
+                                    }/>
+                                </td>
+                                <td>${module.practice_link}</td>
+                                <td>${module.quiz_link}</td>
+                                <td>${module.reflection_link}</td>
+                                <td>
+                                    <a  class="btn btn-dark"
+                                        href="modules/edit/${module._id}">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>`
+    );
+  }, ``);
+  $("#moduleTable").append(content);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 // AJAX shortcut helpers
 function updateHome(field, value) {
@@ -415,39 +522,6 @@ function updateBadge() {
       console.log("[B] fail");
       alert("Badge update failed.");
     });
-}
-
-function writeModules(modules) {
-  let content = modules.reduce((content, module) => {
-    return (
-      content +
-      `<tr>
-                                <td>${module._id}</td>
-                                <td>${module.primary_title}</td>
-                                <td>${module.secondary_title}</td>
-                                <td>
-                                    <input type='checkbox' ${
-                                      module.open === "true" ? "checked" : ""
-                                    }/>
-                                </td>
-                                <td>
-                                    <input type='checkbox' ${
-                                      module.due === "true" ? "checked" : ""
-                                    }/>
-                                </td>
-                                <td>${module.practice_link}</td>
-                                <td>${module.quiz_link}</td>
-                                <td>${module.reflection_link}</td>
-                                <td>
-                                    <a  class="btn btn-dark"
-                                        href="modules/edit/${module._id}">
-                                        Edit
-                                    </a>
-                                </td>
-                            </tr>`
-    );
-  }, ``);
-  $("#moduleTable").append(content);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

@@ -1,18 +1,22 @@
 extends ../layout
 
 block content
-
-    //script(type='text/javascript', src='/javascript/nic-edit.js')
-    //script(type='text/javascript').
-    //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-
+    script.
+        const herokuAPI = "/api",
+              edit = false,
+              courseID = "!{courseID}";
+        needs=["courseTitle", "lucky", "testInfo"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
-                a.btn.btn-lg(href='/admin/modules?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
                     i.fa.fa-chevron-left
-                h2='Editing ' + course_title + ', Module ' + module._id
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
     hr
     div.container
         form(method='POST' action='preview')
