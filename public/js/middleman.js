@@ -3,7 +3,7 @@
 
 $(document).ready(function () {
   // Contains all AJAX calls necessary to interface with system API
-  const hostname = document.referrer.split("/")[2],
+  const hostname = document.referrer.split("/")[2], // assume URL formatted as "https://hostname/courses/courseID"
     courseID = document.referrer.split("/")[4];
 
   var getHomeUpdates = new Promise((resolve, reject) => {

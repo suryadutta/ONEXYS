@@ -3,7 +3,8 @@ extends ../layout
 block content
     br
     script.
-        const herokuAPI = "http://localhost:3000/api";
+        const herokuAPI = "/api";
+              courseID = "!{courseID}";
               needs = ["courseTitle"]; // Define what AJAX needs to retrieve
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")

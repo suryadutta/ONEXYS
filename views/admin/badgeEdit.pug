@@ -2,9 +2,10 @@ extends ../layout
 
 block content
     script.
-        const herokuAPI = "http://localhost:3000/api",
+        const herokuAPI = "/api",
               badgeID = #{id},
-              edit = true;
+              edit = true,
+              courseID = "!{courseID}";
         needs=["courseTitle", "badges"];
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")

@@ -6,8 +6,9 @@ block content
     //script(type='text/javascript').
     //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
     script.
-        const herokuAPI = "http://localhost:3000/api";
-              needs = ["courseTitle", "homepageUpdates", "homepageVideos"];
+        const herokuAPI = "/api";
+              needs = ["courseTitle", "homepageUpdates", "homepageVideos"],
+              courseID = "!{courseID}";
     script(src="/js/autosize.min.js")
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
