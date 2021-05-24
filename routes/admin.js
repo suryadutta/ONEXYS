@@ -35,6 +35,24 @@ router.get("/modules", (req, res) => {
   });
 });
 
+router.get("/homeVidEdit/:id", (req, res) => {
+  res.render("admin/homeVidEdit", {
+    title: `Editing video ${req.params.id}`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
+// router.get("/modules/edit/:id", (req, res) => {
+//   res.render("admin/moduleEdit", {
+//     title: `Editing module ${req.params.id}`,
+//     heroku: config.herokuAppName,
+//     id: req.params.id,
+//     courseID: Object.keys(req.session.course_id)[0],
+//   });
+// });
+
 router.get("/badges", (req, res) => {
   res.render("admin/badges", {
     title: `Course Badges`,

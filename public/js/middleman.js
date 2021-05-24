@@ -156,8 +156,14 @@ $(document).ready(function () {
       }
     })
     .catch((err) => {
-      // TODO
-      console.log("Badge loading failed.");
+      $("#recent_badges").html(
+        `
+        <h2>Recent Badges</h2>
+          <div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
+            <p>Badge loading failed.</p>
+          <div>
+        `
+      );
     });
 
   // Retrieves the leaderboard of a given course
@@ -194,15 +200,24 @@ function writeBadges(badgeData) {
   });
   // Display the 3 most recent badges (stored in recents)
   var badgeHTML = `<h2>Recent Badges</h2>`;
-  recents.forEach((recentBadge) => {
-    if (recentBadge.id) {
-      var badge = badgeData.find((item) => item._id == recentBadge.id);
-      badgeHTML += `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
+  if (recents.length === 0) {
+    badgeHTML += `
+      <h2>Recent Badges</h2>
+        <div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
+          <p>Earn some badges and you will see them here!</p>
+        <div>
+      `;
+  } else {
+    recents.forEach((recentBadge) => {
+      if (recentBadge.id) {
+        var badge = badgeData.find((item) => item._id == recentBadge.id);
+        badgeHTML += `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
                             <div class="badge_portrait" style="width: 80px; height: 100px; background-image: url(${badge.EarnedHoverURL})"></div>
                             <div class="badge_portrait front_portrait" style="width: 80px; height: 100px; background-image: url(${badge.EarnedURL})"></div>
                           </div>`;
-    }
-  });
+      }
+    });
+  }
 
   $("#recent_badges").html(
     badgeHTML +

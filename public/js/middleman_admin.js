@@ -78,7 +78,8 @@ $(document).ready(async function () {
       })
       .catch((err) => {
         console.log("video retrieval failed");
-      });
+      })
+      .always(() => hideLoadingBar());
   }
 
   if (needs.includes("navigationData")) {
@@ -121,6 +122,11 @@ $(document).ready(async function () {
   }
 });
 
+/*****************************************************************
+ * Dynamic DOM update methods
+ *
+ */
+
 // Takes care of:
 //      the three headers;
 //      the three text bodies
@@ -141,43 +147,52 @@ function writeHomeUpdates(updates) {
 //      writing all video data
 function writeHomeVideos(videos) {
   // Write the videos to the editing panel
-  $("#homepageVideosEdit").html(
-    videos.videos
-      .map(
-        (video) =>
-          `<div class="col-md-6 vid-obj">
-            <div class="row">
-                <div class="col-md-8">
-                    <div id="${video._id}" class="video-element">
-                        <div class="onexys_video">
-                            <a class="colorbox" target="_blank" href="${video.src}">
-                                <img class="onexys_thumbnail ${
-                                  video.thumbnail
-                                    ? `" src="${video.thumbnail}"`
-                                    : `default" src="${videos.thumbnail}`
-                                }">
-                                <img class="onexys_playbutton" src="${videos.playbutton}">
-                            </a>
-                        </div>
-                        <span style="font-size: 12pt;">
-                            <p>${video.description}</p>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-md-4" style="position: relative;">
-                    <button class="btn btn-dark" style="width: 80%; position: absolute; top: 25%; transform: translateY(-53%);">Edit Video</button>
-                    <button class="btn btn-danger" style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video</button>
-                </div>
+  if (typeof edit === "boolean" && edit) {
+    const videoToEdit = videos.videos.find((video) => video._id === videoID);
+    $("#video_src").val(videoToEdit.src);
+    $("#video_thumb").val(videoToEdit.thumbnail);
+    $("#video_desc").val(videoToEdit.description);
+    $("#video_pos").val(videoToEdit.position);
+  } else {
+    $("#homepageVideosEdit").html(
+      videos.videos
+        .map(
+          (video) =>
+            `<div class="col-md-6 vid-obj">
+      <div class="row">
+        <div class="col-md-8">
+          <div id="${video._id}" class="video-element">
+            <div class="onexys_video">
+              <a class="colorbox" target="_blank" href="${video.src}">
+                <img class="onexys_thumbnail ${
+                  video.thumbnail
+                    ? `" src="${video.thumbnail}" `
+                    : `default" src="${videos.thumbnail}`
+                }">
+                <img class="onexys_playbutton" src="${videos.playbutton}">
+              </a>
             </div>
+            <span style="font-size: 12pt;">
+              <p>${video.description}</p>
+            </span>
+          </div>
         </div>
-        `
-      )
-      .join("")
-  );
-
-  // Set form fields
-  $("#logdt").val(videos.thumbnail);
-  $("#logpb").val(videos.playbutton);
+        <div class="col-md-4" style="position: relative;">
+          <a class="btn btn-dark text-white" href="/admin/homeVidEdit/${
+            video._id
+          }" style="width: 80%; position: absolute; top: 25%; transform: translateY(-53%);">Edit Video</a>
+          <button class="btn btn-danger"
+            style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video</button>
+        </div>
+      </div>
+    </div>`
+        )
+        .join("")
+    );
+    // Set form fields
+    $("#logdt").val(videos.thumbnail);
+    $("#logpb").val(videos.playbutton);
+  }
 }
 
 // Takes care of:
@@ -231,142 +246,10 @@ function writeDailyTaskInfo(daily) {
   $("#dti").val(daily.img);
 }
 
-// Makes all changes live (saves to Mongo)
-function goLive() {
-  // Homepage updates
-  updateHome("main_header", $("#u1h").val());
-  updateHome("main_text", $("#u1t").val());
-  updateHome("header2", $("#u2h").val());
-  updateHome("text2", $("#u2t").val());
-  updateHome("header3", $("#u3h").val());
-  updateHome("text3", $("#u3t").val());
-
-  // Pre/Post test things
-  updateHome("post_test", $("#poto").is(":checked"));
-  updateHome("pre_test_button_background", $("#prtb").val());
-  updateHome("post_test_button_background", $("#potb").val());
-  updateHome("post_test_filename", $("#ptp").val());
-
-  // LoG
-  updateHome("life_on_grounds_title", $("#logt").val());
-  updateHome("life_on_grounds_link", $("#logl").val());
-
-  // Badges tool link + daily task image
-  updateHome("daily_task_img", $("#dti").val());
-  updateHome("badges_link", $("#btl").val());
-
-  // Video defaults
-  updateVideoDefaults($("#logdt").val(), $("#logpb").val());
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-// AJAX shortcut helpers
-function updateHome(field, value) {
-  $.post(herokuAPI + "/admin/updateHome", {
-    courseID,
-    field,
-    value,
-  })
-    .done((res) => console.log("[H] done"))
-    .fail((res) => console.log("[H] fail"));
-}
-
-// Any parameters which eval to false (undefined/null/etc...) will be left unmodified
-function updateVideo(videoID, src, description, thumbnail, position) {
-  // console.log(position, description);
-  $.post(herokuAPI + "/admin/updateVideo", {
-    courseID,
-    id: videoID,
-    src,
-    description,
-    thumbnail,
-    position,
-  })
-    .done((res) => console.log("[V] done"))
-    .fail((res) => console.log("[V] fail"));
-}
-
-function updateVideoDefaults(thumbnail, playbutton) {
-  $.post(herokuAPI + "/admin/updateVideoDefaults", {
-    courseID,
-    thumbnail,
-    playbutton,
-  })
-    .done((res) => console.log("[VD] done"))
-    .fail((res) => console.log("[VD] fail"));
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Keep the preview up to date
-function copyToPreview() {
-  // Set update headers
-  let headers = [$("#u1h").val(), $("#u2h").val(), $("#u3h").val()];
-  $("#updates")
-    .find(".entry_header")
-    .each((i, elem) => {
-      $(elem).html(`<strong>${headers[i]}</strong>`);
-    });
-
-  // Set update texts
-  let texts = [$("#u1t").val(), $("#u2t").val(), $("#u3t").val()];
-  $("#updates")
-    .find(".entry_text")
-    .each((i, elem) => $(elem).html(texts[i]));
-
-  // Pre/Post test things
-  $("#poto").is(":checked");
-  $("#prtb").val();
-  $("#potb").val();
-  $("#ptp").val();
-
-  // LoG
-  $("#logt").val();
-  $("#logl").val();
-
-  // Badges tool link + daily task image
-  $("#dti").val();
-
-  // Video defaults
-  $("#logdt").val();
-  $("#logpb").val();
-
-  // Copy videos from the edit panel to the preview window
-  $("#homepageVideos").html(
-    $.map(
-      $("#homepageVideosEdit").find(".video-element"),
-      (videoElem) =>
-        `<div class="onexys_video">
-                <a class="colorbox" target="_blank" href="${$(videoElem)
-                  .find("a.colorbox")
-                  .prop("href")}">
-                    <img class="onexys_thumbnail" src="${$(videoElem)
-                      .find("img.onexys_thumbnail")
-                      .prop("src")}">
-                    <img class="onexys_playbutton" src="${$(videoElem)
-                      .find("img.onexys_playbutton")
-                      .prop("src")}">
-                </a>
-            </div>
-            <span style="font-size: 12pt;">
-                <p>${$(videoElem).find("p").html()}</p>
-            </span>
-            `
-    ).join("")
-  );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-// AJAX shortcut helper
-function updateNavigation(location, link) {
-  $.post(herokuAPI + "/admin/updateNavigation", {
-    courseID,
-    location,
-    link,
-  })
-    .done((res) => console.log("[N] done"))
-    .fail((res) => console.log("[N] fail"));
-}
-
+/**
+ * Writes coachinfo, lifeongrounds, posttest, welcome information from Mongo
+ * @param { [{page: string, src, string, _id: string,}, ...] } data
+ */
 function writeNavigationData(data) {
   $("#coachinfo").val(data[0].src);
   $("#lifeongrounds").val(data[1].src);
@@ -463,6 +346,53 @@ function writeBadges(badges) {
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
+// AJAX shortcut helpers
+function updateHome(field, value) {
+  $.post(herokuAPI + "/admin/updateHome", {
+    courseID,
+    field,
+    value,
+  })
+    .done((res) => console.log("[H] done"))
+    .fail((res) => console.log("[H] fail"));
+}
+
+// Any parameters which eval to false (undefined/null/etc...) will be left unmodified
+function updateVideo(videoID, src, description, thumbnail, position) {
+  // console.log(position, description);
+  $.post(herokuAPI + "/admin/updateVideo", {
+    courseID,
+    id: videoID,
+    src,
+    description,
+    thumbnail,
+    position,
+  })
+    .done((res) => console.log("[V] done"))
+    .fail((res) => console.log("[V] fail"));
+}
+
+function updateVideoDefaults(thumbnail, playbutton) {
+  $.post(herokuAPI + "/admin/updateVideoDefaults", {
+    courseID,
+    thumbnail,
+    playbutton,
+  })
+    .done((res) => console.log("[VD] done"))
+    .fail((res) => console.log("[VD] fail"));
+}
+
+function updateNavigation(location, link) {
+  $.post(herokuAPI + "/admin/updateNavigation", {
+    courseID,
+    location,
+    link,
+  })
+    .done((res) => console.log("[N] done"))
+    .fail((res) => console.log("[N] fail"));
+}
+
 function updateBadge() {
   let submit = {
     courseID,
@@ -518,4 +448,91 @@ function writeModules(modules) {
     );
   }, ``);
   $("#moduleTable").append(content);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+// Keep the preview up to date
+function copyToPreview() {
+  // Set update headers
+  let headers = [$("#u1h").val(), $("#u2h").val(), $("#u3h").val()];
+  $("#updates")
+    .find(".entry_header")
+    .each((i, elem) => {
+      $(elem).html(`<strong>${headers[i]}</strong>`);
+    });
+
+  // Set update texts
+  let texts = [$("#u1t").val(), $("#u2t").val(), $("#u3t").val()];
+  $("#updates")
+    .find(".entry_text")
+    .each((i, elem) => $(elem).html(texts[i]));
+
+  // Pre/Post test things
+  $("#poto").is(":checked");
+  $("#prtb").val();
+  $("#potb").val();
+  $("#ptp").val();
+
+  // LoG
+  $("#logt").val();
+  $("#logl").val();
+
+  // Badges tool link + daily task image
+  $("#dti").val();
+
+  // Video defaults
+  $("#logdt").val();
+  $("#logpb").val();
+
+  // Copy videos from the edit panel to the preview window
+  $("#homepageVideos").html(
+    $.map(
+      $("#homepageVideosEdit").find(".video-element"),
+      (videoElem) =>
+        `<div class="onexys_video">
+                <a class="colorbox" target="_blank" href="${$(videoElem)
+                  .find("a.colorbox")
+                  .prop("href")}">
+                    <img class="onexys_thumbnail" src="${$(videoElem)
+                      .find("img.onexys_thumbnail")
+                      .prop("src")}">
+                    <img class="onexys_playbutton" src="${$(videoElem)
+                      .find("img.onexys_playbutton")
+                      .prop("src")}">
+                </a>
+            </div>
+            <span style="font-size: 12pt;">
+                <p>${$(videoElem).find("p").html()}</p>
+            </span>
+            `
+    ).join("")
+  );
+}
+
+// Makes all changes live (saves to Mongo)
+function goLive() {
+  // Homepage updates
+  updateHome("main_header", $("#u1h").val());
+  updateHome("main_text", $("#u1t").val());
+  updateHome("header2", $("#u2h").val());
+  updateHome("text2", $("#u2t").val());
+  updateHome("header3", $("#u3h").val());
+  updateHome("text3", $("#u3t").val());
+
+  // Pre/Post test things
+  updateHome("post_test", $("#poto").is(":checked"));
+  updateHome("pre_test_button_background", $("#prtb").val());
+  updateHome("post_test_button_background", $("#potb").val());
+  updateHome("post_test_filename", $("#ptp").val());
+
+  // LoG
+  updateHome("life_on_grounds_title", $("#logt").val());
+  updateHome("life_on_grounds_link", $("#logl").val());
+
+  // Badges tool link + daily task image
+  updateHome("daily_task_img", $("#dti").val());
+  updateHome("badges_link", $("#btl").val());
+
+  // Video defaults
+  updateVideoDefaults($("#logdt").val(), $("#logpb").val());
 }
