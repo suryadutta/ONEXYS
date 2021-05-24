@@ -17,159 +17,120 @@ block content
       .row
           .col-md-1
           .col.form-inline
-              a.btn.btn-lg(href='/admin/homepageEdit')
+              a.btn.btn-lg(href='/admin/modules')
                   i.fa.fa-chevron-left
               h2#adminPanelTitle='Loading title...'
           .col-md-1
   hr
 
   main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
-    h3 Editing module #{id}
-    hr
-    div.container
-        form(method='POST' action='preview')
-            input(type='hidden', value=course_id, name='course-id')
-            input(type='hidden', value=course_title, name='course-title')
-            input(type='hidden', value=user_id, name='user-id')
-            button.btn.btn-success(type='submit') Preview Changes
-            hr
+    h3.mb-4 Editing module #{id}
 
-    div.d-flex.flex-column
+    div.d-flex.flex-column.mb-4
       label(for="primary_title") Primary Title:
       input#primary_title.form-control(type='text', value="")
-    hr
 
-            div.row.form-group.form-inline
-                label(for='secondary_title') Secondary Title:
-                input#secondary_title.form-control.inlined-input(type='text', value=module.secondary_title, name='secondary_title')
-            hr
+    div.d-flex.flex-column.mb-4
+      label(for="secondary_title") Secondary Title:
+      input#secondary_title.form-control(type='text', value="")
+    
+    hr.w-100
+  
+    div.mb-4
+      label Open?
+      div.custom-control.custom-radio
+        input#open_yes.custom-control-input(type='radio', name="open_radio")
+        label.custom-control-label(for="open_yes") Yes
+      div.custom-control.custom-radio
+        input#open_no.custom-control-input(type='radio', name="open_radio")
+        label.custom-control-label(for="open_no") No
 
-            div.form-group
-                h5 Practice Assignment ID or URL to custom page for multiple practice assignments? (pick one)
-                div.row.form-inline
-                    input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
-                    label(for='practice_link') Practice Assignment ID
-                    input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link', placeholder='Practice Assignment ID')
-                div.row.form-inline
-                    input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
-                    label(for='practice_url_redirect') Practice URL
-                    input#practice_url_redirect.form-control.inlined-input(type='text', value=module.practice_url_redirect, name='practice_url_redirect', placeholder='Practice URL')
+    div.mb-4
+      label Due? 
+      div.custom-control.custom-radio
+        input#due_yes.custom-control-input(type="radio" name="due_radio")
+        label.custom-control-label(for="due_yes") Yes
+      div.custom-control.custom-radio
+        input#due_no.custom-control-input(type="radio" name="due_radio")
+        label.custom-control-label(for="due_no") No
 
-            hr
+    hr.w-100
 
-            //- new practice cutoff form
-            div.row.form-group.form-inline
-                label(for='multiple_practice_cutoff') Practice Assignment Cutoff Scores Formatted in id_cutoff separated by commas (e.g., "73230_90", "73230_90,73231_100,73232_95"):
-                input#multiple_practice_cutoff.form-control(type='text', value=module.multiple_practice_cutoff, name='multiple_practice_cutoff')
-            hr
+    div.mb-4
+      label(for="background_image") Background Image Path:
+      input#background_image.form-control(type='text', value="")
 
-            div.row.form-group.form-inline
-                label(for='quiz_link') Quiz Assignment ID:
-                input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
-            hr
+    div.mb-4
+      label(for="button_background_image") Button Background Image (e.g., battel, alderman):
+      input#button_background_image.form-control(type='text', value="")
 
-            div.row.form-group.form-inline
-                label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100):
-                input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff', style='width:55px;')
-            hr
+    div.mb-4
+      label(for="background_name") Background Name
+      input#background_name.form-control(type='text', value="")
 
-            div.row.form-group.form-inline
-                label(for='reflection_link') Reflections Assignment ID:
-                input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
-            small(color="red") Note: The number found at the end of a discussion topics url is NOT the assignment ID which goes here. You can find the assignment ID by looking in the exported gradebook.
-            hr
+    div.form-floating.mb-4
+      label(for="background_desc") Background Description
+      textarea#background_desc.form-control(style="height: 100px")
 
-            div.form-group
-                h5 Module Open?
-                div.row.form-inline
-                    input#open_true.form-control(type='radio', value='true', checked=module.open=='true', name='open')
-                    label(for='open_true') Yes
-                div.row.form-inline
-                    input#open_false.form-control(type='radio', value='false', checked=module.open=='false', name='open')
-                    label(for='open_false') No
-            hr
+    hr.w-100.mb-4
 
-            div.form-group.form-inline
-                label(for='background_image') Background Image Path:
-                input#background_image.form-control(type='text', value=module.background_image, name='background_image')
-            hr
+    div.form-floating.mb-4
+      label(for="overview_text") Overview
+      textarea#overview_text.form-control(style="height: 100px")
 
-            div.form-group.form-inline
-                label(for='button_background_image') Button Background Image (e.g., battel, alderman):
-                input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
-            hr
+    div.form-floating.mb-4
+      label(for="apply_description") Apply Description
+      textarea#apply_description.form-control(style="height: 100px")
 
-            div.form-group.form-inline
-                label(for='background_name') Background Name:
-                input#background_name.form-control(type='text', value=module.background_name, name='background_name')
-            hr
+    div.mb-4
+      label(for="apply_read_src") Apply Reading Source
+      input#apply_read_src.form-control(type='text', value="")
 
-            div.form-group
-                label(for='background_desc') Background Description:
-                textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
-            hr
+    hr.w-100.mb-4
 
-            div.form-group
-                label(for='module_overview') Overview:
-                textarea#module_overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
-            hr
+    h4 ALEKS Practice 
+    div.d-flex.flex-column
+      label(for="multiple_practice_cutoff") Practice Assignment ID and Grade Cutoff out of 100 (formatted as id_cutoff e.g "73230_90", "73230_90, 73231_100")
+      input#multiple_practice_cutoff.mb-4.form-control(type='text', value="")
 
-            div.form-group
-                label(for='apply_description') Apply Description:
-                textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
-            hr
+      label Practice Assignment ID or URL to custom page for multiple practice assignments?
+      div.d-flex.flex-row.custom-control.custom-radio
+        input#practice_id_bool_true.custom-control-input(type="radio" name="practice_bool")
+        label.custom-control-label(for="practice_id_bool_true") Practice Assignment ID
+        input#practice_link.ml-3.form-control(type='text', value="")
 
-            div.form-group.form-inline
-                label(for='apply_read_src') Apply Read Source:
-                input#apply_read_src.form-control.inlined-input(type='text', value=module.apply_read_src, name='apply_read_src')
-            hr
+      div.d-flex.flex-row.custom-control.custom-radio
+        input#practice_id_bool_false.custom-control-input(type="radio" name="practice_bool")
+        label.custom-control-label(for="practice_id_bool_false") Practice URL to Custom Page
+        input#practice_url_redirect.ml-3.form-control(type='text', value="")
 
-            div.form-group
-                label(for='module_explore') Explore Text:
-                textarea#module_explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
-            hr
+    hr.w-100
 
-            button.btn.btn-success(type='submit') Preview Changes
-        br
-    hr
-    div.container
-        div.row
-            div.col-md-9
-                form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
-                    input(type='hidden', value=course_id, name='course-id')
-                    input(type='hidden', value=course_title, name='course-title')
-                    input(type='hidden', value=user_id, name='user-id')
-                h2='Editing videos for ' + course_title + ': Module ' + module._id
-            div.col-md-3
-                form(method='GET',action='videos/add')
-                    input(type='hidden', value=course_id, name='course-id')
-                    input(type='hidden', value=course_title, name='course-title')
-                    input(type='hidden', value=user_id, name='user-id')
-                    button.btn.btn-dark(type='submit') Add Video
-            table
-                for video in module.videos
-                    tr
-                        td
-                            div.watch_video.left
-                                div.onexys_video
-                                    a.colorbox.cboxElement(href=video.video_src)
-                                    img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
-                                    img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
-                                p
-                                    span(style='font-size: 12pt;')
-                                    strong!=video.video_desc
-                                    span!=video.video_desc_helper
-                            br
-                        td
-                            div.form.form-inline
-                                form(method='GET' action='videos/edit/'+video._id)
-                                    input(type='hidden', value=course_id, name='course-id')
-                                    input(type='hidden', value=course_title, name='course-title')
-                                    input(type='hidden', value=user_id, name='user-id')
-                                    button.btn.btn-dark(type='submit') Edit
-                                form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                                    input(type='hidden', value=course_id, name='course-id')
-                                    input(type='hidden', value=course_title, name='course-title')
-                                    input(type='hidden', value=user_id, name='user-id')
-                                    button.btn.btn-danger(type='submit') Delete
-    script(src="/javascript/resize.js")
+    div.d-flex.flex-column.mb-4
+      label(for="reflection_link") Reflection Link:
+      input#reflection_link.form-control(type='text', value="")
+
+    hr.w-100 
+
+    h4 WIRIS Apply Quiz
+    div.d-flex.flex-column.mb-4
+      label(for="quiz_link") Quiz ID:
+      input#quiz_link.form-control(type='text', value="")
+    
+    div.d-flex.flex-column.mb-4
+      label(for="quiz_cutoff") Quiz Cutoff:
+      input#quiz_cutoff.form-control(type='text', value="")
+
+    hr.w-100.mb-4  
+    
+    div.form-floating.mb-4
+      label(for="explore_text") Explore Text (embed videos for explore here)
+      textarea#explore_text.form-control( style="height: 100px")
+
+    div.mb-4
+      button.btn.btn-success(onClick="updateModule();") Go live
+
+    hr.w-100.mb-4
+
+    h4 Videos for Module #{id}
+    div#module_vid_container.d-flex.flex-column

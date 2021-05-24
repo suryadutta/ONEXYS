@@ -19,9 +19,7 @@ function getDailyTask(courseID, callback) {
         });
       }),
       async.reflect((callback) => {
-        getAdminRequest(dailyTaskUrl(courseID), (err, data) =>
-          callback(err, data)
-        );
+        getAdminRequest(dailyTaskUrl(courseID), (err, data) => callback(err, data));
       }),
     ],
     (err, data) => {
@@ -90,18 +88,11 @@ var assignment_user_url = (studentID, courseID) => {
   //return config.canvasURL + '/api/v1/courses/' + courseID + '/students/submissions?student_ids[]=' + studentID;
 };
 var notes_column_url = (courseID) => {
-  return (
-    config.canvasURL +
-    "/api/v1/courses/" +
-    courseID +
-    "/custom_gradebook_columns/"
-  );
+  return config.canvasURL + "/api/v1/courses/" + courseID + "/custom_gradebook_columns/";
 };
 var get_update_url = (courseID, callback) => {
   getAdminRequest(notes_column_url(courseID), function (err, custom_columns) {
-    var points_id = custom_columns.find(
-      (column) => (column.title = "Notes")
-    ).id;
+    var points_id = custom_columns.find((column) => (column.title = "Notes")).id;
     var update_url =
       config.canvasURL +
       "/api/v1/courses/" +
@@ -113,20 +104,10 @@ var get_update_url = (courseID, callback) => {
   });
 };
 var sections_url = (courseID) => {
-  return (
-    config.canvasURL +
-    "/api/v1/courses/" +
-    courseID +
-    "/sections?include=students"
-  );
+  return config.canvasURL + "/api/v1/courses/" + courseID + "/sections?include=students";
 };
 var student_url = (courseID) => {
-  return (
-    config.canvasURL +
-    "/api/v1/courses/" +
-    courseID +
-    "/users?enrollment_type=student"
-  );
+  return config.canvasURL + "/api/v1/courses/" + courseID + "/users?enrollment_type=student";
 };
 var dailyTaskUrl = (courseID) => {
   return config.canvasURL + "/api/v1/courses/" + courseID + "/assignments";

@@ -150,14 +150,15 @@ function updateNavigation(courseID, location, link, callback) {
 function updateBadge(courseID, badge, callback) {
   let db = client.db(config.mongoDBs[courseID]);
   db.collection("badges")
-    .findOneAndUpdate(
-      {
-        _id: badge._id,
-      },
-      {
-        $set: badge,
-      }
-    )
+    .findOneAndUpdate({ _id: badge._id }, { $set: badge })
+    .then(() => callback(null))
+    .catch((err) => callback(err));
+}
+
+function updateModule(courseID, module, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("modules")
+    .findOneAndUpdate({ _id: module._id }, { $set: module })
     .then(() => callback(null))
     .catch((err) => callback(err));
 }
@@ -177,4 +178,5 @@ module.exports = {
   getNavigationData,
   updateNavigation,
   updateBadge,
+  updateModule,
 };

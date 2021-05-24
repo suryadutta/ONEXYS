@@ -366,40 +366,70 @@ router.post("/admin/updateVideoDefaults", (req, res) => {
 });
 
 // AJAX uses this route to dynamically open/close and mark modules as due
-router.post("/admin/updateModule", (req, res) => {
+router.post("/admin/updateModule/:id", (req, res) => {
   if (req.session.admin) {
     try {
       authorize(req);
-      assert(/\d+/.test(req.body.id)); // IDs must be an integer
+      if (req.body.open) assert(/(true|false)/.test(req.body.open)); // Open must be a valid boolean
+      if (req.body.due) assert(/(true|false)/.test(req.body.due)); // Due must be a valid boolean
+      if (req.body.practice_id_bool) assert(/(true|false)/.test(req.body.practice_id_bool)); // Open must be a valid boolean
 
-      let updates = {};
-      if (req.body.open) {
-        assert(/(true|false)/.test(req.body.open)); // Open must be a valid boolean
-        updates.open = req.body.open;
-      }
-      if (req.body.due) {
-        assert(/(true|false)/.test(req.body.due)); // Due must be a valid boolean
-        updates.due = req.body.due;
-      }
+      assert(/\d+/.test(parseInt(req.params.id))); // IDs must be an integer
+      assert(req.body.primary_title);
+      assert(req.body.secondary_title);
+      assert(req.body.practice_link);
+      assert(req.body.practice_cutoff);
+      assert(req.body.multiple_practice_cutoff);
+      assert(req.body.quiz_link);
+      assert(req.body.quiz_cutoff);
+      assert(req.body.reflection_link);
+      assert(req.body.background_image);
+      assert(req.body.background_name);
+      assert(req.body.background_desc);
+      assert(req.body.overview);
+      assert(req.body.apply_description);
+      assert(req.body.apply_read_src);
+      assert(req.body.explore);
+      assert(req.body.button_background_image);
+      assert(req.body.practice_url_redirect);
 
-      mongo.updateData(
-        req.session.course_id,
-        "modules",
-        { _id: parseInt(req.body.id) },
-        updates,
-        (err, data) => {
-          if (err) {
-            res
-              .status(500)
-              .send("500 - Internal Server Error. Encountered error saving module info.");
-          } else res.status(200).send("200 - OK");
-        }
-      );
+      let submit = {
+        _id: parseInt(req.params.id),
+        primary_title: req.body.primary_title,
+        secondary_title: req.body.secondary_title,
+        practice_link: req.body.practice_link,
+        practice_cutoff: req.body.practice_cutoff,
+        multiple_practice_cutoff: req.body.multiple_practice_cutoff,
+        quiz_link: req.body.quiz_link,
+        quiz_cutoff: req.body.quiz_cutoff,
+        reflection_link: req.body.reflection_link,
+        background_image: req.body.background_image,
+        background_name: req.body.background_name,
+        background_desc: req.body.background_desc,
+        overview: req.body.overview,
+        apply_description: req.body.apply_description,
+        apply_read_src: req.body.apply_read_src,
+        explore: req.body.explore,
+        button_background_image: req.body.button_background_image,
+        practice_url_redirect: req.body.practice_url_redirect,
+        open: req.body.open,
+        due: req.body.due,
+        practice_id_bool: req.body.practice_id_bool,
+      };
+
+      mongo.updateModule(req.body.courseID, submit, (err, data) => {
+        if (err) {
+          res
+            .status(500)
+            .send("500 - Internal Server Error. Encountered error saving module info.");
+        } else res.status(200).send("200 - OK");
+      });
     } catch (e) {
-      res.status(406);
-      res.send(
-        "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans)."
-      );
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans)."
+        );
     }
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
@@ -474,7 +504,5 @@ router.post("/admin/updateBadge/:id", (req, res) => {
     }
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
-
-//
 
 module.exports = router;

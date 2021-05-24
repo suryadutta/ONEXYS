@@ -130,14 +130,14 @@ $(document).ready(async function () {
       .always(() => hideLoadingBar());
   }
 
-  if (needs.includes("testInfo")) {
-    $.get(`${herokuAPI}/testInfo`, {
-      hostname: window.location.hostname,
-      courseID,
-    })
-      .done((data) => writeTestInfo(data))
-      .fail((err) => console.log("test info retrieval failed"));
-  }
+  // if (needs.includes("testInfo")) {
+  //   $.get(`${herokuAPI}/testInfo`, {
+  //     hostname: window.location.hostname,
+  //     courseID,
+  //   })
+  //     .done((data) => writeTestInfo(data))
+  //     .fail((err) => console.log("test info retrieval failed"));
+  // }
 });
 
 /*****************************************************************
@@ -161,49 +161,54 @@ function writeHomeUpdates(updates) {
   autosize(document.querySelectorAll("textarea"));
 }
 
+// TODO: refactor into separate functions for homepagevideos and homepagevideosedit
 // Takes care of:
 //      writing all video data
 function writeHomeVideos(videos) {
   // Write the videos to the editing panel
   if (typeof edit === "boolean" && edit) {
-    const videoToEdit = videos.videos.find((video) => video._id === videoID);
-    $("#video_src").val(videoToEdit.src);
-    $("#video_thumb").val(videoToEdit.thumbnail);
-    $("#video_desc").val(videoToEdit.description);
-    $("#video_pos").val(videoToEdit.position);
+    const videoToEdit = videos.videos.find((video) => video._id.toString() === videoID.toString());
+
+    if (videoToEdit) {
+      $("#video_src").val(videoToEdit.src);
+      $("#video_thumb").val(videoToEdit.thumbnail);
+      $("#video_desc").val(videoToEdit.description);
+      $("#video_pos").val(videoToEdit.position);
+    }
   } else {
     $("#homepageVideosEdit").html(
       videos.videos
         .map(
           (video) =>
             `<div class="col-md-6 vid-obj">
-      <div class="row">
-        <div class="col-md-8">
-          <div id="${video._id}" class="video-element">
-            <div class="onexys_video">
-              <a class="colorbox" target="_blank" href="${video.src}">
-                <img class="onexys_thumbnail ${
-                  video.thumbnail
-                    ? `" src="${video.thumbnail}" `
-                    : `default" src="${videos.thumbnail}`
-                }">
-                <img class="onexys_playbutton" src="${videos.playbutton}">
-              </a>
-            </div>
-            <span style="font-size: 12pt;">
-              <p>${video.description}</p>
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4" style="position: relative;">
-          <a class="btn btn-dark text-white" href="/admin/homeVidEdit/${
-            video._id
-          }" style="width: 80%; position: absolute; top: 25%; transform: translateY(-53%);">Edit Video</a>
-          <button class="btn btn-danger"
-            style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video</button>
-        </div>
-      </div>
-    </div>`
+                <div class="row">
+                  <div class="col-md-8">
+                    <div id="${video._id}" class="video-element">
+                      <div class="onexys_video">
+                        <a class="colorbox" target="_blank" href="${video.src}">
+                          <img class="onexys_thumbnail ${
+                            video.thumbnail
+                              ? `" src="${video.thumbnail}" `
+                              : `default" src="${videos.thumbnail}`
+                          }">
+                          <img class="onexys_playbutton" src="${videos.playbutton}">
+                        </a>
+                      </div>
+                      <span style="font-size: 12pt;">
+                        <p>${video.description}</p>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-md-4" style="position: relative;">
+                    <a class="btn btn-dark text-white" href="/admin/homeVidEdit/${
+                      video._id
+                    }" style="width: 80%; position: absolute; top: 25%; transform: translateY(-53%);">Edit Video</a>
+                    <button class="btn btn-danger"
+                      style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video
+                    </button>
+                  </div>
+                </div>
+              </div>`
         )
         .join("")
     );
@@ -420,37 +425,96 @@ function writeBadges(badges) {
   }
 }
 
+// TODO: refactor into separate functions for modules and modulesvidedit
 function writeModules(modules) {
-  let content = modules.reduce((content, module) => {
-    return (
-      content +
-      `<tr>
-                                <td>${module._id}</td>
-                                <td>${module.primary_title}</td>
-                                <td>${module.secondary_title}</td>
-                                <td>
-                                    <input type='checkbox' ${
-                                      module.open === "true" ? "checked" : ""
-                                    }/>
-                                </td>
-                                <td>
-                                    <input type='checkbox' ${
-                                      module.due === "true" ? "checked" : ""
-                                    }/>
-                                </td>
-                                <td>${module.practice_link}</td>
-                                <td>${module.quiz_link}</td>
-                                <td>${module.reflection_link}</td>
-                                <td>
-                                    <a  class="btn btn-dark"
-                                        href="modules/edit/${module._id}">
-                                        Edit
-                                    </a>
-                                </td>
-                            </tr>`
-    );
-  }, ``);
-  $("#moduleTable").append(content);
+  if (typeof edit === "boolean" && edit) {
+    const moduleToEdit = modules.find((module) => module._id.toString() === moduleID.toString());
+
+    if (moduleToEdit) {
+      $("#primary_title").val(moduleToEdit.primary_title);
+      $("#secondary_title").val(moduleToEdit.secondary_title);
+      $("#practice_link").val(moduleToEdit.practice_link);
+      $("#practice_cutoff").val(moduleToEdit.practice_cutoff);
+      $("#practice_url_redirect").val(moduleToEdit.practice_url_redirect);
+      $("#multiple_practice_cutoff").val(moduleToEdit.multiple_practice_cutoff);
+      $("#quiz_link").val(moduleToEdit.quiz_link);
+      $("#quiz_cutoff").val(moduleToEdit.quiz_cutoff);
+      $("#reflection_link").val(moduleToEdit.reflection_link);
+      $("#background_image").val(moduleToEdit.background_image);
+      $("#button_background_image").val(moduleToEdit.button_background_image);
+      $("#background_name").val(moduleToEdit.background_name);
+      $("#background_desc").val(moduleToEdit.background_desc);
+      $("#overview_text").val(moduleToEdit.overview);
+      $("#apply_description").val(moduleToEdit.apply_description);
+      $("#apply_read_src").val(moduleToEdit.apply_read_src);
+      $("#explore_text").val(moduleToEdit.explore);
+
+      if (moduleToEdit.open === "true") $("#open_yes").prop("checked", true);
+      else $("#open_no").prop("checked", true);
+
+      if (moduleToEdit.due === "true") $("#due_yes").prop("checked", true);
+      else $("#due_no").prop("checked", true);
+
+      if (moduleToEdit.practice_id_bool === "true")
+        $("#practice_id_bool_true").prop("checked", true);
+      else $("#practice_id_bool_false").prop("checked", true);
+
+      let videos = moduleToEdit.videos;
+      videos.sort((video1, video2) => video1.position < video2.position);
+      let videoHTML = videos.reduce((videoHTML, video) => {
+        return (
+          videoHTML +
+          `
+          <div id="${video._id}" class="video-element d-flex align-items-center">
+            <div>
+              <div class="onexys_video">
+                <a class="colorbox" target="_blank" href="${video.video_src}">
+                  <img class="onexys_thumbnail" src="images/video/${video.video_image_src}">
+                </a>
+              </div>
+              <span style="font-size: 12pt;">
+                <p>${video.video_desc}</p>
+              </span>
+            </div>
+            
+            <div>
+              <a class="btn btn-dark text-white" href="/admin/moduleVidEdit/${video._id}">Edit Video</a>
+              <button class="btn btn-danger">Delete Video</button>
+            </div>
+          </div>         
+          `
+        );
+      });
+      $("#module_vid_container").append(videoHTML);
+    }
+  } else {
+    let content = modules.reduce((content, module) => {
+      return (
+        content +
+        `<tr>
+            <td>${module._id}</td>
+            <td>${module.primary_title}</td>
+            <td>${module.secondary_title}</td>
+            <td>
+                <input type='checkbox' ${module.open === "true" ? "checked" : ""}/>
+            </td>
+            <td>
+                <input type='checkbox' ${module.due === "true" ? "checked" : ""}/>
+            </td>
+            <td>${module.practice_link}</td>
+            <td>${module.quiz_link}</td>
+            <td>${module.reflection_link}</td>
+            <td>
+                <a  class="btn btn-dark"
+                    href="modules/edit/${module._id}">
+                    Edit
+                </a>
+            </td>
+        </tr>`
+      );
+    }, ``);
+    $("#moduleTable").append(content);
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -521,6 +585,42 @@ function updateBadge() {
     .fail((res) => {
       console.log("[B] fail");
       alert("Badge update failed.");
+    });
+}
+
+function updateModule() {
+  const submit = {
+    courseID,
+    primary_title: $("#primary_title").val(),
+    secondary_title: $("#secondary_title").val(),
+    practice_link: $("#practice_link").val(),
+    practice_cutoff: $("#multiple_practice_cutoff").val().split("_")[1],
+    practice_url_redirect: $("#practice_url_redirect").val(),
+    multiple_practice_cutoff: $("#multiple_practice_cutoff").val(),
+    quiz_link: $("#quiz_link").val(),
+    quiz_cutoff: $("#quiz_cutoff").val(),
+    reflection_link: $("#reflection_link").val(),
+    background_image: $("#background_image").val(),
+    button_background_image: $("#button_background_image").val(),
+    background_name: $("#background_name").val(),
+    background_desc: $("#background_desc").val(),
+    overview: $("#overview_text").val(),
+    apply_description: $("#apply_description").val(),
+    apply_read_src: $("#apply_read_src").val(),
+    explore: $("#explore_text").val(),
+    open: $("#open_yes").is(":checked") ? "true" : "false",
+    due: $("#due_yes").is(":checked") ? "true" : "false",
+    practice_id_bool: $("#practice_id_bool_true").is(":checked") ? "true" : "false",
+  };
+
+  $.post(herokuAPI + `/admin/updateModule/${moduleID}`, submit)
+    .done((res) => {
+      console.log("[M] done");
+      alert("Module successfully updated.");
+    })
+    .fail((res) => {
+      console.log("[M] fail");
+      alert("Module update failed.");
     });
 }
 
