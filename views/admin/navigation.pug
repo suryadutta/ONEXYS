@@ -35,6 +35,6 @@ block content
                 .form-group.form-inline
                     label(for='post_test') Post Test Filename:
                     input#posttest.form-control.inlined-input(type='text', name='post_test')
-                button.btn.btn-success Go Live
+                button.btn.btn-success(onClick="updateNavigation('welcome',$('#welcome').val()); updateNavigation('coach_information',$('#coachinfo').val()); updateNavigation('life_on_grounds',$('#lifeongrounds').val()); updateNavigation('post_test',$('#posttest').val());") Go Live 
                 hr
             .col

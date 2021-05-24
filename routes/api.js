@@ -370,21 +370,13 @@ router.post("/admin/updateNavigation", (req, res) => {
     try {
       authorize(req);
       assert(navigationLocations.includes(req.body.location));
-      assert(/https?:\/\/.+/.test(req.body.link));
+      // assert(/https?:\/\/.+/.test(req.body.link)); uncomment after switching to cloud stored files
 
-      mongo.updateData(
-        req.session.course_id,
-        "navigation",
-        { page: req.body.location },
-        { src: req.body.link },
-        (err, data) => {
-          if (err) {
-            res
-              .status(500)
-              .send("500 - Internal Server Error. Encountered error saving module info.");
-          } else res.status(200).send("200 - OK");
-        }
-      );
+      mongo.updateNavigation(req.body.courseID, req.body.location, req.body.link, (err) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Request could not be processed.");
+        else res.status(200).send("200 - OK");
+      });
     } catch (e) {
       res.status(406);
       res.send(

@@ -128,19 +128,12 @@ function getNavigationData(courseID, callback) {
     .catch((err) => callback(err, null));
 }
 
-function updateNavigation(ID, location, link, callback) {
+function updateNavigation(courseID, location, link, callback) {
   let db = client.db(config.mongoDBs[courseID]);
   db.collection("navigation")
     .findOneAndUpdate({ page: location }, { $set: { src: link } })
     .then(() => callback(null))
     .catch((err) => callback(err));
-}
-
-function getStaticPage(courseID, targetPage, callback) {
-  getData(courseID, "navigation", (err, data) => {
-    nav_info = data.find((document) => document.type == "navigation");
-    callback(err, nav_info[targetPage]);
-  });
 }
 
 function updateBadge(courseID, badge, callback) {
