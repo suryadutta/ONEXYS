@@ -1,22 +1,30 @@
 extends ../layout
 
 block content
-    script.
-        const herokuAPI = "/api",
-              edit = false,
-              courseID = "!{courseID}";
-        needs=["courseTitle", "lucky", "testInfo"];
-    script(src="/js/courseIDGrabber.js")
-    script(src="/js/middleman_admin.js")
-    br
-    .container(style="margin-top: 25px;")
-        .row
-            .col-md-1
-            .col.form-inline
-                a.btn.btn-lg(href='/admin')
-                    i.fa.fa-chevron-left
-                h2#adminPanelTitle='Loading title...'
-            .col-md-1
+  script.
+    const herokuAPI = "/api",
+      moduleID = "#{id}",
+      edit = true,
+      courseID = "#{courseID}",
+      needs = ["courseTitle", "modules"];  
+  
+  script(src="/js/middleman_admin.js")
+  br
+  #fullscr-loading
+      div
+      img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+  .container(style="margin-top: 25px;")
+      .row
+          .col-md-1
+          .col.form-inline
+              a.btn.btn-lg(href='/admin/homepageEdit')
+                  i.fa.fa-chevron-left
+              h2#adminPanelTitle='Loading title...'
+          .col-md-1
+  hr
+
+  main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
+    h3 Editing module #{id}
     hr
     div.container
         form(method='POST' action='preview')
@@ -26,10 +34,10 @@ block content
             button.btn.btn-success(type='submit') Preview Changes
             hr
 
-            div.row.form-group.form-inline
-                label(for='primary_title') Primary Title:
-                input#primary_title.form-control.inlined-input(type='text', value=module.primary_title, name='primary_title')
-            hr
+    div.d-flex.flex-column
+      label(for="primary_title") Primary Title:
+      input#primary_title.form-control(type='text', value="")
+    hr
 
             div.row.form-group.form-inline
                 label(for='secondary_title') Secondary Title:

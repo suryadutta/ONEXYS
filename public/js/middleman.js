@@ -220,7 +220,7 @@ function writeBadges(badgeData) {
   }
 
   $("#recent_badges").html(
-    badgeHTML + `<br><a href="#" target="_blank">Click here to view all badges</a>`
+    badgeHTML 
   );
 }
 
@@ -231,15 +231,19 @@ function writeUpdates(updates) {
   ); // Write updates to DOM
 
   // Life on Grounds information
-  $("#b_link").text(`Click here to view all badges!`); // Write Life on Grounds name to DOM
-  $("#b_link").prop("href", updates.badges_link); // Write Life on Grounds link to DOM
+  $("#recent_badges").append(
+    `<br><div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;"><a href="${updates.badges_link}" target='_blank'>Click here to view all badges</a></div></br>`
+  ); 
+
+  $("#BaD_link").text(`Click here to view all possible badges!`); // Write Life on Grounds name to DOM
+  $("#BaD_link").prop("href", updates.badges_link); // Write Life on Grounds link to DOM
   $("#LoG_title").text(updates.life_on_grounds_title); // Write Life on Grounds name to DOM
   $("#LoG_link").text(`Click here to see all ${updates.life_on_grounds_title} videos!`); // Write Life on Grounds name to DOM
   $("#LoG_link").prop("href", updates.life_on_grounds_link); // Write Life on Grounds link to DOM
 
   // Pre/post test data
-  $("#pretest").css("background-image", `url(${updates.pre_test_button_background})`);
-  $("#posttest").css("background-image", `url(${updates.post_test_button_background})`);
+  $("#pretest").css("background-image", `url(/images/progress_bar/${updates.pre_test_button_background}_1.png)`);
+  $("#posttest").css("background-image", `url(/images/progress_bar/${updates.post_test_button_background}_2.png)`);
   if (updates.post_test == "true") $("#posttest").addClass("available");
 
   // Daily task image
@@ -275,7 +279,7 @@ function writeModules(modules) {
       visibility = "available";
     }
     $("#modules").append(
-      `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(${module.button_background_image});" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+      `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
     ); // Append module to the DOM
   });
 }
