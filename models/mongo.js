@@ -102,6 +102,16 @@ function getModules(courseID, callback) {
     .catch((err) => callback(err, null));
 }
 
+function getProgress(courseID, callback) {
+  let db = client.db(config.mongoDBs[courseID]);
+  db.collection("user_progress")
+    .find()
+    .sort({ _id: 1 })
+    .toArray()
+    .then((data) => callback(null, data))
+    .catch((err) => callback(err, null));
+}
+
 function getModule(courseID, moduleID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
   db.collection("modules").findOne({ _id: parseInt(moduleID) }, (err, data) => {
@@ -173,6 +183,7 @@ module.exports = {
   getLuckyBonuses,
   getModule,
   getModules,
+  getProgress,
   getUserProgress,
   getBadges,
   getNavigationData,

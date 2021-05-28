@@ -48,8 +48,7 @@ config.mongoDBs = {
 };
 
 // If we're in a development environment, use the development databasez
-if (process.env.NODE_ENV == "development")
-  config.mongoDBs["8310"] = "development";
+if (process.env.NODE_ENV == "development") config.mongoDBs["8310"] = "development";
 
 //the name of the mongo db to connect to
 config.mongo_db_name = process.env.MONGO_DB_NAME;

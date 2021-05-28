@@ -100,7 +100,7 @@ $(document).ready(function () {
       //==============================================================
       $("#point_count").text(data.score);
       $("#teamName").text(data.team);
-      $("#teamScore").text("...");
+      //$("#teamScore").text("...");
     })
     .catch((err) => {
       console.log(err);
@@ -108,6 +108,22 @@ $(document).ready(function () {
         "Failed to retrieve user progress. The page has been loaded, but omitting this data."
       );
     });
+
+  var loadProgress = new Promise((resolve, reject) => {
+    $.get(herokuAPI + "/progress", {
+      hostname,
+      courseID,
+    })
+      .done((data, status) => {
+        resolve(data);
+      })
+      .fail((err) => {
+        reject(err);
+      });
+  }).then((data) => {
+    // Write module data to DOM
+    writeProgress(data);
+  });
 
   var loadModules = new Promise((resolve, reject) => {
     $.get(herokuAPI + "/modules", {
@@ -165,20 +181,6 @@ $(document).ready(function () {
         `
       );
     });
-
-  // Retrieves the leaderboard of a given course
-  var getLeaderboard = new Promise((resolve, reject) => {
-    reject(null);
-  })
-    .then((data) => {
-      // Write leaderboard entries into the DOM
-    })
-    .catch((err) => {
-      // Draw empty leaderboard as a placeholder
-      $("#leaderboard").html(
-        `<tr class="leader"><td></td><td>Leaderboard failed</td><td></td></tr><tr class="leader"><td></td><td>to load.</td><td></td></tr><tr class="leader"><td></td><td></td><td></td></tr>`
-      );
-    });
 });
 
 // Write badge progress into DOM
@@ -219,11 +221,47 @@ function writeBadges(badgeData) {
     });
   }
 
-  $("#recent_badges").html(
-    badgeHTML 
-  );
+  $("#recent_badges").html(badgeHTML);
 }
 
+function writeProgress(users) {
+  /*var teamscore = {};
+  var teampeople = {};
+  const userTeam = "";
+  var top3 = [];
+
+  users.forEach((user) => {
+    if (teamscore[user.team]) {
+      teamscore[user.team] += user.score;
+    } else {
+      teamscore[user.team] = 0;
+      teamscore[user.team] += user.score;
+    }
+
+    if (teampeople[user.team]) {
+      teampeople[user.team] += 1;
+    } else {
+      teampeople[user.team] = 1;
+    }
+
+    console.log(teamscore[user.team]);
+
+    if ($("#teamName").text() === user.team) {
+      console.log(" team name:" + $("#teamName").text());
+      userTeam = user.team;
+    }
+  });
+
+  $("#teamScore").text(teamscore[userTeam]);
+
+  for (var key in teamscore) {
+    console.log(key);
+    top3.push(teamscore[key] / teampeople[key]);
+  }
+  $("#leaderboard").html(
+    `<tr class="leader"><td></td><td>Devs: ${top3[0]}</td><td></td></tr><tr class="leader"><td></td><td>to load.</td><td></td></tr><tr class="leader"><td></td><td></td><td></td></tr>`
+  ); */
+}
 // Updates
 function writeUpdates(updates) {
   $("#updates").html(
@@ -233,7 +271,7 @@ function writeUpdates(updates) {
   // Life on Grounds information
   $("#recent_badges").append(
     `<br><div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;"><a href="${updates.badges_link}" target='_blank'>Click here to view all badges</a></div></br>`
-  ); 
+  );
 
   $("#BaD_link").text(`Click here to view all possible badges!`); // Write Life on Grounds name to DOM
   $("#BaD_link").prop("href", updates.badges_link); // Write Life on Grounds link to DOM
@@ -242,8 +280,14 @@ function writeUpdates(updates) {
   $("#LoG_link").prop("href", updates.life_on_grounds_link); // Write Life on Grounds link to DOM
 
   // Pre/post test data
-  $("#pretest").css("background-image", `url(/images/progress_bar/${updates.pre_test_button_background}_1.png)`);
-  $("#posttest").css("background-image", `url(/images/progress_bar/${updates.post_test_button_background}_2.png)`);
+  $("#pretest").css(
+    "background-image",
+    `url(/images/progress_bar/${updates.pre_test_button_background}_1.png)`
+  );
+  $("#posttest").css(
+    "background-image",
+    `url(/images/progress_bar/${updates.post_test_button_background}_2.png)`
+  );
   if (updates.post_test == "true") $("#posttest").addClass("available");
 
   // Daily task image
@@ -278,9 +322,15 @@ function writeModules(modules) {
       tooltip = "This module is currently available. Click here to open it!";
       visibility = "available";
     }
-    $("#modules").append(
-      `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
-    ); // Append module to the DOM
+    if (module.open === "false") {
+      $("#modules").append(
+        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(/images/progress_bar/${module.button_background_image}_2.png);" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+      );
+    } else {
+      $("#modules").append(
+        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+      );
+    } // Append module to the DOM
   });
 }
 
