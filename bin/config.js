@@ -35,6 +35,7 @@ config.mongoURL =
 //add to list if we create new courses
 //format is courseID: databaseName
 config.mongoDBs = {
+  8367: "trinity20",
   2517: "blue",
   3528: "orange",
   3529: "white",
