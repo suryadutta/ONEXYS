@@ -14,7 +14,7 @@ router.get("/:id", (req, res, next) => {
       if (module) {
         res.render("module", {
           data: moduleData,
-          course_number: req.session.course_id || "38082",
+          course_number: Object.keys(req.session.course_id)[0],
           canvas_url: config.canvasURL,
           heroku_app: config.herokuAppName,
           lucky: req.session.lucky,
