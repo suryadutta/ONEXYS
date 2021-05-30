@@ -278,16 +278,17 @@ function writeDailiesTaskInfo(daily) {
     let content = daily.reduce((content, daily) => {
       return (
         content +
-        `<tr>
-                                <td>${daily._id}</td>
-                                <td>${daily.assignment_id}</td>
-                                <td>
-                                    <a  class="btn btn-dark"
-                                        href="dailyTasks/edit/${daily._id}">
-                                        Edit
-                                    </a>
-                                </td>
-                            </tr>`
+        `
+        <tr>
+          <td>${daily._id}</td>
+          <td>${daily.assignment_id}</td>
+          <td>
+            <a  class="btn btn-dark"
+                href="dailyTasks/edit/${daily._id}">
+                Edit
+            </a>
+          </td>
+        </tr>`
       );
     }, ``);
     $("#dailyTable").append(content);
@@ -310,16 +311,17 @@ function writeLuckyInfo(lucky) {
   let content = lucky.reduce((content, lucky) => {
     return (
       content +
-      `<tr>
-                                  <td>Bonus ${lucky._id}</td>
-                                  <td>Date ${prettyDate(lucky.time)}</td>
-                                  <td>
-                                      <a  class="btn btn-dark"
-                                          href="lucky/edit/${lucky._id}">
-                                          Edit
-                                      </a>
-                                  </td>
-                              </tr>`
+      `
+      <tr>
+        <td>Bonus ${lucky._id}</td>
+        <td>Date ${prettyDate(lucky.time)}</td>
+        <td>
+          <a class="btn btn-dark"
+            href="lucky/edit/${lucky._id}">
+            Edit
+          </a>
+        </td>
+      </tr>`
     );
   }, ``);
   $("#luckyTable").append(content);
@@ -398,27 +400,26 @@ function writeBadges(badges) {
     $("#previewUnearnedImage").css("background-image", `url(${badgeToEdit.UnearnedURL})`);
     $("#previewEarnedImage").css("background-image", `url(${badgeToEdit.EarnedURL})`);
     $("#previewEarnedHoverImage").css("background-image", `url(${badgeToEdit.EarnedHoverURL})`);
-
-    console.log(badgeToEdit);
   } else {
     badges.sort((a, b) => a._id - b._id);
     let content = badges.reduce((content, badge) => {
       return (
         content +
-        `<tr>
-                                    <td>${badge._id}</td>
-                                    <td>${badge.Title}</td>
-                                    <td>${badge.Description}</td>
-                                    <td>${badge.Points}</td>
-                                    <td>${badge.Portrait}</td>
-                                    <td>${badge.PortraitDescription}</td>
-                                    <td>
-                                        <a  class="btn btn-dark"
-                                            href="badges/edit/${badge._id}">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>`
+        `
+        <tr>
+          <td>${badge._id}</td>
+          <td>${badge.Title}</td>
+          <td>${badge.Description}</td>
+          <td>${badge.Points}</td>
+          <td>${badge.Portrait}</td>
+          <td>${badge.PortraitDescription}</td>
+          <td>
+            <a class="btn btn-dark"
+              href="badges/edit/${badge._id}">
+              Edit
+            </a>
+          </td>
+      </tr>`
       );
     }, ``);
     $("#badgeTable").append(content);
@@ -460,16 +461,16 @@ function writeModules(modules) {
       else $("#practice_id_bool_false").prop("checked", true);
 
       let videos = moduleToEdit.videos;
-      videos.sort((video1, video2) => video1.position < video2.position);
-      let videoHTML = videos.reduce((videoHTML, video) => {
-        return (
-          videoHTML +
-          `
+      videos.sort((video1, video2) => video1.position > video2.position);
+      let videoHTML = "";
+      videos.map(
+        (video) =>
+          (videoHTML += `
           <div id="${video._id}" class="video-element d-flex align-items-center">
             <div>
               <div class="onexys_video">
                 <a class="colorbox" target="_blank" href="${video.video_src}">
-                  <img class="onexys_thumbnail" src="images/video/${video.video_image_src}">
+                  <img class="onexys_thumbnail" src="/images/video/${video.video_image_src}">
                 </a>
               </div>
               <span style="font-size: 12pt;">
@@ -477,14 +478,13 @@ function writeModules(modules) {
               </span>
             </div>
             
-            <div>
-              <a class="btn btn-dark text-white" href="/admin/moduleVidEdit/${video._id}">Edit Video</a>
+            <div class="d-flex flex-column ml-2">
+              <a class="btn btn-dark text-white mb-1" href="/admin/moduleVidEdit/${video._id}">Edit Video</a>
               <button class="btn btn-danger">Delete Video</button>
             </div>
           </div>         
-          `
-        );
-      });
+          `)
+      );
       $("#module_vid_container").append(videoHTML);
     }
   } else {
