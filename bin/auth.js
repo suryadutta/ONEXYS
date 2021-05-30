@@ -35,52 +35,43 @@ let oauth2 = require("simple-oauth2").create(credentials);
 var authTokenQueue = new Queue(function (user_id, callback) {
   console.log("Redis Key");
   console.log("token_" + String(user_id));
-  redis_client.get(
-    "token_" + String(user_id),
-    async function (err, token_string) {
-      if (err) {
-        console.log(err);
-        callback(false);
-      } else {
-        token_obj = JSON.parse(token_string);
-        let accessToken = await oauth2.accessToken.create(token_obj.token);
-        // Check if the token is expired. If expired it is refreshed.
-        if (accessToken.expired()) {
-          try {
-            // save refresh token to add later
-            let refresh_token = accessToken.token.refresh_token;
-            // get new access token from Canvas API
-            accessToken = await accessToken.refresh(credentials.client);
-            // add back the previous refresh token to use again
-            accessToken.token.refresh_token = refresh_token;
-            // save new access token to Redis store
-            redis_client.set(
-              "token_" + String(user_id),
-              JSON.stringify(accessToken)
-            );
-            callback(accessToken.token.access_token);
-          } catch (error) {
-            console.log("Error refreshing access token: ", error.message);
-            callback(false);
-          }
-        } else {
+  redis_client.get("token_" + String(user_id), async function (err, token_string) {
+    if (err) {
+      console.log(err);
+      callback(false);
+    } else {
+      token_obj = JSON.parse(token_string);
+      let accessToken = await oauth2.accessToken.create(token_obj.token);
+      // Check if the token is expired. If expired it is refreshed.
+      if (accessToken.expired()) {
+        try {
+          // save refresh token to add later
+          let refresh_token = accessToken.token.refresh_token;
+          // get new access token from Canvas API
+          accessToken = await accessToken.refresh(credentials.client);
+          // add back the previous refresh token to use again
+          accessToken.token.refresh_token = refresh_token;
+          // save new access token to Redis store
+          redis_client.set("token_" + String(user_id), JSON.stringify(accessToken));
           callback(accessToken.token.access_token);
+        } catch (error) {
+          console.log("Error refreshing access token: ", error.message);
+          callback(false);
         }
+      } else {
+        callback(accessToken.token.access_token);
       }
     }
-  );
+  });
 });
 
 //middleware to update course information
 var updateCookies = function (req, res, next) {
   // Manages cookies for other pages
   if (req.body.custom_canvas_course_id && req.query.login_success != 1) {
-    console.log(
-      `Validating access to course ${req.body.custom_canvas_course_id}`
-    );
+    console.log(`Validating access to course ${req.body.custom_canvas_course_id}`);
     if (typeof req.session.course_id !== Object) req.session.course_id = {};
-    req.session.course_id[req.body.custom_canvas_course_id] =
-      req.body.context_title;
+    req.session.course_id[req.body.custom_canvas_course_id] = req.body.context_title;
     req.session.user_id = req.body.custom_canvas_user_id;
     req.session.admin =
       req.body.roles.includes("Instructor") ||
@@ -113,19 +104,16 @@ var checkUser = function (req, res, next) {
           //check if auth token already exists in Redis
           console.log("Redis Key (Check User)");
           console.log("token_" + String(req.session.user_id));
-          redis_client.exists(
-            "token_" + String(req.session.user_id),
-            function (err, token_exists) {
-              if (token_exists == 0) {
-                let authorizationUri = oauth2.authorizationCode.authorizeURL({
-                  // generate auth token
-                  redirect_uri: config.redirectURL,
-                  state: String(req.session.user_id),
-                });
-                res.redirect(authorizationUri);
-              } else next(); // auth token exists
-            }
-          );
+          redis_client.exists("token_" + String(req.session.user_id), function (err, token_exists) {
+            if (token_exists == 0) {
+              let authorizationUri = oauth2.authorizationCode.authorizeURL({
+                // generate auth token
+                redirect_uri: config.redirectURL,
+                state: String(req.session.user_id),
+              });
+              res.redirect(authorizationUri);
+            } else next(); // auth token exists
+          });
         }
       });
     }
