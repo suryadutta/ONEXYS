@@ -57,7 +57,7 @@ router.use("/life-on-grounds", function (req, res) {
       if (err)
         res
           .status(500)
-          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+          .send("500 - Internal Server Error. Life on Grounds page could not be retrieved.");
       else res.sendFile(path.resolve("./views/static/life-on-grounds/" + data[1].src));
     });
   } catch (e) {
@@ -70,9 +70,7 @@ router.use("/post-test", function (req, res) {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
-        res
-          .status(500)
-          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+        res.status(500).send("500 - Internal Server Error. Post test page could not be retrieved.");
       else res.sendFile(path.resolve("./views/static/post-test/" + data[2].src));
     });
   } catch (e) {
@@ -85,9 +83,7 @@ router.use("/welcome", function (req, res) {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
-        res
-          .status(500)
-          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+        res.status(500).send("500 - Internal Server Error. Welcome page could not be retrieved.");
       else res.sendFile(path.resolve("./views/static/welcome/" + data[3].src));
     });
   } catch (e) {
