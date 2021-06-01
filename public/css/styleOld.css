@@ -1,3 +1,25 @@
+#fullscr-loading {
+	top: -10px;
+	position: fixed;
+	height: calc(100% + 10px);
+	width: 100%;
+	z-index: 99;
+}
+
+#fullscr-loading div {
+	background-color: black;
+	opacity: .9;
+	width: 100%;
+	height: 100%;
+}
+
+#fullscr-loading img {
+	position: absolute;
+	opacity: 1;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
 
 .vid-obj:hover {
 	box-shadow: 1px 1px 5px #999;
@@ -63,6 +85,7 @@
 	clear: both;
 }
 .left {
+	user-select: none;
 	float: left;
 }
 .right {
@@ -196,7 +219,7 @@
 }
 .progress_box {
 	float: left;
-	width:150px;
+	width: 187.5px;
 	padding-top: 10px;
 	height: 50px;
 	margin: 5px 4px;
@@ -312,8 +335,10 @@
 	font-weight: bold;
 	line-height: normal !important;
 	font-size: 18px;
+	user-select: none;
 }
 #point_count {
+	user-select: none;
 	padding-right: 10px;
 	width: 100%;
 	box-sizing: border-box;
@@ -374,14 +399,17 @@
 	position: relative;
 	left: 30px;
 	bottom: 10px;
+
 	height: 42px;
 	cursor: pointer;
 }
 .lucky_bulldog_text{
 	float: left;
+
 	height: 25px;
 	padding: 8px 10px 0px 30px;
 	font-size: 20px;
+
 	text-align: right;
 	font-weight: bold;
 	color: white;
@@ -488,46 +516,30 @@
 	border-radius: 8px 8px 0px 8px;
 	background-color: rgb(34,92,203)
 }
+
 #leaderboard table{
+	margin-top: -8px;
+	margin-left: 1px !important;
+	border-collapse: collapse;
+	text-align: center;
+	color: rgb(34, 92, 203);
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 18px;
+}
 
-  margin-top: -8px;
-  margin-left: 1px !important;
+#leaderboard tr:nth-child(odd) {
+	background: rgb(233, 244, 250);
+}
 
-  border-collapse: collapse;
-  text-align: center;
-  color: rgb(34, 92, 203);
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 18px;
+#leaderboard tr:hover {
+	background-color: rgb(200, 200, 200);
 }
-#leaderboard tbody {
-  border-radius: 5px;
-}
-#leaderboard tbody:hover tr:hover td {
-  background: rgb(213, 224, 230);
-}
-#leaderboard th {
-  padding-left: 18px;
 
-
-  font-weight: normal;
-}
-#leaderboard td {
-  padding-left: 18px;
-
-}
-#leaderboard thead th:nth-of-type(1) {
-  width: 50px;
-}
-#leaderboard thead th:nth-of-type(2) {
-  width: 107px;
-}
-#leaderboard thead th:nth-of-type(3) {
-  width: 55px;
-  border-right: none !important;
-}
-#leaderboard tr:nth-child(odd) td {
-  background: rgb(233, 244, 250);
+#leaderboard tr td {
+	padding-left: 18px;
+	cursor: default;
+	user-select: none;
 }
 
 #recent_badges {
@@ -1006,9 +1018,6 @@
 }
 .lifeattitle h1{
 	font-size: 120px; /* Changed from 180px */
-}
-.lifeattitle-Trinity h1{
-	font-size: 100px;  /* original was 180 px */
 }
 .lifeatindex{
 	left: 10px;
@@ -1505,8 +1514,16 @@
 
 
 /*
+
 Admin Portal
+
 */
+
+.vertical {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
 
 textarea .form-control{
 	resize: both;
@@ -1519,6 +1536,15 @@ textarea .form-control{
 
 .form-inline label {
   padding-right: 10px;
+}
+
+.form-inline.spaced {
+	margin-top: 17px;
+}
+
+.form-inline.spaced .form-control {
+	position: absolute;
+	right: 35px;
 }
 
 /*
@@ -1592,16 +1618,3 @@ textarea .form-control{
 .cboxIE #cboxMiddleRight {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
 } Ã¯â€šÅ“
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
