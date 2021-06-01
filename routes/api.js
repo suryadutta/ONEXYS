@@ -386,6 +386,7 @@ router.post("/admin/updateVideoDefaults", (req, res) => {
 });
 
 // AJAX uses this route to dynamically open/close and mark modules as due
+// TODO: refactor to remove :id
 router.post("/admin/updateModule/:id", (req, res) => {
   if (req.session.admin) {
     try {
@@ -454,6 +455,50 @@ router.post("/admin/updateModule/:id", (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+router.post("/admin/updateModuleVid", (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(req.body.courseID);
+      assert(req.body.video_src);
+      assert(req.body.video_image_src);
+      assert(req.body.video_desc);
+      assert(/\d+/.test(req.body.position));
+      assert(req.body.videoID);
+      assert(req.body.moduleID);
+
+      const submit = {
+        video_src: req.body.video_src,
+        video_image_src: req.body.video_image_src,
+        video_desc: req.body.video_desc,
+        video_desc_helper: req.body.video_desc_helper,
+        position: parseInt(req.body.position),
+        _id: req.body.moduleID,
+      };
+
+      mongo.updateModuleVid(
+        req.body.courseID,
+        submit,
+        req.body.moduleID,
+        req.body.videoID,
+        (err, data) => {
+          if (err) {
+            res
+              .status(500)
+              .send("500 - Internal Server Error. Encountered error saving module video info.");
+          } else res.status(200).send("200 - OK");
+        }
+      );
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide POST body parameters videoID, moduleID, and video attributes."
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
 // Asynchronously update navigation options
 const navigationLocations = ["welcome", "coach_information", "life_on_grounds", "post_test"];
 router.post("/admin/updateNavigation", (req, res) => {
@@ -512,7 +557,7 @@ router.post("/admin/updateBadge/:id", (req, res) => {
       };
       if (id === 32) submit.assignment_id = parseInt(req.body.assignment_id);
 
-      mongo.updateBadge(req.body.courseID, submit, (err) => {
+      mongo.updateBadge(req.sessions.courseID, submit, (err) => {
         if (err)
           res.status(500).send("500 - Internal Server Error. Request could not be processed.");
         else res.status(200).send("200 - OK");

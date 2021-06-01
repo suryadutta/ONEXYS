@@ -138,6 +138,16 @@ $(document).ready(async function () {
   //     .done((data) => writeTestInfo(data))
   //     .fail((err) => console.log("test info retrieval failed"));
   // }
+
+  if (needs.includes("moduleVideos")) {
+    $.get(`${herokuAPI}/modules`, {
+      hostname: window.location.hostname,
+      courseID,
+    })
+      .done((data) => writeModuleVidEdit(data))
+      .fail((err) => console.log("module retrieval failed"))
+      .always(() => hideLoadingBar());
+  }
 });
 
 /*****************************************************************
@@ -426,7 +436,7 @@ function writeBadges(badges) {
   }
 }
 
-// TODO: refactor into separate functions for modules and modulesvidedit
+// TODO: refactor into separate functions for modules and modulesEdit
 function writeModules(modules) {
   if (typeof edit === "boolean" && edit) {
     const moduleToEdit = modules.find((module) => module._id.toString() === moduleID.toString());
@@ -479,7 +489,7 @@ function writeModules(modules) {
             </div>
             
             <div class="d-flex flex-column ml-2">
-              <a class="btn btn-dark text-white mb-1" href="/admin/moduleVidEdit/${video._id}">Edit Video</a>
+              <a class="btn btn-dark text-white mb-1" href="/admin/modules/videoEdit/${moduleToEdit._id}/${video._id}">Edit Video</a>
               <button class="btn btn-danger">Delete Video</button>
             </div>
           </div>         
@@ -517,6 +527,18 @@ function writeModules(modules) {
   }
 }
 
+function writeModuleVidEdit(modules) {
+  const moduleToEdit = modules.find((module) => module._id.toString() === moduleID.toString());
+  const moduleVidToEdit = moduleToEdit.videos.find(
+    (video) => video._id.toString() === videoID.toString()
+  );
+
+  $("#video_src").val(moduleVidToEdit.video_src);
+  $("#video_image_src").val(moduleVidToEdit.video_image_src);
+  $("#video_desc").val(moduleVidToEdit.video_desc);
+  $("#video_desc_helper").val(moduleVidToEdit.video_desc_helper);
+  $("#position").val(moduleVidToEdit.position);
+}
 /////////////////////////////////////////////////////////////////////////////////////
 // AJAX shortcut helpers
 function updateHome(field, value) {
@@ -624,6 +646,28 @@ function updateModule() {
     });
 }
 
+function updateModuleVid() {
+  const submit = {
+    video_src: $("#video_src").val(),
+    video_image_src: $("#video_image_src").val(),
+    video_desc: $("#video_desc").val(),
+    video_desc_helper: $("#video_desc_helper").val(),
+    position: $("#position").val(),
+    videoID,
+    moduleID,
+    courseID,
+  };
+
+  $.post(herokuAPI + `/admin/updateModuleVid`, submit)
+    .done((res) => {
+      console.log("[MV] done");
+      alert("Module video successfully updated.");
+    })
+    .fail((res) => {
+      console.log("[MV] fail");
+      alert("Module video update failed.");
+    });
+}
 /////////////////////////////////////////////////////////////////////////////////////
 // Keep the preview up to date
 function copyToPreview() {

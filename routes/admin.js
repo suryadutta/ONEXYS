@@ -27,7 +27,6 @@ router.get("/navigation", (req, res) => {
 });
 
 router.get("/modules", (req, res) => {
-  // res.send("This page has not yet been implemented.");
   res.render("admin/modules", {
     title: `Course Modules`,
     heroku: config.herokuAppName,
@@ -49,6 +48,16 @@ router.get("/modules/edit/:id", (req, res) => {
     title: `Editing module ${req.params.id}`,
     heroku: config.herokuAppName,
     id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
+router.get("/modules/videoEdit/:moduleID/:videoID", (req, res) => {
+  res.render("admin/moduleVideoEdit", {
+    title: `Editing video ${req.params.id}`,
+    heroku: config.herokuAppName,
+    moduleID: req.params.moduleID,
+    videoID: req.params.videoID,
     courseID: Object.keys(req.session.course_id)[0],
   });
 });

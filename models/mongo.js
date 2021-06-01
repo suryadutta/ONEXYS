@@ -173,6 +173,19 @@ function updateModule(courseID, module, callback) {
     .catch((err) => callback(err));
 }
 
+async function updateModuleVid(courseID, moduleVid, moduleID, videoID, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("modules")
+    .updateOne(
+      { _id: parseInt(moduleID), "videos._id": videoID.toString() },
+      {
+        $set: { "videos.$": moduleVid },
+      }
+    )
+    .then(() => callback(null))
+    .catch((err) => callback(err));
+}
+
 module.exports = {
   client, // Allows start.js to create a shared connection pool
   updateVideo,
@@ -190,4 +203,5 @@ module.exports = {
   updateNavigation,
   updateBadge,
   updateModule,
+  updateModuleVid,
 };
