@@ -36,7 +36,7 @@ router.get("/badges", (req, res) => {
   });
 });
 
-router.use("/coach-information", function (req, res) {
+router.use("/coach-information", [auth.updateCookies, auth.checkUser], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
@@ -51,7 +51,7 @@ router.use("/coach-information", function (req, res) {
   }
 });
 
-router.use("/life-on-grounds", function (req, res) {
+router.use("/life-on-grounds", [auth.updateCookies, auth.checkUser], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
@@ -66,7 +66,7 @@ router.use("/life-on-grounds", function (req, res) {
   }
 });
 
-router.use("/post-test", function (req, res) {
+router.use("/post-test", [auth.updateCookies, auth.checkUser], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
@@ -79,7 +79,7 @@ router.use("/post-test", function (req, res) {
   }
 });
 
-router.use("/welcome", function (req, res) {
+router.use("/welcome", [auth.updateCookies, auth.checkUser], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
