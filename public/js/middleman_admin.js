@@ -342,9 +342,9 @@ function writeLuckyInfo(lucky) {
  * @param { [{page: string, src, string, _id: string,}, ...] } data
  */
 function writeNavigationData(data) {
-  $("#coachinfo").val(data[0].src);
-  $("#lifeongrounds").val(data[1].src);
-  $("#posttest").val(data[2].src);
+  $("#coach_info").val(data[0].src);
+  $("#life_on_grounds").val(data[1].src);
+  $("#post_test").val(data[2].src);
   $("#welcome").val(data[3].src);
 }
 
@@ -582,8 +582,14 @@ function updateNavigation(location, link) {
     location,
     link,
   })
-    .done((res) => console.log("[N] done"))
-    .fail((res) => console.log("[N] fail"));
+    .done((res) => {
+      console.log("[N] done");
+      alert("Navigation update successful.");
+    })
+    .fail((res) => {
+      console.log("[N] fail");
+      alert("Navigation update failed.");
+    });
 }
 
 function updateBadge() {
