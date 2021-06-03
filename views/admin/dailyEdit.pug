@@ -6,7 +6,7 @@ block content
               dailyID = "#{id}",
               edit = true,
               courseID = "#{courseID}";
-        needs=["courseTitle", "daily", "testInfo"];
+        needs=["courseTitle", "daily"];
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
     br
@@ -24,17 +24,12 @@ block content
 
     div.container
         div.row
-            form( action='' onsubmit="return confirm('Do you really want to submit your changes?');")
-                input(type='hidden', value=course_id, name='course-id')
-                input(type='hidden', value=course_title, name='course-title')
-                input(type='hidden', value=user_id, name='user-id')
-                div.form-group.form-inline
-                    label(for='assignment_id') Assignment or Quiz ID:
-                    input#assignment_id.form-control(type='text', value="", name='Assignment')
-                    //input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
-                hr
-
-                button.btn.btn-success(onClick="updateDaily();") Update
+            div.form-group.form-inline
+                label(for='assignment_id') Assignment or Quiz ID:
+                input#assignment_id.form-control(type='text', value="", name='Assignment')
+            hr
+        div
+            button.btn.btn-success(onClick="updateDaily();") Update
         br
         div.row
             small(style="color:red") Reminder: you must input the Quiz ID if the assignment has one. You should only use the assignment ID if a quiz ID is not applicable.
