@@ -3,9 +3,9 @@ extends ../layout
 block content
     script.
         const herokuAPI = "/api",
-              dailyID = #{id},
+              dailyID = "#{id}",
               edit = true,
-              courseID = "!{courseID}";
+              courseID = "#{courseID}";
         needs=["courseTitle", "daily", "testInfo"];
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
@@ -14,7 +14,7 @@ block content
         .row
             .col-md-1
             .col.form-inline
-                a.btn.btn-lg(href='/admin')
+                a.btn.btn-lg(href='/admin/dailyTasks')
                     i.fa.fa-chevron-left
                 h2#adminPanelTitle='Loading title...'
             .col-md-1
@@ -24,7 +24,7 @@ block content
 
     div.container
         div.row
-            form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+            form( action='' onsubmit="return confirm('Do you really want to submit your changes?');")
                 input(type='hidden', value=course_id, name='course-id')
                 input(type='hidden', value=course_title, name='course-title')
                 input(type='hidden', value=user_id, name='user-id')
@@ -34,7 +34,7 @@ block content
                     //input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
                 hr
 
-                button.btn.btn-success(type='submit') Save Changes
+                button.btn.btn-success(onClick="updateDaily();") Update
         br
         div.row
             small(style="color:red") Reminder: you must input the Quiz ID if the assignment has one. You should only use the assignment ID if a quiz ID is not applicable.

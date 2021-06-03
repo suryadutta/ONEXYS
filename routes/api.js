@@ -385,6 +385,31 @@ router.post("/admin/updateVideoDefaults", (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+router.post("/admin/updateDaily/:id", (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(req.body.assignment_id);
+      let submit = {
+        _id: parseInt(req.params.id),
+        assignment_id: req.body.assignment_id,
+      };
+      mongo.updateDaily(req.body.courseID, submit, (err, data) => {
+        if (err) {
+          res
+            .status(500)
+            .send("500 - Internal Server Error. Encountered error saving module info.");
+        } else res.status(200).send("200 - OK");
+      });
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans)."
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
 // AJAX uses this route to dynamically open/close and mark modules as due
 // TODO: refactor to remove :id
 router.post("/admin/updateModule/:id", (req, res) => {

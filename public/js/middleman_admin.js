@@ -305,6 +305,23 @@ function writeDailiesTaskInfo(daily) {
   }
 }
 
+function updateDaily() {
+  const submit = {
+    courseID,
+    assignment_id: $("#assignment_id").val(),
+  };
+
+  $.post(herokuAPI + `/admin/updateDaily/${dailyID}`, submit)
+    .done((res) => {
+      console.log("[D] done");
+      alert("Daily successfully updated.");
+    })
+    .fail((res) => {
+      console.log("[D] fail");
+      alert("Daily update failed.");
+    });
+}
+
 function prettyDate(dateString) {
   var date = new Date(dateString);
   return date.toLocaleDateString("en-US", {

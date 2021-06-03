@@ -164,6 +164,13 @@ function updateBadge(courseID, badge, callback) {
     .then(() => callback(null))
     .catch((err) => callback(err));
 }
+function updateDaily(courseID, daily, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("daily_task")
+    .findOneAndUpdate({ _id: daily._id }, { $set: daily })
+    .then(() => callback(null))
+    .catch((err) => callback(err));
+}
 
 function updateModule(courseID, module, callback) {
   const db = client.db(config.mongoDBs[courseID]);
@@ -204,4 +211,5 @@ module.exports = {
   updateBadge,
   updateModule,
   updateModuleVid,
+  updateDaily,
 };
