@@ -19,6 +19,7 @@ router.get("/home", (req, res) => {
     masquerade: false,
     students: [],
     heroku_app: config.herokuAppName,
+    courseID: Object.keys(req.session.course_id)[0],
   });
 });
 

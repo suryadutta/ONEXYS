@@ -4,10 +4,9 @@ block content
     script(src="/js/middleman.js")
     script(src="/js/courseIDGrabber.js")
     script.
-        //var herokuAPI = "https://!{heroku_app}.herokuapp.com/api";
-        //- var herokuAPI = "http://localhost:3000/api";
-        const herokuAPI = "/api";
-        var heroku = "!{heroku_app}";
+        const herokuAPI = "/api",
+            courseID = "#{courseID}";
+        
     if lucky
         include lucky-overlay
     if admin

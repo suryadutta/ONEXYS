@@ -3,8 +3,8 @@
 
 $(document).ready(function () {
   // Contains all AJAX calls necessary to interface with system API
-  const hostname = document.referrer.split("/")[2], // assume URL formatted as "https://hostname/courses/courseID"
-    courseID = document.referrer.split("/")[4];
+  // TODO: find way to supply hostname
+  const hostname = "https://educationvirginia.instructure.com/"; // assume URL formatted as "https://hostname/courses/courseID"
 
   var getHomeUpdates = new Promise((resolve, reject) => {
     $.get(herokuAPI + "/home/updates", {
@@ -270,7 +270,7 @@ function writeUpdates(updates) {
 
   // Life on Grounds information
   $("#recent_badges").append(
-    `<br><div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;"><a href="${updates.badges_link}" target='_blank'>Click here to view all badges</a></div></br>`
+    `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;"><a href="${updates.badges_link}" target='_blank'>Click here to view all badges</a></div>`
   );
 
   $("#BaD_link").text(`Click here to view all possible badges!`); // Write Life on Grounds name to DOM
@@ -324,11 +324,11 @@ function writeModules(modules) {
     }
     if (module.open === "false") {
       $("#modules").append(
-        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(/images/progress_bar/${module.button_background_image}_2.png);" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="background-image:url(/images/progress_bar/${module.button_background_image}_2.png);" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
       );
     } else {
       $("#modules").append(
-        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="width:187.5px !important; background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
       );
     } // Append module to the DOM
   });
