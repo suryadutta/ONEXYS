@@ -191,7 +191,6 @@ router.use("/badges", (req, res) => {
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
       mongo.getBadges(req.query.courseID, (err, data) => {
-        console.log(data);
         if (err)
           res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
         else res.status(200).header(access, getDst(req.query.hostname)).send(data);
@@ -549,9 +548,7 @@ router.post("/admin/updateNavigation", (req, res) => {
 router.post("/admin/updateBadge/:id", (req, res) => {
   if (req.session.admin) {
     try {
-      req.query.courseID = req.body.courseID;
       authorize(req);
-      console.log(Object.keys(req.session.course_id));
       assert(Object.keys(req.session.course_id).includes(req.body.courseID));
       let id = parseInt(req.params.id);
       assert(id > -1 && id < 33); // The ID should be between 0 and 32 (inclusive)
@@ -564,9 +561,9 @@ router.post("/admin/updateBadge/:id", (req, res) => {
       assert(/\d+/.test(req.body.points)); // Points should be only digits.
       assert(req.body.portrait); // Portrait name should exist
       assert(req.body.portraitdescription); // Portrait description should exist
-      assert(/https?:\/\/.+/.test(req.body.unearned_url)); // Unearned_url should be a URL
-      assert(/https?:\/\/.+/.test(req.body.earned_url)); // Earned_url should be a URL
-      assert(/https?:\/\/.+/.test(req.body.earned_hover_url)); // Unearned_hover_url should be a URL
+      // assert(/https?:\/\/.+/.test(req.body.unearned_url)); // Unearned_url should be a URL
+      // assert(/https?:\/\/.+/.test(req.body.earned_url)); // Earned_url should be a URL
+      // assert(/https?:\/\/.+/.test(req.body.earned_hover_url)); // Unearned_hover_url should be a URL
 
       let submit = {
         _id: id,
@@ -581,7 +578,7 @@ router.post("/admin/updateBadge/:id", (req, res) => {
       };
       if (id === 32) submit.assignment_id = parseInt(req.body.assignment_id);
 
-      mongo.updateBadge(req.sessions.courseID, submit, (err) => {
+      mongo.updateBadge(req.body.courseID, submit, (err) => {
         if (err)
           res.status(500).send("500 - Internal Server Error. Request could not be processed.");
         else res.status(200).send("200 - OK");
