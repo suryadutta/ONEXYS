@@ -6,7 +6,7 @@ var express = require("express"),
   mongo = require("../models/mongo"),
   path = require("path");
 
-router.post("/home", [auth.updateCookies, auth.checkUser], (req, res) => {
+router.post("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   res.redirect("/home");
 });
 
@@ -23,7 +23,7 @@ router.get("/home", (req, res) => {
   });
 });
 
-router.post("/badges", [auth.updateCookies, auth.checkUser], (req, res) => {
+router.post("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   res.redirect("/badges");
 });
 
@@ -34,40 +34,49 @@ router.get("/badges", (req, res) => {
     masquerade: false,
     students: [],
     heroku_app: config.herokuAppName,
+    courseID: Object.keys(req.session.course_id)[0],
   });
 });
 
-router.use("/coach-information", [auth.updateCookies, auth.checkUser], (req, res) => {
-  try {
-    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
-      if (err)
-        res
-          .status(500)
-          .send("500 - Internal Server Error. Coach information page could not be retrieved.");
-      else res.sendFile(path.resolve("./views/static/coach-info/" + data[0].src)); // see navigation collection
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+router.use(
+  "/coach-information",
+  [auth.updateCookies, auth.checkUser, auth.userExists],
+  (req, res) => {
+    try {
+      mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
+        if (err)
+          res
+            .status(500)
+            .send("500 - Internal Server Error. Coach information page could not be retrieved.");
+        else res.sendFile(path.resolve("./views/static/coach-info/" + data[0].src)); // see navigation collection
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
-});
+);
 
-router.use("/life-on-grounds", [auth.updateCookies, auth.checkUser], (req, res) => {
-  try {
-    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
-      if (err)
-        res
-          .status(500)
-          .send("500 - Internal Server Error. Life on Grounds page could not be retrieved.");
-      else res.sendFile(path.resolve("./views/static/life-on-grounds/" + data[1].src));
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+router.use(
+  "/life-on-grounds",
+  [auth.updateCookies, auth.checkUser, auth.userExists],
+  (req, res) => {
+    try {
+      mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
+        if (err)
+          res
+            .status(500)
+            .send("500 - Internal Server Error. Life on Grounds page could not be retrieved.");
+        else res.sendFile(path.resolve("./views/static/life-on-grounds/" + data[1].src));
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
-});
+);
 
-router.use("/post-test", [auth.updateCookies, auth.checkUser], (req, res) => {
+router.use("/post-test", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
@@ -80,7 +89,7 @@ router.use("/post-test", [auth.updateCookies, auth.checkUser], (req, res) => {
   }
 });
 
-router.use("/welcome", [auth.updateCookies, auth.checkUser], (req, res) => {
+router.use("/welcome", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)

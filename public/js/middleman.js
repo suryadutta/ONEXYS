@@ -4,7 +4,7 @@
 $(document).ready(function () {
   // Contains all AJAX calls necessary to interface with system API
   // TODO: find way to supply hostname
-  const hostname = "https://educationvirginia.instructure.com/"; // assume URL formatted as "https://hostname/courses/courseID"
+  const hostname = "https://educationvirginia.instructure.com/";
 
   var getHomeUpdates = new Promise((resolve, reject) => {
     $.get(herokuAPI + "/home/updates", {

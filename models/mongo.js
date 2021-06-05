@@ -5,13 +5,40 @@ const MongoClient = require("mongodb").MongoClient,
     useUnifiedTopology: true,
     keepAlive: 1,
     connectTimeoutMS: 30000,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000,
   },
   assert = require("assert"),
   async = require("async"),
   config = require("../bin/config"),
   client = new MongoClient(config.mongoURL, mongoSettings);
+
+// --------------------------
+//       User Progress
+// --------------------------
+
+/**
+ * @param {string} courseID - courseID passed from req.session.course_id
+ * @param {string} userID - user canvas id
+ * @param {function} callback
+ */
+async function findUser(courseID, userID, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  const user = await db.collection("user_progress").findOne({ user: userID });
+  callback(!!user); // convert object or null into boolean
+}
+
+/**
+ *
+ * @param {string} courseID - courseID passed from req.session.course_id
+ * @param {string} userID - user canvas id
+ * @param {function} callback
+ */
+function initUser(courseID, userID, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("user_progress")
+    .insertOne({ badges: {}, modules: {}, score: 0, team: "", user: userID })
+    .then(() => callback(true))
+    .catch(() => callback(false));
+}
 
 // --------------------------
 //          Methods
@@ -180,7 +207,7 @@ function updateModule(courseID, module, callback) {
     .catch((err) => callback(err));
 }
 
-async function updateModuleVid(courseID, moduleVid, moduleID, videoID, callback) {
+function updateModuleVid(courseID, moduleVid, moduleID, videoID, callback) {
   const db = client.db(config.mongoDBs[courseID]);
   db.collection("modules")
     .updateOne(
@@ -195,8 +222,6 @@ async function updateModuleVid(courseID, moduleVid, moduleID, videoID, callback)
 
 module.exports = {
   client, // Allows start.js to create a shared connection pool
-  updateVideo,
-  updateHomepageUpdates,
   getHomepageUpdates,
   getHomepageVideos,
   getDailyTasks,
@@ -207,9 +232,14 @@ module.exports = {
   getUserProgress,
   getBadges,
   getNavigationData,
+  findUser,
+  initUser,
+  updateVideo,
+  updateHomepageUpdates,
   updateNavigation,
   updateBadge,
   updateModule,
   updateModuleVid,
   updateDaily,
+  updateScore,
 };

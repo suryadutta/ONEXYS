@@ -3,8 +3,7 @@
 
 $(document).ready(function () {
   const progress = {},
-    hostname = document.referrer.split("/")[2],
-    courseID = document.referrer.split("/")[4];
+    hostname = "https://educationvirginia.instructure.com/";
 
   // Gets the user's progress, including finished modules and badge status
   var getUserProgress = new Promise((resolve, reject) => {

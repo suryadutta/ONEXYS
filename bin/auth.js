@@ -2,6 +2,8 @@ var express = require("express");
 var config = require("./config");
 var request = require("request");
 var Queue = require("better-queue");
+var mongo = require("../models/mongo");
+var assert = require("assert");
 
 var lti = require("ims-lti");
 var RedisNonceStore = require("../node_modules/ims-lti/lib/redis-nonce-store.js");
@@ -139,9 +141,33 @@ var oath2_callback = async function (req, res, next) {
   }
 };
 
+const userExists = function (req, res, next) {
+  try {
+    assert(req.session.course_id);
+    assert(req.session.user_id);
+    mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id, (exists) => {
+      if (!exists) {
+        console.log("Creating user:", req.session.user_id);
+        mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id, (success) => {
+          if (success) console.log("User created.");
+          else res.status(500).send("Internal Server Error. User creation failed.");
+        });
+      } else console.log("User already exists.");
+    });
+  } catch (e) {
+    res
+      .status(406)
+      .send(
+        "Could not process request. Try refreshing the page or contact your Canvas instructor for help."
+      );
+  }
+  next();
+};
+
 module.exports = {
   oath2_callback,
   updateCookies,
   authTokenQueue,
   checkUser,
+  userExists,
 };
