@@ -43,11 +43,13 @@ block content
                                 #myteam_head MY TEAM
                             td#teamName
                             td#teamScore
-            #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
+            #recent_badges.standard_home_box.left(style='min-width: 313px; min-height: 180px;')
                 h2 Recent Badges
-                h4 Loading Badges
-                img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
-                br   
+                div#badge_content
+                    h4 Loading Badges
+                    img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+                div#all_badge_link.w-100.mt-2
+                
                 
             #progress.standard_home_box.left(style='width: 324px;')
                 h2 My Progress So Far

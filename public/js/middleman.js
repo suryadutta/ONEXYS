@@ -1,11 +1,9 @@
 // ACCESS CURRENT COURSE ID WITH:
 // courseIDFromURL
-
+const hostname = "https://educationvirginia.instructure.com/";
 $(document).ready(function () {
   // Contains all AJAX calls necessary to interface with system API
   // TODO: find way to supply hostname
-  const hostname = "https://educationvirginia.instructure.com/";
-
   var getHomeUpdates = new Promise((resolve, reject) => {
     $.get(herokuAPI + "/home/updates", {
       hostname,
@@ -98,19 +96,8 @@ $(document).ready(function () {
         reject(err);
       });
   })
-    .then((data) => {
-      if (addModuleProgress) {
-        // Modules have been written to DOM. Add in the user's progress
-        writeModuleProgress(data);
-      } else progress = data;
-      if (badges) {
-        //console.log("Adding badges from getUserProgress");
-        writeBadges(badges);
-      } else progress = data;
-      //==============================================================
-      $("#point_count").text(data.score);
-      $("#teamName").text(data.team);
-      //$("#teamScore").text("...");
+    .then((userProgress) => {
+      getBadges(userProgress.badges);
     })
     .catch((err) => {
       console.log(err);
@@ -119,23 +106,7 @@ $(document).ready(function () {
       );
     });
 
-  var loadProgress = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/progress", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
-  }).then((data) => {
-    // Write module data to DOM
-    writeProgress(data);
-  });
-
-  var loadModules = new Promise((resolve, reject) => {
+  var getModules = new Promise((resolve, reject) => {
     $.get(herokuAPI + "/modules", {
       hostname,
       courseID,
@@ -159,132 +130,61 @@ $(document).ready(function () {
       //console.log("User progress has not been retrieved yet. It has been flagged for completion later.")
     }
   });
+});
 
-  var loadBadges = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/badges", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
+function getBadges(earnedBadges) {
+  $.get(herokuAPI + "/badges", {
+    hostname,
+    courseID,
   })
-    .then((data) => {
-      if (progress) {
-        //console.log("Writing badges from loadBadges");
-        writeBadges(data);
-      } else {
-        badges = data;
-        //console.log("Badge progress has not been retrieved yet. Display badge progress has been flagged for completion later.")
-      }
+    .then((badges) => {
+      writeBadges(badges, earnedBadges);
     })
     .catch((err) => {
-      $("#recent_badges").html(
-        `
-        <h2>Recent Badges</h2>
-          <div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
-            <p>Badge loading failed.</p>
-          <div>
+      $("#badge_content").html(
+        `<div style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
+          <p>Badge loading failed.</p>
+         <div>
         `
       );
     });
-});
-
+}
 // Write badge progress into DOM
-function writeBadges(badgeData) {
-  var defaultBadge = { id: null, earned: new Date(0) },
-    recents = [defaultBadge, defaultBadge, defaultBadge];
-
-  function leastRecent() {
-    return recents.reduce((min, badge, i) => {
-      if (isNaN(min)) return 0; // start the min at the 0th element
-      return badge.earned < recents[min].earned ? i : min;
-    });
+function writeBadges(badges, earnedBadges) {
+  if (Object.keys(earnedBadges).length === 0) {
+    $("#badge_content").html(`<p>Earn some badges and you will see them here!</p>`);
+    return;
   }
-
-  // Filter out all but the three most recent badges
-  Object.keys(badgeData).forEach((key) => {
-    badgeData[key].id = key;
-    recents[leastRecent()] = badgeData[key];
-  });
-  // Display the 3 most recent badges (stored in recents)
-  var badgeHTML = `<h2>Recent Badges</h2>`;
-  if (recents.length === 0) {
-    badgeHTML += `
-      <h2>Recent Badges</h2>
-        <div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
-          <p>Earn some badges and you will see them here!</p>
-        <div>
-      `;
-  } else {
-    recents.forEach((recentBadge) => {
-      if (recentBadge.id) {
-        var badge = badgeData.find((item) => item._id == recentBadge.id);
-        badgeHTML += `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
-                            <div class="badge_portrait" style="width: 80px; height: 100px; background-image: url(${badge.EarnedHoverURL})"></div>
-                            <div class="badge_portrait front_portrait" style="width: 80px; height: 100px; background-image: url(${badge.EarnedURL})"></div>
-                          </div>`;
-      }
-    });
+  let badgeHTML = "",
+    badgeCount = 0;
+  for (let i = 0; i < badges.length; i++) {
+    console.log(badges[i]);
+    if (typeof earnedBadges[badges[i]._id] === "object") {
+      badgeHTML += `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
+                      <div class="badge_portrait" style="width: 80px; height: 100px; background-image: url(${badges[i].EarnedHoverURL})"></div>
+                      <div class="badge_portrait front_portrait" style="width: 80px; height: 100px; background-image: url(${badges[i].EarnedURL})"></div>
+                    </div>`;
+      badgeCount++;
+    }
+    if (badgeCount >= 3) break;
   }
-
-  $("#recent_badges").html(badgeHTML);
+  $("#badge_content").html(badgeHTML);
 }
 
-function writeProgress(users) {
-  /*var teamscore = {};
-  var teampeople = {};
-  const userTeam = "";
-  var top3 = [];
-
-  users.forEach((user) => {
-    if (teamscore[user.team]) {
-      teamscore[user.team] += user.score;
-    } else {
-      teamscore[user.team] = 0;
-      teamscore[user.team] += user.score;
-    }
-
-    if (teampeople[user.team]) {
-      teampeople[user.team] += 1;
-    } else {
-      teampeople[user.team] = 1;
-    }
-
-    console.log(teamscore[user.team]);
-
-    if ($("#teamName").text() === user.team) {
-      console.log(" team name:" + $("#teamName").text());
-      userTeam = user.team;
-    }
-  });
-
-  $("#teamScore").text(teamscore[userTeam]);
-
-  for (var key in teamscore) {
-    console.log(key);
-    top3.push(teamscore[key] / teampeople[key]);
-  }
-  $("#leaderboard").html(
-    `<tr class="leader"><td></td><td>Devs: ${top3[0]}</td><td></td></tr><tr class="leader"><td></td><td>to load.</td><td></td></tr><tr class="leader"><td></td><td></td><td></td></tr>`
-  ); */
-}
 // Updates
 function writeUpdates(updates) {
   $("#updates").html(
     `<h2>Updates</h2><div class="entry"><p class="entry_header"><strong>${updates.main_header}</strong></p><p class="entry_text">${updates.main_text}</p></div><div class="entry"><p class="entry_header"><strong>${updates.header2}</strong></p><p class="entry_text">${updates.text2}</p></div><div class="entry"><p class="entry_header"><strong>${updates.header3}</strong></p><p class="entry_text">${updates.text3}</p></div>`
   ); // Write updates to DOM
 
-  // Life on Grounds information
-  $("#recent_badges").append(
-    `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;"><a href="${updates.badges_link}" target='_blank'>Click here to view all badges</a></div>`
+  $("#all_badge_link").append(
+    `<a href="${updates.badges_link}" target='_blank'>
+        Click here to view all badges!
+      </a>
+    `
   );
 
-  $("#BaD_link").text(`Click here to view all possible badges!`); // Write Life on Grounds name to DOM
-  $("#BaD_link").prop("href", updates.badges_link); // Write Life on Grounds link to DOM
+  // Life on Grounds information
   $("#LoG_title").text(updates.life_on_grounds_title); // Write Life on Grounds name to DOM
   $("#LoG_link").text(`Click here to see all ${updates.life_on_grounds_title} videos!`); // Write Life on Grounds name to DOM
   $("#LoG_link").prop("href", updates.life_on_grounds_link); // Write Life on Grounds link to DOM
@@ -317,6 +217,10 @@ function writeDailyTaskInfo(daily_tasks) {
       `https://educationvirginia.instructure.com/courses/${courseID}/assignments/${daily.assignment_id.toString()}`
     );
   }
+}
+
+function writeProgress(progress) {
+  $("#badge_content").html();
 }
 
 function writeModuleProgress(progress) {

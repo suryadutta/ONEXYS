@@ -152,7 +152,7 @@ function getModule(courseID, moduleID, callback) {
 
 function getUserProgress(courseID, userID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
-  db.collection("user_progress").findOne({ user: parseInt(userID) }, (err, data) =>
+  db.collection("user_progress").findOne({ user: userID.toString() }, (err, data) =>
     callback(err, data)
   );
 }
@@ -161,6 +161,7 @@ function getBadges(courseID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
   db.collection("badges")
     .find()
+    .sort({ _id: 1 })
     .toArray()
     .then((data) => callback(null, data))
     .catch((err) => callback(err, null));

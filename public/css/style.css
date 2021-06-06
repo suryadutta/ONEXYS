@@ -530,9 +530,8 @@
 }
 
 #recent_badges {
-	width: 273px;
-	height: 152.5px;
-	padding-top: 5px;
+	display: flex;
+	flex-direction: column;
 }
 #recent_badges h2{
 	margin-top: 2px !important;
