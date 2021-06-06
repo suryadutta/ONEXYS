@@ -18,19 +18,6 @@ $(document).ready(function () {
   })
     .then((data) => {
       writeUpdates(data.updates);
-      //$("#dailyTaskImg").css("height", ""); // Set back to default height
-      if (data.daily.id == null)
-        $("#dailyTaskLink").prop(
-          "href",
-          `${herokuAPI.substring(0, herokuAPI.length - 3)}missing-resource`
-        );
-      else if (data.daily.id == -1)
-        $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}not-open`);
-      else
-        $("#dailyTaskLink").prop(
-          "href",
-          `${herokuAPI.substring(0, herokuAPI.length - 3)}assignments/${data.daily.id}`
-        );
     })
     .catch((err) => {
       console.log(err);
@@ -47,6 +34,29 @@ $(document).ready(function () {
       );
       $("#pretest").css("background-image", "");
       $("#posttest").css("background-image", "");
+    });
+
+  var getDailyTask = new Promise((resolve, reject) => {
+    $.get(herokuAPI + "/dailies", {
+      hostname,
+      courseID,
+    })
+      .done((data, status) => {
+        resolve(data);
+      })
+      .fail((err) => {
+        reject(err);
+      });
+  })
+    .then((data) => {
+      writeDailyTaskInfo(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      $("#dailyTaskLink").prop(
+        "href",
+        `${herokuAPI.substring(0, herokuAPI.length - 3)}missing-resource`
+      );
     });
 
   var getHomeVideos = new Promise((resolve, reject) => {
@@ -292,6 +302,21 @@ function writeUpdates(updates) {
 
   // Daily task image
   $("#dailyTaskImg").prop("src", updates.daily_task_img).css("height", ""); // Set daily task image source
+}
+
+function writeDailyTaskInfo(daily_tasks) {
+  const todaysDaily = daily_tasks.pop();
+  const daily = daily_tasks.find(
+    (daily) => daily._id.toString() === todaysDaily.position.toString()
+  );
+  if (daily._id === -1)
+    $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}not-open`);
+  else {
+    $("#dailyTaskLink").prop(
+      "href",
+      `https://educationvirginia.instructure.com/courses/${courseID}/assignments/${daily.assignment_id.toString()}`
+    );
+  }
 }
 
 function writeModuleProgress(progress) {

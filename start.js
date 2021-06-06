@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").load();
 }
 
-var express = require("express"),
+const express = require("express"),
   config = require("./bin/config"),
   redis = require("redis").createClient(config.redisURL),
   modules = require("./routes/modules"),
@@ -16,6 +16,7 @@ var express = require("express"),
   auth = require("./bin/auth"),
   assert = require("assert"),
   http = require("http");
+require("./bin/cron"); // initialize cron jobs
 app = express();
 
 app.set("port", process.env.PORT || "3000");

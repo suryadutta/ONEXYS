@@ -199,6 +199,14 @@ function updateDaily(courseID, daily, callback) {
     .catch((err) => callback(err));
 }
 
+function updateTodaysDaily(courseID, position, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("daily_task")
+    .findOneAndUpdate({ type: "todays" }, { $set: { position } })
+    .then(() => callback(null))
+    .catch((err) => callback(err));
+}
+
 function updateModule(courseID, module, callback) {
   const db = client.db(config.mongoDBs[courseID]);
   db.collection("modules")
@@ -241,5 +249,6 @@ module.exports = {
   updateModule,
   updateModuleVid,
   updateDaily,
-  updateScore,
+  updateTodaysDaily,
+  // updateScore,
 };

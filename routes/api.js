@@ -395,16 +395,37 @@ router.post("/admin/updateDaily/:id", (req, res) => {
       };
       mongo.updateDaily(req.body.courseID, submit, (err, data) => {
         if (err) {
-          res
-            .status(500)
-            .send("500 - Internal Server Error. Encountered error saving module info.");
+          res.status(500).send("500 - Internal Server Error. Encountered error updating daily.");
         } else res.status(200).send("200 - OK");
       });
     } catch (e) {
       res
         .status(406)
         .send(
-          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and 'open' and/or 'due' (booleans)."
+          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and an assignment_id."
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.post("/admin/updateTodaysDaily", (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(typeof parseInt(req.body.position) === "number");
+      assert(req.body.courseID);
+      mongo.updateTodaysDaily(req.body.courseID, req.body.position, (err, data) => {
+        if (err) {
+          res
+            .status(500)
+            .send("500 - Internal Server Error. Encountered error saving todays daily.");
+        } else res.status(200).send("200 - OK");
+      });
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), and a position number)."
         );
     }
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");

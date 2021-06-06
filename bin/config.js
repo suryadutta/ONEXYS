@@ -40,15 +40,6 @@ config.mongoDBs = {
   8374: "conexBlue21",
   8369: "smithBlue21",
   8367: "trinityBlue21",
-  2517: "blue",
-  3528: "orange",
-  3529: "white",
-  3559: "conexDemo",
-  48080: "smith",
-  48036: "yale-blue",
-  48037: "yale-gray",
-  48039: "yale-physics",
-  48038: "yale-white",
 };
 
 // If we're in a development environment, use the development databasez

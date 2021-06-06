@@ -5,7 +5,7 @@ block content
         const herokuAPI = "/api",
               edit = false,
               courseID = "!{courseID}";
-        needs=["courseTitle", "daily", "testInfo"];
+        needs=["courseTitle", "daily"];
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
     br
@@ -39,30 +39,14 @@ block content
                 li
                     p Watch the homepage as the next available daily task is linked to in the top left! If no daily task is found, the generic 404 / Missing resource page will be linked on the homepage. In the case that the next daily task is not open yet, the generic not-open page is displayed.
             hr
+        div.mb-4
+            label(for="todaysDaily") Today's Daily Task Number
+            input#todaysDaily.mb-3.form-control(type='number', value="", min="1", style="width: 5rem;")
+            button.btn.btn-success(onClick="updateTodaysDaily()") Update Daily 
         div.row
             table#dailyTable.admin_table(style="margin-bottom:100px;")
                 tr
                     th Row
                     th Assignment ID
                     th Edit Item
-                //each daily in dailies
-                    if(daily._id == last_edited)
-                        tr(style="background-color:#ff99cc;")
-                            td=daily._id
-                            td=daily.assignment_id
-                            td
-                                form(method='GET' action='dailies/edit/'+daily._id)
-                                    input(type='hidden', value=course_id, name='course-id')
-                                    input(type='hidden', value=course_title, name='course-title')
-                                    input(type='hidden', value=user_id, name='user-id')
-                                    button.btn.btn-dark(type='submit') Edit
-                    else
-                        tr
-                            td=daily._id
-                            td=daily.assignment_id
-                            td
-                                form(method='GET' action='dailies/edit/'+daily._id)
-                                    input(type='hidden', value=course_id, name='course-id')
-                                    input(type='hidden', value=course_title, name='course-title')
-                                    input(type='hidden', value=user_id, name='user-id')
-                                    button.btn.btn-dark(type='submit') Edit
+

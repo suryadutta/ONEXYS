@@ -279,6 +279,7 @@ function writeDailyTaskInfo(daily) {
   $("#dti").val(daily.img);
 }
 
+// TODO:refactor
 function writeDailiesTaskInfo(daily) {
   if (edit) {
     let dailyToEdit = daily.filter((daily) => daily._id == dailyID)[0];
@@ -286,9 +287,13 @@ function writeDailiesTaskInfo(daily) {
     $("#assignment_id").val(dailyToEdit.assignment_id);
   } else {
     let content = daily.reduce((content, daily) => {
-      return (
-        content +
-        `
+      if (typeof daily.type === "string" && daily.type) {
+        $("#todaysDaily").val(daily.position);
+        return content;
+      } else {
+        return (
+          content +
+          `
         <tr>
           <td>${daily._id}</td>
           <td>${daily.assignment_id}</td>
@@ -299,27 +304,11 @@ function writeDailiesTaskInfo(daily) {
             </a>
           </td>
         </tr>`
-      );
+        );
+      }
     }, ``);
     $("#dailyTable").append(content);
   }
-}
-
-function updateDaily() {
-  const submit = {
-    courseID,
-    assignment_id: $("#assignment_id").val(),
-  };
-
-  $.post(herokuAPI + `/admin/updateDaily/${dailyID}`, submit)
-    .done((res) => {
-      console.log("[D] done");
-      alert("Daily successfully updated.");
-    })
-    .fail((res) => {
-      console.log("[D] fail");
-      alert("Daily update failed.");
-    });
 }
 
 function prettyDate(dateString) {
@@ -689,6 +678,35 @@ function updateModuleVid() {
     .fail((res) => {
       console.log("[MV] fail");
       alert("Module video update failed.");
+    });
+}
+
+function updateDaily() {
+  const submit = {
+    courseID,
+    assignment_id: $("#assignment_id").val(),
+  };
+
+  $.post(herokuAPI + `/admin/updateDaily/${dailyID}`, submit)
+    .done((res) => {
+      console.log("[D] done");
+      alert("Daily successfully updated.");
+    })
+    .fail((res) => {
+      console.log("[D] fail");
+      alert("Daily update failed.");
+    });
+}
+
+function updateTodaysDaily() {
+  $.post(herokuAPI + `/admin/updateTodaysDaily/`, { courseID, position: $("#todaysDaily").val() })
+    .done((res) => {
+      console.log("[TD] done");
+      alert("Today's daily successfully updated.");
+    })
+    .fail((res) => {
+      console.log("[TD] fail");
+      alert("Today's daily update failed.");
     });
 }
 /////////////////////////////////////////////////////////////////////////////////////
