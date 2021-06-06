@@ -1,18 +1,10 @@
-// ACCESS CURRENT COURSE ID WITH:
-// courseIDFromURL
+// TODO: find way to supply hostname
 const hostname = "https://educationvirginia.instructure.com/";
 $(document).ready(function () {
   // Contains all AJAX calls necessary to interface with system API
-  // TODO: find way to supply hostname
-  var getHomeUpdates = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/home/updates", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => reject(err));
+  const homeUpdates = $.get(herokuAPI + "/home/updates", {
+    hostname,
+    courseID,
   })
     .then((data) => {
       writeUpdates(data.updates);
@@ -24,50 +16,28 @@ $(document).ready(function () {
       ); // Write updates to DOM
       $("#LoG_title").text("Available Videos"); // Write Life on Grounds name to DOM
       $("#LoG_link").text(""); // Write Life on Grounds name to DOM
-      $("#LoG_link").prop("href", "#"); // Write Life on Grounds link to DOM
+      $("#LoG_link").prop("href", "/missing-resource"); // Write Life on Grounds link to DOM
       $("#dailyTaskImg").prop("src", ""); // Set daily task image source
-      $("#dailyTaskLink").prop(
-        "href",
-        `${herokuAPI.substring(0, herokuAPI.length - 3)}missing-resource`
-      );
+      $("#dailyTaskLink").prop("href", "/missing-resource");
       $("#pretest").css("background-image", "");
       $("#posttest").css("background-image", "");
     });
 
-  var getDailyTask = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/dailies", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
+  const getDailyTask = $.get(herokuAPI + "/dailies", {
+    hostname,
+    courseID,
   })
     .then((data) => {
       writeDailyTaskInfo(data);
     })
     .catch((err) => {
       console.log(err);
-      $("#dailyTaskLink").prop(
-        "href",
-        `${herokuAPI.substring(0, herokuAPI.length - 3)}missing-resource`
-      );
+      $("#dailyTaskLink").prop("href", "/missing-resource");
     });
 
-  var getHomeVideos = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/home/videos", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
+  const getHomeVideos = $.get(herokuAPI + "/home/videos", {
+    hostname,
+    courseID,
   })
     .then((data) => {
       // On success, write videos to DOM
@@ -78,59 +48,25 @@ $(document).ready(function () {
       $("#homepageVideos").html("Video content failed to load."); // Write error message
     });
 
-  //
-  var addModuleProgress = false,
-    badges = null,
-    progress = null;
-
   // Gets the user's progress, including finished modules and badge status
-  var getUserProgress = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/users/progress", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
+  const getUserProgress = $.get(herokuAPI + "/users/progress", {
+    hostname,
+    courseID,
   })
     .then((userProgress) => {
       getBadges(userProgress.badges);
+      getModules(userProgress.modules);
+      $("#point_count").html(userProgress.score);
     })
     .catch((err) => {
-      console.log(err);
-      console.log(
-        "Failed to retrieve user progress. The page has been loaded, but omitting this data."
-      );
+      console.log(err.responseText);
+      getBadges(null);
+      getModules(null);
+      alert("Failed to retrieve user progress. The page has been loaded, but omitting this data.");
     });
-
-  var getModules = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/modules", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
-  }).then((data) => {
-    // Write module data to DOM
-    writeModules(data);
-    if (progress) {
-      // If user progress has been fetched, go ahead and fill it in
-      //console.log("Filling in user progress from loadModules");
-      writeModuleProgress(progress.modules);
-    } else {
-      // Otherwise, mark that progress needs to be added
-      addModuleProgress = true;
-      //console.log("User progress has not been retrieved yet. It has been flagged for completion later.")
-    }
-  });
 });
+
+/*---------- Badge and Module API calls --------*/
 
 function getBadges(earnedBadges) {
   $.get(herokuAPI + "/badges", {
@@ -138,6 +74,7 @@ function getBadges(earnedBadges) {
     courseID,
   })
     .then((badges) => {
+      if (!earnedBadges) throw 500;
       writeBadges(badges, earnedBadges);
     })
     .catch((err) => {
@@ -149,6 +86,19 @@ function getBadges(earnedBadges) {
       );
     });
 }
+
+function getModules(completedModules) {
+  $.get(herokuAPI + "/modules", {
+    hostname,
+    courseID,
+  }).then((data) => {
+    writeModules(data);
+    if (completedModules) writeModuleProgress(completedModules);
+  });
+}
+
+/*---------- Dynamic DOM update methods -----------*/
+
 // Write badge progress into DOM
 function writeBadges(badges, earnedBadges) {
   if (Object.keys(earnedBadges).length === 0) {
@@ -158,7 +108,6 @@ function writeBadges(badges, earnedBadges) {
   let badgeHTML = "",
     badgeCount = 0;
   for (let i = 0; i < badges.length; i++) {
-    console.log(badges[i]);
     if (typeof earnedBadges[badges[i]._id] === "object") {
       badgeHTML += `<div class="badge_container completed" style="margin-left: 1px; margin-right: 10px; margin-bottom: 20px;">
                       <div class="badge_portrait" style="width: 80px; height: 100px; background-image: url(${badges[i].EarnedHoverURL})"></div>
@@ -214,17 +163,12 @@ function writeDailyTaskInfo(daily_tasks) {
   else {
     $("#dailyTaskLink").prop(
       "href",
-      `https://educationvirginia.instructure.com/courses/${courseID}/assignments/${daily.assignment_id.toString()}`
+      `${hostname}/courses/${courseID}/assignments/${daily.assignment_id.toString()}`
     );
   }
 }
 
-function writeProgress(progress) {
-  $("#badge_content").html();
-}
-
 function writeModuleProgress(progress) {
-  console.log("Writing progress");
   // Add Module progress
   var modules = $("#modules .module").length;
   $("#modules .module").each(function () {
@@ -253,11 +197,31 @@ function writeModules(modules) {
     }
     if (module.open === "false") {
       $("#modules").append(
-        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="background-image:url(/images/progress_bar/${module.button_background_image}_2.png);" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+        `<div class="module">
+          <div id="moduleID" style="display:none;" mID=${module._id}>
+          </div>
+          <a class="progress_box ${visibility}" style="background-image:url(/images/progress_bar/${module.button_background_image}_2.png);" title="${tooltip}">
+            <span>${module.primary_title}</span>
+            <br>
+            <span>${module.secondary_title}</span>
+          </a>
+          <div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div>
+          <div class="onexys_checkbox quiz_checkbox"></div>
+        </div>
+        <br>`
       );
     } else {
       $("#modules").append(
-        `<div class="module"><div id="moduleID" style="display:none;" mID=${module._id}></div><a class="progress_box ${visibility}" style="background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}"><span>${module.primary_title}</span><br><span>${module.secondary_title}</span></a><div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div><div class="onexys_checkbox quiz_checkbox"></div></div><br>`
+        `<div class="module">
+          <div id="moduleID" style="display:none;" mID=${module._id}>
+          </div>
+          <a class="progress_box ${visibility}" style="background-image:url(/images/progress_bar/${module.button_background_image}_0.png);" href="/modules/${module._id}" title="${tooltip}">
+            <span>${module.primary_title}</span><br><span>${module.secondary_title}</span>
+          </a>
+          <div class="onexys_checkbox aleks_checkbox" style="margin-left:14px !important;"></div>
+          <div class="onexys_checkbox quiz_checkbox"></div>
+        </div>
+        <br>`
       );
     } // Append module to the DOM
   });
@@ -267,9 +231,10 @@ function writeVideos(videos) {
   var html = ``;
   videos.videos.forEach((video) => {
     html += `<div class="onexys_video"><a class="colorbox" href="${video.src}">`;
-    if (video.thumbnail) html += `<img class="onexys_thumbnail" src="${video.thumbnail}">`;
     // Use specified thumbnail
-    else html += `<img class="onexys_thumbnail" src="${videos.thumbnail}">`; // Use default thumbnail, found in other
+    if (video.thumbnail) html += `<img class="onexys_thumbnail" src="${video.thumbnail}">`;
+    // Use default thumbnail, found in other
+    else html += `<img class="onexys_thumbnail" src="${videos.thumbnail}">`;
     html += `<img class="onexys_playbutton" src="${videos.playbutton}"></a></div><p><span style="font-size: 12pt;"><strong>${video.description}</strong></p>`;
   });
   $("#homepageVideos").html(html); // Write videos to DOM
