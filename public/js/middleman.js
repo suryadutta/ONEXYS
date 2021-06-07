@@ -57,12 +57,25 @@ $(document).ready(function () {
       getBadges(userProgress.badges);
       getModules(userProgress.modules);
       $("#point_count").html(userProgress.score);
+      $("#teamName").html(userProgress.team);
     })
     .catch((err) => {
       console.log(err.responseText);
       getBadges(null);
       getModules(null);
       alert("Failed to retrieve user progress. The page has been loaded, but omitting this data.");
+    });
+
+  const getLeaderboard = $.get(herokuAPI + "/progress", {
+    hostname,
+    courseID,
+  })
+    .then((data) => {
+      writeLeaderboard(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      $("#leaderboard").text("Leaderboard info not available.");
     });
 });
 
@@ -238,4 +251,65 @@ function writeVideos(videos) {
     html += `<img class="onexys_playbutton" src="${videos.playbutton}"></a></div><p><span style="font-size: 12pt;"><strong>${video.description}</strong></p>`;
   });
   $("#homepageVideos").html(html); // Write videos to DOM
+}
+
+function writeLeaderboard(progress) {
+  var points = {};
+  var count = {};
+  var averages = {};
+  var html = "";
+  progress.forEach((user_progress) => {
+    if (user_progress.team) {
+      var team = user_progress.team;
+      //creates dict of key(team), value(total team score)
+      if (team in points) {
+        points[team] += user_progress.score;
+      } else {
+        points[team] = user_progress.score;
+      }
+      //creates dict of key(team), value(# of members in team)
+      if (team in count) {
+        count[team] += 1;
+      } else {
+        count[team] = 1;
+      }
+    }
+  });
+  //creates dict of key(team), value(average score in team)
+
+  Object.keys(points).forEach(function (key) {
+    if (key in averages) {
+      averages[key] += points[key] / count[key];
+    } else {
+      averages[key] = points[key] / count[key];
+    }
+  });
+
+  //updates team score
+  $("#teamScore").html(averages[$("#teamName").text()]);
+  //Finds teams with max scores
+  var max_teams = ["", "", ""];
+  Object.keys(averages).forEach(function (key) {
+    for (i = 0; i < max_teams.length; i++) {
+      if (averages[key] > averages[max_teams[i]] || max_teams[i] === "") {
+        max_teams[i] = key;
+        break;
+      }
+    }
+  });
+  //Accounts for there being not enough teams
+  for (i = 0; i < max_teams.length; i++) {
+    if (max_teams[i] === "") {
+      averages[max_team] = 0;
+    }
+  }
+
+  html += `<tr class="leader"><td>1</td><td>${max_teams[0]}</td><td>${
+    averages[max_teams[0]]
+  }</td></tr><tr class="leader"><td>2</td><td>${max_teams[1]}</td><td>${
+    averages[max_teams[1]]
+  }</td></tr><tr class="leader"><td>3</td><td>${max_teams[2]}</td><td>${
+    averages[max_teams[2]]
+  }</td></tr>`;
+  $("#leaderboard").html(html);
 }

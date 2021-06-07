@@ -426,12 +426,12 @@
 #leaderboard {
 	position: relative;
 	margin-left: -3px;
-	width: 220px;
+	width: 350px;
 	margin-top: 42px;
 	padding-left: 0px !important;
 	padding-right: 0px !important;
 	padding-top: 0;
-	height: 128px;
+	height: 75px;
 }
 .leader_me {
 	border-top: 1px dashed rgb(34,92,203);
@@ -443,6 +443,7 @@
 }
 #leaderboard table {
   table-layout: fixed;
+  display: table;
   width: 212px;
 }
 #leaderboard td:nth-child(2) {
