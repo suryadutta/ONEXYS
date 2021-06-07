@@ -302,7 +302,7 @@ function writeLeaderboard(progress) {
   //Accounts for there being not enough teams
   for (i = 0; i < max_teams.length; i++) {
     if (max_teams[i] === "") {
-      averages[max_team] = 0;
+      averages[max_teams] = 0;
     }
   }
 
