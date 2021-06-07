@@ -58,6 +58,7 @@ $(document).ready(function () {
       getModules(userProgress.modules);
       $("#point_count").html(userProgress.score);
       $("#teamName").html(userProgress.team);
+      getLeaderboard();
     })
     .catch((err) => {
       console.log(err.responseText);
@@ -65,8 +66,11 @@ $(document).ready(function () {
       getModules(null);
       alert("Failed to retrieve user progress. The page has been loaded, but omitting this data.");
     });
+});
 
-  const getLeaderboard = $.get(herokuAPI + "/progress", {
+/*---------- Badge and Module API calls --------*/
+function getLeaderboard() {
+  $.get(herokuAPI + "/progress", {
     hostname,
     courseID,
   })
@@ -77,9 +81,7 @@ $(document).ready(function () {
       console.log(err);
       $("#leaderboard").text("Leaderboard info not available.");
     });
-});
-
-/*---------- Badge and Module API calls --------*/
+}
 
 function getBadges(earnedBadges) {
   $.get(herokuAPI + "/badges", {
