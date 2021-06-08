@@ -290,10 +290,10 @@ function writeLeaderboard(progress) {
   //updates team score
   $("#teamScore").html(averages[$("#teamName").text()]);
   //Finds teams with max scores
-  var max_teams = ["", "", ""];
+  var max_teams = ["None", "None", "None"];
   Object.keys(averages).forEach(function (key) {
     for (i = 0; i < max_teams.length; i++) {
-      if (averages[key] > averages[max_teams[i]] || max_teams[i] === "") {
+      if (averages[key] > averages[max_teams[i]] || max_teams[i] === "None") {
         max_teams[i] = key;
         break;
       }
@@ -301,8 +301,8 @@ function writeLeaderboard(progress) {
   });
   //Accounts for there being not enough teams
   for (i = 0; i < max_teams.length; i++) {
-    if (max_teams[i] === "") {
-      averages[max_teams] = 0;
+    if (max_teams[i] === "None") {
+      averages[max_teams[i]] = "N/A";
     }
   }
 
