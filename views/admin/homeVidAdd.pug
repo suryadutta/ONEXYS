@@ -2,38 +2,39 @@ extends ../layout
 
 block content
 
-    //script(type='text/javascript', src='/javascript/nic-edit.js')
-    //script(type='text/javascript').
-    //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-
+    script.
+       const herokuAPI = "/api",
+      courseID = "#{courseID}",
+      needs = ["courseTitle", "homeVidAdd"];
+    script(src="/js/middleman_admin.js")
     br
     .container
         .row
             .form.form-inline
-                a.btn.btn-lg(href='/admin/home?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+                a.btn.btn-lg(href=`/admin/homepageEdit`)
                     i.fa.fa-chevron-left
-                h2='Add a Video to ' + course_title + '\'s Home Page'
+                h2='Add a Video to Home Page'
     hr
 
     .container
-        form(method='POST' action='')
-            input(type='hidden', value=course_id, name='course-id')
-            input(type='hidden', value=course_title, name='course-title')
-            input(type='hidden', value=user_id, name='user-id')
-            .row
-                .form-group.form-inline
-                    label(for='video_src') Video Source:
-                    input#video_src.form-control.inlined-input(type='text', name='video_src', required)
-                hr
-            .row
-                .form-group
-                    label(for='video_thumb') Video Thumbnail (leave blank to use default):
-                    input#video_thumb.form-control.inlined-input(type='text', name='video_img')
-                hr
-            .row
-                .form-group
-                    label(for='video_desc') Video Description:
-                    textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;")="Edit this text"
-                hr
-            .row
-                button.btn.btn-success(type='submit') Add Video
+    main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
+        h3 Add Video
+        div.d-flex.flex-column 
+        label(for="video_src") Video Source:
+        input#video_src.form-control(type='text', value="")
+        hr
+        div.d-flex.flex-column
+        label(for="video_thumb") Video Thumbnail:
+        input#video_thumb.form-control(type='text', value="")
+        small.text-primary Leave blank for default thumbnail
+        hr
+        div.d-flex.flex-column
+        label(for="video_desc") Video Description:
+        textarea#video_desc.form-control(type='text', value="")
+        hr
+        div.d-flex.flex-column
+        label(for="video_pos") Video Position:
+        input#video_pos.form-control(type='number', min="0" value="" size=4 style="width: min-content")
+        hr
+        div 
+        button.btn.btn-success(onClick="addHomeVid($('#video_src').val(), $('#video_desc').val(), $('#video_thumb').val(), $('#video_pos').val()); alert('Video updated')") Add Video

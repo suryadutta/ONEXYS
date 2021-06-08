@@ -193,7 +193,7 @@ function writeHomeVideos(videos) {
             `<div class="col-md-6 vid-obj">
                 <div class="row">
                   <div class="col-md-8">
-                    <div id="${video._id}" class="video-element">
+                    <div class="video-element">
                       <div class="onexys_video">
                         <a class="colorbox" target="_blank" href="${video.src}">
                           <img class="onexys_thumbnail ${
@@ -213,8 +213,8 @@ function writeHomeVideos(videos) {
                     <a class="btn btn-dark text-white" href="/admin/homeVidEdit/${
                       video._id
                     }" style="width: 80%; position: absolute; top: 25%; transform: translateY(-53%);">Edit Video</a>
-                    <button class="btn btn-danger"
-                      style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video
+                    <button class="btn btn-danger" onClick = "deleteHomeVid('${video._id}')"
+                       style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video
                     </button>
                   </div>
                 </div>
@@ -708,6 +708,40 @@ function updateTodaysDaily() {
       console.log("[TD] fail");
       alert("Today's daily update failed.");
     });
+}
+
+function addHomeVid(src, description, thumbnail, position) {
+  $.post(herokuAPI + "/admin/addHomeVid", {
+    courseID,
+    src,
+    description,
+    thumbnail,
+    position,
+  })
+    .done((res) => console.log("[V] add done"))
+    .fail((res) => console.log("[V] add fail"));
+}
+
+function deleteHomeVid(vidId) {
+  var result = confirm("Delete this vid?");
+  if (result) {
+    var dataToSend = JSON.stringify({ courseID: courseID, vidId: vidId });
+    $.ajax({
+      url: herokuAPI + "/admin/deleteHomeVid",
+      type: "DELETE",
+      contentType: "application/json; charset=utf-8",
+      data: dataToSend,
+      dataType: "json",
+      success: function (result) {
+        location.reload();
+      },
+    })
+      .done((res) => {})
+      .fail((res) => {
+        location.reload();
+        console.log("[V] delete fail");
+      });
+  }
 }
 /////////////////////////////////////////////////////////////////////////////////////
 // Keep the preview up to date

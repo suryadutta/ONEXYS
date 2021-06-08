@@ -18,6 +18,15 @@ router.get("/homepageEdit", (req, res) => {
   });
 });
 
+router.get("/homeVidAdd", (req, res) => {
+  res.render("admin/homeVidAdd", {
+    title: `Adding Video`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
 router.get("/navigation", (req, res) => {
   res.render("admin/navigation", {
     title: `Edit Navigation Links`,

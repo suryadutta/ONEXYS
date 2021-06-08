@@ -43,6 +43,15 @@ function initUser(courseID, userID, callback) {
 // --------------------------
 //          Methods
 // --------------------------
+// Need alpha numeric string id starting with letter for videos
+function randomString() {
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const length = 12;
+  var result = "";
+  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  console.log(result);
+  return result;
+}
 
 function getHomepageUpdates(courseID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
@@ -229,6 +238,32 @@ function updateModuleVid(courseID, moduleVid, moduleID, videoID, callback) {
     .catch((err) => callback(err));
 }
 
+function addHomeVid(courseID, homeVid, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("home")
+    .insertOne({
+      _id: randomString(),
+      src: homeVid.src,
+      description: homeVid.description,
+      thumbnail: homeVid.thumbnail,
+      type: "video",
+      position: homeVid.position,
+    })
+    .then(() => callback(true))
+    .catch(() => callback(false));
+}
+
+function deleteHomeVid(courseID, vidId, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+
+  db.collection("home")
+    .deleteOne({
+      _id: vidId,
+    })
+    .then(() => callback(true))
+    .catch(() => callback(false));
+}
+
 module.exports = {
   client, // Allows start.js to create a shared connection pool
   getHomepageUpdates,
@@ -249,6 +284,8 @@ module.exports = {
   updateBadge,
   updateModule,
   updateModuleVid,
+  addHomeVid,
+  deleteHomeVid,
   updateDaily,
   updateTodaysDaily,
   // updateScore,

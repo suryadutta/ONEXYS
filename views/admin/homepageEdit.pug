@@ -2,9 +2,6 @@ extends ../layout
 
 block content
 
-    //script(type='text/javascript', src='/javascript/nic-edit.js')
-    //script(type='text/javascript').
-    //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
     script.
         const herokuAPI = "/api";
               needs = ["courseTitle", "homepageUpdates", "homepageVideos"],
@@ -190,6 +187,7 @@ block content
                 .row
                     .col-md-12
                         h3 Homepage Videos
+                        <a class="btn btn-dark text-white" href="/admin/homeVidAdd";">Add Video</a>
                 .row#homepageVideosEdit
             .col
     br

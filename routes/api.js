@@ -351,6 +351,67 @@ router.post("/admin/updateVideo", (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+router.post("/admin/addHomeVid", (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+      assert(/\d+/.test(req.body.position)); // Positions consist at least 1 digit, and nothing else
+      assert(/.+/.test(req.body.description)); // Description must be provided
+      assert(/.*/.test(req.body.thumbnail)); // Thumbnail may not be provided
+      // res.send("pass"); return;
+
+      mongo.addHomeVid(
+        req.body.courseID,
+        {
+          src: req.body.src,
+          description: req.body.description,
+          thumbnail: req.body.thumbnail,
+          position: parseInt(req.body.position),
+        },
+        (err) => {
+          if (err)
+            res
+              .status(500)
+              .send("500 - Internal Server Error. Encountered error saving video info.");
+          else res.status(200).send("200 - OK");
+        }
+      );
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide body arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else). " +
+            e
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.delete("/admin/deleteHomeVid", (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.body.courseID));
+      // res.send("pass"); return;
+      console.log(req.body.vidId);
+      console.log(req.body.courseID);
+      mongo.deleteHomeVid(req.body.courseID, req.body.vidId, (err) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Encountered error deleting video.");
+        else res.status(200).send("200 - OK");
+      });
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide body arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else). " +
+            e
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
 router.post("/admin/updateVideoDefaults", (req, res) => {
   if (req.session.admin) {
     try {
