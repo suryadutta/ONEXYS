@@ -294,7 +294,11 @@ function writeLeaderboard(progress) {
   Object.keys(averages).forEach(function (key) {
     for (i = 0; i < max_teams.length; i++) {
       if (averages[key] > averages[max_teams[i]] || max_teams[i] === "None") {
+        for (j = max_teams.length; j > i; j--) {
+          max_teams[j] = max_teams[j - 1];
+        }
         max_teams[i] = key;
+
         break;
       }
     }
