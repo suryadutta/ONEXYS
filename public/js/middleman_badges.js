@@ -1,54 +1,39 @@
 // COURSE ID AVAILABLE IN:
 // courseIDFromURL
-
+const hostname = "https://educationvirginia.instructure.com/";
 $(document).ready(function () {
-  const progress = {},
-    hostname = "https://educationvirginia.instructure.com/";
-
-  // Gets the user's progress, including finished modules and badge status
-  var getUserProgress = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/users/progress", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => {
-        reject(err);
-      });
+  $.get(herokuAPI + "/users/progress", {
+    hostname,
+    courseID,
   })
-    .then((data) => {
-      if (data) {
-        progress = data.badges;
-      }
+    .then((userProgress) => {
+      getBadges(userProgress.badges);
     })
     .catch((err) => {
+      getBadges(null);
       console.log(err);
       console.log(
         "Failed to retrieve user progress. The page has been loaded, but omitting this data."
       );
     });
+});
 
-  var loadBadges = new Promise((resolve, reject) => {
-    $.get(herokuAPI + "/badges", {
-      hostname,
-      courseID,
-    })
-      .done((data, status) => {
-        resolve(data);
-      })
-      .fail((err) => reject(err));
+function getBadges(progress) {
+  $.get(herokuAPI + "/badges", {
+    hostname,
+    courseID,
   })
-    .then((data) => {
-      writeBadges(data, progress);
+    .then((badges) => {
+      if (!progress) throw "Failed to retrieve user progress.";
+      writeBadges(badges, progress);
       // console.log("Badge progress has not been retrieved yet. Display badge progress has been flagged for completion later.")
     })
     .catch((err) => {
       // TODO
+      writeBadges(badges, {});
       console.log("Badge loading failed.");
     });
-});
+}
 
 function writeBadges(badges, progress) {
   var badgeHTML = ``;

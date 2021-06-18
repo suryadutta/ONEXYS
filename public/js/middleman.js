@@ -2,7 +2,7 @@
 const hostname = "https://educationvirginia.instructure.com/";
 $(document).ready(function () {
   // Contains all AJAX calls necessary to interface with system API
-  const homeUpdates = $.get(herokuAPI + "/home/updates", {
+  $.get(herokuAPI + "/home/updates", {
     hostname,
     courseID,
   })
@@ -23,7 +23,7 @@ $(document).ready(function () {
       $("#posttest").css("background-image", "");
     });
 
-  const getDailyTask = $.get(herokuAPI + "/dailies", {
+  $.get(herokuAPI + "/todaysDaily", {
     hostname,
     courseID,
   })
@@ -35,7 +35,7 @@ $(document).ready(function () {
       $("#dailyTaskLink").prop("href", "/missing-resource");
     });
 
-  const getHomeVideos = $.get(herokuAPI + "/home/videos", {
+  $.get(herokuAPI + "/home/videos", {
     hostname,
     courseID,
   })
@@ -49,14 +49,14 @@ $(document).ready(function () {
     });
 
   // Gets the user's progress, including finished modules and badge status
-  const getUserProgress = $.get(herokuAPI + "/users/progress", {
+  $.get(herokuAPI + "/users/progress", {
     hostname,
     courseID,
   })
     .then((userProgress) => {
       getBadges(userProgress.badges);
       getModules(userProgress.modules);
-      $("#point_count").html(userProgress.score);
+      $("#point_count").html(parseInt(userProgress.score));
       $("#teamName").html(userProgress.team);
       getLeaderboard();
     })
@@ -168,18 +168,14 @@ function writeUpdates(updates) {
   $("#dailyTaskImg").prop("src", updates.daily_task_img).css("height", ""); // Set daily task image source
 }
 
-function writeDailyTaskInfo(daily_tasks) {
-  const todaysDaily = daily_tasks.pop();
-  const daily = daily_tasks.find(
-    (daily) => daily._id.toString() === todaysDaily.position.toString()
-  );
-  if (daily._id === -1)
-    $("#dailyTaskLink").prop("href", `${herokuAPI.substring(0, herokuAPI.length - 3)}not-open`);
-  else {
+function writeDailyTaskInfo(todaysDaily) {
+  if (todaysDaily.assignment_id.toString() !== -1) {
     $("#dailyTaskLink").prop(
       "href",
-      `${hostname}/courses/${courseID}/assignments/${daily.assignment_id.toString()}`
+      `${hostname}/courses/${courseID}/assignments/${todaysDaily.assignment_id.toString()}`
     );
+  } else {
+    $("#dailyTaskLink").prop("href", `${herokuAPI}/not-open`);
   }
 }
 
@@ -288,7 +284,7 @@ function writeLeaderboard(progress) {
   });
 
   //updates team score
-  $("#teamScore").html(averages[$("#teamName").text()]);
+  $("#teamScore").html(parseInt(averages[$("#teamName").text()]));
   //Finds teams with max scores
   var max_teams = ["None", "None", "None"];
   Object.keys(averages).forEach(function (key) {
@@ -310,12 +306,12 @@ function writeLeaderboard(progress) {
     }
   }
 
-  html += `<tr class="leader"><td>1</td><td>${max_teams[0]}</td><td>${
+  html += `<tr class="leader"><td>1</td><td>${max_teams[0]}</td><td>${parseInt(
     averages[max_teams[0]]
-  }</td></tr><tr class="leader"><td>2</td><td>${max_teams[1]}</td><td>${
+  )}</td></tr><tr class="leader"><td>2</td><td>${max_teams[1]}</td><td>${parseInt(
     averages[max_teams[1]]
-  }</td></tr><tr class="leader"><td>3</td><td>${max_teams[2]}</td><td>${
+  )}</td></tr><tr class="leader"><td>3</td><td>${max_teams[2]}</td><td>${parseInt(
     averages[max_teams[2]]
-  }</td></tr>`;
+  )}</td></tr>`;
   $("#leaderboard").html(html);
 }

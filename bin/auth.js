@@ -1,16 +1,14 @@
-var express = require("express");
-var config = require("./config");
-var request = require("request");
-var Queue = require("better-queue");
-var mongo = require("../models/mongo");
-var assert = require("assert");
-
-var lti = require("ims-lti");
-var RedisNonceStore = require("../node_modules/ims-lti/lib/redis-nonce-store.js");
-var redis = require("redis"),
-  redis_client = redis.createClient(config.redisURL);
-
-var store = new RedisNonceStore(config.client_id, redis_client);
+const config = require("./config"),
+  Queue = require("better-queue"),
+  mongo = require("../models/mongo"),
+  assert = require("assert"),
+  request = require("request"),
+  canvas = require("../models/canvas"),
+  lti = require("ims-lti"),
+  RedisNonceStore = require("../node_modules/ims-lti/lib/redis-nonce-store.js"),
+  redis = require("redis"),
+  redis_client = redis.createClient(config.redisURL),
+  store = new RedisNonceStore(config.client_id, redis_client);
 
 if (!provider) {
   console.log("Generating new provider...");
@@ -129,7 +127,7 @@ var checkUser = function (req, res, next) {
 var oath2_callback = async function (req, res, next) {
   let code = req.query.code;
   let options = { code };
-
+  console.log(options);
   try {
     let result = await oauth2.authorizationCode.getToken(options); // create new access token from Canvas API
     let accessToken = await oauth2.accessToken.create(result);
@@ -141,20 +139,42 @@ var oath2_callback = async function (req, res, next) {
   }
 };
 
-const userExists = function (req, res, next) {
+const userExists = async function (req, res, next) {
   try {
     assert(req.session.course_id);
     assert(req.session.user_id);
-    mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id, (exists) => {
-      if (!exists) {
-        console.log("Creating user:", req.session.user_id);
-        mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id, (success) => {
-          if (success) console.log("User created.");
-          else res.status(500).send("Internal Server Error. User creation failed.");
-        });
-      } else console.log("User already exists.");
-    });
+
+    let user = await mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id);
+    if (!user || Object.keys(user).length !== 6) {
+      await mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id);
+      user = { team: "" };
+    }
+
+    if (user.team === "") {
+      console.log(`Updating all user sections for course ${req.session.course_id}.`);
+      const sections = (
+        await canvas.getSections(Object.keys(req.session.course_id)[0], "include=students")
+      ).data;
+
+      sections.map((section) => {
+        if (section.students) {
+          section.students.map((student) =>
+            mongo.updateUserProgressField(
+              Object.keys(req.session.course_id)[0],
+              student.id,
+              "$set",
+              "team",
+              section.name,
+              (err) => {
+                if (err) console.log(`Failed to update user ${student.id}'s section`);
+              }
+            )
+          );
+        } else console.log(`Section ${section.name} has no students`);
+      });
+    }
   } catch (e) {
+    console.log(e);
     res
       .status(406)
       .send(
