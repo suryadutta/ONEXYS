@@ -61,7 +61,6 @@ router.get("/home/updates", (req, res) => {
             canvas.getDailyTask(req.query.courseID, (err, data) => {
               callback(null, data);
             });
-            //callback(null, {id: 123});
           }),
         ],
         (err, data) => {
@@ -154,6 +153,21 @@ router.get("/dailies", (req, res) => {
           res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
         else res.status(200).header(access, getDst(req.query.hostname)).send(data);
       });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
+  }
+});
+
+router.get("/todaysDaily", async (req, res) => {
+  if (req.session.user_id) {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID));
+      assert(req.query.hostname);
+      const todaysDaily = await mongo.getTodaysDaily(req.query.courseID);
+      res.status(200).header(access, getDst(req.query.hostname)).send(todaysDaily);
     } catch (e) {
       console.log(e);
       res.status(406).send("406 - Your request could not be processed.");
@@ -671,6 +685,37 @@ router.post("/admin/updateBadge/:id", (req, res) => {
       console.log(e);
     }
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+// --------------------------
+//     Canvas Live Event
+// --------------------------
+// TODO: assert inputs
+router.post("/gradeChangeEvent", (req, res) => {
+  try {
+    // assert(req.metadata.event_name === "grade_change");
+    // assert(req.metadata.context_id);
+    // assert(req.metadata.user_id);
+    // assert(req.body.grade);
+    /**
+     * Get Canvas course id from Canvas Live Event context_id
+     * https://community.canvaslms.com/t5/Question-Forum/Get-course-id-from-context-id/td-p/159753
+     * https://canvas.instructure.com/doc/api/file.data_service_canvas_grade.html
+     */
+    console.log(req.body);
+    // const courseID = (await canvas.getCourseID(req.)).data;
+    // canvas.updateScore(courseBody.id, req.body.user_id, parseInt(req.body.grade), (err) => {
+    //   if (err) console.log(err);
+    //   else console.log(`User ${req.body.user_id} score successfully updated.`);
+    // });
+    // canvas.updateModuleProgress(courseBody.id, req.body.user_id, req.body, (err) => {
+    //   if (err) console.log(err);
+    //   else console.log(`User ${req.body.user_id} badges successfully updated.`);
+    // });
+    // canvas.updateBadgeProgress(courseBody.id, req.body.user_id, (err) => console.log(err));
+  } catch (e) {
+    console.log("Invalid or uneccessary Canvas Live Event received.", e);
+  }
 });
 
 module.exports = router;

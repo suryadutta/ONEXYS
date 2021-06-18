@@ -287,13 +287,9 @@ function writeDailiesTaskInfo(daily) {
     $("#assignment_id").val(dailyToEdit.assignment_id);
   } else {
     let content = daily.reduce((content, daily) => {
-      if (typeof daily.type === "string" && daily.type) {
-        $("#todaysDaily").val(daily.position);
-        return content;
-      } else {
-        return (
-          content +
-          `
+      return (
+        content +
+        `
         <tr>
           <td>${daily._id}</td>
           <td>${daily.assignment_id}</td>
@@ -304,8 +300,7 @@ function writeDailiesTaskInfo(daily) {
             </a>
           </td>
         </tr>`
-        );
-      }
+      );
     }, ``);
     $("#dailyTable").append(content);
   }

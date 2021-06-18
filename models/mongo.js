@@ -12,32 +12,43 @@ const MongoClient = require("mongodb").MongoClient,
   client = new MongoClient(config.mongoURL, mongoSettings);
 
 // --------------------------
-//       User Progress
+//        User Creation
 // --------------------------
 
 /**
  * @param {string} courseID - courseID passed from req.session.course_id
- * @param {string} userID - user canvas id
- * @param {function} callback
+ * @param {string} userID - user canvas id from POST custom_canvas_user_id
+ * @returns {Promise}
  */
-async function findUser(courseID, userID, callback) {
-  const db = client.db(config.mongoDBs[courseID]);
-  const user = await db.collection("user_progress").findOne({ user: userID });
-  callback(!!user); // convert object or null into boolean
+function findUser(courseID, userID) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db.collection("user_progress").findOne({ user: userID.toString() });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /**
- *
+ * TODO: refactor
  * @param {string} courseID - courseID passed from req.session.course_id
- * @param {string} userID - user canvas id
+ * @param {string} userID - user canvas id from POST custom_canvas_user_id
  * @param {function} callback
+ * @returns {Promise}
  */
-function initUser(courseID, userID, callback) {
-  const db = client.db(config.mongoDBs[courseID]);
-  db.collection("user_progress")
-    .insertOne({ badges: {}, modules: {}, score: 0, team: "", user: userID })
-    .then(() => callback(true))
-    .catch(() => callback(false));
+function initUser(courseID, userID) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db
+      .collection("user_progress")
+      .updateOne(
+        { user: userID.toString() },
+        { badges: {}, modules: {}, score: 0, team: "", user: userID.toString() },
+        { upsert: true }
+      );
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 // --------------------------
@@ -47,9 +58,8 @@ function initUser(courseID, userID, callback) {
 function randomString() {
   const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const length = 12;
-  var result = "";
-  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-  console.log(result);
+  let result = "";
+  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 }
 
@@ -116,6 +126,11 @@ function getDailyTasks(courseID, callback) {
     .toArray()
     .then((data) => callback(null, data))
     .catch((err) => callback(err, null));
+}
+
+function getTodaysDaily(courseID) {
+  const db = client.db(config.mongoDBs[courseID]);
+  return db.collection("global").findOne({ type: "todays_daily" });
 }
 
 function getLuckyBonuses(courseID, callback) {
@@ -209,10 +224,10 @@ function updateDaily(courseID, daily, callback) {
     .catch((err) => callback(err));
 }
 
-function updateTodaysDaily(courseID, position, callback) {
+function updateTodaysDaily(courseID, assignment_id, callback) {
   const db = client.db(config.mongoDBs[courseID]);
-  db.collection("daily_task")
-    .findOneAndUpdate({ type: "todays" }, { $set: { position } })
+  db.collection("global")
+    .findOneAndUpdate({ type: "todays_daily" }, { $set: { assignment_id } })
     .then(() => callback(null))
     .catch((err) => callback(err));
 }
@@ -264,11 +279,58 @@ function deleteHomeVid(courseID, vidId, callback) {
     .catch(() => callback(false));
 }
 
+function updateUserProgressField(courseID, userID, operator, field, value, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("user_progress")
+    .updateOne(
+      { user: userID.toString() },
+      {
+        [operator]: { [field]: value },
+      },
+      { upsert: true }
+    )
+    .catch((err) => callback(err));
+}
+
+/**
+ * @todo - refactor into just one function.
+ * @param {string} courseID
+ * @param {string} userID
+ * @param {string} fieldID - id of corresponding module or badge
+ * @param {string} field - modules or badges
+ * @param {string} assignmentType - practice or apply
+ * @param {string} value - value to set at modules.$.assignmentType
+ * @param {function} callback
+ */
+function updateUserProgressBadgeOrModules(
+  courseID,
+  userID,
+  fieldID,
+  field,
+  assignmentType,
+  value,
+  callback
+) {
+  const db = client.db(config.mongoDBs[courseID]);
+  const key = `${field}.${fieldID}.${assignmentType}`;
+  console.log(`Updated user ${userID}`);
+  db.collection("user_progress")
+    .updateOne(
+      { user: userID },
+      {
+        $set: { [key]: value },
+      },
+      { upsert: true }
+    )
+    .catch((err) => callback(err));
+}
+
 module.exports = {
   client, // Allows start.js to create a shared connection pool
   getHomepageUpdates,
   getHomepageVideos,
   getDailyTasks,
+  getTodaysDaily,
   getLuckyBonuses,
   getModule,
   getModules,
@@ -288,5 +350,6 @@ module.exports = {
   deleteHomeVid,
   updateDaily,
   updateTodaysDaily,
-  // updateScore,
+  updateUserProgressField,
+  updateUserProgressBadgeOrModules,
 };

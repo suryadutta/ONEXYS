@@ -39,10 +39,6 @@ block content
                 li
                     p Watch the homepage as the next available daily task is linked to in the top left! If no daily task is found, the generic 404 / Missing resource page will be linked on the homepage. In the case that the next daily task is not open yet, the generic not-open page is displayed.
             hr
-        div.mb-4
-            label(for="todaysDaily") Today's Daily Task Number
-            input#todaysDaily.mb-3.form-control(type='number', value="", min="1", style="width: 5rem;")
-            button.btn.btn-success(onClick="updateTodaysDaily()") Update Daily 
         div.row
             table#dailyTable.admin_table(style="margin-bottom:100px;")
                 tr

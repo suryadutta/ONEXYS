@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "async": "^2.6.3",
+    "axios": "^0.21.1",
     "better-queue": "^3.8.10",
     "bird": "^0.7.0",
     "body-parser": "~1.18.3",
