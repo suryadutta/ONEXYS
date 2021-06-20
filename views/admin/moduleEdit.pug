@@ -9,6 +9,8 @@ block content
       needs = ["courseTitle", "modules"];  
   
   script(src="/js/middleman_admin.js")
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+  
   br
   #fullscr-loading
       div
@@ -22,9 +24,101 @@ block content
               h2#adminPanelTitle='Loading title...'
           .col-md-1
   hr
+ 
+  #previewModal.modal.fade(role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true")
+    .modal-dialog.modal-xl
+      .modal-content
+          .modal-header
+              h4.modal-title Module Preview
+              button.close(type="button" data-dismiss="modal") &times;
+          .modal-body.p-0
+            div
+              div.onexys_styling(style="min-width:initial;")
+                img#preview_background_building.w-100.position-absolute(style="z-index: 0;left:0;")
+                div#background_building_outline
+                  div#bbo_white
+                div#background_building_outline2
+                div.title_mod.standard_title_box.left.position-relative
+                  p#preview_primary_text
+                  h1#preview_secondary_text
+                div.quicklinks.standard_title_box.left.position-relative
+                  a(href="#watch") Watch
+                  br
+                  a(href="#practice") Practice
+                  br
+                  a(href="#apply") Apply
+                  br
+                  a(href="#explore") Explore
+                div.building_descriptor.standard_title_box.right
+                  h2#preview_background_name
+                  p#preview_background_desc
+                div.clear
+                div#overview.module_box.standard_box.left
+                  div.title_box.standard_box
+                    h2 Overview
+                  span#preview_overview
+                    br
+                    br
+                div.left
+                  div#watch.module_box.standard_box
+                    div.title_box.standard_box
+                      h2 1. Watch
+                    div.clear
+                  div#practice.module_box.standard_box
+                    div.title_box.standard_box
+                      h2 2. Practice
+                    p Practice, practice, practice! We would like you to keep working until you reach 90% proficiency for this module in ALEKS.
+                    a#preview_practice_location(src="", target="_blank")
+                      div.onexys_button Practice Now
+                  div#apply.module_box.standard_box
+                    div.title_box.standard_box
+                      h2 3. Apply
+                    span#preview_apply_description
+                    a#preview_read(href='', target="_blank")
+                      div.onexys_button.apply_button.left
+                        img(src="/images/icons/Read.png", alt="Read.png")
+                        | 1. Read
+                    p.apply_description.left
+                      em Before
+                      |  your team meeting read the scenario and questions.
+                    div.clear
+                    a#preview_reflect(href='', data-api-endpoint= "https://yale.instructure.com/api/v1/", data-api-returntype="Discussion", target="_blank")
+                      div.onexys_button.apply_button.left
+                        img(src="/images/icons/Reflect.png", alt="Reflect.png")
+                        | 2. Reflect
+                    p.apply_description.left
+                      em Before
+                      |  your team meeting, complete the reflection
+                    div.clear
+                    div#meet-button.onexys_button.apply_button.left
+                      img(src="/images/icons/Meet.png", alt="Meet.png")
+                      | 3. Meet
+                    p.apply_description.left
+                      em Meet with your team!
+                      |  We'll unlock the questions afterwards.
+                    div.clear
+                    a#preview_quiz_link(href="", target="_blank")
+                      div.onexys_button.apply_button.left
+                        img(src="/images/icons/Answer.png", alt="Answer.png")
+                        | 4. Answer
+                    p.apply_description.left
+                      em After
+                      |  your team meeting, the application quiz will be unlocked.
+                    div.clear
+                  div#explore.module_box.standard_box.left
+                    div.title_box.standard_box
+                      h2 4. Explore
+                    div#preview_explore_content.explore_content
+          div.modal-footer
+            button.btn.btn-info(type="button" data-dismiss="modal") Close Preview
+            button.btn.btn-danger(onClick="updateModule();") Go live
 
   main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
     h3.mb-4 Editing module #{id}
+
+    div.mb-4
+      button.btn.btn-info.mr-2(type="button" data-toggle="modal" data-target="#previewModal" onClick="copyToModulePreview();") Open Preview
+      button.btn.btn-danger(onClick="updateModule();") Go live
 
     div.d-flex.flex-column.mb-4
       label(for="primary_title") Primary Title:
@@ -128,7 +222,8 @@ block content
       textarea#explore_text.form-control( style="height: 10rem")
 
     div.mb-4
-      button.btn.btn-success(onClick="updateModule();") Go live
+      button.btn.btn-info.mr-2(type="button" data-toggle="modal" data-target="#previewModal" onclick="") Open Preview
+      button.btn.btn-danger(onClick="updateModule();") Go live
 
     hr.w-100.mb-4
 

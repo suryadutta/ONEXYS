@@ -44,52 +44,48 @@ cron.schedule("0 0 0 * * * mon,tue,wed,thur,fri", () => {
 /**
  * @todo - refactor to use also refactored mongo functions
  * @todo - debug logging system
+ * @todo - possible optimzation: store various maps in redis cache
  * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
  */
-// */15 * * * *
 cron.schedule("*/15 * * * *", async () => {
   Object.keys(config.mongoDBs).map(async (courseID) => {
     let logs = { success: {}, failed: [] };
     try {
-      /**
-       * @description - Maps a course's modules assignment id to its type - e.g 22657: "practice"
-       * @description - Maps a course's badges id to its points - e.g 1: 200
-       */
-      let assignmentIdToType = {},
-        badgeIdToPoints = {};
+      let assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
+        badgeIdToPoints = {}; // Maps a course's badges id to its points - e.g 1: 200
 
       const db = mongo.client.db(config.mongoDBs[courseID]),
         userSubmissionsPromise = () =>
           canvas.getSubmissions(
             courseID,
-            "student_ids[]=all&workflow_state=graded&grouped=true&per_page=1000"
+            "student_ids[]=all&workflow_state=graded&grouped=true&per_page=1000" // Get submissions grouped by user - e.g [{user_id:1, submissions: []}, ...]
           ),
         modulesPromise = () => db.collection("modules").find().sort({ _id: 1 }).toArray(),
         dailyTasksPromise = () => db.collection("daily_task").find().sort({ _id: 1 }).toArray(),
         badgesPromise = () => db.collection("badges").find().sort({ _id: 1 }).toArray();
 
+      // Retrieve all necessary information at once
       const [userSubmissions, modules, daily_tasks, badges] = await Promise.allSettled([
-        // Retrieve all necessary information at once
         userSubmissionsPromise(),
         modulesPromise(),
         dailyTasksPromise(),
         badgesPromise(),
       ]);
 
+      // Initialize maps to each value
       modules.value.map((module) => {
         assignmentIdToType[module.practice_link] = { type: "practice", moduleID: module._id };
         assignmentIdToType[module.quiz_link] = { type: "apply", moduleID: module._id };
         assignmentIdToType[module.reflection_link] = { type: "reflection", moduleID: module._id };
       });
-
       daily_tasks.value.map((daily) => {
         assignmentIdToType[daily.assignment_id] = { type: "daily" };
       });
-
       badges.value.map((badge) => {
         badgeIdToPoints[badge._id] = parseInt(badge.Points);
       });
 
+      // Iterate through each user
       userSubmissions.value.map(async (user, index) => {
         // Get submissions grouped by user
         if (user.submissions.length > 0) {
@@ -112,12 +108,12 @@ cron.schedule("*/15 * * * *", async () => {
 
               switch (assignmentIdToType[submission.assignment_id].type) {
                 case "practice":
+                  // Hard-coded to 90 for now
                   if (submission.score >= 90) {
-                    // Hard-coded to 90 for now
                     score += 100;
                     completed.practice += 1;
+                    // If submission not already stored in MongoDB
                     if (!userProgress.modules || !(moduleID in userProgress.modules)) {
-                      // If submission not already stored in MongoDB
                       logs.success[user.user_id].practice.push(submission.assignment_id);
                       await db.collection("user_progress").updateOne(
                         { user: user.user_id.toString() },
@@ -159,8 +155,8 @@ cron.schedule("*/15 * * * *", async () => {
                   console.log(`Assignment ${submission.assignment_id} not stored in Mongo`);
               }
 
+              // Get earned badges, see in canvas.js
               const earned = await canvas.updateBadgeProgress(
-                // Get earned badges, see in canvas.js
                 courseID,
                 user.user_id,
                 userProgress,

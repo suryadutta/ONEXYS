@@ -16,11 +16,12 @@ function hideLoadingBar() {
   );
 }
 
+const hostname = "https://educationvirginia.instructure.com";
 $(document).ready(async function () {
   // Get the course title
   if (needs.includes("courseTitle")) {
     $.get(`${herokuAPI}/authorize/getCourseTitle`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((title, status) => {
@@ -33,7 +34,7 @@ $(document).ready(async function () {
 
   if (needs.includes("homepageUpdates")) {
     $.get(`${herokuAPI}/home/updates`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((homepage, status) => {
@@ -70,7 +71,7 @@ $(document).ready(async function () {
 
   if (needs.includes("homepageVideos")) {
     $.get(`${herokuAPI}/home/videos`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((videos, status) => {
@@ -84,7 +85,7 @@ $(document).ready(async function () {
 
   if (needs.includes("navigationData")) {
     $.get(`${herokuAPI}/navigation`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((data) => writeNavigationData(data))
@@ -94,7 +95,7 @@ $(document).ready(async function () {
 
   if (needs.includes("badges")) {
     $.get(`${herokuAPI}/badges`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((data) => writeBadges(data))
@@ -104,7 +105,7 @@ $(document).ready(async function () {
 
   if (needs.includes("modules")) {
     $.get(`${herokuAPI}/modules`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((data) => writeModules(data))
@@ -113,7 +114,7 @@ $(document).ready(async function () {
   }
   if (needs.includes("daily")) {
     $.get(`${herokuAPI}/dailies`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((data) => writeDailiesTaskInfo(data))
@@ -122,7 +123,7 @@ $(document).ready(async function () {
   }
   if (needs.includes("lucky")) {
     $.get(`${herokuAPI}/lucky`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((data) => writeLuckyInfo(data))
@@ -141,7 +142,7 @@ $(document).ready(async function () {
 
   if (needs.includes("moduleVideos")) {
     $.get(`${herokuAPI}/modules`, {
-      hostname: window.location.hostname,
+      hostname,
       courseID,
     })
       .done((data) => writeModuleVidEdit(data))
@@ -475,9 +476,9 @@ function writeModules(modules) {
       videos.sort((video1, video2) => video1.position > video2.position);
       let videoHTML = "";
       videos.map(
-        (video) =>
+        (video, index) =>
           (videoHTML += `
-          <div id="${video._id}" class="video-element d-flex align-items-center">
+          <div id="module_vid_${index}" class="video-element d-flex align-items-center">
             <div>
               <div class="onexys_video">
                 <a class="colorbox" target="_blank" href="${video.video_src}">
@@ -797,6 +798,65 @@ function copyToPreview() {
   );
 }
 
+function copyToModulePreview() {
+  $("#preview_background_building").attr(
+    "src",
+    `/images/moduleBackgrounds/${$("#background_image").val()}`
+  );
+  $("#preview_background_building").attr("alt", $("#background_name").val());
+  $("#preview_primary_text").html($("#primary_title").val());
+  $("#preview_secondary_text").html($("#secondary_title").val());
+  $("#preview_background_name").html($("#background_name").val());
+  $("#preview_background_desc").html($("#background_desc").val());
+  $("#preview_overview").html($("#overview_text").val());
+
+  if ($("#practice_id_bool_true").is(":checked")) {
+    $("#preview_practice_location").attr(
+      "src",
+      `${hostname}/courses/${courseID}/assignments/${$("#practice_link").val()}`
+    );
+  } else if ($("#practice_id_bool_false").is(":checked")) {
+    $("#preview_practice_location").attr("src", $("#practice_url_redirect").val());
+  }
+
+  $("#preview_read").attr("src", `/applicationPDFs/${$("#apply_read_src").val()}`);
+  $("#preview_reflect").attr(
+    "src",
+    `${hostname}/courses/${courseID}/assignments/${$("#reflection_link").val()}`
+  );
+  $("#preview_quiz_link").attr(
+    "src",
+    `${hostname}/courses/${courseID}/assignments/${$("#quiz_link").val()}`
+  );
+  $("#preview_explore_content").html($("#explore_text").val());
+
+  //todo: refactor
+  const videoImgs = Object.values($(".onexys_video img")),
+    videoLinks = Object.values($(".onexys_video a")),
+    videoTitles = Object.values($("#module_vid_container p"));
+  let videoHTML = "";
+  console.log(videoImgs, videoLinks, videoTitles);
+  for (let i = 0; i < videoImgs.length; i++) {
+    if (videoImgs[i] instanceof HTMLElement)
+      videoHTML += `<div class="watch_video left">
+                      <div class="onexys_video">
+                        <a class="colorbox cboxElement" href=${videoLinks[i].href} target="_blank">
+                          <img class="onexys_thumbnail" src="${videoImgs[i].src}")></img>
+                          <img class="onexys_playbutton" src="/images/icons/playbutton.png", alt=""></img>
+                        </a>
+                      </div>
+                      <p>
+                        <span style="font-size: 12pt;">
+                          <strong>${videoTitles[i].innerText}</strong>
+                        </span>
+                      </p>
+                    </div>`;
+  }
+  videoHTML += "<div class='clear'></div>";
+  $("#watch").append(videoHTML);
+}
+
+// @todo refactor use one mongo call
 // Makes all changes live (saves to Mongo)
 function goLive() {
   // Homepage updates

@@ -43,7 +43,7 @@ function initUser(courseID, userID) {
       .collection("user_progress")
       .updateOne(
         { user: userID.toString() },
-        { badges: {}, modules: {}, score: 0, team: "", user: userID.toString() },
+        { $set: { badges: {}, modules: {}, score: 0, team: "", user: userID.toString() } },
         { upsert: true }
       );
   } catch (e) {

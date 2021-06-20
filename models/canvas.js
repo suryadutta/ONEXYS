@@ -247,47 +247,49 @@ function updateModuleProgress(courseID, userID, grade_change, callback) {
  * @param {Object} completed - Object mapping assignment type to the number completed for a user
  * @return {Array} - List of earned badge ids
  */
+// Hard-coded badges
+const badgeRequirements = {
+  daily: [
+    { id: 1, req: 1 },
+    { id: 2, req: 5 },
+    { id: 3, req: 10 },
+    { id: 4, req: 15 },
+    { id: 5, req: 20 },
+    { id: 6, req: 25 },
+  ],
+  practice: [
+    { id: 7, req: 1 },
+    { id: 8, req: 3 },
+    { id: 9, req: 7 },
+    { id: 10, req: 10 },
+  ],
+  apply: [
+    { id: 11, req: 1 },
+    { id: 12, req: 3 },
+    { id: 13, req: 7 },
+    { id: 14, req: 10 },
+  ],
+  reflection: [
+    { id: 15, req: 1 },
+    { id: 16, req: 3 },
+    { id: 17, req: 7 },
+    { id: 18, req: 10 },
+  ],
+};
 function updateBadgeProgress(courseID, userID, userProgress, completed) {
   try {
-    const db = mongo.client.db(config.mongoDBs[courseID]),
-      badgeRequirements = {
-        // Hard-coded badges
-        daily: [
-          { id: 1, req: 1 },
-          { id: 2, req: 5 },
-          { id: 3, req: 10 },
-          { id: 4, req: 15 },
-          { id: 5, req: 20 },
-          { id: 6, req: 25 },
-        ],
-        practice: [
-          { id: 7, req: 1 },
-          { id: 8, req: 3 },
-          { id: 9, req: 7 },
-          { id: 10, req: 10 },
-        ],
-        apply: [
-          { id: 11, req: 1 },
-          { id: 12, req: 3 },
-          { id: 13, req: 7 },
-          { id: 14, req: 10 },
-        ],
-        reflection: [
-          { id: 15, req: 1 },
-          { id: 16, req: 3 },
-          { id: 17, req: 7 },
-          { id: 18, req: 10 },
-        ],
-      };
-
+    const db = mongo.client.db(config.mongoDBs[courseID]);
     let earned = [];
     for (const [type, badges] of Object.entries(badgeRequirements)) {
+      // e.g - [practice, [ { id: 7, req: 1 }, { id: 8, req: 3 }]]
       badges.map((badge) => {
+        // For a given type, if the number completed is greater than the badge req, push
         if (completed[type] >= badge.req) earned.push(badge.id);
       });
     }
 
     earned.map(async (badgeID) => {
+      // If not already recorded in userProgress in MongoDB
       if (!userProgress.badges || !(badgeID in userProgress.badges)) {
         await db.collection("user_progress").updateOne(
           { user: userID.toString() },
