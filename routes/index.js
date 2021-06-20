@@ -1,3 +1,5 @@
+const { canvasAdminAuthToken, canvasURL } = require("../bin/config");
+
 var express = require("express"),
   router = express.Router(),
   config = require("../bin/config"),
@@ -102,7 +104,22 @@ router.use("/welcome", [auth.updateCookies, auth.checkUser, auth.userExists], (r
   }
 });
 
-router.use("/missing-resource", function (req, res) {
+router.get("/missing-daily", (req, res) => {
+  try {
+    mongo.getDailyError(Object.keys(req.session.course_id)[0], (err, data) => {
+      if (err)
+        res.status(500).send("500 - Internal Server Error. Daily error could not be retrieved.");
+      else {
+        res.send(data["message"]);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(406).send("406 - Your request could not be processed.");
+  }
+});
+
+router.get("/missing-resource", function (req, res) {
   res.send("Resource is missing!");
 });
 

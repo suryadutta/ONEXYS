@@ -18,7 +18,7 @@ $(document).ready(function () {
       $("#LoG_link").text(""); // Write Life on Grounds name to DOM
       $("#LoG_link").prop("href", "/missing-resource"); // Write Life on Grounds link to DOM
       $("#dailyTaskImg").prop("src", ""); // Set daily task image source
-      $("#dailyTaskLink").prop("href", "/missing-resource");
+      $("#dailyTaskLink").prop("href", "/missing-daily");
       $("#pretest").css("background-image", "");
       $("#posttest").css("background-image", "");
     });
@@ -32,7 +32,7 @@ $(document).ready(function () {
     })
     .catch((err) => {
       console.log(err);
-      $("#dailyTaskLink").prop("href", "/missing-resource");
+      $("#dailyTaskLink").prop("href", "/missing-daily");
     });
 
   $.get(herokuAPI + "/home/videos", {

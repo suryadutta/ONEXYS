@@ -180,6 +180,10 @@ function getUserProgress(courseID, userID, callback) {
     callback(err, data)
   );
 }
+function getDailyError(courseID, callback) {
+  const db = client.db(config.mongoDBs[courseID]);
+  db.collection("global").findOne({ type: "daily-error" }, (err, data) => callback(err, data));
+}
 
 function getBadges(courseID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
@@ -336,6 +340,7 @@ module.exports = {
   getModules,
   getProgress,
   getUserProgress,
+  getDailyError,
   getBadges,
   getNavigationData,
   findUser,
