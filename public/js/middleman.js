@@ -169,13 +169,13 @@ function writeUpdates(updates) {
 }
 
 function writeDailyTaskInfo(todaysDaily) {
-  if (todaysDaily.assignment_id.toString() !== -1) {
+  if (todaysDaily.assignment_id.toString() !== "-1") {
     $("#dailyTaskLink").prop(
       "href",
       `${hostname}/courses/${courseID}/assignments/${todaysDaily.assignment_id.toString()}`
     );
   } else {
-    $("#dailyTaskLink").prop("href", `${herokuAPI}/not-open`);
+    $("#dailyTaskLink").prop("href", `/missing-daily`);
   }
 }
 
