@@ -265,17 +265,12 @@ function writeLeaderboard(userProgress) {
           });
     }
   });
-  console.log(courseName);
+
   const leaderboard = Object.entries(sections);
   leaderboard.sort((entry1, entry2) => entry1[1].score < entry2[1].score);
-  console.log(leaderboard);
-  for (let i = 0; i < Math.max(3, leaderboard.length); i++) {
+  for (let i = 0; i < Math.min(3, leaderboard.length); i++) {
     $(`#teamName${i}`).html(leaderboard[i][0]);
     $(`#teamScore${i}`).html(Math.round(leaderboard[i][1].score / leaderboard[i][1].num));
-    // $("#teamName1").html(leaderboard[1][0]);
-    // $("#teamScore1").html(Math.round(leaderboard[1][1].score / leaderboard[1][1].num));
-    // $("#teamName2").html(leaderboard[2][0]);
-    // $("#teamScore2").html(Math.round(leaderboard[2][1].score / leaderboard[2][1].num));
   }
 
   if (currentUser.section) {
