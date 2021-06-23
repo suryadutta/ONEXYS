@@ -16,7 +16,6 @@ $(document).ready(function () {
       ); // Write updates to DOM
       $("#LoG_title").text("Available Videos"); // Write Life on Grounds name to DOM
       $("#LoG_link").text(""); // Write Life on Grounds name to DOM
-      $("#LoG_link").prop("href", "/missing-resource"); // Write Life on Grounds link to DOM
       $("#dailyTaskImg").prop("src", ""); // Set daily task image source
       $("#dailyTaskLink").prop("href", "/missing-daily");
       $("#pretest").css("background-image", "");
@@ -68,7 +67,7 @@ $(document).ready(function () {
     });
 });
 
-/*---------- Badge and Module API calls --------*/
+/*---------- Leaderboard, Badge, and Module API calls --------*/
 function getLeaderboard() {
   $.get(herokuAPI + "/progress", {
     hostname,
@@ -251,67 +250,38 @@ function writeVideos(videos) {
   $("#homepageVideos").html(html); // Write videos to DOM
 }
 
-function writeLeaderboard(progress) {
-  var points = {};
-  var count = {};
-  var averages = {};
-  var html = "";
-  progress.forEach((user_progress) => {
-    if (user_progress.team) {
-      var team = user_progress.team;
-      //creates dict of key(team), value(total team score)
-      if (team in points) {
-        points[team] += user_progress.score;
-      } else {
-        points[team] = user_progress.score;
-      }
-      //creates dict of key(team), value(# of members in team)
-      if (team in count) {
-        count[team] += 1;
-      } else {
-        count[team] = 1;
-      }
+function writeLeaderboard(userProgress) {
+  const sections = {},
+    currentUser = {};
+
+  userProgress.map((user) => {
+    if (user.user.toString() === userID.toString()) currentUser.section = user.team;
+    if (user.team && user.score && user.team !== courseName) {
+      typeof sections[user.team] === "undefined"
+        ? (sections[user.team] = { score: user.score, num: 1 })
+        : (sections[user.team] = {
+            score: sections[user.team].score + user.score,
+            num: sections[user.team].num + 1,
+          });
     }
   });
-  //creates dict of key(team), value(average score in team)
-
-  Object.keys(points).forEach(function (key) {
-    if (key in averages) {
-      averages[key] += points[key] / count[key];
-    } else {
-      averages[key] = points[key] / count[key];
-    }
-  });
-
-  //updates team score
-  $("#teamScore").html(parseInt(averages[$("#teamName").text()]));
-  //Finds teams with max scores
-  var max_teams = ["None", "None", "None"];
-  Object.keys(averages).forEach(function (key) {
-    for (i = 0; i < max_teams.length; i++) {
-      if (averages[key] > averages[max_teams[i]] || max_teams[i] === "None") {
-        for (j = max_teams.length; j > i; j--) {
-          max_teams[j] = max_teams[j - 1];
-        }
-        max_teams[i] = key;
-
-        break;
-      }
-    }
-  });
-  //Accounts for there being not enough teams
-  for (i = 0; i < max_teams.length; i++) {
-    if (max_teams[i] === "None") {
-      averages[max_teams[i]] = "N/A";
-    }
+  console.log(courseName);
+  const leaderboard = Object.entries(sections);
+  leaderboard.sort((entry1, entry2) => entry1[1].score < entry2[1].score);
+  console.log(leaderboard);
+  for (let i = 0; i < Math.max(3, leaderboard.length); i++) {
+    $(`#teamName${i}`).html(leaderboard[i][0]);
+    $(`#teamScore${i}`).html(Math.round(leaderboard[i][1].score / leaderboard[i][1].num));
+    // $("#teamName1").html(leaderboard[1][0]);
+    // $("#teamScore1").html(Math.round(leaderboard[1][1].score / leaderboard[1][1].num));
+    // $("#teamName2").html(leaderboard[2][0]);
+    // $("#teamScore2").html(Math.round(leaderboard[2][1].score / leaderboard[2][1].num));
   }
 
-  html += `<tr class="leader"><td>1</td><td>${max_teams[0]}</td><td>${parseInt(
-    averages[max_teams[0]]
-  )}</td></tr><tr class="leader"><td>2</td><td>${max_teams[1]}</td><td>${parseInt(
-    averages[max_teams[1]]
-  )}</td></tr><tr class="leader"><td>3</td><td>${max_teams[2]}</td><td>${parseInt(
-    averages[max_teams[2]]
-  )}</td></tr>`;
-  $("#leaderboard").html(html);
+  if (currentUser.section) {
+    $("#myTeamName").html(currentUser.section);
+    $("#myTeamScore").html(
+      Math.round(sections[currentUser.section].score / sections[currentUser.section].num)
+    );
+  }
 }

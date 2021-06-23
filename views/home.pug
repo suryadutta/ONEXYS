@@ -4,7 +4,9 @@ block content
     script(src="/js/middleman.js")
     script.
         const herokuAPI = "/api",
-            courseID = "#{courseID}";
+            courseID = "#{courseID}",
+            courseName = "#{courseName}",
+            userID = "#{userID}"
         
     if lucky
         include lucky-overlay
@@ -19,29 +21,35 @@ block content
     //-                     option(value=val.id)=val.sortable_name
     //-             input(type='hidden', name='login_success', value='1')
     //-             input.form-control.btn.btn-secondary(type='submit' value='Masquerade as Student')
-    .onexys_styling.o_hompage
-        .left(style='width: 360px; margin-top: -10px;')
-            #points.standard_box.left
-                h2 My Points
-                p#point_count
-                #flag.blue
-                    a#dailyTaskLink(title="Open Daily Task" target="_blank")
-                        img#dailyTaskImg(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif" style="height:35px;")
-            .standard_home_box.left
-                h2 Leaderboard
-                table
-                    thead#leaderboard-header
-                        tr
-                            th Place
-                            th Team
-                            th Score
-                    tbody#leaderboard
-                    tbody#myTeam
-                        tr.leader_me
-                            td
-                                #myteam_head MY TEAM
-                            td#teamName
-                            td#teamScore
+    .onexys_styling.o_hompage.d-flex.flex-row
+        .left.d-flex.flex-column(style='width: 360px; margin-top: -10px;')
+            div.d-flex
+                div.d-flex.flex-column.align-items-center
+                    #points.standard_home_box.left
+                        h2 My Points
+                        p#point_count
+                    div
+                        a#dailyTaskLink(title="Open Daily Task" target="_blank")
+                            img#dailyTaskImg(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif" style="height:35px; transform:translateY(-10px);")
+                .standard_home_box.left.flex-grow-1.ml-2
+                    h2 Leaderboard
+                    table.w-100
+                        thead#leaderboard-header
+                            tr
+                                th.text-center Place
+                                th.text-center Team
+                                th.text-center Score
+                        tbody#leaderboard
+                            for _, index in Array(3)
+                                tr.leader
+                                    td.text-center.text-truncate(style="max-width: 1rem;")= index+1
+                                    td.text-center.text-truncate(id=`teamName${index}` style="max-width: 1rem;") 
+                                    td.text-center.text-truncate(id=`teamScore${index}` style="max-width: 1rem;") 
+                        tbody#myTeam
+                            tr.leader_me
+                                td#myteam_head MY TEAM
+                                td#myTeamName.text-center
+                                td#myTeamScore.text-center
             #recent_badges.standard_home_box.left(style='min-width: 313px; min-height: 180px;')
                 h2 Recent Badges
                 div#badge_content
@@ -50,7 +58,7 @@ block content
                 div#all_badge_link.w-100.mt-2
                 
                 
-            #progress.standard_home_box.left(style='width: 324px;')
+            #progress.standard_home_box.left(style='min-width: 324px;')
                 h2 My Progress So Far
                 a#pretest.progress_box.single_line.completed Pre-Test
                 #progress_labels(style='margin-left: 15px !important;')
@@ -59,9 +67,8 @@ block content
                 br
                 #modules
                 a#posttest.progress_box.single_line(title="The Post Test is not ready yet. Complete all Practices and Applications, then check back!") Post-Test
-        .left(style='width: 500px !important; margin-top: -10px;')
-            br
-            #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+        .left.d-flex.flex-column.justify-content-start(style='width: 500px !important;')
+            #updates.standard_home_box.left.mt-0(style='width: 450px !important;')
                 h2 Updates
                 img(style="margin-left:175px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
             #featured.standard_home_box.left(style='width: 458px !important;')
