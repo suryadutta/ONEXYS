@@ -1,18 +1,11 @@
-const { canvasAdminAuthToken, canvasURL } = require("../bin/config");
-
-var express = require("express"),
+const express = require("express"),
   router = express.Router(),
   config = require("../bin/config"),
-  queries = require("../models/queries"),
   auth = require("../bin/auth.js"),
   mongo = require("../models/mongo"),
   path = require("path");
 
-router.post("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
-  res.redirect("/home");
-});
-
-router.get("/home", (req, res) => {
+router.use("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   // Assume not lucky for now
   res.render("home", {
     title: "Home",
@@ -27,11 +20,7 @@ router.get("/home", (req, res) => {
   });
 });
 
-router.post("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
-  res.redirect("/badges");
-});
-
-router.get("/badges", (req, res) => {
+router.use("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   res.render("badges", {
     title: "Badges",
     admin: req.session.admin,

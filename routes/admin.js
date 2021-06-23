@@ -1,9 +1,5 @@
 const router = require("express").Router(),
-  mongo = require("../models/mongo"),
-  canvas = require("../models/canvas"),
-  config = require("../bin/config"),
-  auth = require("../bin/auth"),
-  assert = require("assert");
+  config = require("../bin/config");
 
 function requireAdmin(req, res, next) {
   if (req.session.admin) next();
