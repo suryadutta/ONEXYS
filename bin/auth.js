@@ -143,35 +143,36 @@ const userExists = async function (req, res, next) {
   try {
     assert(req.session.course_id);
     assert(req.session.user_id);
-
-    let user = await mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id);
+    const user = await mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id);
+    // If user does not exist in MongoDB, create user
     if (!user || Object.keys(user).length !== 6) {
       await mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id);
-      user = { team: "" };
     }
-
-    if (user.team === "") {
-      console.log(`Updating all user sections for course ${req.session.course_id}.`);
+    if (!user || user.team === "") {
+      // e.g [{name: "Test1", students: [...]}, {name: "Test2", students: [...]}]
       const sections = (
         await canvas.getSections(Object.keys(req.session.course_id)[0], "include=students")
       ).data;
-
-      sections.map((section) => {
-        if (section.students) {
-          section.students.map((student) =>
-            mongo.updateUserProgressField(
-              Object.keys(req.session.course_id)[0],
-              student.id,
-              "$set",
-              "team",
-              section.name,
-              (err) => {
-                if (err) console.log(`Failed to update user ${student.id}'s section`);
-              }
-            )
-          );
-        } else console.log(`Section ${section.name} has no students`);
-      });
+      // Find section with user in it
+      const userSection = sections.find(
+        (section) =>
+          section.students && // Check not null
+          section.students.find(
+            (student) => student.id.toString() === req.session.user_id.toString()
+          )
+      );
+      if (typeof userSection !== "undefined") {
+        await mongo.updateUserProgressField(
+          Object.keys(req.session.course_id)[0],
+          req.session.user_id,
+          "$set",
+          "team",
+          userSection.name
+        );
+        console.log(
+          `User ${req.session.user_id} created in ${Object.keys(req.session.course_id)[0]}`
+        );
+      } else console.log("User not in a section");
     }
   } catch (e) {
     console.log(e);

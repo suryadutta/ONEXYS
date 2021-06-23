@@ -283,17 +283,19 @@ function deleteHomeVid(courseID, vidId, callback) {
     .catch(() => callback(false));
 }
 
-function updateUserProgressField(courseID, userID, operator, field, value, callback) {
-  const db = client.db(config.mongoDBs[courseID]);
-  db.collection("user_progress")
-    .updateOne(
+function updateUserProgressField(courseID, userID, operator, field, value) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db.collection("user_progress").updateOne(
       { user: userID.toString() },
       {
         [operator]: { [field]: value },
       },
       { upsert: true }
-    )
-    .catch((err) => callback(err));
+    );
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /**
