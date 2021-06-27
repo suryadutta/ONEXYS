@@ -268,10 +268,11 @@ function writeLeaderboard(userProgress) {
   });
 
   const leaderboard = Object.entries(sections);
-  leaderboard.sort((entry1, entry2) => entry1[1].score < entry2[1].score);
+  leaderboard.forEach((section) => (section[1].score /= section[1].num));
+  leaderboard.sort((section1, section2) => section1[1].score < section2[1].score);
   for (let i = 0; i < Math.min(3, leaderboard.length); i++) {
     $(`#teamName${i}`).html(leaderboard[i][0]);
-    $(`#teamScore${i}`).html(Math.round(leaderboard[i][1].score / leaderboard[i][1].num));
+    $(`#teamScore${i}`).html(Math.round(leaderboard[i][1].score));
   }
 
   if (currentUser.section) {
