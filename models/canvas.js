@@ -28,73 +28,6 @@ function registerWebhook(courseID, callback) {
   );
 }
 
-var add_page_number = (url) => {
-  if (url.indexOf("?") > -1) {
-    return url + "&per_page=" + String(config.canvasPageResults);
-  } else {
-    return url + "?per_page=" + String(config.canvasPageResults);
-  }
-};
-
-var dailyTaskUrl = (courseID) => {
-  return config.canvasURL + "/api/v1/courses/" + courseID + "/assignments";
-};
-
-// 1. Get the list of assignments from Mongo
-// 2. Get the list of assignments from Canvas
-// 3. Pull out Canvas assignments which are in the Mongo list
-// 4. Return the one with the smallest, but still in the future, due date
-function getDailyTask(courseID, callback) {
-  async.parallel(
-    [
-      async.reflect((callback) => {
-        mongo.getDailyTasks(courseID, (err, data) => {
-          var arr = [];
-          data.forEach((asn) => arr.push(asn.assignment_id));
-          callback(err, arr);
-        });
-      }),
-      async.reflect((callback) => {
-        getAdminRequest(dailyTaskUrl(courseID), (err, data) => callback(err, data));
-      }),
-    ],
-    (err, data) => {
-      var daily = { id: null, due: new Date(86400000000000) }, // create max date
-        now = new Date();
-      try {
-        data[1].value.forEach((asn) => {
-          if (data[0].value.includes(asn.id)) {
-            // If it's not a daily assignment, forget it
-            var asn_date = new Date(asn.due_at);
-            if (asn_date <= daily.due && asn_date > now) {
-              // Make it the new daily assignment if it's due sooner than the previous daily assignment, but still due in the future
-              daily.id = asn.id;
-              daily.due = asn_date;
-            }
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-      callback(err, daily);
-    }
-  );
-}
-
-function getAdminRequest(url, callback) {
-  url = add_page_number(url);
-  request.get(
-    {
-      url: url,
-      headers: {
-        Authorization: " Bearer " + config.canvasAdminAuthToken,
-      },
-    },
-    function (error, response, body) {
-      callback(error, JSON.parse(body));
-    }
-  );
-}
 /**
  * @todo assert input
  * @param {string} courseID
@@ -105,7 +38,7 @@ function getSections(courseID, query) {
   try {
     const url = `${config.canvasURL}api/v1/courses/${courseID}/sections?${query}`;
     const auth = { Authorization: `Bearer ${config.canvasAdminAuthToken}` };
-    return axios.get(url, { headers: auth });
+    return axios.get(url, { headers: auth }).then((res) => res.data);
   } catch (e) {
     console.error(e);
   }
@@ -141,7 +74,7 @@ function getEnrollments(courseID, query) {
   try {
     const url = `${config.canvasURL}api/v1/courses/${courseID}/enrollments?${query}`;
     const auth = { Authorization: `Bearer ${config.canvasAdminAuthToken}` };
-    return axios.get(url, { headers: auth });
+    return axios.get(url, { headers: auth }).then((res) => res.data);
   } catch (e) {
     console.error(e);
   }
@@ -151,7 +84,7 @@ function getCourseID(contextID) {
   try {
     const url = `${config.canvasURL}api/v1/courses/lti_context_id:${contextID}`;
     const auth = { Authorization: `Bearer ${config.canvasAdminAuthToken}` };
-    return axios.get(url, { headers: auth });
+    return axios.get(url, { headers: auth }).then((res) => res.data);
   } catch (e) {
     console.error(e);
   }
@@ -161,7 +94,7 @@ function getAssignments(courseID, query) {
   try {
     const url = `${config.canvasURL}api/v1/courses/${courseID}/assignments?${query}`;
     const auth = { Authorization: `Bearer ${config.canvasAdminAuthToken}` };
-    return axios.get(url, { headers: auth });
+    return axios.get(url, { headers: auth }).then((res) => res.data);
   } catch (e) {
     console.error(e);
   }
@@ -308,7 +241,6 @@ function updateBadgeProgress(courseID, userID, userProgress, completed) {
 }
 
 module.exports = {
-  getDailyTask,
   registerWebhook,
   updateScore,
   updateModuleProgress,

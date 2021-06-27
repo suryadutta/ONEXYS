@@ -6,45 +6,36 @@ const cron = require("node-cron"),
 
 /**
  * @description - Cron job to update daily tasks every day of the week at midnight
- * @param {string} - Min Hour Day-of-Month Month Day-of-Week
- * @todo - refactor 10 0 0 * * * mon,tue,wed,thur,fri"
+ * @param {string} - Second Min Hour Day-of-Month Month Day-of-Week
+ * @param {function} 0 0 0 * * mon,tue,wed,thur,fri,sat
  */
-cron.schedule("0 0 0 * * * mon,tue,wed,thur,fri,sat", () => {
-  try {
-    const today = new Date();
-    // Saturday or Sunday
-    if (today.getDay() === 7 || today.getDay() === 0) {
-      mongo.updateTodaysDaily(courseID, "-1", (err) => console.log(err));
-    } else {
-      Object.keys(config.mongoDBs).map(async (courseID) => {
-        mongo.getDailyTasks(courseID, async (err, daily_tasks) => {
-          const dailyTasksIDs = new Set(daily_tasks.map((daily_task) => daily_task.assignment_id)); // HashSet of daily tasks ids
-          const assignments = (
-            await canvas.getAssignments(courseID, "per_page=125&order_by=due_at")
-          ).data; // Get all the courses assignments sorted by earliest future due date; ideally the first one is the next daily task
-          const newDaily = assignments.find((assignment) =>
-            dailyTasksIDs.has(assignment.id.toString())
-          ); // Check if a given assignment is a daily task
-          assert(typeof newDaily === "object");
-          mongo.updateTodaysDaily(courseID, newDaily.id.toString(), (err) => {
-            if (err) throw "Error updating daily task";
-            else
-              console.log(
-                `Daily task for course ${courseID} successfully updated to ${
-                  newDaily.id
-                } due at ${new Date(newDaily.due_at).toLocaleString()}`
-              );
-          });
-        });
-      });
+cron.schedule("*/5 * * * * *", () => {
+  Object.keys(config.mongoDBs).map(async (courseID) => {
+    try {
+      const today = new Date();
+      if (today.getDay() === 7 || today.getDay() === 0)
+        throw `Today is a weekend - setting daily task id to -1`;
+
+      const dailyTasks = await mongo.getDailyTasks(courseID);
+      const dailyTaskIDs = dailyTasks.map((daily) => daily.assignment_id); // Array of all daily task ids in MongoDB
+      const dailyTaskIDSet = new Set(dailyTaskIDs); // HashSet of daily tasks ids
+      const assignments = await canvas.getAssignments(
+        courseID,
+        "per_page=125&order_by=due_at&bucket=future"
+      ); // Get all the courses assignments sorted by earliest future due date
+      const newDaily = assignments.find((assignment) =>
+        dailyTaskIDSet.has(assignment.id.toString())
+      ); // Check if a given assignment is a daily task; ideally the next daily task is the first couple
+
+      assert(typeof newDaily === "object");
+      assert(typeof newDaily === "object");
+      await mongo.updateTodaysDaily(courseID, newDaily.id);
+      console.log(`Daily task for course ${config.mongoDBs[courseID]} updated to ${newDaily.name}`);
+    } catch (e) {
+      console.error(e);
+      mongo.updateTodaysDaily(courseID, "-1");
     }
-  } catch (e) {
-    console.error(e);
-    mongo.updateTodaysDaily(courseID, "-1", (err) => {
-      if (err) console.log("Error setting the error daily task :(");
-      else console.log(`Daily task for course ${courseID} successfully updated to -1`);
-    });
-  }
+  });
 });
 
 /**

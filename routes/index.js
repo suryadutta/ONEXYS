@@ -100,9 +100,7 @@ router.get("/missing-daily", (req, res) => {
     mongo.getDailyError(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
         res.status(500).send("500 - Internal Server Error. Daily error could not be retrieved.");
-      else {
-        res.send(data["message"]);
-      }
+      else res.send(data.message);
     });
   } catch (e) {
     console.log(e);

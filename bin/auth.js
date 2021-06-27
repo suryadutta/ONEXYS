@@ -150,9 +150,10 @@ const userExists = async function (req, res, next) {
     }
     if (!user || user.team === "") {
       // e.g [{name: "Test1", students: [...]}, {name: "Test2", students: [...]}]
-      const sections = (
-        await canvas.getSections(Object.keys(req.session.course_id)[0], "include=students")
-      ).data;
+      const sections = await canvas.getSections(
+        Object.keys(req.session.course_id)[0],
+        "include=students"
+      );
       // Find section with user in it
       const userSection = sections.find(
         (section) =>

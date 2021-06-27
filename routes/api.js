@@ -50,31 +50,12 @@ router.get("/home/updates", (req, res) => {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
-      async.parallel(
-        [
-          async.reflect((callback) => {
-            mongo.getHomepageUpdates(req.query.courseID, (err, data) => {
-              callback(err, data);
-            });
-          }),
-          async.reflect((callback) => {
-            canvas.getDailyTask(req.query.courseID, (err, data) => {
-              callback(null, data);
-            });
-          }),
-        ],
-        (err, data) => {
-          if (err)
-            res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-          else
-            res.status(200).header(access, getDst(req.query.hostname)).send({
-              updates: data[0].value,
-              daily: data[1].value,
-            });
-        }
-      );
+      mongo.getHomepageUpdates(req.query.courseID, (err, updates) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(updates);
+      });
     } catch (e) {
-      console.log("E", e);
       res.status(406).send("406 - Your request could not be processed.");
     }
   }
@@ -140,7 +121,7 @@ router.get("/progress", (req, res) => {
   }
 });
 
-router.get("/dailies", (req, res) => {
+router.get("/dailies", async (req, res) => {
   if (!req.session.user_id)
     res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
   else {
@@ -148,11 +129,9 @@ router.get("/dailies", (req, res) => {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
-      mongo.getDailyTasks(req.query.courseID, (err, data) => {
-        if (err)
-          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-      });
+      const dailyTasks = await mongo.getDailyTasks(req.query.courseID);
+      if (dailyTasks) res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
     } catch (e) {
       console.log(e);
       res.status(406).send("406 - Your request could not be processed.");
@@ -483,6 +462,7 @@ router.post("/admin/updateDaily/:id", (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+// Not used
 router.post("/admin/updateTodaysDaily", (req, res) => {
   if (req.session.admin) {
     try {

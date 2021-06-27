@@ -6,12 +6,12 @@ $(document).ready(function () {
     hostname,
     courseID,
   })
-    .then((data) => {
-      writeUpdates(data.updates);
+    .then((updates) => {
+      writeUpdates(updates);
     })
     .catch((err) => {
       console.log(err);
-      $("#updates").append(
+      $("#updates").html(
         `<h2>Updates</h2><div class="entry"><p class="entry_header"><strong>Updates could not be retrieved.</strong></p></div>`
       ); // Write updates to DOM
       $("#LoG_title").text("Available Videos"); // Write Life on Grounds name to DOM
@@ -20,18 +20,6 @@ $(document).ready(function () {
       $("#dailyTaskLink").prop("href", "/missing-daily");
       $("#pretest").css("background-image", "");
       $("#posttest").css("background-image", "");
-    });
-
-  $.get(herokuAPI + "/todaysDaily", {
-    hostname,
-    courseID,
-  })
-    .then((data) => {
-      writeDailyTaskInfo(data);
-    })
-    .catch((err) => {
-      console.log(err);
-      $("#dailyTaskLink").prop("href", "/missing-daily");
     });
 
   $.get(herokuAPI + "/home/videos", {
@@ -45,6 +33,18 @@ $(document).ready(function () {
     .catch((err) => {
       console.log(err);
       $("#homepageVideos").html("Video content failed to load."); // Write error message
+    });
+
+  $.get(herokuAPI + "/todaysDaily", {
+    hostname,
+    courseID,
+  })
+    .then((todaysDaily) => {
+      writeDailyTaskInfo(todaysDaily);
+    })
+    .catch((err) => {
+      console.log(err);
+      $("#dailyTaskLink").prop("href", "/missing-daily");
     });
 
   // Gets the user's progress, including finished modules and badge status
@@ -174,6 +174,7 @@ function writeDailyTaskInfo(todaysDaily) {
       `${hostname}/courses/${courseID}/assignments/${todaysDaily.assignment_id.toString()}`
     );
   } else {
+    $("#dailyTaskLink").attr("target", "");
     $("#dailyTaskLink").prop("href", `/missing-daily`);
   }
 }
