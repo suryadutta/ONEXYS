@@ -7,9 +7,9 @@ const cron = require("node-cron"),
 /**
  * @description - Cron job to update daily tasks every day of the week at midnight
  * @param {string} - Second Min Hour Day-of-Month Month Day-of-Week
- * @param {function} 0 0 0 * * mon,tue,wed,thur,fri,sat
+ * @param {function}
  */
-cron.schedule("*/5 * * * * *", () => {
+cron.schedule("0 0 0 * * *", () => {
   Object.keys(config.mongoDBs).map(async (courseID) => {
     try {
       const today = new Date();
