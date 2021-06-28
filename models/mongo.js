@@ -18,7 +18,7 @@ const MongoClient = require("mongodb").MongoClient,
 /**
  * @param {string} courseID - courseID passed from req.session.course_id
  * @param {string} userID - user canvas id from POST custom_canvas_user_id
- * @returns {Promise}
+ * @returns {Promise} - Resolves to user_progress document from MongoDB; returns null if not found
  */
 function findUser(courseID, userID) {
   try {

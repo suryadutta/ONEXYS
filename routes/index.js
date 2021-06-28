@@ -6,29 +6,29 @@ const express = require("express"),
   path = require("path");
 
 router.use("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
-  // Assume not lucky for now
-  res.render("home", {
-    title: "Home",
-    lucky: false,
-    admin: req.session.admin,
-    masquerade: false,
-    students: [],
-    heroku_app: config.herokuAppName,
-    courseID: Object.keys(req.session.course_id)[0],
-    courseName: Object.values(req.session.course_id)[0],
-    userID: req.session.user_id,
-  });
+  if (req.session.user_id && req.session.course_id)
+    res.render("home", {
+      title: "Home",
+      admin: req.session.admin,
+      heroku_app: config.herokuAppName,
+      courseID: Object.keys(req.session.course_id)[0],
+      courseName: Object.values(req.session.course_id)[0],
+      userID: req.session.user_id,
+    });
+  else res.status(500).render("cookieError");
 });
 
 router.use("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
-  res.render("badges", {
-    title: "Badges",
-    admin: req.session.admin,
-    masquerade: false,
-    students: [],
-    heroku_app: config.herokuAppName,
-    courseID: Object.keys(req.session.course_id)[0],
-  });
+  if (req.session.user_id && req.session.course_id)
+    res.render("badges", {
+      title: "Badges",
+      admin: req.session.admin,
+      masquerade: false,
+      students: [],
+      heroku_app: config.herokuAppName,
+      courseID: Object.keys(req.session.course_id)[0],
+    });
+  else res.status(500).render("cookieError");
 });
 
 router.use(

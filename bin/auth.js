@@ -65,6 +65,22 @@ var authTokenQueue = new Queue(function (user_id, callback) {
   });
 });
 
+//path for oauth2 callback from Canvas server
+var oath2_callback = async function (req, res, next) {
+  let code = req.query.code;
+  let options = { code };
+  console.log(options);
+  try {
+    let result = await oauth2.authorizationCode.getToken(options); // create new access token from Canvas API
+    let accessToken = await oauth2.accessToken.create(result);
+    redis_client.set("token_" + req.query.state, JSON.stringify(accessToken)); // save access token to Redis
+    return res.redirect("/home?login_success=1");
+  } catch (e) {
+    console.log("Auth failed in /bin/auth.js/oauth2_callback", e);
+    return res.status(500).send("Authentication failed in oauth2_callback.");
+  }
+};
+
 //middleware to update course information
 var updateCookies = function (req, res, next) {
   // Manages cookies for other pages
@@ -123,31 +139,16 @@ var checkUser = function (req, res, next) {
   }
 };
 
-//path for oauth2 callback from Canvas server
-var oath2_callback = async function (req, res, next) {
-  let code = req.query.code;
-  let options = { code };
-  console.log(options);
-  try {
-    let result = await oauth2.authorizationCode.getToken(options); // create new access token from Canvas API
-    let accessToken = await oauth2.accessToken.create(result);
-    redis_client.set("token_" + req.query.state, JSON.stringify(accessToken)); // save access token to Redis
-    return res.redirect("/home?login_success=1");
-  } catch (e) {
-    console.log("Auth failed in /bin/auth.js/oauth2_callback", e);
-    return res.status(500).send("Authentication failed in oauth2_callback.");
-  }
-};
-
 const userExists = async function (req, res, next) {
   try {
     assert(req.session.course_id);
     assert(req.session.user_id);
     const user = await mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id);
+
     // If user does not exist in MongoDB, create user
-    if (!user || Object.keys(user).length !== 6) {
+    if (!user || Object.keys(user).length !== 6)
       await mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id);
-    }
+
     if (!user || user.team === "") {
       // e.g [{name: "Test1", students: [...]}, {name: "Test2", students: [...]}]
       const sections = await canvas.getSections(
