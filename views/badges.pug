@@ -2,11 +2,9 @@ extends layout
 
 block content
     script.
-        //var herokuAPI = "https://!{heroku_app}.herokuapp.com/api";
-        //- var herokuAPI = "http://localhost:3000/api";
         const herokuAPI = "/api",
-            courseID = "#{courseID}";
-        //- var heroku = "!{heroku_app}";
+            courseID = "#{courseID}",
+            userID = "#{userID}"
     script(src="/js/middleman_badges.js")
     .onexys_styling
         .standard_title_box.badge_title.title_mod.left

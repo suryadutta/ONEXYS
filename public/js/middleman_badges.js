@@ -5,6 +5,7 @@ $(document).ready(function () {
   $.get(herokuAPI + "/users/progress", {
     hostname,
     courseID,
+    userID,
   })
     .then((userProgress) => {
       getBadges(userProgress.badges);
@@ -12,8 +13,8 @@ $(document).ready(function () {
     .catch((err) => {
       getBadges(null);
       console.log(err);
-      console.log(
-        "Failed to retrieve user progress. The page has been loaded, but omitting this data."
+      alert(
+        "Failed to retrieve user progress. The badges will be loaded, but omits user progress."
       );
     });
 });
@@ -24,14 +25,11 @@ function getBadges(progress) {
     courseID,
   })
     .then((badges) => {
-      if (!progress) throw "Failed to retrieve user progress.";
-      writeBadges(badges, progress);
-      // console.log("Badge progress has not been retrieved yet. Display badge progress has been flagged for completion later.")
+      if (!progress) writeBadges(badges, null);
+      else writeBadges(badges, progress);
     })
     .catch((err) => {
-      // TODO
-      writeBadges(badges, {});
-      console.log("Badge loading failed.");
+      console.log(err);
     });
 }
 
@@ -39,7 +37,7 @@ function writeBadges(badges, progress) {
   var badgeHTML = ``;
 
   badges.map((badge) => {
-    let completed = progress[badge._id] && progress[badge._id].has ? "completed" : "";
+    let completed = progress && progress[badge._id] && progress[badge._id].has ? "completed" : "";
     badgeHTML += `<div class="badge_container ${completed}"><div class="badge_descriptor badge_box"><h3>${badge.Title}</h3><p>${badge.Description}</p></div><div class="badge_points badge_box"><p>${badge.Points}</p></div>`;
 
     if (completed === "completed")
