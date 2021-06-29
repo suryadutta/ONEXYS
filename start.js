@@ -34,7 +34,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       path: "/",
-      sameSite: "none",
+      sameSite: "strict",
       httpOnly: true,
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
