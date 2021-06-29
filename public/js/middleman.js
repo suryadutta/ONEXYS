@@ -253,11 +253,11 @@ function writeVideos(videos) {
 }
 
 function writeLeaderboard(userProgress) {
-  const sections = {},
-    currentUser = {};
+  const sections = {};
+  let currentSection = "";
 
   userProgress.map((user) => {
-    if (user.user.toString() === userID.toString()) currentUser.section = user.team;
+    if (user.user.toString() === userID.toString()) currentSection = user.team;
     if (user.team && user.score && user.team !== courseName) {
       typeof sections[user.team] === "undefined"
         ? (sections[user.team] = { score: user.score, num: 1 })
@@ -268,18 +268,22 @@ function writeLeaderboard(userProgress) {
     }
   });
 
-  const leaderboard = Object.entries(sections);
-  leaderboard.forEach((section) => (section[1].score /= section[1].num));
-  leaderboard.sort((section1, section2) => section1[1].score < section2[1].score);
+  const leaderboard = Object.keys(sections).map((section) => ({
+    name: section,
+    average: sections[section].score / sections[section].num,
+  }));
+
+  leaderboard.sort((section1, section2) => section2.average - section1.average);
+
   for (let i = 0; i < Math.min(3, leaderboard.length); i++) {
-    $(`#teamName${i}`).html(leaderboard[i][0]);
-    $(`#teamScore${i}`).html(Math.round(leaderboard[i][1].score));
+    $(`#teamName${i}`).html(leaderboard[i].name);
+    $(`#teamScore${i}`).html(Math.round(leaderboard[i].average));
   }
 
-  if (currentUser.section) {
-    $("#myTeamName").html(currentUser.section);
+  if (currentSection) {
+    $("#myTeamName").html(currentSection);
     $("#myTeamScore").html(
-      Math.round(sections[currentUser.section].score / sections[currentUser.section].num)
+      Math.round(sections[currentSection].score / sections[currentSection].num)
     );
   }
 }
