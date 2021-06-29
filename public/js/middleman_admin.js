@@ -38,25 +38,25 @@ $(document).ready(async function () {
       courseID,
     })
       .done((homepage, status) => {
-        writeBadgeThings({ link: homepage.updates.badges_link });
-        writeDailyTaskInfo({ id: homepage.daily.id, img: homepage.updates.daily_task_img });
+        writeBadgeThings({ link: homepage.badges_link });
+        writeDailyTaskInfo({ img: homepage.daily_task_img });
         writeHomeUpdates({
-          h1: homepage.updates.main_header,
-          b1: homepage.updates.main_text,
-          h2: homepage.updates.header2,
-          b2: homepage.updates.text2,
-          h3: homepage.updates.header3,
-          b3: homepage.updates.text3,
+          h1: homepage.main_header,
+          b1: homepage.main_text,
+          h2: homepage.header2,
+          b2: homepage.text2,
+          h3: homepage.header3,
+          b3: homepage.text3,
         });
         writeLoGThings({
-          title: homepage.updates.life_on_grounds_title,
-          link: homepage.updates.life_on_grounds_link,
+          title: homepage.life_on_grounds_title,
+          link: homepage.life_on_grounds_link,
         });
         writePostTestChanges({
-          bool: homepage.updates.post_test == "true",
-          pre_img: homepage.updates.pre_test_button_background,
-          post_img: homepage.updates.post_test_button_background,
-          page: homepage.updates.post_test_filename,
+          bool: homepage.post_test == "true",
+          pre_img: homepage.pre_test_button_background,
+          post_img: homepage.post_test_button_background,
+          page: homepage.post_test_filename,
         });
       })
       .catch((err) => {

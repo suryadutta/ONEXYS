@@ -101,13 +101,16 @@ router.get("/progress", (req, res) => {
   }
 });
 
-router.get("/dailies", async (req, res) => {
+router.get("/dailies", (req, res) => {
   try {
     authorize(req);
+    //assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
     assert(req.query.hostname);
-    const dailyTasks = await mongo.getDailyTasks(req.query.courseID);
-    if (dailyTasks) res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+    mongo.getDailyTasks(req.query.courseID, (err, data) => {
+      if (err)
+        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+    });
   } catch (e) {
     console.log(e);
     res.status(406).send("406 - Your request could not be processed.");
