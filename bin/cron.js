@@ -28,7 +28,6 @@ cron.schedule("0 0 0 * * *", () => {
       ); // Check if a given assignment is a daily task; ideally the next daily task is the first couple
 
       assert(typeof newDaily === "object");
-      assert(typeof newDaily === "object");
       await mongo.updateTodaysDaily(courseID, newDaily.id);
       console.log(`Daily task for course ${config.mongoDBs[courseID]} updated to ${newDaily.name}`);
     } catch (e) {

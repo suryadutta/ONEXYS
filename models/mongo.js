@@ -118,14 +118,13 @@ function updateVideo(courseID, videoID, setDict, callback) {
     .catch((err) => callback(err));
 }
 
-function getDailyTasks(courseID, callback) {
-  let db = client.db(config.mongoDBs[courseID]);
-  db.collection("daily_task")
-    .find()
-    .sort({ _id: 1 })
-    .toArray()
-    .then((data) => callback(null, data))
-    .catch((err) => callback(err, null));
+function getDailyTasks(courseID) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db.collection("daily_task").find().sort({ _id: 1 }).toArray();
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function getTodaysDaily(courseID) {
