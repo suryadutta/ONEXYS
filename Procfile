@@ -1,1 +1,1 @@
-web: node --inspect=8080 start.js
+web: node start.js

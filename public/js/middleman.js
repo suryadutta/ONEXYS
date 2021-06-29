@@ -51,6 +51,7 @@ $(document).ready(function () {
   $.get(herokuAPI + "/users/progress", {
     hostname,
     courseID,
+    userID,
   })
     .then((userProgress) => {
       getBadges(userProgress.badges);

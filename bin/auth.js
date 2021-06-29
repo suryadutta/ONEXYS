@@ -114,8 +114,7 @@ var checkUser = function (req, res, next) {
       provider.valid_request(req, function (err, is_valid) {
         // Request is INVALID iff the provider expressed invalidity and we're not in development mode
         if (!is_valid && process.env.NODE_ENV !== "development") {
-          console.log("Unverified User:");
-          res.send("Unverified User");
+          res.status(401).send("401 - Unauthorized. User was unable to be authorized by Canvas");
         } else {
           //check if auth token already exists in Redis
           console.log("Redis Key (Check User)");
