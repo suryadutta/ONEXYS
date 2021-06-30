@@ -30,12 +30,10 @@ app.use(
   session({
     name: "session",
     secret: config.client_secret,
-    cookie: {
-      path: "/",
-      sameSite: "none",
-      httpOnly: true,
-      secure: true,
-    },
+    path: "/",
+    sameSite: "none",
+    httpOnly: true,
+    secure: true,
   })
 );
 
