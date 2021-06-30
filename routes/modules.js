@@ -19,10 +19,10 @@ router.get("/:id", (req, res, next) => {
           heroku_app: config.herokuAppName,
           lucky: req.session.lucky,
         });
-      } else res.status(406).send("Module doesn't exist");
+      } else res.status(500).send("500 - Internal Server Error. Module could not be retrieved.");
     });
   } catch (e) {
-    res.status(406).send("Bad input");
+    res.status(406).send("406 - Your request could not be processed.");
     //res.render("errors/inputError");
   }
 });

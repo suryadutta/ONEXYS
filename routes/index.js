@@ -5,7 +5,11 @@ const express = require("express"),
   mongo = require("../models/mongo"),
   path = require("path");
 
-router.use("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
+router.post("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
+  res.redirect("/home");
+});
+
+router.get("/home", (req, res) => {
   if (req.session.user_id && req.session.course_id)
     res.render("home", {
       title: "Home",
@@ -14,6 +18,10 @@ router.use("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req,
       userID: req.session.user_id,
     });
   else res.status(500).render("cookieError");
+});
+
+router.post("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
+  res.redirect("/badges");
 });
 
 router.use("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {

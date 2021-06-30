@@ -6,7 +6,7 @@ const express = require("express"),
   config = require("./bin/config"),
   redis = require("redis").createClient(config.redisURL),
   modules = require("./routes/modules"),
-  session = require("express-session"),
+  session = require("cookie-session"),
   canvas = require("./models/canvas"),
   bodyParser = require("body-parser"),
   index = require("./routes/index"),
@@ -28,10 +28,8 @@ app.set("trust proxy", true);
 
 app.use(
   session({
-    cookieName: "session",
+    name: "session",
     secret: config.client_secret,
-    resave: false,
-    saveUninitialized: false,
     cookie: {
       path: "/",
       sameSite: "none",
@@ -43,7 +41,7 @@ app.use(
 
 app.use("/api", api);
 app.use("/admin", [auth.updateCookies, auth.checkUser, admin.requireAdmin], admin.router);
-app.use("/modules", modules);
+app.use("/modules", [auth.updateCookies, auth.checkUser], modules);
 app.get("/callback", auth.oath2_callback);
 app.use("/", index);
 

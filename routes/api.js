@@ -43,146 +43,195 @@ router.get("/authorize/getCourseTitle", (req, res) => {
  * @courseID
  **/
 router.get("/home/updates", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getHomepageUpdates(req.query.courseID, (err, updates) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(updates);
-    });
-  } catch (e) {
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getHomepageUpdates(req.query.courseID, (err, updates) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(updates);
+      });
+    } catch (e) {
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/home/videos", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getHomepageVideos(req.query.courseID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getHomepageVideos(req.query.courseID, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/modules", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getModules(req.query.courseID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getModules(req.query.courseID, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/progress", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getProgress(req.query.courseID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getProgress(req.query.courseID, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/dailies", async (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    const dailyTasks = await mongo.getDailyTasks(req.query.courseID);
-    if (dailyTasks) res.status(200).header(access, getDst(req.query.hostname)).send(dailyTasks);
-    else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      const dailyTasks = await mongo.getDailyTasks(req.query.courseID);
+      if (dailyTasks) res.status(200).header(access, getDst(req.query.hostname)).send(dailyTasks);
+      else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/todaysDaily", async (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    const todaysDaily = await mongo.getTodaysDaily(req.query.courseID);
-    res.status(200).header(access, getDst(req.query.hostname)).send(todaysDaily);
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (req.session.user_id) {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID));
+      assert(req.query.hostname);
+      const todaysDaily = await mongo.getTodaysDaily(req.query.courseID);
+      res.status(200).header(access, getDst(req.query.hostname)).send(todaysDaily);
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/lucky", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getLuckyBonuses(req.query.courseID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getLuckyBonuses(req.query.courseID, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.use("/badges", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getBadges(req.query.courseID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id) {
+    console.log("id :" + req.session.user_id);
+    res.status(403).send("403 - Forbidden. You must be logged in to make this reques");
+  } else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getBadges(req.query.courseID, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/users/progress", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getUserProgress(req.query.courseID, req.query.userID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getUserProgress(req.query.courseID, req.session.user_id, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
 router.get("/navigation", (req, res) => {
-  try {
-    authorize(req);
-    assert(req.query.hostname);
-    mongo.getNavigationData(req.query.courseID, (err, data) => {
-      if (err)
-        res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-      else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+  if (!req.session.user_id)
+    res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
+  else {
+    try {
+      authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
+      assert(req.query.hostname);
+      mongo.getNavigationData(req.query.courseID, (err, data) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
 });
 
