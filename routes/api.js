@@ -310,7 +310,7 @@ router.post("/admin/updateVideo", (req, res) => {
     try {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.body.courseID));
-      assert(/[A-Z\d]{16}/.test(req.body.id)); // IDs must be a 16 character alphanumeric string
+      assert(/[A-Z\d]/.test(req.body.id)); // IDs must be an alphanumeric string
       assert(/\d+/.test(req.body.position)); // Positions consist at least 1 digit, and nothing else
       assert(/.+/.test(req.body.description)); // Description must be provided
       assert(/.*/.test(req.body.thumbnail)); // Thumbnail may not be provided
@@ -412,15 +412,11 @@ router.post("/admin/updateVideoDefaults", (req, res) => {
       assert(/https?:\/\/.*/.test(req.body.thumbnail)); // Verify some sort of url-ness
       assert(/https?:\/\/.*/.test(req.body.playbutton)); // ''
 
-      mongo.updateData(
+      mongo.updateVideoDefaults(
         req.session.course_id,
-        "home",
-        { type: "all_vids" },
-        {
-          thumbnail: req.body.thumbnail,
-          playbutton: req.body.playbutton,
-        },
-        (err, result) => {
+        req.body.thumbnail,
+        req.body.playbutton,
+        (err) => {
           if (err)
             res
               .status(500)

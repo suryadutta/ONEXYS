@@ -117,6 +117,16 @@ function updateVideo(courseID, videoID, setDict, callback) {
     .then(() => callback(null))
     .catch((err) => callback(err));
 }
+function updateVideoDefaults(courseID, thumbnail, playbutton, callback) {
+  let db = client.db(config.mongoDBs[courseID]);
+  db.collection("home")
+    .findOneAndUpdate(
+      { type: "all-vids" },
+      { $set: { thumbnail: thumbnail, playbutton: playbutton } }
+    )
+    .then(() => callback(null))
+    .catch((err) => callback(err));
+}
 
 function getDailyTasks(courseID) {
   try {
@@ -349,6 +359,7 @@ module.exports = {
   findUser,
   initUser,
   updateVideo,
+  updateVideoDefaults,
   updateHomepageUpdates,
   updateNavigation,
   updateBadge,

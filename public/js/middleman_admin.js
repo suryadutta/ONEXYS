@@ -192,10 +192,15 @@ function writeHomeVideos(videos) {
         .map(
           (video) =>
             `<div class="col-md-6 vid-obj">
+            
                 <div class="row">
+               
                   <div class="col-md-8">
+                  
                     <div class="video-element">
+                    <div class = "id" value = "${video._id}">
                       <div class="onexys_video">
+                      
                         <a class="colorbox" target="_blank" href="${video.src}">
                           <img class="onexys_thumbnail ${
                             video.thumbnail
@@ -205,10 +210,12 @@ function writeHomeVideos(videos) {
                           <img class="onexys_playbutton" src="${videos.playbutton}">
                         </a>
                       </div>
+                      
                       <span style="font-size: 12pt;">
                         <p>${video.description}</p>
                       </span>
                     </div>
+                  </div>
                   </div>
                   <div class="col-md-4" style="position: relative;">
                     <a class="btn btn-dark text-white" href="/admin/homeVidEdit/${
@@ -217,6 +224,7 @@ function writeHomeVideos(videos) {
                     <button class="btn btn-danger" onClick = "deleteHomeVid('${video._id}')"
                        style="width: 80%; position: absolute; top: 25%; transform: translateY(+53%);">Delete Video
                     </button>
+                  </div>
                   </div>
                 </div>
               </div>`

@@ -8,6 +8,7 @@
     "debug": "nodemon --inspect start.js"
   },
   "dependencies": {
+    "all": "0.0.0",
     "async": "^2.6.3",
     "axios": "^0.21.1",
     "better-queue": "^3.8.10",
@@ -34,7 +35,8 @@
     "request-promise": "^4.2.6",
     "serve-favicon": "~2.5.0",
     "simple-oauth2": "^2.5.2",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.1",
+    "url-exists": "^1.0.3"
   },
   "description": "Second version of ONEXYS app, with new API and admin interface",
   "main": "start.js",
