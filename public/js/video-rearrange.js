@@ -21,7 +21,7 @@ $(document).ready(function () {
               let thumb = $(elem).find(".onexys_thumbnail").hasClass("default")
                 ? ""
                 : $(elem).find(".onexys_thumbnail").attr("src");
-              console.log("thumb", thumb);
+
               updateVideo(
                 $(elem).find(".id").attr("value"),
                 $(elem).find(".colorbox").attr("href"),

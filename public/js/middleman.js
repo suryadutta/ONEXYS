@@ -64,7 +64,9 @@ $(document).ready(function () {
       console.log(err.responseText);
       getBadges(null);
       getModules(null);
-      alert("Failed to retrieve user progress. The page has been loaded, but omitting this data.");
+      alert(
+        "Failed to retrieve user progress. Missing information will not be displayed in Progress Bar, but the rest of the site is working normally. Please continue working."
+      );
     });
 });
 
