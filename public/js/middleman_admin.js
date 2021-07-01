@@ -735,14 +735,12 @@ function deleteHomeVid(vidId) {
       type: "DELETE",
       contentType: "application/json; charset=utf-8",
       data: dataToSend,
-      dataType: "json",
-      success: function (result) {
-        location.reload();
-      },
     })
-      .done((res) => {})
-      .fail((res) => {
+      .done((res) => {
         location.reload();
+        console.log("[V] delete success");
+      })
+      .fail((res) => {
         console.log("[V] delete fail");
       });
   }

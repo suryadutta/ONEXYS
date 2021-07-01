@@ -279,19 +279,18 @@ function addHomeVid(courseID, homeVid, callback) {
       type: "video",
       position: homeVid.position,
     })
-    .then(() => callback(true))
-    .catch(() => callback(false));
+    .then(() => callback(null))
+    .catch(() => callback(err));
 }
 
 function deleteHomeVid(courseID, vidId, callback) {
   const db = client.db(config.mongoDBs[courseID]);
-
   db.collection("home")
     .deleteOne({
       _id: vidId,
     })
-    .then(() => callback(true))
-    .catch(() => callback(false));
+    .then(() => callback(null))
+    .catch(() => callback(err));
 }
 
 function updateUserProgressField(courseID, userID, operator, field, value) {

@@ -386,9 +386,6 @@ router.delete("/admin/deleteHomeVid", (req, res) => {
     try {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.body.courseID));
-      // res.send("pass"); return;
-      console.log(req.body.vidId);
-      console.log(req.body.courseID);
       mongo.deleteHomeVid(req.body.courseID, req.body.vidId, (err) => {
         if (err)
           res.status(500).send("500 - Internal Server Error. Encountered error deleting video.");
