@@ -1,0 +1,35 @@
+table {
+	table-layout: fixed;
+}
+
+.team-lock-highlight {
+	background-color: #ede504 !important;
+}
+
+th {
+	padding-right: 10px;
+	text-align: center;
+}
+
+td {
+	border-right: 1px dotted gray;
+	padding-left: 5px;
+	max-width: 120px;
+	min-width: 120px;
+}
+
+tr.tdata-header th {
+	max-width: 240px;
+	min-width: 240px;
+	border-top: 2px double black;
+}
+
+#gradebook th {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+tr.tdata-header th.spacer {
+	max-width: 120px;
+	min-width: 120px;
+}

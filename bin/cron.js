@@ -1,311 +1,205 @@
-#!/usr/bin/env node
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').load('../');
-}
+const cron = require("node-cron"),
+  mongo = require("../models/mongo"),
+  config = require("./config"),
+  canvas = require("../models/canvas"),
+  assert = require("assert");
 
-var asyncStuff = require('async');
-var config = require('./config');
-var mongo = require('../models/mongo');
-var canvas = require('../models/canvas');
-
-var assignment_url = (courseID) => {
-  return config.canvasURL + 'api/v1/courses/' + courseID + '/students/submissions?student_ids[]=all&grouped=true&per_page=100'
-};
-
-var get_update_url = (courseID, callback) => {    
-  getAdminRequest(notes_column_url(courseID),function(err,custom_columns){
-    var points_id = custom_columns.find(column => column.title='Notes').id;
-    var update_url = config.canvasURL + '/api/v1/courses/' + courseID + '/custom_gradebook_columns/' + points_id + '/data/';
-    callback(update_url);
-  });
-}
-
-function computeScoreAndBadges(courseID, studentID, data, callback){ // Return score and badges
-  mongo.getAllData(courseID,function(mongo_data){
-    var badges = mongo_data.badges;
-    var totalPoints = 0;
-    var practice_proficient = 0;
-    var quizzes_attempted = 0;
-    var daily_done = 0;
-    var reflections_done = 0;
-
-    function awardBadge(badgeID) {
-      badge_info = mongo_data.badges.find(badge => badge._id == badgeID);
-      totalPoints += badge_info.Points;
-      badges[badges.indexOf(badge_info)].Awarded = true;
-    }
-    
-    function sortLeaderboardScores(a,b) {
-      if (a.score < b.score)
-        return 1;
-      if (a.score > b.score)
-        return -1;
-      return 0;
-    }
-
+/**
+ * @description - Cron job to update daily tasks every day of the week at midnight
+ * @param {string} - Second Min Hour Day-of-Month Month Day-of-Week
+ * @param {function}
+ */
+cron.schedule("0 0 0 * * *", () => {
+  Object.keys(config.mongoDBs).map(async (courseID) => {
     try {
-      //Daily Yalie questions
-      for (var i = 0; i < mongo_data.dailies.length; i++) {
-        var daily_object = data.find(daily => daily.assignment_id == (mongo_data.dailies[i]).assignment_id);
-        if (daily_object){
-          var daily_grade = parseFloat(daily_object.grade);
-          if (daily_grade == parseFloat(100)) {
-            daily_done += 1
+      const today = new Date();
+      if (today.getDay() === 7 || today.getDay() === 0)
+        throw `Today is a weekend - setting daily task id to -1`;
+
+      const dailyTasks = await mongo.getDailyTasks(courseID);
+      const dailyTaskIDs = dailyTasks.map((daily) => daily.assignment_id); // Array of all daily task ids in MongoDB
+      const dailyTaskIDSet = new Set(dailyTaskIDs); // HashSet of daily tasks ids
+      const assignments = await canvas.getAssignments(
+        courseID,
+        "per_page=125&order_by=due_at&bucket=future"
+      ); // Get all the courses assignments sorted by earliest future due date
+      const newDaily = assignments.find((assignment) =>
+        dailyTaskIDSet.has(assignment.id.toString())
+      ); // Check if a given assignment is a daily task; ideally the next daily task is the first couple
+
+      assert(typeof newDaily === "object");
+      await mongo.updateTodaysDaily(courseID, newDaily.id);
+      console.log(`Daily task for course ${config.mongoDBs[courseID]} updated to ${newDaily.name}`);
+    } catch (e) {
+      console.error(e);
+      mongo.updateTodaysDaily(courseID, "-1");
+    }
+  });
+});
+
+/**
+ * @todo - refactor to use also refactored mongo functions
+ * @todo - debug logging system
+ * @todo - possible optimzation: store various maps in redis cache
+ * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
+ */
+cron.schedule("*/15 * * * *", async () => {
+  Object.keys(config.mongoDBs).map(async (courseID) => {
+    let logs = { success: {}, failed: [] };
+    try {
+      let assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
+        badgeIdToPoints = {}; // Maps a course's badges id to its points - e.g 1: 200
+
+      const db = mongo.client.db(config.mongoDBs[courseID]),
+        userSubmissionsPromise = () =>
+          canvas.getSubmissions(
+            courseID,
+            "student_ids[]=all&workflow_state=graded&grouped=true&per_page=1000" // Get submissions grouped by user - e.g [{user_id:1, submissions: []}, ...]
+          ),
+        modulesPromise = () => db.collection("modules").find().sort({ _id: 1 }).toArray(),
+        dailyTasksPromise = () => db.collection("daily_task").find().sort({ _id: 1 }).toArray(),
+        badgesPromise = () => db.collection("badges").find().sort({ _id: 1 }).toArray();
+
+      // Retrieve all necessary information at once
+      const [userSubmissions, modules, daily_tasks, badges] = await Promise.allSettled([
+        userSubmissionsPromise(),
+        modulesPromise(),
+        dailyTasksPromise(),
+        badgesPromise(),
+      ]);
+
+      // Initialize maps to each value
+      modules.value.map((module) => {
+        assignmentIdToType[module.practice_link] = { type: "practice", moduleID: module._id };
+        assignmentIdToType[module.quiz_link] = { type: "apply", moduleID: module._id };
+        assignmentIdToType[module.reflection_link] = { type: "reflection", moduleID: module._id };
+      });
+      daily_tasks.value.map((daily) => {
+        assignmentIdToType[daily.assignment_id] = { type: "daily" };
+      });
+      badges.value.map((badge) => {
+        badgeIdToPoints[badge._id] = parseInt(badge.Points);
+      });
+
+      // Iterate through each user
+      userSubmissions.value.map(async (user, index) => {
+        // Get submissions grouped by user
+        if (user.submissions.length > 0) {
+          let score = 0, // User score
+            completed = {
+              // Number of completed assignments
+              practice: 0,
+              apply: 0,
+              reflection: 0,
+              daily: 0,
+            };
+          const userProgress = await db // Get current user's progress from MongoDB
+            .collection("user_progress")
+            .findOne({ user: user.user_id.toString() });
+
+          if (userProgress) {
+            user.submissions.map(async (submission) => {
+              const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
+              logs.success[user.user_id] = { practice: [], apply: [], daily: [], reflection: [] };
+
+              switch (assignmentIdToType[submission.assignment_id].type) {
+                case "practice":
+                  // Hard-coded to 90 for now
+                  if (submission.score >= 90) {
+                    score += 100;
+                    completed.practice += 1;
+                    // If submission not already stored in MongoDB
+                    if (!userProgress.modules || !(moduleID in userProgress.modules)) {
+                      logs.success[user.user_id].practice.push(submission.assignment_id);
+                      await db.collection("user_progress").updateOne(
+                        { user: user.user_id.toString() },
+                        {
+                          $set: { [`modules.${moduleID}.practice`]: true },
+                        },
+                        { upsert: true }
+                      );
+                    }
+                  }
+                  break;
+                case "apply":
+                  if (submission.score >= 90) {
+                    score += 100;
+                    completed.apply += 1;
+                    if (!userProgress.modules || !(moduleID in userProgress.modules)) {
+                      logs.success[user.user_id].apply.push(submission.assignment_id);
+                      await db.collection("user_progress").updateOne(
+                        { user: user.user_id.toString() },
+                        {
+                          $set: { [`modules.${moduleID}.apply`]: true },
+                        },
+                        { upsert: true }
+                      );
+                    }
+                  }
+                  break;
+                case "daily":
+                  logs.success[user.user_id].daily.push(submission.assignment_id);
+                  score += 100;
+                  completed.daily += 1;
+                  break;
+                case "reflection":
+                  logs.success[user.user_id].reflection.push(submission.assignment_id);
+                  score += 100;
+                  completed.reflection += 1;
+                  break;
+                default:
+                  console.log(`Assignment ${submission.assignment_id} not stored in Mongo`);
+              }
+
+              // Get earned badges, see in canvas.js
+              const earned = await canvas.updateBadgeProgress(
+                courseID,
+                user.user_id,
+                userProgress,
+                completed
+              );
+              earned.map((badge) => (score += badgeIdToPoints[badge])); // Add badges points
+
+              await db.collection("user_progress").updateOne(
+                { user: user.user_id.toString() },
+                {
+                  $set: { score },
+                },
+                { upsert: true }
+              );
+            });
           }
         }
-      }
-      totalPoints += (daily_done * 50); //assign points for each daily
-      //assign points for each badge earned
-      if (daily_done >= 1) {
-        awardBadge(1);
-      }
-      if (daily_done >= 5) {
-        awardBadge(2);
-      }
-      if (daily_done >= 10) {
-        awardBadge(3);
-      }
-      if (daily_done >= 15) {
-        awardBadge(4);
-      }
-      if (daily_done >= 20) {
-        awardBadge(5);
-      }
-      if (daily_done >= 25) {
-        awardBadge(6);
-      }
-
-      for (var i = 0; i < mongo_data.modules.length; i++) {
-        if (mongo_data.modules[i].open=='true'){
-                  
-          //practice objectives proficient
-          var practice_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).practice_link);
-          if (practice_object){
-            var practice_grade = parseFloat(practice_object.grade);
-            if (practice_grade > parseFloat(mongo_data.modules[i].practice_cutoff)) {
-
-              practice_proficient += 1;
-
-              //Process Practice Leaderboard
-
-              if(mongo_data.modules[i].leaderboard.practice_leaderboard.find(placement => placement.student_id==studentID)){
-                //user is already on leaderboard
-                awardBadge(20);
-                user_index =  mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)
-                mongo_data.modules[i].leaderboard.practice_leaderboard[user_index] = {
-                  'student_id': studentID.toString(),
-                  'score': practice_grade
-                }
-                mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
-                if(mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
-                  //user is top on leaderboard
-                  awardBadge(21);
-                }
-
-              } else {
-                // Process leaderboard if not full - add user automatically
-                if(mongo_data.modules[i].leaderboard.practice_leaderboard.length<10){
-                  mongo_data.modules[i].leaderboard.practice_leaderboard.push({
-                    'student_id': studentID.toString(),
-                    'score': practice_grade
-                  });
-                  awardBadge(20);
-                  mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
-                  if(mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
-                    //user is top on leaderboard
-                    awardBadge(21);
-                  }
-                } else {
-                  //user not on full leaderboard - compare scores and update
-                  mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
-                  if (practice_grade > mongo_data.modules[i].leaderboard.practice_leaderboard[mongo_data.modules[i].leaderboard.practice_leaderboard.length-1].score){
-                    mongo_data.modules[i].leaderboard.practice_leaderboard.pop()
-                    mongo_data.modules[i].leaderboard.practice_leaderboard.push({
-                      'student_id': studentID.toString(),
-                      'score': practice_grade
-                    });
-                    awardBadge(20);
-                    mongo_data.modules[i].leaderboard.practice_leaderboard = mongo_data.modules[i].leaderboard.practice_leaderboard.sort(sortLeaderboardScores)
-                    if(mongo_data.modules[i].leaderboard.practice_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
-                      //user is top on leaderboard
-                      awardBadge(21);
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          //quizzes attempted
-          var quiz_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).quiz_link);
-          if (quiz_object){
-            var quiz_grade = parseFloat(quiz_object.grade);
-            if (quiz_grade > parseFloat(0)) {
-              quizzes_attempted += 1;
-
-              //Process Quiz Leaderboard
-
-              if(mongo_data.modules[i].leaderboard.quiz_leaderboard.find(placement => placement.student_id==studentID)){
-                //user is already on leaderboard
-                awardBadge(22);
-                user_index =  mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)
-                mongo_data.modules[i].leaderboard.quiz_leaderboard[user_index] = {
-                  'student_id': studentID.toString(),
-                  'score': quiz_grade
-                }
-                mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
-                if(mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
-                  //user is top on leaderboard
-                  awardBadge(23);
-                }
-
-              } else {
-                // Process leaderboard if not full - add user automatically
-                if(mongo_data.modules[i].leaderboard.quiz_leaderboard.length<10){
-                  mongo_data.modules[i].leaderboard.quiz_leaderboard.push({
-                    'student_id': studentID.toString(),
-                    'score': quiz_grade
-                  });
-                  awardBadge(22);
-                  mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
-                  if(mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
-                    //user is top on leaderboard
-                    awardBadge(23);
-                  }
-                } else {
-                  //user not on full leaderboard - compare scores and update
-                  mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
-                  if (quiz_grade > mongo_data.modules[i].leaderboard.quiz_leaderboard[mongo_data.modules[i].leaderboard.quiz_leaderboard.length-1].score){
-                    mongo_data.modules[i].leaderboard.quiz_leaderboard.pop()
-                    mongo_data.modules[i].leaderboard.quiz_leaderboard.push({
-                      'student_id': studentID.toString(),
-                      'score': quiz_grade
-                    });
-                    awardBadge(22);
-                    mongo_data.modules[i].leaderboard.quiz_leaderboard = mongo_data.modules[i].leaderboard.quiz_leaderboard.sort(sortLeaderboardScores)
-                    if(mongo_data.modules[i].leaderboard.quiz_leaderboard.findIndex(placement => placement.student_id==studentID)==0){
-                      //user is top on leaderboard
-                      awardBadge(23);
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          //number of reflections
-          var reflection_object = data.find(assignment => assignment.assignment_id == (mongo_data.modules[i]).reflection_link);
-          if(reflection_object){
-            var reflection_grade = parseFloat(reflection_object.grade);
-            if (reflection_grade == parseFloat(100)) {
-              reflections_done += 1;
-            }
-          }
-          mongo.updateData(courseID,'modules',{_id:(mongo_data.modules[i])._id},mongo_data.modules[i],function(err,result){});
-        } 
-      }
-
-
-      totalPoints += (practice_proficient * 100); //assign points for each proficient ALEKS 
-      //assign points for each badge earned
-      if (practice_proficient >= 1) {
-        awardBadge(7);
-      }
-      if (practice_proficient >= 3) {
-        awardBadge(8);
-      }
-      if (practice_proficient >= 7) {
-        awardBadge(9);
-      }
-      if (practice_proficient >= 10) {
-        awardBadge(10);
-      }
-
-      
-      totalPoints += (quizzes_attempted * 100); //assign points for each quiz
-      //assign points for each badge earned
-      if (quizzes_attempted >= 1) {
-        awardBadge(11);
-      }
-      if (quizzes_attempted >= 3) {
-        awardBadge(12);
-      }
-      if (quizzes_attempted >= 7) {
-        awardBadge(13);
-      }
-      if (quizzes_attempted >= 10) {
-        awardBadge(14);
-      }
-
-      totalPoints += (reflections_done * 100);
-      //assign points for each badge earned
-      if (reflections_done >= 1) {
-        awardBadge(28);
-      }
-      if (reflections_done >= 3) {
-        awardBadge(29);
-      }
-      if (reflections_done >= 7) {
-        awardBadge(30);
-      }
-      if (reflections_done >= 10) {
-        awardBadge(31);
-      }
-
-      callback(null, totalPoints, badges); 
-      console.log('Done with Student '+studentID.toString());
-   
-    } catch (err) {
-      console.log(err);
-      callback(err, 0, badges)
+        if (index === userSubmissions.value.length - 1) {
+          console.log(
+            `Sucessfully updated new user progression of ${
+              Object.keys(logs.success).length
+            } out of ${Object.keys(logs.success).length + logs.failed.length} students`
+          );
+          console.log(
+            `Changes: ${JSON.stringify(
+              logs.success,
+              (key, value) => {
+                if (
+                  typeof key === "string" &&
+                  Object.keys(value).length === 4 &&
+                  value.practice.length === 0 &&
+                  value.apply.length === 0 &&
+                  value.daily.length === 0 &&
+                  value.reflection.length === 0
+                )
+                  return undefined;
+                return value;
+              },
+              2
+            )}`
+          );
+          // console.log(`Failed: ${JSON.stringify(logs.failed, null, 2)}`);
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      logs.failed.push(e);
     }
   });
-}
-
-var updateAllStudentData = function(courseID, callback){
-  console.log('Working on Course '+String(courseID));
-  canvas.getAdminRequest(assignment_url(courseID), function(err, users) {
-    console.log('Updating '+String(users.length)+' Students..');
-    for (let i = 0; i < users.length; i++) {
-      setTimeout(function () {
-        computeScoreAndBadges(courseID, users[i].user_id, users[i].submissions, function(err, totalPoints, badges) {
-          get_update_url(courseID, function(update_url){
-            update_url = update_url + '/' + studentID;
-            putAdminRequest(update_url, {
-              column_data: {
-                content: totalPoints.toString()
-              }
-            }, function(err, body) {
-              if (err){
-                console.log(err);
-              }
-              callback(null, totalPoints, badges);
-            });
-          });
-        });
-      }, i * 1000);
-    }
-    callback('Done');
-  });
-}
-
-var courses_array = [38080,38081,38082,38083]
-
-asyncStuff.series([
-  function(callback) {
-    updateAllStudentData(courses_array[0],callback)
-  },
-  function(callback) {
-    updateAllStudentData(courses_array[1],callback)
-  },
-  function(callback) {
-    updateAllStudentData(courses_array[2],callback)
-  },
-  function(callback) {
-    updateAllStudentData(courses_array[3],callback)
-  },
-],
-// optional callback
-function(err, results) {
-  console.log('All Done!');
 });

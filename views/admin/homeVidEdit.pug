@@ -1,33 +1,46 @@
 extends ../layout
 
 block content
+  script.
+    const herokuAPI = "/api",
+      videoID = "#{id}",
+      edit = true,
+      courseID = "#{courseID}",
+      needs = ["courseTitle", "homepageVideos"];  
+  
+  script(src="/js/middleman_admin.js")
+  br
+  #fullscr-loading
+      div
+      img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+  .container(style="margin-top: 25px;")
+      .row
+          .col-md-1
+          .col.form-inline
+              a.btn.btn-lg(href='/admin/homepageEdit')
+                  i.fa.fa-chevron-left
+              h2#adminPanelTitle='Loading title...'
+          .col-md-1
+  hr
 
-    //script(type='text/javascript', src='/javascript/nic-edit.js')
-    //script(type='text/javascript').
-    //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-
-    h1='Edit Home Page Video '+video._id
-    h3=course
-
-    form(method='POST' action='/admin/home/videos/preview/'+video._id)
-
-        div.form-group
-        label(for='video_src') Video Source: 
-        input#video_src.form-control(type='text', name='video_src', value=video.video_src, required)
-        br
-        br
-
-        div.form-group
-        label(for='video_src') Video Image: 
-        input#video_img.form-control(type='text', name='video_img', value=video.video_img, required)
-        br
-        br
-
-        div.form-group
-        label(for='video_desc') Video Description: 
-        br
-        textarea#video_desc.form-control(rows=3, name='video_desc',style="width: 750px;", required)=video.video_desc
-        br
-        br
-
-        button.btn.btn-primary(type='submit') Preview Changes
+  main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
+    h3 Editing video #{id}
+    div.d-flex.flex-column 
+      label(for="video_src") Video Source:
+      input#video_src.form-control(type='text', value="")
+    hr
+    div.d-flex.flex-column
+      label(for="video_thumb") Video Thumbnail:
+      input#video_thumb.form-control(type='text', value="")
+      small.text-primary Leave blank for default thumbnail
+    hr
+    div.d-flex.flex-column
+      label(for="video_desc") Video Description:
+      textarea#video_desc.form-control(type='text', value="")
+    hr
+    div.d-flex.flex-column
+      label(for="video_pos") Video Position:
+      input#video_pos.form-control(type='number', min="0" value="" size=4 style="width: min-content")
+    hr
+    div 
+      button.btn.btn-success(onClick="updateVideo(videoID, $('#video_src').val(), $('#video_desc').val(), $('#video_thumb').val(), $('#video_pos').val()); alert('Video updated')") Go live

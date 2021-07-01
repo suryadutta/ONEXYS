@@ -1,9 +1,9 @@
 {
-    "name": "ONEXYS Canvas Application",
-    "description": "An external tool for the ONEXYS program on the Canvas LMS",
-    "repository": "https://github.com/suryadutta/ONEXYSappcom/",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Yale_University_logo.svg/2000px-Yale_University_logo.svg.png",
-    "keywords": ["ONEXYS", "LTI", "LMS","Yale","Node.JS"],
+    "name": "CONEX Canvas Application",
+    "description": "An external tool for the CONEX program on the Canvas LMS",
+    "repository": "https://github.com/UVAMobileDev/ONEXYS/",
+    "logo": "https://en.wikipedia.org/wiki/University_of_Virginia#/media/File:University_of_Virginia_logo.svg",
+    "keywords": ["CONEX", "LTI", "LMS","UVA","Node.JS"],
     "addons": [
         {
           "plan": "heroku-redis:hobby-dev"
@@ -16,7 +16,7 @@
           },
         "CANVAS_URL":{
             "description": "The base URL for your deployment of Canvas",
-            "value": "https://yale.instructure.com/"
+            "value": "https://curryvirginia.instructure.com/"
         },
         "CANVAS_KEY":{
             "description": "A secret key to use when linking this app to your course (from school)."

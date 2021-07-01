@@ -1,151 +1,80 @@
 extends layout
 
 block content
-  if admin
-    if masquerade
-      a(href='/home?login_success=1') Back to Home
-    else
-      form(action='')
-        select(name='masquerade')
-          each val in students
-            option(value=val.id)=val.sortable_name
-        input(type='hidden', name='login_success', value='1')
-        input(type='submit' value='Masquerade as Student')
-  .user_content(style='margin-top: 0px !important;')
-  .onexys_styling.o_hompage
-    .left(style='width: 360px; margin-top: -10px;')
-      #points.standard_box.left
-        h2 My Points
-        p#point_count= score
-        #flag.blue
-          a(title='Quiz List', href='https://yale.instructure.com/courses/'+courseID+'/assignments/'+daily_yalie.id, target='_blank')
-            img(src='https://onexys.herokuapp.com/images/homepage/DY_Flag_2017.svg')
-      #leaderboard.standard_home_box.left
-        h2 Leaderboard
-        table
-          thead
-            tr
-              th Place
-              th Team
-              th Score
-          tbody
-            tr.leader_1
-              td 1
-              td= leaderboard[0].Name
-              td= leaderboard[0].Score
-            tr.leader_2
-              td 2
-              td= leaderboard[1].Name
-              td= leaderboard[1].Score
-            tr.leader_3
-              td 3
-              td= leaderboard[2].Name
-              td= leaderboard[2].Score
-            tr.leader_me
-              td
-                #myteam_head MY TEAM
-              td= my_team.Name
-              td= my_team.Score
-      #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
-        h2 Recent Badges
-
-        each badgeID in awarded_badge_ids
-
-          #recent_badge1.onexys_badge.completed(class='badge'+badgeID,style='margin-left: 1px; margin-right: 10px; margin-bottom: 20px; width: 80px; height: 90px;')
-            .badge_descriptor.badge_box
-              h3
-              p  
-            .badge_points.badge_box
-              p  
-            .badge_portrait(style='width: 80px; height: 100px;')
-            .badge_label.badge_box
-              h3s
-              p  
-
-        br
-        .clear
-        p#badges_link_sentence
-          a(id='', title='info_Badges', href=home_links.badges, target='_blank') Click here to see all your badges.
-      #progress.standard_home_box.left(style='width: 324px;')
-        h2 My Progress So Far 
-
-        .module_0.module_background_0
-          a.progress_box.single_line.completed(style='width: 187.5px !important;')  Pre-Test
-        #progress_labels(style='margin-left: 15px !important;')
-          p Pract.
-          p Apply
-        br
-        .clear
-
-        each module, index in module_progress
+    script(src="/js/middleman.js")
+    script.
+        const herokuAPI = "/api",
+            courseID = "#{courseID}",
+            courseName = "#{courseName}",
+            userID = "#{userID}"
         
-          div(class=module.button_background_image)
-            if module.open == 'true'
-              if module.practice_progress && module.quiz_progress
-                a.progress_box.completed(style='width: 187.5px !important;', href= '/modules/'+module._id)
-                  span= module.primary_title
-                  br
-                  span= module.secondary_title
-              else
-                a.progress_box.available(style='width: 187.5px !important;', href= '/modules/'+module._id)
-                  span= module.primary_title
-                  br
-                  span= module.secondary_title
-            else
-              a.progress_box(style='width: 187.5px !important;')
-                span= module.primary_title
+    if lucky
+        include lucky-overlay
+    //- if admin
+    //-     if masquerade
+    //-         a(href='/home?login_success=1') Back to Home
+    //-     else
+    //-         //
+    //-         form.form-inline(action='')
+    //-             select.form-control(name='masquerade')
+    //-                 each val in students
+    //-                     option(value=val.id)=val.sortable_name
+    //-             input(type='hidden', name='login_success', value='1')
+    //-             input.form-control.btn.btn-secondary(type='submit' value='Masquerade as Student')
+    .onexys_styling.o_hompage.d-flex.flex-row
+        .left.d-flex.flex-column(style='width: 360px; margin-top: -10px;')
+            div.d-flex
+                div.d-flex.flex-column.align-items-center
+                    #points.standard_home_box.left
+                        h2 My Points
+                        p#point_count
+                    div
+                        a#dailyTaskLink(title="Open Daily Task" target="_blank")
+                            img#dailyTaskImg(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif" style="height:35px; transform:translateY(-10px);")
+                .standard_home_box.left.flex-grow-1.ml-2
+                    h2 Leaderboard
+                    table.w-100
+                        thead#leaderboard-header
+                            tr
+                                th.text-center Place
+                                th.text-center Team
+                                th.text-center Score
+                        tbody#leaderboard
+                            for _, index in Array(3)
+                                tr.leader
+                                    td.text-center.text-truncate(style="max-width: 1rem;")= index+1
+                                    td.text-center.text-truncate(id=`teamName${index}` style="max-width: 1rem;") 
+                                    td.text-center.text-truncate(id=`teamScore${index}` style="max-width: 1rem;") 
+                        tbody#myTeam
+                            tr.leader_me
+                                td#myteam_head MY TEAM
+                                td#myTeamName.text-center
+                                td#myTeamScore.text-center
+            #recent_badges.standard_home_box.left(style='min-width: 313px; min-height: 180px;')
+                h2 Recent Badges
+                div#badge_content
+                    h4 Loading Badges
+                    img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+                div#all_badge_link.w-100.mt-2
+                
+                
+            #progress.standard_home_box.left(style='min-width: 324px;')
+                h2 My Progress So Far
+                a#pretest.progress_box.single_line.completed Pre-Test
+                #progress_labels(style='margin-left: 15px !important;')
+                    p Pract.
+                    p Apply
                 br
-                span= module.secondary_title
-
-            if module.practice_progress
-              div(class='onexys_checkbox aleks_checkbox completed' style='margin-left: 14px !important;')
-            else
-              div(class='onexys_checkbox aleks_checkbox' style='margin-left: 14px !important;')
-
-            if module.quiz_progress
-              div(class='onexys_checkbox quiz_checkbox completed')
-            else
-              div(class='onexys_checkbox quiz_checkbox')
-
-          br
-          .clear
-
-        if home_updates.post_test == 'true'
-          .module_11.module_background_00
-            a.progress_box.available.single_line(style='width: 187.5px !important;', href=home_updates.post_test_link, target="_blank")  Post-Test
-        else
-          .module_11.module_background_00
-            a.progress_box(style='width: 187.5px !important;')  Post-Test
-    .left(style='width: 500px !important; margin-top: -10px;')
-      .lucky_bulldog
-        img(src='', alt='Lucky Bulldog')
-        .lucky_bulldog_text +500pts!
-      br
-      .clear
-      #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
-        h2 Updates
-        .entry.clear
-          p.entry_header
-            strong!=home_updates.main_header
-          p.entry_text!=home_updates.main_text
-        .entry.clear
-          p.entry_header!=home_updates.header2
-          p.entry_text!=home_updates.text2
-        .entry.clear
-          p.entry_header!=home_updates.header3
-          p.entry_text!=home_updates.text3
-      #featured.standard_home_box.left(style='width: 458px !important;')
-        h2 Life @ Yale Videos
-        p
-          a(href=home_links.life_at_yale_videos, data-api-endpoint=home_links.life_at_yale_videos, data-api-returntype='Page', target='_blank') Click here to see all Life at Yale videos
-        each video in home_vids
-          .onexys_video
-            a.colorbox(href=video.video_src)
-              if video.video_img
-                img.onexys_thumbnail(src=video.video_img)
-              else
-                img.onexys_thumbnail(src='https://onexys.herokuapp.com/images/lifeAtYale/lifeAtYaleC.png', alt='')
-              img.onexys_playbutton(src='https://onexys.herokuapp.com/images/icons/playbutton.png', alt='')
-          p
-            span(style='font-size: 12pt;')
-              strong!=video.video_desc
+                #modules
+                a#posttest.progress_box.single_line(title="The Post Test is not ready yet. Complete all Practices and Applications, then check back!") Post-Test
+        .left.d-flex.flex-column.justify-content-start(style='width: 500px !important;')
+            #updates.standard_home_box.left.mt-0(style='width: 450px !important;')
+                h2 Updates
+                img(style="margin-left:175px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+            #featured.standard_home_box.left(style='width: 458px !important;')
+                h2#LoG_title Loading Videos...
+                    br
+                    img(style="height:25px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+                p
+                    a#LoG_link(href="#" target='_blank')
+                #homepageVideos

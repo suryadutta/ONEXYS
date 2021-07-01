@@ -1,21 +1,48 @@
 extends ../layout
 
 block content
+    script.
+        const herokuAPI = "/api",
+              edit = false,
+              courseID = "!{courseID}";
+        needs=["courseTitle", "daily"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    br
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
+            if fixed_id
+                script.
+                    alert("The system detected you submitted a quiz ID. This was automatically corrected to the corresponding assignment ID (so what you typed may not be in the table).");
+    hr
+    div.container
+        div.row
+            h5 Daily Tasks
+            br
+            p Each day when a student logs into Canvas, a flag on the home page will link to that day's assignment, if there is one. To create a daily assignment, simply follow these steps:
+            ol
+                li
+                    p Create the assignment in Canvas like any other assignment, and take note of the assignment ID, which can be found in the URL when editing it.
+                    br
+                    small(style="color:red;")
+                        p For daily tasks which are Canvas Quizzes, you should use the Quiz ID instead.
+                        a(href="https://'+heroku_app+'.herokuapp.com/images/misc/dailytask_id_examples.png", target="_blank")
+                            p See here for an example.
+                li
+                    p For each daily task, in your course, enter the assignment or quiz ID on this page. The system will automatically determine which type of ID you have entered and convert it to the corresponding assignment ID, if necessary.
+                li
+                    p Watch the homepage as the next available daily task is linked to in the top left! If no daily task is found, the generic 404 / Missing resource page will be linked on the homepage. In the case that the next daily task is not open yet, the generic not-open page is displayed.
+            hr
+        div.row
+            table#dailyTable.admin_table(style="margin-bottom:100px;")
+                tr
+                    th Row
+                    th Assignment ID
+                    th Edit Item
 
-    a(href='/admin') Back to Home Page
-
-    h1 Edit ONEXYS Dailies
-    h3=course
-    
-    table(class="admin_table")
-        tr 
-            th ID
-            th Assignment ID
-
-        each daily in dailies
-            tr 
-                td=daily._id
-                td=daily.assignment_id
-                td
-                    form(method='GET' action='dailies/edit/'+daily._id)
-                        button(type='submit') Edit
