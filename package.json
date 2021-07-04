@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon start.js",
-    "debug": "nodemon --inspect start.js"
+    "debug": "nodemon --inspect start.js",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "all": "0.0.0",
@@ -41,6 +43,8 @@
   "description": "Second version of ONEXYS app, with new API and admin interface",
   "main": "start.js",
   "devDependencies": {
+    "@testing-library/cypress": "^7.0.6",
+    "cypress": "^7.6.0",
     "nodemon": "^2.0.7"
   },
   "repository": {
