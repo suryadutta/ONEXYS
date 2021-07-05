@@ -39,6 +39,7 @@ config.mongoDBs = {
   8375: "conexWhite21",
   8374: "conexBlue21",
   8369: "smithBlue21",
+  8367: "trinityBlue21",
   8467: "physics21", 
 };
 
