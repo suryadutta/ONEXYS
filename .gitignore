@@ -64,3 +64,6 @@ Thumbs.db
 # VSCode
 .vscode
 *.rest
+
+# Cypress videos
+*.mp4

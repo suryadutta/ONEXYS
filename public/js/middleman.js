@@ -174,7 +174,7 @@ function writeDailyTaskInfo(todaysDaily) {
   if (todaysDaily.assignment_id.toString() !== "-1") {
     $("#dailyTaskLink").prop(
       "href",
-      `${hostname}/courses/${courseID}/assignments/${todaysDaily.assignment_id.toString()}`
+      `${hostname}courses/${courseID}/assignments/${todaysDaily.assignment_id.toString()}`
     );
   } else {
     $("#dailyTaskLink").attr("target", "");
