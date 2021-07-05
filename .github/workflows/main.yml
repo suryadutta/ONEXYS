@@ -1,0 +1,22 @@
+#https://docs.cypress.io/guides/continuous-integration/github-actions#Basic-Setup
+name: Cypress Tests
+
+on:
+  pull_request:
+    branches:
+      - overhaul
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node12.18.3-chrome87-ff82
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: node start.js
+          browser: chrome

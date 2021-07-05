@@ -59,7 +59,6 @@ describe("Homepage Regression Test", { defaultCommandTimeout: 5000 }, () => {
     // Check badges or correct message appears
     cy.get("@progress").should(({ request, response }) => {
       const progress = response.body;
-      console.log(progress);
       cy.get("#recent_badges").within(() => {
         if (Object.keys(progress.badges).length <= 0)
           cy.findByText("Earn some badges and you will see them here!");
