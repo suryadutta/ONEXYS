@@ -4,7 +4,10 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express"),
   config = require("./bin/config"),
-  redis = require("redis").createClient(config.redisURL),
+  redis =
+    process.env.NODE_ENV === "development"
+      ? require("redis").createClient()
+      : require("redis").createClient(config.redisURL),
   modules = require("./routes/modules"),
   session = require("cookie-session"),
   canvas = require("./models/canvas"),

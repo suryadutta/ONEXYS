@@ -7,7 +7,10 @@ const config = require("./config"),
   lti = require("ims-lti"),
   RedisNonceStore = require("../node_modules/ims-lti/lib/redis-nonce-store.js"),
   redis = require("redis"),
-  redis_client = redis.createClient(config.redisURL),
+  redis_client =
+    process.env.NODE_ENV === "development"
+      ? require("redis").createClient()
+      : require("redis").createClient(config.redisURL),
   store = new RedisNonceStore(config.client_id, redis_client);
 
 if (!provider) {
