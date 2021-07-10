@@ -40,7 +40,7 @@ config.mongoDBs = {
   8374: "conexBlue21",
   8369: "smithBlue21",
   8367: "trinityBlue21",
-  8467: "physics21", 
+  8467: "physics21",
 };
 
 // If we're in a development environment, use the development databasez
