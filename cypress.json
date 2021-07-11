@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://conex-test.herokuapp.com",
+  "baseUrl": "http://localhost:3000",
   "defaultCommandTimeout": 50000,
   "responseTimeoout": 50000
 }
