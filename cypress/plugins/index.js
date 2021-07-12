@@ -21,8 +21,7 @@ require("dotenv").config();
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  config.env.course_id = process.env.CYPRESS_CUSTOM_CANVAS_COURSE_ID;
-  config.env.user_id = process.env.CYPRESS_CUSTOM_CANVAS_USER_ID;
-  config.env.canvas_url = process.env.CANVAS_URL;
+  config.env.session = process.env.CYPRESS_COOKIE_SESSION;
+  config.env.session_sig = process.env.CYPRESS_COOKIE_SIG;
   return config;
 };

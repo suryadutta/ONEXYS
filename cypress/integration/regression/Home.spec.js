@@ -9,18 +9,9 @@ describe("Homepage Regression Test", { defaultCommandTimeout: 5000 }, () => {
     cy.intercept("GET", "/api/badges?**").as("badges");
     cy.intercept("GET", "/api/modules?**").as("modules");
 
-    cy.visit("/home", {
-      method: "POST",
-      qs: {
-        login_success: -1,
-      },
-      body: {
-        custom_canvas_course_id: Cypress.env("course_id"),
-        context_title: "Cypress Test Course",
-        custom_canvas_user_id: Cypress.env("user_id"),
-        roles: "ContentDeveloper",
-      },
-    });
+    cy.setCookie("session", Cypress.env("session"));
+    cy.setCookie("session.sig", Cypress.env("session_sig"));
+    cy.visit("/home");
 
     // Wait for API calls to finish
     cy.wait("@updates");
