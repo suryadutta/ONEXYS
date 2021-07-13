@@ -44,7 +44,7 @@ cron.schedule("0 0 0 * * *", () => {
  * @todo - possible optimzation: store various maps in redis cache
  * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
  */
-cron.schedule("*/5 * * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   Object.keys(config.mongoDBs).map(async (courseID) => {
     let logs = { success: {}, failed: [] };
     try {
@@ -146,11 +146,11 @@ cron.schedule("*/5 * * * * *", async () => {
                     score += 100;
                     completed.apply += 1;
 
-                    logs.success[user.user_id].apply.push(submission.assignment_id);
                     try {
                       if (userProgress.modules.moduleID.apply) {
                       }
                     } catch {
+                      logs.success[user.user_id].apply.push(submission.assignment_id);
                       await db.collection("user_progress").updateOne(
                         { user: user.user_id.toString() },
                         {
