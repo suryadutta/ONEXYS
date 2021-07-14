@@ -70,8 +70,16 @@ cron.schedule("*/15 * * * *", async () => {
 
       // Initialize maps to each value
       modules.value.map((module) => {
-        assignmentIdToType[module.practice_link] = { type: "practice", moduleID: module._id };
-        assignmentIdToType[module.quiz_link] = { type: "apply", moduleID: module._id };
+        assignmentIdToType[module.practice_link] = {
+          type: "practice",
+          moduleID: module._id,
+          subject: module.subject ? module.subject : null,
+        };
+        assignmentIdToType[module.quiz_link] = {
+          type: "apply",
+          moduleID: module._id,
+          subject: module.subject ? module.subject : null,
+        };
         assignmentIdToType[module.reflection_link] = { type: "reflection", moduleID: module._id };
       });
       daily_tasks.value.map((daily) => {
@@ -100,7 +108,13 @@ cron.schedule("*/15 * * * *", async () => {
           if (userProgress) {
             user.submissions.map(async (submission) => {
               const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
-              logs.success[user.user_id] = { practice: [], apply: [], daily: [], reflection: [] };
+
+              logs.success[user.user_id] = {
+                practice: [],
+                apply: [],
+                daily: [],
+                reflection: [],
+              };
 
               switch (assignmentIdToType[submission.assignment_id].type) {
                 case "practice":
@@ -109,7 +123,12 @@ cron.schedule("*/15 * * * *", async () => {
                     score += 100;
                     completed.practice += 1;
                     // If submission not already stored in MongoDB
-                    if (!userProgress.modules || !(moduleID in userProgress.modules)) {
+
+                    if (
+                      !userProgress.modules ||
+                      !(moduleID in userProgress.modules) ||
+                      !userProgress.modules[moduleID].practice
+                    ) {
                       logs.success[user.user_id].practice.push(submission.assignment_id);
                       await db.collection("user_progress").updateOne(
                         { user: user.user_id.toString() },
@@ -120,13 +139,17 @@ cron.schedule("*/15 * * * *", async () => {
                       );
                     }
                   }
+
                   break;
                 case "apply":
                   if (submission.score >= 90) {
                     score += 100;
                     completed.apply += 1;
-                    if (!userProgress.modules || !(moduleID in userProgress.modules)) {
-                      logs.success[user.user_id].apply.push(submission.assignment_id);
+                    if (
+                      !userProgress.modules ||
+                      !(moduleID in userProgress.modules) ||
+                      !userProgress.modules[moduleID].apply
+                    ) {
                       await db.collection("user_progress").updateOne(
                         { user: user.user_id.toString() },
                         {
@@ -136,6 +159,7 @@ cron.schedule("*/15 * * * *", async () => {
                       );
                     }
                   }
+
                   break;
                 case "daily":
                   logs.success[user.user_id].daily.push(submission.assignment_id);
