@@ -506,7 +506,7 @@ router.post("/admin/updateModule/:id", (req, res) => {
       assert(req.body.explore);
       assert(req.body.button_background_image);
       assert(req.body.practice_url_redirect);
-
+      assert(req.body.subject);
       let submit = {
         _id: parseInt(req.params.id),
         primary_title: req.body.primary_title,
@@ -529,6 +529,7 @@ router.post("/admin/updateModule/:id", (req, res) => {
         open: req.body.open,
         due: req.body.due,
         practice_id_bool: req.body.practice_id_bool,
+        subject: req.body.subject,
       };
 
       mongo.updateModule(req.body.courseID, submit, (err, data) => {

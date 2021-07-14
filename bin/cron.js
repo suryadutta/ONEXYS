@@ -100,6 +100,11 @@ cron.schedule("*/15 * * * *", async () => {
               apply: 0,
               reflection: 0,
               daily: 0,
+              econ: 0,
+              bio: 0,
+              chem: 0,
+              physics: 0,
+              engineering: 0,
             };
           const userProgress = await db // Get current user's progress from MongoDB
             .collection("user_progress")
@@ -108,14 +113,18 @@ cron.schedule("*/15 * * * *", async () => {
           if (userProgress) {
             user.submissions.map(async (submission) => {
               const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
-
+              const subj = assignmentIdToType[submission.assignment_id].subject
               logs.success[user.user_id] = {
                 practice: [],
                 apply: [],
                 daily: [],
                 reflection: [],
+                econ: [],
+                bio: [],
+                chem: [],
+                physics: [],
+                engineering: [],
               };
-
               switch (assignmentIdToType[submission.assignment_id].type) {
                 case "practice":
                   // Hard-coded to 90 for now
@@ -123,7 +132,10 @@ cron.schedule("*/15 * * * *", async () => {
                     score += 100;
                     completed.practice += 1;
                     // If submission not already stored in MongoDB
-
+                    if (subj) {
+                      completed[subj] += 1;
+                      logs.success[user.user_id][subj].push(submission.assignment_id);
+                    }
                     if (
                       !userProgress.modules ||
                       !(moduleID in userProgress.modules) ||
@@ -145,6 +157,10 @@ cron.schedule("*/15 * * * *", async () => {
                   if (submission.score >= 90) {
                     score += 100;
                     completed.apply += 1;
+                    if (subj && userProgress.modules[moduleID].practice) {
+                      completed[subj] += 1;
+                      logs.success[user.user_id][subj].push(submission.assignment_id);
+                    }
                     if (
                       !userProgress.modules ||
                       !(moduleID in userProgress.modules) ||
@@ -161,6 +177,7 @@ cron.schedule("*/15 * * * *", async () => {
                   }
 
                   break;
+
                 case "daily":
                   logs.success[user.user_id].daily.push(submission.assignment_id);
                   score += 100;
@@ -174,7 +191,6 @@ cron.schedule("*/15 * * * *", async () => {
                 default:
                   console.log(`Assignment ${submission.assignment_id} not stored in Mongo`);
               }
-
               // Get earned badges, see in canvas.js
               const earned = await canvas.updateBadgeProgress(
                 courseID,

@@ -469,6 +469,7 @@ function writeModules(modules) {
       $("#apply_description").val(moduleToEdit.apply_description);
       $("#apply_read_src").val(moduleToEdit.apply_read_src);
       $("#explore_text").val(moduleToEdit.explore);
+      $("#subject").val(moduleToEdit.subject);
 
       if (moduleToEdit.open === "true") $("#open_yes").prop("checked", true);
       else $("#open_no").prop("checked", true);
@@ -649,6 +650,7 @@ function updateModule() {
     open: $("#open_yes").is(":checked") ? "true" : "false",
     due: $("#due_yes").is(":checked") ? "true" : "false",
     practice_id_bool: $("#practice_id_bool_true").is(":checked") ? "true" : "false",
+    subject: $("#subject").val(),
   };
 
   $.post(herokuAPI + `/admin/updateModule/${moduleID}`, submit)
