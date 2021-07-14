@@ -1,4 +1,3 @@
-const { exception } = require("console");
 const cron = require("node-cron"),
   mongo = require("../models/mongo"),
   config = require("./config"),
@@ -125,10 +124,11 @@ cron.schedule("*/15 * * * *", async () => {
                     completed.practice += 1;
                     // If submission not already stored in MongoDB
 
-                    try {
-                      if (userProgress.modules.moduleID.practice) {
-                      }
-                    } catch {
+                    if (
+                      !userProgress.modules ||
+                      !(moduleID in userProgress.modules) ||
+                      !userProgress.modules[moduleID].practice
+                    ) {
                       logs.success[user.user_id].practice.push(submission.assignment_id);
                       await db.collection("user_progress").updateOne(
                         { user: user.user_id.toString() },
@@ -145,12 +145,11 @@ cron.schedule("*/15 * * * *", async () => {
                   if (submission.score >= 90) {
                     score += 100;
                     completed.apply += 1;
-
-                    try {
-                      if (userProgress.modules.moduleID.apply) {
-                      }
-                    } catch {
-                      logs.success[user.user_id].apply.push(submission.assignment_id);
+                    if (
+                      !userProgress.modules ||
+                      !(moduleID in userProgress.modules) ||
+                      !userProgress.modules[moduleID].apply
+                    ) {
                       await db.collection("user_progress").updateOne(
                         { user: user.user_id.toString() },
                         {
