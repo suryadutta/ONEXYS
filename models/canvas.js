@@ -202,6 +202,12 @@ const badgeRequirements = {
     { id: 13, req: 7 },
     { id: 14, req: 10 },
   ],
+  econ: [{ id: 15, req: 2 }],
+  bio: [{ id: 16, req: 2 }],
+  chem: [{ id: 17, req: 2 }],
+  physics: [{ id: 18, req: 2 }],
+  engineering: [{ id: 19, req: 2 }],
+
   reflection: [
     { id: 28, req: 1 },
     { id: 29, req: 3 },
@@ -217,7 +223,6 @@ function updateBadgeProgress(courseID, userID, userProgress, completed) {
       // e.g - [practice, [ { id: 7, req: 1 }, { id: 8, req: 3 }]]
       badges.map((badge) => {
         // For a given type, if the number completed is greater than the badge req, push
-
         if (completed[type] >= badge.req) earned.push(badge.id);
       });
     }
