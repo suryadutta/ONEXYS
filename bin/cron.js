@@ -10,7 +10,7 @@ const cron = require("node-cron"),
  * @param {function}
  */
 cron.schedule("0 0 0 * * *", () => {
-  Object.keys(config.devDBs).map(async (courseID) => {
+  Object.keys(config.mongoDBs).map(async (courseID) => {
     try {
       const today = new Date();
       if (today.getDay() === 7 || today.getDay() === 0)
