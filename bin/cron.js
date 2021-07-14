@@ -43,8 +43,8 @@ cron.schedule("0 0 0 * * *", () => {
  * @todo - possible optimzation: store various maps in redis cache
  * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
  */
-cron.schedule("*/15 * * * *", async () => {
-  Object.keys(config.mongoDBs).map(async (courseID) => {
+cron.schedule("*/5 * * * * *", async () => {
+  Object.keys(config.devDBs).map(async (courseID) => {
     let logs = { success: {}, failed: [] };
     try {
       let assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
@@ -134,28 +134,8 @@ cron.schedule("*/15 * * * *", async () => {
                     completed.practice += 1;
                     // If submission not already stored in MongoDB
                     if (subj) {
-                      switch (subj) {
-                        case "econ":
-                          completed.econ += 1;
-                          logs.success[user.user_id].econ.push(submission.assignment_id);
-                          break;
-                        case "bio":
-                          completed.bio += 1;
-                          logs.success[user.user_id].bio.push(submission.assignment_id);
-                          break;
-                        case "chem":
-                          completed.chem += 1;
-                          logs.success[user.user_id].chem.push(submission.assignment_id);
-                          break;
-                        case "physics":
-                          completed.physics += 1;
-                          logs.success[user.user_id].physics.push(submission.assignment_id);
-                          break;
-                        case "engineering":
-                          completed.engineering += 1;
-                          logs.success[user.user_id].engineering.push(submission.assignment_id);
-                          break;
-                      }
+                      completed[subj] += 1;
+                      logs.success[user.user_id][subj].push(submission.assignment_id);
                     }
                     if (
                       !userProgress.modules ||
@@ -178,41 +158,21 @@ cron.schedule("*/15 * * * *", async () => {
                     score += 100;
                     completed.apply += 1;
                     if (subj && userProgress.modules[moduleID].practice) {
-                      switch (subj) {
-                        case "econ":
-                          completed.econ += 1;
-                          logs.success[user.user_id].econ.push(submission.assignment_id);
-                          break;
-                        case "bio":
-                          completed.bio += 1;
-                          logs.success[user.user_id].bio.push(submission.assignment_id);
-                          break;
-                        case "chem":
-                          completed.chem += 1;
-                          logs.success[user.user_id].chem.push(submission.assignment_id);
-                          break;
-                        case "physics":
-                          completed.physics += 1;
-                          logs.success[user.user_id].physics.push(submission.assignment_id);
-                          break;
-                        case "engineering":
-                          completed.engineering += 1;
-                          logs.success[user.user_id].engineering.push(submission.assignment_id);
-                          break;
-                      }
-                      if (
-                        !userProgress.modules ||
-                        !(moduleID in userProgress.modules) ||
-                        !userProgress.modules[moduleID].apply
-                      ) {
-                        await db.collection("user_progress").updateOne(
-                          { user: user.user_id.toString() },
-                          {
-                            $set: { [`modules.${moduleID}.apply`]: true },
-                          },
-                          { upsert: true }
-                        );
-                      }
+                      completed[subj] += 1;
+                      logs.success[user.user_id][subj].push(submission.assignment_id);
+                    }
+                    if (
+                      !userProgress.modules ||
+                      !(moduleID in userProgress.modules) ||
+                      !userProgress.modules[moduleID].apply
+                    ) {
+                      await db.collection("user_progress").updateOne(
+                        { user: user.user_id.toString() },
+                        {
+                          $set: { [`modules.${moduleID}.apply`]: true },
+                        },
+                        { upsert: true }
+                      );
                     }
                   }
                   break;
