@@ -113,8 +113,7 @@ cron.schedule("*/15 * * * *", async () => {
           if (userProgress) {
             user.submissions.map(async (submission) => {
               const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
-              const subj = assignmentIdToType[submission.assignment_id].subject;
-
+              const subj = assignmentIdToType[submission.assignment_id].subject
               logs.success[user.user_id] = {
                 practice: [],
                 apply: [],
@@ -152,6 +151,7 @@ cron.schedule("*/15 * * * *", async () => {
                       );
                     }
                   }
+
                   break;
                 case "apply":
                   if (submission.score >= 90) {
@@ -175,6 +175,7 @@ cron.schedule("*/15 * * * *", async () => {
                       );
                     }
                   }
+
                   break;
 
                 case "daily":

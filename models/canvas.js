@@ -223,6 +223,7 @@ function updateBadgeProgress(courseID, userID, userProgress, completed) {
       // e.g - [practice, [ { id: 7, req: 1 }, { id: 8, req: 3 }]]
       badges.map((badge) => {
         // For a given type, if the number completed is greater than the badge req, push
+
         if (completed[type] >= badge.req) earned.push(badge.id);
       });
     }
