@@ -43,8 +43,8 @@ cron.schedule("0 0 0 * * *", () => {
  * @todo - possible optimzation: store various maps in redis cache
  * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
  */
-cron.schedule("*/5 * * * * *", async () => {
-  Object.keys(config.devDBs).map(async (courseID) => {
+cron.schedule("*/15 * * * *", async () => {
+  Object.keys(config.mongoDBs).map(async (courseID) => {
     let logs = { success: {}, failed: [] };
     try {
       let assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
