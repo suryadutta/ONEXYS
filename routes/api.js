@@ -484,29 +484,12 @@ router.post("/admin/updateModule/:id", (req, res) => {
   if (req.session.admin) {
     try {
       authorize(req);
+      Object.values(req.body).map((field) => assert(typeof field === "string"));
       if (req.body.open) assert(/(true|false)/.test(req.body.open)); // Open must be a valid boolean
       if (req.body.due) assert(/(true|false)/.test(req.body.due)); // Due must be a valid boolean
       if (req.body.practice_id_bool) assert(/(true|false)/.test(req.body.practice_id_bool)); // Open must be a valid boolean
-
       assert(/\d+/.test(parseInt(req.params.id))); // IDs must be an integer
-      assert(req.body.primary_title);
-      assert(req.body.secondary_title);
-      assert(req.body.practice_link);
-      assert(req.body.practice_cutoff);
-      assert(req.body.multiple_practice_cutoff);
-      assert(req.body.quiz_link);
-      assert(req.body.quiz_cutoff);
-      assert(req.body.reflection_link);
-      assert(req.body.background_image);
-      assert(req.body.background_name);
-      assert(req.body.background_desc);
-      assert(req.body.overview);
-      assert(req.body.apply_description);
-      assert(req.body.apply_read_src);
-      assert(req.body.explore);
-      assert(req.body.button_background_image);
-      assert(req.body.practice_url_redirect);
-      assert(req.body.subject);
+
       let submit = {
         _id: parseInt(req.params.id),
         primary_title: req.body.primary_title,
