@@ -131,15 +131,6 @@ $(document).ready(async function () {
       .always(() => hideLoadingBar());
   }
 
-  // if (needs.includes("testInfo")) {
-  //   $.get(`${herokuAPI}/testInfo`, {
-  //     hostname: window.location.hostname,
-  //     courseID,
-  //   })
-  //     .done((data) => writeTestInfo(data))
-  //     .fail((err) => console.log("test info retrieval failed"));
-  // }
-
   if (needs.includes("moduleVideos")) {
     $.get(`${herokuAPI}/modules`, {
       hostname,
@@ -384,7 +375,6 @@ function writeBadges(badges) {
       .change((event) => {
         $("p.previewPoints").html($(event.target).val());
       });
-    // $("#assignment_id").val(badgeToEdit.);
     $("#portrait")
       .val(badgeToEdit.Portrait)
       .change((event) => {
@@ -550,6 +540,7 @@ function writeModuleVidEdit(modules) {
   $("#video_desc_helper").val(moduleVidToEdit.video_desc_helper);
   $("#position").val(moduleVidToEdit.position);
 }
+
 /////////////////////////////////////////////////////////////////////////////////////
 // AJAX shortcut helpers
 function updateHome(field, value) {
@@ -558,8 +549,14 @@ function updateHome(field, value) {
     field,
     value,
   })
-    .done((res) => console.log("[H] done"))
-    .fail((res) => console.log("[H] fail"));
+    .done((res) => {
+      console.log("[H] done");
+      alert("Home page updated successfully.");
+    })
+    .fail((res) => {
+      console.log("[H] fail");
+      alert("Home page update failed.");
+    });
 }
 
 // Any parameters which eval to false (undefined/null/etc...) will be left unmodified

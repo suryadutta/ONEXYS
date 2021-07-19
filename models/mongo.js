@@ -63,9 +63,13 @@ function randomString() {
   return result;
 }
 
-function getHomepageUpdates(courseID, callback) {
-  let db = client.db(config.mongoDBs[courseID]);
-  db.collection("home").findOne({ type: "updates" }, (err, data) => callback(err, data));
+function getHomepageUpdates(courseID) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db.collection("home").findOne({ type: "updates" });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function updateHomepageUpdates(courseID, field, value, callback) {

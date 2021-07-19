@@ -42,7 +42,7 @@ router.get("/authorize/getCourseTitle", (req, res) => {
  * @hostname
  * @courseID
  **/
-router.get("/home/updates", (req, res) => {
+router.get("/home/updates", async (req, res) => {
   if (!req.session.user_id)
     res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
   else {
@@ -50,11 +50,9 @@ router.get("/home/updates", (req, res) => {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
-      mongo.getHomepageUpdates(req.query.courseID, (err, updates) => {
-        if (err)
-          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-        else res.status(200).header(access, getDst(req.query.hostname)).send(updates);
-      });
+      const updates = await mongo.getHomepageUpdates(req.query.courseID);
+      if (updates) res.status(200).header(access, getDst(req.query.hostname)).send(updates);
+      else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
     } catch (e) {
       res.status(406).send("406 - Your request could not be processed.");
     }

@@ -5,7 +5,7 @@ block content
         const herokuAPI = "/api",
               edit = false,
               courseID = "!{courseID}";
-        needs=["courseTitle", "modules", "testInfo"];
+        needs=["courseTitle", "modules"];
     script(src="/js/courseIDGrabber.js")
     script(src="/js/middleman_admin.js")
     br
@@ -20,45 +20,9 @@ block content
                     i.fa.fa-chevron-left
                 h2#adminPanelTitle='Loading title...'
             .col-md-1
-    hr
+    hr.mb-3
     .container
-        .row(style="margin-bottom:25px;padding-bottom:5px;border-bottom:3px solid #777777;")
-            .col-md-5(style="padding-right:45px;border-right:1px solid #777777;")
-                .row
-                    .col-md-3
-                        p Post Test Link
-                    .col
-                        input.form-control.vertical(type='text' value="")
-                .row
-                    .col-md-3
-                        p Post Test Open?
-                    .col
-                        input.vertical(type='checkbox')
-                .row
-                    .col(style="position:absolute;bottom:10px;")
-                        button.btn.btn-success Save Pre/Post Test Changes
-            .col
-                .row
-                    .col-md-3
-                        p Pre-Test Button Background
-                    .col
-                        input.form-control.vertical(type='text')
-                .row
-                    .col-md-3
-                        p Pre-Test Button Preview
-                    .col
-                        p Todo
-                .row
-                    .col-md-3
-                        p Post-Test Button Background
-                    .col
-                        input.form-control.vertical(type='text')
-                .row
-                    .col-md-3
-                        p Post-Test Button Preview
-                    .col
-                        p Todo
-        .row(style="")
+        .row
             .col
                 table#moduleTable.admin_table(style="margin-bottom:100px;")
                     tr
@@ -72,41 +36,4 @@ block content
                         th Reflections Link
                         th Edit
             hr
-        //.row
-            script.
-                var heroku = "!{heroku_app}";
-            table(class="admin_table")
-                tr
-                    th ID
-                    th Primary Title
-                    th Secondary Title
-                    th Open?
-                    th Due?
-                    th Practice Link
-                    th Quiz Link
-                    th Reflections Link
-                    th Edit Module
-                each module, i in modules
-                    tr
-                        td=module._id
-                        td=module.primary_title
-                        td=module.secondary_title
-                        td
-                            if(module.open == "true")
-                                input.moduleEditor(id=module._id type="checkbox", edit="open" checked)
-                            else
-                                input.moduleEditor(id=module._id type="checkbox" edit="open")
-                        td
-                            if(module.due == "true")
-                                input.moduleEditor(id=module._id type="checkbox" edit="due" checked)
-                            else
-                                input.moduleEditor(id=module._id type="checkbox" edit="due")
-                        td=module.practice_link
-                        td=module.quiz_link
-                        td=module.reflection_link
-                        td
-                            form(method='GET' action='/admin/modules/'+module._id+'/edit')
-                                input(type='hidden', value=course_id, name='course-id')
-                                input(type='hidden', value=course_title, name='course-title')
-                                input(type='hidden', value=user_id, name='user-id')
-                                button.btn.btn-dark(type='submit') Edit
+

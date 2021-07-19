@@ -162,7 +162,9 @@ function writeUpdates(updates) {
   );
   $("#posttest").css(
     "background-image",
-    `url(/images/progress_bar/${updates.post_test_button_background}_2.png)`
+    `url(/images/progress_bar/${updates.post_test_button_background}_${
+      updates.post_test == "true" ? "0" : "2"
+    }.png)`
   );
   if (updates.post_test == "true") $("#posttest").addClass("available");
 
