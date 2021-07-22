@@ -345,8 +345,7 @@ function writeLuckyInfo(lucky) {
 function writeNavigationData(data) {
   $("#coach_info").val(data[0].src);
   $("#life_on_grounds").val(data[1].src);
-  $("#post_test").val(data[2].src);
-  $("#welcome").val(data[3].src);
+  $("#welcome").val(data[2].src);
 }
 
 function writeBadges(badges) {
@@ -584,11 +583,12 @@ function updateVideoDefaults(thumbnail, playbutton) {
     .fail((res) => console.log("[VD] fail"));
 }
 
-function updateNavigation(location, link) {
+function updateNavigation() {
   $.post(herokuAPI + "/admin/updateNavigation", {
     courseID,
-    location,
-    link,
+    coach_info: $("#coach_info").val(),
+    life_on_grounds: $("#life_on_grounds").val(),
+    welcome: $("#welcome").val(),
   })
     .done((res) => {
       console.log("[N] done");

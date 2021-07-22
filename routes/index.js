@@ -72,25 +72,31 @@ router.use(
   }
 );
 
-router.use("/post-test", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
-  try {
-    mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
-      if (err)
+router.use(
+  "/post-test",
+  [auth.updateCookies, auth.checkUser, auth.userExists],
+  async (req, res) => {
+    try {
+      const homepageUpdates = await mongo.getHomepageUpdates(Object.keys(req.session.course_id)[0]);
+      if (homepageUpdates)
+        res.sendFile(
+          path.resolve("./views/static/post-test/" + homepageUpdates.post_test_filename)
+        );
+      else
         res.status(500).send("500 - Internal Server Error. Post test page could not be retrieved.");
-      else res.sendFile(path.resolve("./views/static/post-test/" + data[2].src));
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(406).send("406 - Your request could not be processed.");
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
   }
-});
+);
 
 router.use("/welcome", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
   try {
     mongo.getNavigationData(Object.keys(req.session.course_id)[0], (err, data) => {
       if (err)
         res.status(500).send("500 - Internal Server Error. Welcome page could not be retrieved.");
-      else res.sendFile(path.resolve("./views/static/welcome/" + data[3].src));
+      else res.sendFile(path.resolve("./views/static/welcome/" + data[2].src));
     });
   } catch (e) {
     console.log(e);

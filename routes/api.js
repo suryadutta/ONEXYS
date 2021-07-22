@@ -575,18 +575,24 @@ router.post("/admin/updateModuleVid", (req, res) => {
 });
 
 // Asynchronously update navigation options
-const navigationLocations = ["welcome", "coach_info", "life_on_grounds", "post_test"];
+const navigationLocations = ["welcome", "coach_info", "life_on_grounds"];
 router.post("/admin/updateNavigation", (req, res) => {
   if (req.session.admin) {
     try {
       authorize(req);
-      assert(navigationLocations.includes(req.body.location));
+      assert(Object.keys(req.session.course_id).includes(req.body.courseID));
       // assert(/https?:\/\/.+/.test(req.body.link)); uncomment after switching to cloud stored file
-      mongo.updateNavigation(req.body.courseID, req.body.location, req.body.link, (err) => {
-        if (err)
+      navigationLocations.map(async (location) => {
+        assert(location in req.body);
+        const navigation = await mongo.updateNavigation(
+          req.body.courseID,
+          location,
+          req.body[location]
+        );
+        if (!navigation)
           res.status(500).send("500 - Internal Server Error. Request could not be processed.");
-        else res.status(200).send("200 - OK");
       });
+      res.status(200).send("200 - OK");
     } catch (e) {
       res.status(406);
       res.send(

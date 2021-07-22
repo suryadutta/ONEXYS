@@ -202,12 +202,15 @@ function getNavigationData(courseID, callback) {
     .catch((err) => callback(err, null));
 }
 
-function updateNavigation(courseID, location, link, callback) {
-  let db = client.db(config.mongoDBs[courseID]);
-  db.collection("navigation")
-    .findOneAndUpdate({ page: location }, { $set: { src: link } })
-    .then(() => callback(null))
-    .catch((err) => callback(err));
+function updateNavigation(courseID, location, link) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db
+      .collection("navigation")
+      .findOneAndUpdate({ page: location }, { $set: { src: link } });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function updateBadge(courseID, badge, callback) {
