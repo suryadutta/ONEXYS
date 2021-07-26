@@ -128,7 +128,7 @@ cron.schedule("*/15 * * * *", async () => {
 
         await mongo.updateUserProgressField(courseID, userProgress.user, "$set", "score", score);
       }
-      console.log("Finished", JSON.stringify(logs));
+      console.log(`Finished updating ${config.mongoDBs[courseID]}`, JSON.stringify(logs));
     } catch (e) {
       console.error(e);
     }
