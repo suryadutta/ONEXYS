@@ -19,10 +19,9 @@ config.canvasPageResults = process.env.CANVAS_PAGE_RESULTS || "200";
 
 config.redisURL = process.env.REDIS_URL || "";
 
-(config.mongo_username = process.env.MONGO_USERNAME || "localhost"),
-  (config.mongo_password = process.env.MONGO_PASSWORD || ""),
-  (config.disableLeaderboard =
-    process.env.DISABLE_LEADERBOARD.toLowerCase() === "true" ? true : false);
+config.mongo_username = process.env.MONGO_USERNAME || "localhost";
+config.mongo_password = process.env.MONGO_PASSWORD || "";
+config.disableLeaderboard = process.env.DISABLE_LEADERBOARD === "true";
 
 //configure MongoDB urls here - course ID to mongoDB URL
 config.mongoURL =

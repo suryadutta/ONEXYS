@@ -66,4 +66,5 @@ Thumbs.db
 
 # Cypress videos
 videos
+screenshots
 *.rdb

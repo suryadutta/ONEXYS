@@ -2,7 +2,8 @@ const cron = require("node-cron"),
   mongo = require("../models/mongo"),
   config = require("./config"),
   canvas = require("../models/canvas"),
-  assert = require("assert");
+  assert = require("assert"),
+  { diff } = require("deep-object-diff");
 
 /**
  * @description - Cron job to update daily tasks every day of the week at midnight
@@ -39,15 +40,15 @@ cron.schedule("0 0 0 * * *", () => {
 
 /**
  * @todo - refactor to use also refactored mongo functions
- * @todo - debug logging system
  * @todo - possible optimzation: store various maps in redis cache
  * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
  */
 cron.schedule("*/15 * * * *", async () => {
+  const logs = {};
   Object.keys(config.mongoDBs).map(async (courseID) => {
-    let logs = { success: {}, failed: [] };
+    console.log(`Updating ${config.mongoDBs[courseID]}'s user progress`);
     try {
-      let assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
+      const assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
         badgeIdToPoints = {}; // Maps a course's badges id to its points - e.g 1: 200
 
       const db = mongo.client.db(config.mongoDBs[courseID]),
@@ -90,169 +91,213 @@ cron.schedule("*/15 * * * *", async () => {
       });
 
       // Iterate through each user
-      userSubmissions.value.map(async (user, index) => {
-        // Get submissions grouped by user
-        if (user.submissions.length > 0) {
-          let score = 0, // User score
-            completed = {
-              // Number of completed assignments
-              practice: 0,
-              apply: 0,
-              reflection: 0,
-              daily: 0,
-              econ: 0,
-              bio: 0,
-              chem: 0,
-              physics: 0,
-              engineering: 0,
-            };
-          const userProgress = await db // Get current user's progress from MongoDB
+      for (const user of userSubmissions.value) {
+        if (user.submissions.length <= 0) continue;
+
+        let score = 0; // User score
+        // Number of completed assignments
+        const completed = {
+            practice: 0,
+            apply: 0,
+            reflection: 0,
+            daily: 0,
+          },
+          userProgress = await db // Get current user's progress from MongoDB
             .collection("user_progress")
             .findOne({ user: user.user_id.toString() });
 
-          if (userProgress) {
-            user.submissions.map(async (submission) => {
-              const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
-              const subj = assignmentIdToType[submission.assignment_id].subject
-              logs.success[user.user_id] = {
-                practice: [],
-                apply: [],
-                daily: [],
-                reflection: [],
-                econ: [],
-                bio: [],
-                chem: [],
-                physics: [],
-                engineering: [],
-              };
-              switch (assignmentIdToType[submission.assignment_id].type) {
-                case "practice":
-                  // Hard-coded to 90 for now
-                  if (submission.score >= 90) {
-                    score += 100;
-                    completed.practice += 1;
-                    // If submission not already stored in MongoDB
-                    if (
-                      subj === "chem" ||
-                      subj === "econ" ||
-                      subj === "physics" ||
-                      subj === "engineering" ||
-                      subj === "bio"
-                    ) {
-                      completed[subj] += 1;
-                      logs.success[user.user_id][subj].push(submission.assignment_id);
-                    }
-                    if (
-                      !userProgress.modules ||
-                      !(moduleID in userProgress.modules) ||
-                      !userProgress.modules[moduleID].practice
-                    ) {
-                      logs.success[user.user_id].practice.push(submission.assignment_id);
-                      await db.collection("user_progress").updateOne(
-                        { user: user.user_id.toString() },
-                        {
-                          $set: { [`modules.${moduleID}.practice`]: true },
-                        },
-                        { upsert: true }
-                      );
-                    }
-                  }
+        if (!userProgress) continue;
 
-                  break;
-                case "apply":
-                  if (submission.score >= 90) {
-                    score += 100;
-                    completed.apply += 1;
-                    if (
-                      (subj === "chem" ||
-                        subj === "econ" ||
-                        subj === "physics" ||
-                        subj === "engineering" ||
-                        subj === "bio") &&
-                      userProgress.modules[moduleID].practice
-                    ) {
-                      completed[subj] += 1;
-                      logs.success[user.user_id][subj].push(submission.assignment_id);
-                    }
-                    if (
-                      !userProgress.modules ||
-                      !(moduleID in userProgress.modules) ||
-                      !userProgress.modules[moduleID].apply
-                    ) {
-                      await db.collection("user_progress").updateOne(
-                        { user: user.user_id.toString() },
-                        {
-                          $set: { [`modules.${moduleID}.apply`]: true },
-                        },
-                        { upsert: true }
-                      );
-                    }
-                  }
+        score += await updateModuleProgress(
+          courseID,
+          assignmentIdToType,
+          modules.value,
+          userProgress,
+          user.submissions,
+          completed,
+          logs
+        );
 
-                  break;
+        score += await updateBadgeProgress(
+          courseID,
+          userProgress,
+          completed,
+          badgeIdToPoints,
+          logs
+        );
 
-                case "daily":
-                  logs.success[user.user_id].daily.push(submission.assignment_id);
-                  score += 100;
-                  completed.daily += 1;
-                  break;
-                case "reflection":
-                  logs.success[user.user_id].reflection.push(submission.assignment_id);
-                  score += 100;
-                  completed.reflection += 1;
-                  break;
-                default:
-                  console.log(`Assignment ${submission.assignment_id} not stored in Mongo`);
-              }
-              // Get earned badges, see in canvas.js
-              const earned = await canvas.updateBadgeProgress(
-                courseID,
-                user.user_id,
-                userProgress,
-                completed
-              );
-              earned.map((badge) => (score += badgeIdToPoints[badge])); // Add badges points
-
-              await db.collection("user_progress").updateOne(
-                { user: user.user_id.toString() },
-                {
-                  $set: { score },
-                },
-                { upsert: true }
-              );
-            });
-          }
-        }
-        if (index === userSubmissions.value.length - 1) {
-          console.log(
-            `Sucessfully updated new user progression of ${
-              Object.keys(logs.success).length
-            } out of ${Object.keys(logs.success).length + logs.failed.length} students`
-          );
-          console.log(
-            `Changes: ${JSON.stringify(
-              logs.success,
-              (key, value) => {
-                if (
-                  typeof key === "string" &&
-                  Object.keys(value).length === 4 &&
-                  value.practice.length === 0 &&
-                  value.apply.length === 0 &&
-                  value.daily.length === 0 &&
-                  value.reflection.length === 0
-                )
-                  return undefined;
-                return value;
-              },
-              2
-            )}`
-          );
-          // console.log(`Failed: ${JSON.stringify(logs.failed, null, 2)}`);
-        }
-      });
+        await mongo.updateUserProgressField(courseID, userProgress.user, "$set", "score", score);
+      }
+      console.log("Finished", JSON.stringify(logs));
     } catch (e) {
       console.error(e);
-      logs.failed.push(e);
     }
   });
 });
+
+/**
+ * @description - Updates the user's module progress from the diff between the progress based on Canvas submissions and progress in MongoDB. Updates `completed` to contain the number of assignments completed by type. Returns `score` earned by module progress.
+ * @param {string} courseID
+ * @param {Object} assignmentIdToType - Maps assignment id to the type
+ * @param {Array} modules - Array of modules from Mongo
+ * @param {Object} userProgress - User progress object from Mongo
+ * @param {Array} submissions - Array of submitted assignments from Canvas
+ * @param {Object} completed - Object mapping assignment type to number completed
+ * @param {Object} logs
+ * @return {number} - calculated score earned from completed assignments
+ */
+async function updateModuleProgress(
+  courseID,
+  assignmentIdToType,
+  modules,
+  userProgress,
+  submissions,
+  completed,
+  logs
+) {
+  try {
+    let score = 0;
+    const moduleProgress = {};
+    submissions.map((submission) => {
+      switch (assignmentIdToType[submission.assignment_id].type) {
+        case "practice": {
+          const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
+          const module = modules.find((module) => module._id === moduleID);
+          const subject = assignmentIdToType[submission.assignment_id].subject;
+          if (submission.score >= module.practice_cutoff) {
+            score += 100;
+            completed.practice += 1;
+            moduleID in moduleProgress
+              ? (moduleProgress[moduleID].practice = true)
+              : (moduleProgress[moduleID] = { practice: true });
+            if (subject) completed[subject] = completed[subject] + 1 || 1;
+          }
+          break;
+        }
+        case "apply": {
+          const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
+          const module = modules.find((module) => module._id === moduleID);
+          const subject = assignmentIdToType[submission.assignment_id].subject;
+          if (submission.score >= module.quiz_cutoff) {
+            score += 100;
+            completed.apply += 1;
+            moduleID in moduleProgress
+              ? (moduleProgress[moduleID].apply = true)
+              : (moduleProgress[moduleID] = { apply: true });
+            if (subject) completed[subject] = completed[subject] + 1 || 1;
+          }
+          break;
+        }
+        case "daily":
+          score += 100;
+          completed.daily += 1;
+          break;
+        case "reflection":
+          score += 100;
+          completed.reflection += 1;
+          break;
+        default:
+          console.log(`Assignment ${submission.assignment_id} not stored in Mongo`);
+      }
+    });
+    // if there is a diff, then update user progress
+    const moduleDiff = diff(userProgress.modules, moduleProgress); // https://www.npmjs.com/package/deep-object-diff
+    if (Object.keys(moduleDiff).length > 0) {
+      await mongo.updateUserProgressField(
+        courseID,
+        userProgress.user,
+        "$set",
+        "modules",
+        moduleProgress
+      );
+      userProgress.user in logs
+        ? (logs[userProgress.user].modules = moduleDiff)
+        : (logs[userProgress.user] = { modules: moduleDiff });
+    }
+
+    return score;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+// Hard-coded badges
+const badgeRequirements = {
+  daily: [
+    { id: 1, req: 1 },
+    { id: 2, req: 5 },
+    { id: 3, req: 10 },
+    { id: 4, req: 15 },
+    { id: 5, req: 20 },
+    { id: 6, req: 25 },
+  ],
+  practice: [
+    { id: 7, req: 1 },
+    { id: 8, req: 3 },
+    { id: 9, req: 7 },
+    { id: 10, req: 10 },
+  ],
+  apply: [
+    { id: 11, req: 1 },
+    { id: 12, req: 3 },
+    { id: 13, req: 7 },
+    { id: 14, req: 10 },
+  ],
+  econ: [{ id: 15, req: 2 }],
+  bio: [{ id: 16, req: 2 }],
+  chem: [{ id: 17, req: 2 }],
+  physics: [{ id: 18, req: 2 }],
+  engineering: [{ id: 19, req: 2 }],
+
+  reflection: [
+    { id: 28, req: 1 },
+    { id: 29, req: 3 },
+    { id: 30, req: 7 },
+    { id: 31, req: 10 },
+  ],
+};
+/**
+ * @param {string} courseID
+ * @param {Object} userProgress - User progress object
+ * @param {Object} completed - Object mapping assignment type to the number completed for a user
+ * @param {Object} badgeIdToPoints - Object mapping badge id to points earned
+ * @return {number} - Calculated score earned from badges
+ */
+async function updateBadgeProgress(courseID, userProgress, completed, badgeIdToPoints, logs) {
+  try {
+    let score = 0;
+    const badgeProgress = {};
+    // e.g - [practice, [ { id: 7, req: 1 }, { id: 8, req: 3 }]]
+    for (const [type, badges] of Object.entries(badgeRequirements)) {
+      badges.map((badge) => {
+        // For a given type, if the number completed is greater than the badge req, push
+        if (completed[type] >= badge.req) {
+          score += badgeIdToPoints[badge.id];
+          badgeProgress[badge.id] = { has: true };
+        }
+      });
+    }
+    const badgeDiff = diff(userProgress.badges, badgeProgress);
+    if (Object.keys(badgeDiff).length > 0) {
+      await mongo.updateUserProgressField(
+        courseID,
+        userProgress.user,
+        "$set",
+        "badges",
+        badgeProgress
+      );
+      userProgress.user in logs
+        ? (logs[userProgress.user].badges = badgeDiff)
+        : (logs[userProgress.user] = { badges: badgeDiff });
+    }
+
+    return score;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+module.exports = {
+  updateBadgeProgress,
+  updateModuleProgress,
+};
