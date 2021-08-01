@@ -163,10 +163,11 @@ function getProgress(courseID, callback) {
 function getModule(courseID, moduleID, callback) {
   let db = client.db(config.mongoDBs[courseID]);
   db.collection("modules").findOne({ _id: parseInt(moduleID) }, (err, data) => {
-    if (data.videos)
+    if (data && data.videos)
       data.videos = data.videos.sort((a, b) => {
         return a.position < b.position ? -1 : 1;
       });
+    else console.log("getModule log:", courseID, moduleID);
     callback(err, data);
   });
 }
