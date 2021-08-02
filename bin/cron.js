@@ -158,7 +158,8 @@ async function updateModuleProgress(
   try {
     let score = 0;
     const moduleProgress = {};
-    submissions.map((submission) => {
+    for (const submission of submissions) {
+      if (!(submission.assignment_id in assignmentIdToType)) continue;
       switch (assignmentIdToType[submission.assignment_id].type) {
         case "practice": {
           const moduleID = assignmentIdToType[submission.assignment_id].moduleID; // Map current submission id to moduleID
@@ -199,7 +200,7 @@ async function updateModuleProgress(
         default:
           console.log(`Assignment ${submission.assignment_id} not stored in Mongo`);
       }
-    });
+    }
     // if there is a diff, then update user progress
     const moduleDiff = diff(userProgress.modules, moduleProgress); // https://www.npmjs.com/package/deep-object-diff
     if (Object.keys(moduleDiff).length > 0) {
