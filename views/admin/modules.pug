@@ -22,6 +22,8 @@ block content
             .col-md-1
     hr.mb-3
     .container
+        a#moduleAddButton.btn.btn-dark.text-white.mb-2 Add Module
+        button.btn.btn-success.text-white.ml-2.mb-2(onClick="saveModules()") Save
         .row
             .col
                 table#moduleTable.admin_table(style="margin-bottom:100px;")
@@ -34,6 +36,6 @@ block content
                         th Practice Link
                         th Quiz Link
                         th Reflections Link
-                        th Edit
+                        th
             hr
 

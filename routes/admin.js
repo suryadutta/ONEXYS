@@ -23,6 +23,15 @@ router.get("/homeVidAdd", (req, res) => {
   });
 });
 
+router.get("/modules/add/:id", (req, res) => {
+  res.render("admin/moduleAdd", {
+    title: `Adding Module`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
 router.get("/navigation", (req, res) => {
   res.render("admin/navigation", {
     title: `Edit Navigation Links`,
@@ -63,6 +72,15 @@ router.get("/modules/videoEdit/:moduleID/:videoID", (req, res) => {
     heroku: config.herokuAppName,
     moduleID: req.params.moduleID,
     videoID: req.params.videoID,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
+router.get("/modules/videoAdd/:moduleID", (req, res) => {
+  res.render("admin/moduleVideoAdd", {
+    title: `Adding video to module ${req.params.moduleID}`,
+    heroku: config.herokuAppName,
+    moduleID: req.params.moduleID,
     courseID: Object.keys(req.session.course_id)[0],
   });
 });
