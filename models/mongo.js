@@ -242,10 +242,16 @@ function updateTodaysDaily(courseID, assignment_id) {
 
 async function updateModules(courseID, modules) {
   const db = client.db(config.mongoDBs[courseID]);
-  Object.entries(modules).map(async ([oldID, { newID, open, due }]) => {
-    const module = await db.collection("modules").findOneAndDelete({ _id: parseInt(oldID) });
+
+  const prevModules = await Promise.allSettled(
+    Object.keys(modules).map((oldID) =>
+      db.collection("modules").findOneAndDelete({ _id: parseInt(oldID) })
+    )
+  );
+
+  Object.entries(modules).map(async ([, { newID, open, due }], index) => {
     await db.collection("modules").insertOne({
-      ...module.value,
+      ...prevModules[index].value.value,
       _id: parseInt(newID),
       open: open.toString(),
       due: due.toString(),
