@@ -1,11 +1,13 @@
 extends ../layout
 
 block content
+    script.
+        const herokuAPI = "/api";
     br
     .container
         .row
             .form.form-inline
-                h2='Live View ' + course_title + ' Modules'
+                h2='Module Live View'
     hr
     br
     .container
@@ -30,4 +32,4 @@ block content
                         td=module.quiz_link
                         td=module.reflection_link
                         td
-                            a.btn.btn-primary(href="https://" + test_app + ".herokuapp.com/modules/" + (i + 1), target="_blank") Live View
+                            a.btn.btn-primary(href=`/modules/${i+1}`, target="_blank") Live View

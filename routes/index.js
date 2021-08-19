@@ -104,6 +104,27 @@ router.use("/welcome", [auth.updateCookies, auth.checkUser, auth.userExists], (r
   }
 });
 
+router.use("/liveview", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {
+  if (req.session.admin) {
+    try {
+      mongo.getModules(Object.keys(req.session.course_id)[0], (err, modules) => {
+        if (err)
+          res.status(500).send("500 - Internal Server Error. Request could not be processed.");
+        else
+          res.render("admin/liveview", {
+            title: "Live View",
+            heroku: config.herokuAppName,
+            courseID: Object.keys(req.session.course_id)[0],
+            modules,
+          });
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
 router.get("/missing-daily", (req, res) => {
   try {
     mongo.getDailyError(Object.keys(req.session.course_id)[0], (err, data) => {
