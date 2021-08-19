@@ -68,3 +68,6 @@ Thumbs.db
 videos
 screenshots
 *.rdb
+
+#Jest
+coverage

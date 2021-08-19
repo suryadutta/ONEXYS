@@ -1,4 +1,3 @@
-const { captureRejectionSymbol } = require("events");
 const request = require("request"),
   config = require("../bin/config"),
   mongo = require("./mongo"),
@@ -46,10 +45,11 @@ function getSections(courseID, query) {
 
 async function getSubmissions(courseID, query) {
   try {
-    const url = `${config.canvasURL}api/v1/courses/${courseID}/students/submissions?${query}`;
     const auth = { Authorization: `Bearer ${config.canvasAdminAuthToken}` };
-    let submissions = [];
+    const submissions = [];
+    let url;
     while (true) {
+      url = `${config.canvasURL}api/v1/courses/${courseID}/students/submissions?${query}`;
       const response = await axios.get(url, { headers: auth });
       submissions.push(...response.data);
       /**

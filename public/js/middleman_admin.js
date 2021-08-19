@@ -17,6 +17,7 @@ function hideLoadingBar() {
 }
 
 const hostname = "https://educationvirginia.instructure.com";
+let unifiedGradebook;
 $(document).ready(async function () {
   // Get the course title
   if (needs.includes("courseTitle")) {
@@ -139,6 +140,18 @@ $(document).ready(async function () {
       .done((data) => writeModuleVidEdit(data))
       .fail((err) => console.log("module retrieval failed"))
       .always(() => hideLoadingBar());
+  }
+
+  if (needs.includes("unifiedGradebook")) {
+    $.get(`${herokuAPI}/admin/unifiedGradebook`, {
+      hostname,
+      courseID,
+    })
+      .done((gradebook) => {
+        unifiedGradebook = Object.entries(gradebook);
+        writeUnifiedGradebook(unifiedGradebook);
+      })
+      .fail((err) => console.log("gradebook retrieval failed"));
   }
 });
 
@@ -553,6 +566,41 @@ function writeModuleVidEdit(modules) {
   $("#video_desc").val(moduleVidToEdit.video_desc);
   $("#video_desc_helper").val(moduleVidToEdit.video_desc_helper);
   $("#position").val(moduleVidToEdit.position);
+}
+
+function writeUnifiedGradebook(gradebook) {
+  const html = gradebook.reduce((accum, [id, student]) => {
+    const modulesHTML = Object.values(student.modules).reduce(
+      (accum, module) =>
+        accum +
+        `
+        <td class="text-center">${
+          typeof module.practice === "number" ? Math.round(module.practice) : module.practice
+        }</td>
+        <td class="text-center">${
+          typeof module.apply === "number" ? Math.round(module.apply) : module.apply
+        }</td>
+        `,
+      ""
+    );
+    return (
+      accum +
+      `<tr>
+      <td>${student.name}</td>
+      <td>${id}</td>
+      <td>${student.team}</td>
+      ${modulesHTML}
+    </tr>`
+    );
+  }, "");
+  $("#gradebook").html(html);
+}
+
+function sortUnifiedGradebook(unifiedGradebook, id, compareFn) {
+  unifiedGradebook.sort(compareFn);
+  writeUnifiedGradebook(unifiedGradebook);
+  $("th[name='sort_button']").removeClass("bg-secondary");
+  $(`#${id}`).addClass("bg-secondary");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

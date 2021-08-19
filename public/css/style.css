@@ -300,16 +300,16 @@
 }
 
 .aleks_checkbox {
-	background-image: url('https://conex.herokuapp.com/images/checkbox/check_blue_no.png');
+	background-image: url('https://conex-overhaul.herokuapp.com/images/checkbox/check_blue_no.png');
 }
 .aleks_checkbox.completed{
-	background-image: url('https://conex.herokuapp.com/images/checkbox/check_blue_yes.png');
+	background-image: url('https://conex-overhaul.herokuapp.com/images/checkbox/check_blue_yes.png');
 }
 .quiz_checkbox {
-	background-image: url('https://conex.herokuapp.com/images/checkbox/check_white_no.png');
+	background-image: url('https://conex-overhaul.herokuapp.com/images/checkbox/check_white_no.png');
 }
 .quiz_checkbox.completed{
-	background-image: url('https://conex.herokuapp.com/images/checkbox/check_white_yes.png');
+	background-image: url('https://conex-overhaul.herokuapp.com/images/checkbox/check_white_yes.png');
 }
 
 #points {

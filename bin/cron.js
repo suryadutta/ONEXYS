@@ -44,12 +44,12 @@ cron.schedule("0 0 0 * * *", () => {
  * @description - https://www.npmjs.com/package/node-cron; runs every 15 minues to update every course's user progress
  */
 cron.schedule("*/15 * * * *", async () => {
-  const logs = {};
   Object.keys(config.mongoDBs).map(async (courseID) => {
-    console.log(`Updating ${config.mongoDBs[courseID]}'s user progress`);
     try {
+      console.log(`Updating ${config.mongoDBs[courseID]}'s user progress`);
       const assignmentIdToType = {}, // Maps a course's modules assignment id to its type - e.g 22657: "practice"
         badgeIdToPoints = {}; // Maps a course's badges id to its points - e.g 1: 200
+      logs = {};
 
       const db = mongo.client.db(config.mongoDBs[courseID]),
         userSubmissionsPromise = () =>

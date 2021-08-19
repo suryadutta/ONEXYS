@@ -1,5 +1,7 @@
 const router = require("express").Router(),
-  config = require("../bin/config");
+  config = require("../bin/config"),
+  canvas = require("../models/canvas"),
+  mongo = require("../models/mongo");
 
 function requireAdmin(req, res, next) {
   if (req.session.admin) next();
@@ -127,11 +129,25 @@ router.get("/luckyBonuses", (req, res) => {
   });
 });
 
-router.get("/unifiedGradebook", (req, res) => {
+router.get("/unifiedGradebook", async (req, res) => {
+  const courseID = Object.keys(req.session.course_id)[0],
+    modules = await mongo.client
+      .db(config.mongoDBs[courseID])
+      .collection("modules")
+      .find()
+      .sort({ _id: 1 })
+      .toArray();
+
+  const moduleTitles = modules.map((module) => ({
+    id: module._id,
+    title: module.primary_title + " " + module.secondary_title,
+  }));
+
   res.render("admin/gradebook", {
     title: "Gradebook",
     heroku: config.herokuAppName,
     courseID: Object.keys(req.session.course_id)[0],
+    moduleTitles,
   });
 });
 

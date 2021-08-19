@@ -179,6 +179,16 @@ function getUserProgress(courseID, userID, callback) {
     callback(err, data)
   );
 }
+
+function getCourseUserProgress(courseID) {
+  try {
+    const db = client.db(config.mongoDBs[courseID]);
+    return db.collection("user_progress").find().toArray();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function getDailyError(courseID, callback) {
   const db = client.db(config.mongoDBs[courseID]);
   db.collection("global").findOne({ type: "daily-error" }, (err, data) => callback(err, data));
@@ -393,6 +403,7 @@ module.exports = {
   getModules,
   getProgress,
   getUserProgress,
+  getCourseUserProgress,
   getDailyError,
   getBadges,
   getNavigationData,

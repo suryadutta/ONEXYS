@@ -787,6 +787,70 @@ router.post("/admin/updateBadge/:id", (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+router.get("/admin/unifiedGradebook", async (req, res) => {
+  if (req.session.admin) {
+    try {
+      const courseID = Object.keys(req.session.course_id)[0],
+        gradebook = {},
+        assignmentIdToType = {},
+        moduleIDs = [],
+        modules = await mongo.client
+          .db(config.mongoDBs[courseID])
+          .collection("modules")
+          .find()
+          .toArray(),
+        sections = await canvas.getSections(courseID, "include[]=students"),
+        submissions = await canvas.getSubmissions(
+          courseID,
+          "student_ids[]=all&workflow_state=graded&per_page=1000"
+        );
+
+      // Map assignement id to module type and ID
+      modules.map((module) => {
+        assignmentIdToType[module.practice_link] = {
+          type: "practice",
+          moduleID: module._id,
+        };
+        assignmentIdToType[module.quiz_link] = {
+          type: "apply",
+          moduleID: module._id,
+        };
+        moduleIDs.push(module._id);
+      });
+
+      // Add each student to gradebook with name, team, and initialize modules empty scores
+      for (const section of sections) {
+        if (!section.students || section.name === Object.values(req.session.course_id)[0]) continue;
+        section.students.map((student) => {
+          gradebook[student.id] = {
+            modules: {},
+            team: section.name,
+            name: student.short_name,
+          };
+          moduleIDs.map((id) => {
+            gradebook[student.id].modules[id] = { practice: "-", apply: "-" };
+          });
+        });
+      }
+
+      // Fill in empty scores
+      for (const submission of submissions) {
+        const userID = submission.user_id.toString();
+        const assignmentType = assignmentIdToType[submission.assignment_id];
+
+        if (userID in gradebook && assignmentType) {
+          gradebook[userID].modules[assignmentType.moduleID][assignmentType.type] =
+            submission.score;
+        }
+      }
+      res.status(200).send(gradebook);
+    } catch (e) {
+      console.log(e);
+      res.send("406 - Not acceptable.");
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
 // --------------------------
 //     Canvas Live Event
 // --------------------------
