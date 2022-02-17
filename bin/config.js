@@ -50,6 +50,13 @@ config.mongoDBs = {
   '48039': 'yale-physics',
   '48038': 'yale-white',
   '10766': 'pranesh',
+  '8376': "conexOrange21",
+  '8375': "conexWhite21",
+  '8374': "conexBlue21",
+  '8369': "smithBlue21",
+  '8367': "trinityBlue21",
+  '8617': "brandeis",
+  '8467': "physics21",
 };
 
 // If we're in a development environment, use the development databasez
