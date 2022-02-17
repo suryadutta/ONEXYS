@@ -34,13 +34,22 @@ config.mongoURL =
 //add to list if we create new courses
 //format is courseID: databaseName
 config.mongoDBs = {
-  8376: "conexOrange21",
-  8375: "conexWhite21",
-  8374: "conexBlue21",
-  8369: "smithBlue21",
-  8367: "trinityBlue21",
-  8617: "brandeis",
-  8467: "physics21",
+  '2517': 'blue',
+  '3528': 'orange',
+  '3529': 'white',
+  '3559': 'conexDemo',
+  '4887': 'conexBlue20',
+  '4888': 'conexDemo20',
+  '5710': 'smithDemo20',
+  '5713': 'trinity20',
+  '5772': 'conexWhite20',
+  '5773': 'conexOrange20',
+  '48080': 'smith',
+  '48036': 'yale-blue',
+  '48037': 'yale-gray',
+  '48039': 'yale-physics',
+  '48038': 'yale-white',
+  '10766': 'pranesh',
 };
 
 // If we're in a development environment, use the development databasez
