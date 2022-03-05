@@ -28,14 +28,14 @@ block content
 
             table#luckyTable.admin_table(style="margin-bottom:100px;")
                 tr
-                //each lucky_bonus in lucky_data
+                each lucky_bonus in lucky_data
                     tr
                         td
                             h2="Bonus "+ lucky_bonus._id
                             h4=prettyDate(lucky_bonus.time)
                             hr
                         td
-                            //div.form.form-inline
+                            div.form.form-inline
                                     form(method='GET' action='lucky/edit/'+lucky_bonus._id)
                                         input(type='hidden', value=course_id, name='course-id')
                                         input(type='hidden', value=course_title, name='course-title')
