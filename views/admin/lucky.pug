@@ -28,7 +28,7 @@ block content
 
             table#luckyTable.admin_table(style="margin-bottom:100px;")
                 tr
-                each lucky_bonus in lucky_data
+                each lucky_bonus in lucky_data ? lucky_data : []
                     tr
                         td
                             h2="Bonus "+ lucky_bonus._id
