@@ -1,18 +1,35 @@
 extends ../layout
 
 block content
+    script.
+        const herokuAPI = "/api",
+              dailyID = "#{id}",
+              edit = true,
+              courseID = "#{courseID}";
+        needs=["courseTitle", "daily"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    br
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin/dailyTasks')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
+        .row    
+            h2#daily_id
+    hr
 
-    a(href='/admin/dailies') Back to Dailies
-
-    h1='Edit ONEXYS Daily '+daily._id
-    h3=course
-
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
-        
-        div.form-group
-        label(for='assignment_id') Assignment ID: 
-        input#assignment_id.form-control(type='numeric', value=daily.assignment_id, name='assignment_id')
+    div.container
+        div.row
+            div.form-group.form-inline
+                label(for='assignment_id') Assignment or Quiz ID:
+                input#assignment_id.form-control(type='text', value="", name='Assignment')
+            hr
+        div
+            button.btn.btn-success(onClick="updateDaily();") Update
         br
-        br
-
-        button.btn.btn-primary(type='submit') Save Changes
+        div.row
+            small(style="color:red") Reminder: you must input the Quiz ID if the assignment has one. You should only use the assignment ID if a quiz ID is not applicable.

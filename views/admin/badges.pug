@@ -1,33 +1,42 @@
 extends ../layout
 
 block content
-
-    a(href='/admin') Back to Home Page
-
-    h1 Edit ONEXYS Badges
-    h3=course
-    
-    table(class="admin_table")
-        tr 
-            th ID
-            th Title
-            th Description
-            th Points
-            th Portrait
-            th Portrait Description
-
-        each badge in badges
-            tr 
-                td=badge._id
-                td=badge.Title
-                td=badge.Description
-                td=badge.Points
-                td=badge.Portrait
-                td=badge.PortraitDescription
-                td
-                    form(method='GET' action='badges/edit/'+badge._id)
-                        button(type='submit') Edit
-                //
-                    td 
-                        form(method='POST' action='badges/delete/'+badge._id onsubmit="return confirm('Do you really want to delete this badge?');")
-                            button(type='submit') Delete
+    script.
+        const herokuAPI = "/api",
+              edit = false,
+              courseID = "!{courseID}";
+        needs=["courseTitle", "badges"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    br
+    style.
+        td {
+            padding: 3px
+        }
+        tr {
+            border-bottom: 2px solid #777777
+        }
+    #fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
+    hr
+    .container
+        .row
+            .col
+                table#badgeTable(style="margin-bottom: 100px;")
+                    tr
+                        th ID
+                        th Title
+                        th Description
+                        th Points
+                        th Portrait
+                        th Portrait Description
+                        th Edit

@@ -2,29 +2,42 @@ extends ../layout
 
 block content
 
-    a(href='/admin/modules/'+moduleID+'/edit') Go Back
+    script.
+       const herokuAPI = "/api",
+      courseID = "#{courseID}",
+      moduleID = "#{moduleID}",
+      needs = ["courseTitle", "moduleVidAdd"];
+    script(src="/js/middleman_admin.js")
 
-    h1='Add Video to ONEXYS Module ' + moduleID
-    h3=course
+    br
+    .container
+        .row
+            .form.form-inline
+                a.btn.btn-lg(href=`/admin/modules/edit/${moduleID}`)
+                    i.fa.fa-chevron-left
+                h2='Add a Module Video for Module ' + moduleID
+    hr
 
-    form(method='POST' action='')
-
-        div.form-group
-        label(for='video_desc') Video Description: 
-        input#video_desc.form-control(type='text', name='video_desc', required)
-        br
-        br
-        
-        div.form-group
-        label(for='video_src') Video Source: 
-        input#video_src.form-control(type='text', name='video_src', required)
-        br
-        br
-
-        div.form-group
-        label(for='video_image_src') Video Image Path: 
-        input#video_image_src.form-control(type='text', name='video_image_src', required)
-        br
-        br
-
-        button.btn.btn-primary(type='submit') Add Video
+    main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
+        div.d-flex.flex-column 
+            label(for="video_src") Video Source:
+            input#video_src.form-control(type='text', value="")
+        hr
+        div.d-flex.flex-column
+            label(for="video_image_src") Video Thumbnail:
+            input#video_image_src.form-control(type='text', value="")
+        hr
+        div.d-flex.flex-column
+            label(for="video_desc") Video Description:
+            textarea#video_desc.form-control(type='text', value="")
+        hr
+        div.d-flex.flex-column
+            label(for="video_desc_helper") Video Description Helper (optional):
+            textarea#video_desc_helper.form-control(type='text', value="")
+        hr
+        div.d-flex.flex-column
+            label(for="position") Video Position:
+            input#position.form-control(type='number', min="0" value="" size=4 style="width: min-content")
+        hr
+        div 
+          button.btn.btn-success(onClick='addModuleVid();') Add Video

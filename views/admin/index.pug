@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+    br
+    script.
+        const herokuAPI = "/api";
+              courseID = "!{courseID}";
+              needs = ["courseTitle"]; // Define what AJAX needs to retrieve
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    .container
+        h1#adminPanelTitle(class='display-4')='Loading admin panel...'
+        .row
+            .col-md-12
+                hr
+        .row
+            .col-md-12
+                a(href='/admin/homepageEdit', class='btn btn-dark', role='button', style='margin:4px') Home Page
+                a(href='/admin/navigation', class='btn btn-dark', role='button', style='margin:4px') Navigation
+                a(href='/admin/modules', class='btn btn-dark', role='button', style='margin:4px') Modules
+                a(href='/admin/badges', class='btn btn-dark', role='button', style='margin:4px') Badges
+                a(href='/admin/dailyTasks', class='btn btn-dark', role='button', style='margin:4px') Daily Tasks
+                a(href='/admin/luckyBonuses', class='btn btn-dark', role='button', style='margin:4px') Lucky Bonuses
+                a(href='/admin/unifiedGradebook', class='btn btn-dark', role='button', style='margin:4px') Unified Gradebook

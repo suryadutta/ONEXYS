@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+    script.
+        const herokuAPI = "/api";
+              courseID = "!{courseID}";
+              needs = ["courseTitle", "navigationData"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    #fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
+    hr
+    .container
+        .row
+            .col
+            .col-md-10
+                .form-group.form-inline
+                    label(for='welcome_page') Welcome Page Filename:
+                    input#welcome.form-control.inlined-input(type='text', name='welcome_page')
+                .form-group.form-inline
+                    label(for='coach_info') Coach Information Filename:
+                    input#coach_info.form-control.inlined-input(type='text', name='coach_information')
+                .form-group.form-inline
+                    label(for='life_on_grounds') Life on Grounds Filename:
+                    input#life_on_grounds.form-control.inlined-input(type='text', name='life_on_grounds')
+                button.btn.btn-success(onClick="updateNavigation();") Go Live 
+                hr
+            .col

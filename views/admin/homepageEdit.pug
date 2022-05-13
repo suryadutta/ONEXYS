@@ -1,0 +1,197 @@
+extends ../layout
+
+block content
+
+    script.
+        const herokuAPI = "/api";
+              needs = ["courseTitle", "homepageUpdates", "homepageVideos"],
+              courseID = "!{courseID}";
+    script(src="/js/autosize.min.js")
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src='/js/homepageUpdateSwap.js')
+    script(src='/js/video-rearrange.js')
+    br
+    #fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container
+        .row
+            .col-md-1
+                
+            .col.form-inline
+                a.btn.btn-lg(href='/admin')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+    hr
+    .container
+        .row
+            .col
+            .col-md-5
+                button.btn.btn-info(type="button" data-toggle="modal" data-target="#previewModal" onclick="copyToPreview()") Open Preview
+                #previewModal.modal.fade(role="dialog")
+                    
+                    .modal-dialog.modal-xl
+                        .modal-content
+                            .modal-header
+                                h4.modal-title Homepage Preview
+                                button.close(type="button" data-dismiss="modal") &times;
+                            .modal-body
+                                //
+                                    PREVIEW TO DISPLAY THE HOMEPAGE
+                                    note: an include was not used because some data is manually written in.
+                                          for example, the leaderboard does not need to be loaded in the preview.
+                                    / / / / / / / / / / / / / / / / / / / / / /
+                                .onexys_styling.o_hompage
+                                    .left(style='width: 360px; margin-top: -10px;')
+                                        #points.standard_box.left
+                                            h2 My Points
+                                            p#point_count 0
+                                            #flag.blue
+                                                a#dailyTaskLink(title="Open Daily Task" target="_blank")
+                                                    img#dailyTaskImg(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif" style="height:35px;")
+                                        .standard_home_box.left(style="width:229px;")
+                                            h2 Leaderboard
+                                            table(style="width:100%;")
+                                                thead#leaderboard-header
+                                                    tr.leader
+                                                        th Place
+                                                        th Team
+                                                        th Score
+                                                tbody#leaderboard
+                                                    tr.leader
+                                                        td 1
+                                                        td Team A
+                                                        td 42
+                                                    tr.leader
+                                                        td 2
+                                                        td Team B
+                                                        td 0
+                                                    tr.leader
+                                                        td 3
+                                                        td Team C
+                                                        td 0
+                                                    tr.leader_me
+                                                        td
+                                                            #myteam_head MY TEAM
+                                                        td#teamName Team A
+                                                        td#teamScore 42
+                                        #recent_badges.standard_home_box.left(style='width: 313px; height: 180px;')
+                                            h2 Recent Badges
+                                            p Recently earned user badges will appear here.
+                                            br
+                                            a(title='info_Badges' href="https://" + heroku_app + ".herokuapp.com/badges" target='_blank') Click here to view all badges
+                                        #progress.standard_home_box.left(style='width: 324px;')
+                                            h2 My Progress So Far
+                                            a#pretest.progress_box.single_line.completed Pre-Test
+                                            #progress_labels(style='margin-left: 15px !important;')
+                                                p Pract.
+                                                p Apply
+                                            br
+                                            #modules
+                                                p(style="margin-top:55px;") Modules will appear here.
+                                            a#posttest.progress_box.single_line(title="The Post Test is not ready yet. Complete all Practices and Applications, then check back!") Post-Test
+                                    .left(style='width: 500px !important; margin-top: -10px;')
+                                        br
+                                        #updates.standard_home_box.left(style='width: 450px !important; margin-top: 23px !important;')
+                                            h2 Updates
+                                            img(style="margin-left:175px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+                                        #featured.standard_home_box.left(style='width: 458px !important;')
+                                            h2#LoG_title Loading Videos...
+                                                br
+                                                img(style="height:25px;" src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+                                            p
+                                                a#LoG_link(href="#" target='_blank')
+                                            #homepageVideos
+                                //
+                                    END HOMEPAGE CONTENT
+                                    / / / / / / / / / / / / / / / / / / / / / /
+                            .modal-footer
+                                small Changes saved when "Go Live" is pressed.
+                                button.btn.btn-success(type="button" data-dismiss="modal" title="Close preview WITHOUT saving changes") Close Preview
+                                button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;" data-dismiss="modal" title="Close preview AND save changes") Go Live
+                button.btn.btn-danger(type="button" onclick="goLive();return false;" style="margin-left:10px;") Go Live
+            .col-md-5(style="text-align:right;")
+                p All fields are saved when "Go Live" is clicked. Until then, you can test changes using "Open Preview".
+            .col
+        .row
+            .col
+            .col-md-10
+                .row(style="margin-top:30px;")
+                    .col(style="display:inline;")
+                        h3.left Homepage Updates
+                        button#updateToggle.btn.btn-dark(style="float:right;" title="Click to switch update editing mode!" onclick="toggleUpdateEditMode();return false;") Click to add a single update
+                hr
+                .row
+                    .col-md-6
+                        label#u1l(style="text-align:center;width:100%;") Update 1 (Top)
+                        input#u1h.form-control(type="text" title="Header for the top update on the homepage")
+                        textarea#u1t.form-control(type="text" rows="3" title="Text body for the top update on the homepage")
+                    .col-md-6
+                        ul.vertical
+                            li Each update has a header and a body.
+                            li Update headers are automatically put in bold.
+                            li All update fields allow HTML tags to style parts of your text.
+                    .col-md-6(style="margin-top:10px;")
+                        label#u2l(style="text-align:center;width:100%;") Update 2 (Middle)
+                        input#u2h.form-control(type="text" title="Header for the middle update on the homepage")
+                        textarea#u2t.form-control(type="text" rows="3" title="Text body for the middle update on the homepage")
+                    .col-md-6(style="margin-top:10px;")
+                        label#u3l(style="text-align:center;width:100%;") Update 3 (Bottom)
+                        input#u3h.form-control(type="text" title="Header for the bottom update on the homepage")
+                        textarea#u3t.form-control(type="text" rows="3" title="Text body for the bottom update on the homepage")
+                hr(style="margin-top:30px;")
+                .row
+                    .col-md-12
+                        h3 Homepage Fields
+                .row
+                    .col
+                        .form-inline.spaced
+                            label Post Test Open?
+                            input#poto.form-control(type="checkbox")
+                        .form-inline.spaced
+                            label Pre-Test Background
+                            input#prtb.form-control(type="text") 
+                        .form-inline.spaced
+                            label Post-Test Background
+                            input#potb.form-control(type="text")
+                        .form-inline.spaced
+                            label Post Test Page
+                            input#ptp.form-control(type="text")
+                    .col
+                        .form-inline.spaced
+                            label Life on Grounds Title
+                            input#logt.form-control(type="text") 
+                        .form-inline.spaced
+                            label LoG Tool Link
+                            input#logl.form-control(type="text")
+                        .form-inline.spaced
+                            label LoG Default Thumbnail
+                            input#logdt.form-control(type="text")
+                        .form-inline.spaced
+                            label LoG Playbutton
+                            input#logpb.form-control(type="text")
+                | &nbsp;
+                .row
+                    .col    
+                        .form-inline.spaced
+                            label Badges Tool Link
+                            input#btl.form-control(type="text")
+                    .col
+                        .form-inline.spaced
+                            label Daily Task Image
+                            input#dti.form-control(type="text")
+                hr(style="margin-top:30px; margin-bottom:30px;")
+                .row
+                    .col-md-12
+                        h3 Homepage Videos
+                        <a class="btn btn-dark text-white" href="/admin/homeVidAdd";>Add Video</a>
+                .row#homepageVideosEdit
+            .col
+    br
+    br
+    br
+    br
+    br                        
