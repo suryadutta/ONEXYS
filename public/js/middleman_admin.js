@@ -358,7 +358,7 @@ function writeLuckyInfo(lucky) {
 function writeNavigationData(data) {
   $("#coach_info").val(data[0].src);
   $("#life_on_grounds").val(data[1].src);
-  $("#welcome").val(data[2].src);
+  $("#welcome_page").val(data[2].src);
 }
 
 function writeBadges(badges) {
@@ -651,7 +651,7 @@ function updateNavigation() {
     courseID,
     coach_info: $("#coach_info").val(),
     life_on_grounds: $("#life_on_grounds").val(),
-    welcome: $("#welcome").val(),
+    welcome: $("#welcome_page").val(),
   })
     .done((res) => {
       console.log("[N] done");
