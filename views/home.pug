@@ -4,12 +4,18 @@ block content
     script(src="/js/middleman.js")
     script.
         const herokuAPI = "/api",
-            courseID = "#{courseID}",
-            courseName = "#{courseName}",
-            userID = "#{userID}"
+        courseID = "#{courseID}",
+        courseName = "#{courseName}",
+        userID = "#{userID}",
+        lucky_score = "#{lucky_score}",
+        luckyID = "#{luckyID}"
+            
+            
+           
         
     if lucky
         include lucky-overlay
+        
     //- if admin
     //-     if masquerade
     //-         a(href='/home?login_success=1') Back to Home

@@ -9,15 +9,41 @@ router.post("/home", [auth.updateCookies, auth.checkUser, auth.userExists], (req
   res.redirect("/home");
 });
 
-router.get("/home", (req, res) => {
-  if (req.session.user_id && req.session.course_id)
-    res.render("home", {
-      title: "Home",
-      courseID: Object.keys(req.session.course_id)[0],
-      courseName: Object.values(req.session.course_id)[0],
-      userID: req.session.user_id,
-    });
-  else res.status(500).render("cookieError");
+router.get("/home", async (req, res) => {
+  if (req.session.user_id && req.session.course_id) {
+    let lucky_to_load = false;
+
+    try {
+      const luckys = await mongo.getLuckyBonuses(Object.keys(req.session.course_id)[0]);
+      const userProgress = await mongo.getUserProgress(
+        Object.keys(req.session.course_id)[0],
+        req.session.user_id
+      );
+      const today = new Date();
+
+      for (lucky of luckys) {
+        // If student not already on list AND within 5 minutes of the assigned time...
+        if (Math.abs((today.getTime() - Date.parse(lucky.time)) / (1000 * 60)) <= 5) {
+          if (!userProgress.luckies || !userProgress.luckies[lucky._id]) {
+            lucky_to_load = lucky;
+          }
+        }
+      }
+      res.render("home", {
+        title: "Home",
+        courseID: Object.keys(req.session.course_id)[0],
+        courseName: Object.values(req.session.course_id)[0],
+        userID: req.session.user_id,
+        heroku_app: config.herokuAppName,
+        lucky: lucky_to_load,
+        lucky_score: lucky_to_load ? lucky_to_load.point_value : false,
+        luckyID: lucky_to_load ? lucky_to_load._id : null,
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(406).send("406 - Your request could not be processed.");
+    }
+  } else res.status(500).render("cookieError");
 });
 
 router.post("/badges", [auth.updateCookies, auth.checkUser, auth.userExists], (req, res) => {

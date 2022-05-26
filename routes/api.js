@@ -79,6 +79,47 @@ router.get("/home/videos", (req, res) => {
   }
 });
 
+router.post("/home/updateLuckyProgress", async (req, res) => {
+  try {
+    authorize(req);
+    assert(req.body.userID);
+    assert(req.body.luckyID);
+    assert(req.body.lucky_score);
+    const userID = req.body.userID;
+    const luckyID = req.body.luckyID;
+    const lucky_score = req.body.lucky_score;
+    await mongo.updateUserProgressField(req.body.courseID, userID, "$set", "badges.27", {
+      has: true,
+    });
+    await mongo.updateUserProgressField(
+      req.body.courseID,
+      userID,
+      "$set",
+      "luckies." + parseInt(luckyID),
+      {
+        has: true,
+      }
+    );
+    await mongo.updateUserProgressField(
+      req.body.courseID,
+      userID,
+      "$inc",
+      "score",
+      parseInt(lucky_score)
+    );
+
+    //}
+
+    res.status(200).send("200 - OK");
+  } catch (e) {
+    res
+      .status(406)
+      .send(
+        "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), a valid date/time, points, and image name"
+      );
+  }
+});
+
 router.get("/modules", (req, res) => {
   if (!req.session.user_id)
     res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
@@ -152,7 +193,7 @@ router.get("/todaysDaily", async (req, res) => {
   }
 });
 
-router.get("/lucky", (req, res) => {
+router.get("/lucky", async (req, res) => {
   if (!req.session.user_id)
     res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
   else {
@@ -160,11 +201,9 @@ router.get("/lucky", (req, res) => {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
-      mongo.getLuckyBonuses(req.query.courseID, (err, data) => {
-        if (err)
-          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-      });
+      const luckys = await mongo.getLuckyBonuses(req.query.courseID);
+      if (luckys) res.status(200).header(access, getDst(req.query.hostname)).send(luckys);
+      else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
     } catch (e) {
       console.log(e);
       res.status(406).send("406 - Your request could not be processed.");
@@ -193,7 +232,7 @@ router.use("/badges", (req, res) => {
   }
 });
 
-router.get("/users/progress", (req, res) => {
+router.get("/users/progress", async (req, res) => {
   if (!req.session.user_id)
     res.status(403).send("403 - Forbidden. You must be logged in to make this request.");
   else {
@@ -201,11 +240,9 @@ router.get("/users/progress", (req, res) => {
       authorize(req);
       assert(Object.keys(req.session.course_id).includes(req.query.courseID)); // prevent cross track cookie usage
       assert(req.query.hostname);
-      mongo.getUserProgress(req.query.courseID, req.session.user_id, (err, data) => {
-        if (err)
-          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
-        else res.status(200).header(access, getDst(req.query.hostname)).send(data);
-      });
+      const progress = await mongo.getUserProgress(req.query.courseID, req.session.user_id);
+      if (progress) res.status(200).header(access, getDst(req.query.hostname)).send(progress);
+      else res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
     } catch (e) {
       console.log(e);
       res.status(406).send("406 - Your request could not be processed.");
@@ -374,6 +411,73 @@ router.post("/admin/addHomeVid", (req, res) => {
         .send(
           "406 - Not acceptable. You must provide body arguments 'id' (a 16 character alphanumberic string) and 'position' (an integer / string consisting of at least 1 digit and nothing else). " +
             e
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.post("/admin/updateLucky", async (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(req.body.date_time);
+      assert(req.body.point_value);
+      assert(req.body.image_name);
+      const luckyID = parseInt(req.body.id);
+      const submit = {
+        time: req.body.date_time,
+        point_value: req.body.point_value,
+        image_name: req.body.image_name,
+      };
+      await mongo.updateLucky(req.body.courseID, luckyID, submit);
+      res.status(200).send("200 - OK");
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), a valid date/time, points, and image name"
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.post("/admin/addLucky", async (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(req.body.date_time);
+      assert(req.body.point_value);
+      assert(req.body.image_name);
+      const luckyID = parseInt(req.body.id);
+      let submit = {
+        time: req.body.date_time,
+        point_value: req.body.point_value,
+        image_name: req.body.image_name,
+      };
+      await mongo.addLucky(req.body.courseID, luckyID, submit);
+      res.status(200).send("200 - OK");
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide POST body parameters 'id' (a positive integer), a valid date/time, points, and image name"
+        );
+    }
+  } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
+});
+
+router.delete("/admin/deleteLucky", async (req, res) => {
+  if (req.session.admin) {
+    try {
+      authorize(req);
+      assert(req.body.luckyID);
+      await mongo.deleteLucky(req.body.courseID, req.body.luckyID);
+      res.status(200).send("200 - OK");
+    } catch (e) {
+      res
+        .status(406)
+        .send(
+          "406 - Not acceptable. You must provide body arguments 'id' (a positive integer) " + e
         );
     }
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
@@ -790,7 +894,7 @@ router.post("/admin/updateBadge/:id", (req, res) => {
 router.get("/admin/unifiedGradebook", async (req, res) => {
   if (req.session.admin) {
     try {
-      const courseID = Object.keys(req.session.course_id)[0],
+      const courseID = 8376,
         gradebook = {},
         assignmentIdToType = {},
         moduleIDs = [],

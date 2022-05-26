@@ -2,32 +2,33 @@ extends ../layout
 
 block content
 
+    script.
+       const herokuAPI = "/api",
+      courseID = "#{courseID}",
+      luckyID = "#{id}",
+      needs = ["courseTitle", "luckyAdd"];
+    script(src="/js/middleman_admin.js")
     br
-    div.container
-        div.row
-            div.form.form-inline
-                a.btn.btn-lg(href='/admin/lucky?course-id='+course_id+'&course-title='+course_title+'&user-id='+user_id)
+    .container
+        .row
+            .form.form-inline
+                a.btn.btn-lg(href=`/admin/luckyBonuses`)
                     i.fa.fa-chevron-left
-                h2='Adding new Lucky Bonus to ' + course_title
+                h3.mb-4 Adding Lucky Bonus #{id}
     hr
 
     div.container
         div.row
-            form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
-                input(type='hidden', value=course_id, name='course-id')
-                input(type='hidden', value=course_title, name='course-title')
-                input(type='hidden', value=user_id, name='user-id')
+            div.form-group.form-inline
+                label(for='date_time') Date and Time of Lucky Bonus:
+                input#date_time.form-control(type='datetime-local', name='date_time')
+            div.form-group.form-inline
+                label(for='point_value') Point value of Lucky Bulldog:
+                input#point_value.form-control(type='numeric', name='point_value')
+            div.form-group.form-inline
+                label(for='image_name') Image to display:
+                input#image_name.form-control(type='numeric', name='image_name')
 
-                div.form-group.form-inline
-                    label(for='badge_points') Date and Time of Lucky Bonus:
-                    input#badge_points.form-control(type='datetime-local', name='date_time')
-                div.form-group.form-inline
-                    label(for='point_value') Point value of Lucky Bulldog:
-                    input#point_value.form-control(type='numeric', name='point_value')
-                div.form-group.form-inline
-                    label(for='image_name') Image to display:
-                    input#image_name.form-control(type='numeric', name='image_name')
+            hr
 
-                hr
-
-                button.btn.btn-success(type='submit') Save Changes
+            button.btn.btn-success(onClick="addLucky($('#date_time').val(), $('#point_value').val(), $('#image_name').val());") Add Lucky Bonus

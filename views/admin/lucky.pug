@@ -17,7 +17,9 @@ block content
                     i.fa.fa-chevron-left
                 h2#adminPanelTitle='Loading title...'
             .col-md-1
-    hr
+    hr.mb-3
+    .container
+        a#luckyAddButton.btn.btn-dark.text-white.mb-2 Add Lucky Bonus
     div.container
         div.row
             -function prettyDate(dateString){
@@ -46,9 +48,4 @@ block content
                                         input(type='hidden', value=course_title, name='course-title')
                                         input(type='hidden', value=user_id, name='user-id')
                                         button.btn.btn-danger(type='submit') Delete
-        div.row
-            form(method='GET' action='lucky/add')
-                input(type='hidden', value=course_id, name='course-id')
-                input(type='hidden', value=course_title, name='course-title')
-                input(type='hidden', value=user_id, name='user-id')
-                button.btn.btn-dark(type='submit') Add New Time
+        

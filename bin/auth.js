@@ -145,8 +145,7 @@ const userExists = async function (req, res, next) {
     const user = await mongo.findUser(Object.keys(req.session.course_id)[0], req.session.user_id);
 
     // If user does not exist in MongoDB, create user
-    if (!user || Object.keys(user).length !== 6)
-      await mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id);
+    if (!user) await mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id);
 
     if (!user || user.team === "") {
       // e.g [{name: "Test1", students: [...]}, {name: "Test2", students: [...]}]
