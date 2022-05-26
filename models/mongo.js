@@ -37,13 +37,20 @@ function findUser(courseID, userID) {
 function initUser(courseID, userID) {
   try {
     const db = client.db(config.mongoDBs[courseID]);
-    return db
-      .collection("user_progress")
-      .updateOne(
-        { user: userID.toString() },
-        { $set: { badges: {}, modules: {}, score: 0, team: "", user: userID.toString() } },
-        { upsert: true }
-      );
+    return db.collection("user_progress").updateOne(
+      { user: userID.toString() },
+      {
+        $set: {
+          badges: {},
+          modules: {},
+          score: 0,
+          team: "",
+          user: userID.toString(),
+          luckies: {},
+        },
+      },
+      { upsert: true }
+    );
   } catch (e) {
     console.error(e);
   }
@@ -131,14 +138,9 @@ function getTodaysDaily(courseID) {
   return db.collection("global").findOne({ type: "todays_daily" });
 }
 
-function getLuckyBonuses(courseID, callback) {
+function getLuckyBonuses(courseID) {
   let db = client.db(config.mongoDBs[courseID]);
-  db.collection("lucky_bonuses")
-    .find()
-    .sort({ _id: 1 })
-    .toArray()
-    .then((data) => callback(null, data))
-    .catch((err) => callback(err, null));
+  return db.collection("lucky_bonuses").find().sort({ _id: 1 }).toArray();
 }
 
 function getModules(courseID, callback) {
@@ -173,11 +175,9 @@ function getModule(courseID, moduleID, callback) {
   });
 }
 
-function getUserProgress(courseID, userID, callback) {
+function getUserProgress(courseID, userID) {
   let db = client.db(config.mongoDBs[courseID]);
-  db.collection("user_progress").findOne({ user: userID.toString() }, (err, data) =>
-    callback(err, data)
-  );
+  return db.collection("user_progress").findOne({ user: userID.toString() });
 }
 
 function getCourseUserProgress(courseID) {
@@ -248,6 +248,24 @@ function updateTodaysDaily(courseID, assignment_id) {
       { type: "todays_daily" },
       { $set: { assignment_id: assignment_id.toString() } }
     );
+}
+
+function updateLucky(courseID, luckyID, submit) {
+  const db = client.db(config.mongoDBs[courseID]);
+  return db
+    .collection("lucky_bonuses")
+    .findOneAndUpdate({ _id: parseInt(luckyID) }, { $set: submit });
+}
+function addLucky(courseID, luckyID, submit) {
+  const db = client.db(config.mongoDBs[courseID]);
+  return db
+    .collection("lucky_bonuses")
+    .updateOne({ _id: parseInt(luckyID) }, { $setOnInsert: submit }, { upsert: true });
+}
+
+function deleteLucky(courseID, luckyID) {
+  const db = client.db(config.mongoDBs[courseID]);
+  return db.collection("lucky_bonuses").deleteOne({ _id: luckyID });
 }
 
 async function updateModules(courseID, modules) {
@@ -394,6 +412,7 @@ function updateUserProgressBadgeOrModules(
 
 module.exports = {
   client, // Allows start.js to create a shared connection pool
+  addLucky,
   getHomepageUpdates,
   getHomepageVideos,
   getDailyTasks,
@@ -414,6 +433,7 @@ module.exports = {
   updateHomepageUpdates,
   updateNavigation,
   updateBadge,
+  updateLucky,
   updateModules,
   updateModule,
   updateModuleVid,
@@ -423,6 +443,7 @@ module.exports = {
   deleteHomeVid,
   deleteModule,
   deleteModuleVid,
+  deleteLucky,
   updateDaily,
   updateTodaysDaily,
   updateUserProgressField,

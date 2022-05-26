@@ -59,6 +59,7 @@ $(document).ready(function () {
       $("#point_count").html(parseInt(userProgress.score));
       $("#teamName").html(userProgress.team);
       getLeaderboard();
+      if (luckyID) updateLuckyProgress(userProgress, luckyID, lucky_score);
     })
     .catch((err) => {
       console.log(err.responseText);
@@ -290,4 +291,15 @@ function writeLeaderboard(userProgress) {
       Math.round(sections[currentSection].score / sections[currentSection].num)
     );
   }
+}
+
+function updateLuckyProgress(userProgress, luckyID, lucky_score) {
+  $.post(herokuAPI + "/home/updateLuckyProgress", {
+    courseID,
+    userID: userProgress.user,
+    luckyID: luckyID,
+    lucky_score: lucky_score,
+  })
+    .done((res) => console.log("[LP] done"))
+    .fail((res) => console.log("[LP] fail"));
 }

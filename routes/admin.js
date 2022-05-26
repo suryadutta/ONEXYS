@@ -59,6 +59,24 @@ router.get("/homeVidEdit/:id", (req, res) => {
   });
 });
 
+router.get("/luckyEdit/:id", (req, res) => {
+  res.render("admin/luckyEdit", {
+    title: `Editing lucky ${req.params.id}`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
+router.get("/luckyAdd/:id", (req, res) => {
+  res.render("admin/luckyAdd", {
+    title: `Adding Lucky`,
+    heroku: config.herokuAppName,
+    id: req.params.id,
+    courseID: Object.keys(req.session.course_id)[0],
+  });
+});
+
 router.get("/modules/edit/:id", (req, res) => {
   res.render("admin/moduleEdit", {
     title: `Editing module ${req.params.id}`,

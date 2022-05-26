@@ -332,23 +332,39 @@ function prettyDate(dateString) {
 }
 
 function writeLuckyInfo(lucky) {
-  let content = lucky.reduce((content, lucky) => {
-    return (
-      content +
-      `
+  if (edit) {
+    let luckyToEdit = lucky.filter((lucky) => lucky._id == luckyID)[0];
+    $("#date_time").val(luckyToEdit.time);
+    $("#point_value").val(luckyToEdit.point_value);
+    $("#image_name").val(luckyToEdit.image_name);
+  } else {
+    let content = lucky.reduce((content, lucky) => {
+      return (
+        content +
+        `
       <tr>
-        <td>Bonus ${lucky._id}</td>
+        <td> Bonus ${lucky._id} </td>
         <td>Date ${prettyDate(lucky.time)}</td>
         <td>
+        <div class="d-flex flex-column ml-2">
           <a class="btn btn-dark"
-            href="lucky/edit/${lucky._id}">
+            href="luckyEdit/${lucky._id}">
             Edit
           </a>
+          <button class="btn btn-danger" onClick ="deleteLucky(${lucky._id})"
+                       >Delete
+                    </button>
+          </div>
+          
+              
+            
         </td>
       </tr>`
-    );
-  }, ``);
-  $("#luckyTable").append(content);
+      );
+    }, ``);
+    $("#luckyTable").append(content);
+    $("#luckyAddButton").prop("href", `luckyAdd/${lucky.length + 1}`);
+  }
 }
 
 /**
@@ -634,6 +650,55 @@ function updateVideo(videoID, src, description, thumbnail, position) {
   })
     .done((res) => console.log("[V] done"))
     .fail((res) => console.log("[V] fail"));
+}
+
+function updateLucky(luckyID, date_time, point_value, image_name) {
+  $.post(herokuAPI + "/admin/updateLucky", {
+    courseID,
+    id: luckyID,
+    date_time,
+    point_value,
+    image_name,
+  })
+    .done((res) => console.log("[L] done"))
+    .fail((res) => console.log("[L] fail"));
+}
+
+function addLucky(date_time, point_value, image_name) {
+  $.post(herokuAPI + "/admin/addLucky", {
+    courseID,
+    id: luckyID,
+    date_time,
+    point_value,
+    image_name,
+  })
+    .done((res) => {
+      console.log("[L] done");
+      alert("Lucky add successful.");
+    })
+    .fail((res) => {
+      console.log("[L] fail");
+      alert("Lucky add failed.");
+    });
+}
+
+function deleteLucky(luckyID) {
+  if (confirm("Delete this lucky bonus?")) {
+    const dataToSend = JSON.stringify({ courseID: courseID, luckyID: luckyID });
+    $.ajax({
+      url: herokuAPI + "/admin/deleteLucky",
+      type: "DELETE",
+      contentType: "application/json; charset=utf-8",
+      data: dataToSend,
+    })
+      .done((res) => {
+        location.reload();
+        console.log("[L] delete success");
+      })
+      .fail((res) => {
+        console.log("[L] delete fail");
+      });
+  }
 }
 
 function updateVideoDefaults(thumbnail, playbutton) {
