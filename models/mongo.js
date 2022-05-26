@@ -140,7 +140,7 @@ function getTodaysDaily(courseID) {
 
 function getLuckyBonuses(courseID) {
   let db = client.db(config.mongoDBs[courseID]);
-  return db.collection("lucky_bonuses").find().sort({ _id: 1 }).toArray();
+  return db.collection("lucky_bulldogs").find().sort({ _id: 1 }).toArray();
 }
 
 function getModules(courseID, callback) {
@@ -253,19 +253,19 @@ function updateTodaysDaily(courseID, assignment_id) {
 function updateLucky(courseID, luckyID, submit) {
   const db = client.db(config.mongoDBs[courseID]);
   return db
-    .collection("lucky_bonuses")
+    .collection("lucky_bulldogs")
     .findOneAndUpdate({ _id: parseInt(luckyID) }, { $set: submit });
 }
 function addLucky(courseID, luckyID, submit) {
   const db = client.db(config.mongoDBs[courseID]);
   return db
-    .collection("lucky_bonuses")
+    .collection("lucky_bulldogs")
     .updateOne({ _id: parseInt(luckyID) }, { $setOnInsert: submit }, { upsert: true });
 }
 
 function deleteLucky(courseID, luckyID) {
   const db = client.db(config.mongoDBs[courseID]);
-  return db.collection("lucky_bonuses").deleteOne({ _id: luckyID });
+  return db.collection("lucky_bulldogs").deleteOne({ _id: luckyID });
 }
 
 async function updateModules(courseID, modules) {
