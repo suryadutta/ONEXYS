@@ -61,7 +61,6 @@ config.mongoDBs = {
   '13269': "AscendWhite22",
   '13270': "AscendGreen22",
   '13322': "AscendBlueCoach22",
-  '13367': "conexBlueCoach22",
   '13369': "conexWhite22",
   '13366': "conexBlueCoach22",
   
