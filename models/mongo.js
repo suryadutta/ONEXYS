@@ -107,21 +107,17 @@ function getHomepageVideos(courseID, callback) {
 
 function updateVideo(courseID, videoID, setDict, callback) {
   let db = client.db(config.mongoDBs[courseID]);
-  db.collection("home")
-    .findOneAndUpdate({ _id: videoID, type: "video" }, { $set: setDict })
-    .then(() => callback(null))
-    .catch((err) => callback(err));
+  return db.collection("home").findOneAndUpdate({ _id: videoID, type: "video" }, { $set: setDict });
 }
 
-function updateVideoDefaults(courseID, thumbnail, playbutton, callback) {
+function updateVideoDefaults(courseID, thumbnail, playbutton) {
   let db = client.db(config.mongoDBs[courseID]);
-  db.collection("home")
+  return db
+    .collection("home")
     .findOneAndUpdate(
       { type: "all-vids" },
       { $set: { thumbnail: thumbnail, playbutton: playbutton } }
-    )
-    .then(() => callback(null))
-    .catch((err) => callback(err));
+    );
 }
 
 function getDailyTasks(courseID) {

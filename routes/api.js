@@ -222,7 +222,7 @@ router.use("/badges", (req, res) => {
       assert(req.query.hostname);
       mongo.getBadges(req.query.courseID, (err, data) => {
         if (err)
-          res.status(500).send("500 - Internal Server Error. Home data could not be retrieved.");
+          res.status(500).send("500 - Internal Server Error. Badges data could not be retrieved.");
         else res.status(200).header(access, getDst(req.query.hostname)).send(data);
       });
     } catch (e) {
@@ -614,25 +614,15 @@ router.delete("/admin/deleteModuleVid", async (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
-router.post("/admin/updateVideoDefaults", (req, res) => {
+router.post("/admin/updateVideoDefaults", async (req, res) => {
   if (req.session.admin) {
     try {
       authorize(req);
       assert(/https?:\/\/.*/.test(req.body.thumbnail)); // Verify some sort of url-ness
       assert(/https?:\/\/.*/.test(req.body.playbutton)); // ''
 
-      mongo.updateVideoDefaults(
-        req.session.course_id,
-        req.body.thumbnail,
-        req.body.playbutton,
-        (err) => {
-          if (err)
-            res
-              .status(500)
-              .send("500 - Internal Server Error. Encountered error saving video info.");
-          else res.status(200).send("200 - OK");
-        }
-      );
+      await mongo.updateVideoDefaults(req.body.courseID, req.body.thumbnail, req.body.playbutton);
+      res.status(200).send("200 - OK");
     } catch (e) {
       res
         .status(400)
