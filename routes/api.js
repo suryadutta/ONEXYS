@@ -894,7 +894,7 @@ router.post("/admin/updateBadge/:id", (req, res) => {
 router.get("/admin/unifiedGradebook", async (req, res) => {
   if (req.session.admin) {
     try {
-      const courseID = 8376,
+      const courseID = req.body.courseID,
         gradebook = {},
         assignmentIdToType = {},
         moduleIDs = [],
