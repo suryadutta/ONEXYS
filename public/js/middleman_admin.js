@@ -629,7 +629,7 @@ function updateHome(field, value) {
   })
     .done((res) => {
       console.log("[H] done");
-      alert("Home page updated successfully.");
+      // alert("Home page updated successfully.");
     })
     .fail((res) => {
       console.log("[H] fail");
@@ -1134,6 +1134,9 @@ function goLive() {
   // Badges tool link + daily task image
   updateHome("daily_task_img", $("#dti").val());
   updateHome("badges_link", $("#btl").val());
+
+  // Let user know page updated successfully
+  alert("Home page updated successfully.");
 
   // Video defaults
   updateVideoDefaults($("#logdt").val(), $("#logpb").val());
