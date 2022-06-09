@@ -1135,9 +1135,9 @@ function goLive() {
   updateHome("daily_task_img", $("#dti").val());
   updateHome("badges_link", $("#btl").val());
 
-  // Let user know page updated successfully
-  alert("Home page updated successfully.");
-
   // Video defaults
   updateVideoDefaults($("#logdt").val(), $("#logpb").val());
+
+  // Let user know page updated successfully
+  alert("Home page updated successfully.");
 }

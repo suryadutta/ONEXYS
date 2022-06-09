@@ -614,15 +614,17 @@ router.delete("/admin/deleteModuleVid", async (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
+
 router.post("/admin/updateVideoDefaults", (req, res) => {
   if (req.session.admin) {
     try {
       authorize(req);
+      assert(Object.keys(req.session.course_id).includes(req.body.courseID));
       assert(/https?:\/\/.*/.test(req.body.thumbnail)); // Verify some sort of url-ness
       assert(/https?:\/\/.*/.test(req.body.playbutton)); // ''
 
       mongo.updateVideoDefaults(
-        req.session.course_id,
+        req.body.courseID,
         req.body.thumbnail,
         req.body.playbutton,
         (err) => {
@@ -634,6 +636,7 @@ router.post("/admin/updateVideoDefaults", (req, res) => {
         }
       );
     } catch (e) {
+      console.log(e);
       res
         .status(400)
         .send(

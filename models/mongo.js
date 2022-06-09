@@ -118,7 +118,7 @@ function updateVideoDefaults(courseID, thumbnail, playbutton, callback) {
   db.collection("home")
     .findOneAndUpdate(
       { type: "all-vids" },
-      { $set: { thumbnail: thumbnail, playbutton: playbutton } }
+      { $set: { "thumbnail": thumbnail, "playbutton": playbutton } }
     )
     .then(() => callback(null))
     .catch((err) => callback(err));
