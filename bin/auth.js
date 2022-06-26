@@ -147,32 +147,42 @@ const userExists = async function (req, res, next) {
     // If user does not exist in MongoDB, create user
     if (!user) await mongo.initUser(Object.keys(req.session.course_id)[0], req.session.user_id);
 
-    if (!user || user.team === "") {
-      // e.g [{name: "Test1", students: [...]}, {name: "Test2", students: [...]}]
-      const sections = await canvas.getSections(
+    // e.g [{name: "Test1", students: [...]}, {name: "Test2", students: [...]}]
+    const sections = await canvas.getSections(
+      Object.keys(req.session.course_id)[0],
+      "include=students"
+    );
+    // Find section with user in it
+    const userSection = sections.find(
+      (section) =>
+        section.students && // Check not null
+        section.students.find((student) => student.id.toString() === req.session.user_id.toString())
+    );
+    if (typeof userSection !== "undefined") {
+      await mongo.updateUserProgressField(
         Object.keys(req.session.course_id)[0],
-        "include=students"
+        req.session.user_id,
+        "$set",
+        "team",
+        userSection.name
       );
-      // Find section with user in it
-      const userSection = sections.find(
-        (section) =>
-          section.students && // Check not null
-          section.students.find(
-            (student) => student.id.toString() === req.session.user_id.toString()
-          )
+      console.log(
+        `User ${req.session.user_id} created in ${Object.keys(req.session.course_id)[0]}`
       );
-      if (typeof userSection !== "undefined") {
-        await mongo.updateUserProgressField(
-          Object.keys(req.session.course_id)[0],
-          req.session.user_id,
-          "$set",
-          "team",
-          userSection.name
-        );
-        console.log(
-          `User ${req.session.user_id} created in ${Object.keys(req.session.course_id)[0]}`
-        );
-      } else console.log("User not in a section");
+    } else console.log("User not in a section");
+    if (typeof userSection !== "undefined" && userSection.name != user.team) {
+      await mongo.updateUserProgressField(
+        Object.keys(req.session.course_id)[0],
+        req.session.user_id,
+        "$set",
+        "team",
+        userSection.name
+      );
+      console.log(
+        `User ${req.session.user_id} changed team to ${userSection.name} in ${
+          Object.keys(req.session.course_id)[0]
+        }`
+      );
     }
   } catch (e) {
     console.log(e);
