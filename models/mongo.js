@@ -117,7 +117,9 @@ function updateVideoDefaults(courseID, thumbnail, playbutton) {
     .findOneAndUpdate(
       { type: "all-vids" },
       { $set: { thumbnail: thumbnail, playbutton: playbutton } }
-    );
+    )
+    .then(() => callback(null))
+    .catch((err) => callback(err));
 }
 
 function getDailyTasks(courseID) {
