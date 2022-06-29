@@ -799,6 +799,7 @@ router.post("/admin/addModuleVid", async (req, res) => {
       res.status(200).send("200 - OK");
     } catch (e) {
       res
+
         .status(406)
         .send(
           "406 - Not acceptable. You must provide POST body parameters videoID, moduleID, and video attributes."
@@ -884,7 +885,13 @@ router.post("/admin/updateBadge/:id", (req, res) => {
 router.get("/admin/unifiedGradebook", async (req, res) => {
   if (req.session.admin) {
     try {
-      const courseID = 8376,
+      authorize(req);
+      console.log(req.session.course_id);
+          
+      // USE WHEN TESTING GRADEBOOK SORTING LOCALLY
+          // const courseID = 5772,
+      
+      const courseID = Object.keys(req.session.course_id)[0],
         gradebook = {},
         assignmentIdToType = {},
         moduleIDs = [],
