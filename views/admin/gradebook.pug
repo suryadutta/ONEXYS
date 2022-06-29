@@ -30,12 +30,12 @@ block content
       
       thead.thead-dark(style="font-size: 0.8rem;")
         tr
-          th#student_name(name="sort_button", onClick="sortUnifiedGradebook(unifiedGradebook, 'student_name',(a, b) => a[1].name - b[1].name);",style="cursor:pointer;") Student Name
-          th#student_id(name="sort_button", onClick="sortUnifiedGradebook(unifiedGradebook, 'student_id',(a, b) => a[0] - b[0]);",style="cursor:pointer;") Student ID
-          th#team_name(name="sort_button", onClick="sortUnifiedGradebook(unifiedGradebook, 'team_name',(a, b) => a[1].team - b[1].team);",style="cursor:pointer;") Team Name
+          th#student_name(name="sort_button", onClick="sortUnifiedGradebook(unifiedGradebook, 'student_name',(a, b) => a[1].name > b[1].name);",style="cursor:pointer;") Student Name
+          th#student_id(name="sort_button", onClick="sortUnifiedGradebook(unifiedGradebook, 'student_id',(a, b) => a[0] > b[0]);",style="cursor:pointer;") Student ID
+          th#team_name(name="sort_button", onClick="sortUnifiedGradebook(unifiedGradebook, 'team_name',(a, b) => a[1].team > b[1].team);",style="cursor:pointer;") Team Name
           each module in moduleTitles
-            th(name="sort_button", id=`practice_${module.id}`, onClick=`sortUnifiedGradebook(unifiedGradebook, 'practice_${module.id}',(a, b) => a[1].modules[${module.id}].practice - b[1].modules[${module.id}].practice);`,style="cursor:pointer;") Practice
-            th(name="sort_button", id=`quiz_${module.id}`, onClick=`sortUnifiedGradebook(unifiedGradebook, 'quiz_${module.id}',(a, b) => a[1].modules[${module.id}].apply - b[1].modules[${module.id}].apply);`,style="cursor:pointer;") Quiz
+            th(name="sort_button", id=`practice_${module.id}`, onClick=`sortUnifiedGradebook(unifiedGradebook, 'practice_${module.id}',(a, b) => a[1].modules[${module.id}].practice > b[1].modules[${module.id}].practice);`,style="cursor:pointer;") Practice
+            th(name="sort_button", id=`quiz_${module.id}`, onClick=`sortUnifiedGradebook(unifiedGradebook, 'quiz_${module.id}',(a, b) => a[1].modules[${module.id}].apply > b[1].modules[${module.id}].apply);`,style="cursor:pointer;") Quiz
 
       tbody#gradebook
         tr
