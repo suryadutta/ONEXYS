@@ -614,28 +614,16 @@ router.delete("/admin/deleteModuleVid", async (req, res) => {
   } else res.status(403).send("403 - Forbidden. You are not authorized to make requests here.");
 });
 
-router.post("/admin/updateVideoDefaults", (req, res) => {
+router.post("/admin/updateVideoDefaults", async (req, res) => {
   if (req.session.admin) {
     try {
       authorize(req);
-      assert(Object.keys(req.session.course_id).includes(req.body.courseID));
       assert(/https?:\/\/.*/.test(req.body.thumbnail)); // Verify some sort of url-ness
       assert(/https?:\/\/.*/.test(req.body.playbutton)); // ''
 
-      mongo.updateVideoDefaults(
-        req.body.courseID,
-        req.body.thumbnail,
-        req.body.playbutton,
-        (err) => {
-          if (err)
-            res
-              .status(500)
-              .send("500 - Internal Server Error. Encountered error saving video info.");
-          else res.status(200).send("200 - OK");
-        }
-      );
+      await mongo.updateVideoDefaults(req.body.courseID, req.body.thumbnail, req.body.playbutton);
+      res.status(200).send("200 - OK");
     } catch (e) {
-      console.log(e);
       res
         .status(400)
         .send(
@@ -895,9 +883,8 @@ router.post("/admin/updateBadge/:id", (req, res) => {
 
 router.get("/admin/unifiedGradebook", async (req, res) => {
   if (req.session.admin) {
-    console.log(req.session.course_id);
     try {
-      const courseID = Object.keys(req.session.course_id)[0],
+      const courseID = 8376,
         gradebook = {},
         assignmentIdToType = {},
         moduleIDs = [],

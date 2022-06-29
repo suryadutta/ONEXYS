@@ -629,7 +629,6 @@ function updateHome(field, value) {
   })
     .done((res) => {
       console.log("[H] done");
-      // alert("Home page updated successfully.");
     })
     .fail((res) => {
       console.log("[H] fail");
@@ -1138,7 +1137,4 @@ function goLive() {
 
   // Video defaults
   updateVideoDefaults($("#logdt").val(), $("#logpb").val());
-
-  // Let user know page updated successfully
-  alert("Home page updated successfully.");
 }
