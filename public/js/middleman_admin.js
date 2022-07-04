@@ -615,7 +615,7 @@ function writeUnifiedGradebook(gradebook) {
 function sortUnifiedGradebook(unifiedGradebook, id, compareFn) {
   unifiedGradebook.sort(compareFn);
   writeUnifiedGradebook(unifiedGradebook);
-  $("th[name='sort_button']").removeClass("bg-secondary");
+  $("th[name='sort_button']").removeClass("bg-secondary"); // restores background color
   $(`#${id}`).addClass("bg-secondary");
 }
 
