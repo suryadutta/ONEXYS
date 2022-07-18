@@ -3,21 +3,8 @@
 // Variables to store initially provided information for context
 // (mode) switching later on.
 var pHead1, pHead2, pHead3;
-var pText1, pu2t, pu3t;
+var pText1, pText2, pText3;
 var all = true;
-
-// When the document loads, populate the variables with the current
-// information.
-$(document).ready(function() {
-    pHead1 = $('#u1h').attr('value');
-    pText1 = $('#u1t').text();
-
-    pHead2 = $('#u2h').attr('value');
-    pu2t = $('#u2t').text();
-
-    pHead3 = $('#u3h').attr('value');
-    pu3t = $('#u3t').text();
-});
 
 function toggleUpdateEditMode() {
     if(all) doSingleUpdate();
@@ -30,15 +17,27 @@ function toggleUpdateEditMode() {
 // existing updates downwards.
 function doSingleUpdate() {
     all = false;
+    
+    // save current information to variables
+    pHead1 = $('#u1h').val();
+    pText1 = $('#u1t').val();
+
+    pHead2 = $('#u2h').val();
+    pText2 = $('#u2t').val();
+
+    pHead3 = $('#u3h').val();
+    pText3 = $('#u3t').val();
+    console.log("current updates saved");
+    
     // Clear out the first pair of fields (so the first entry is
-    // blank), then shift the existing text fields down one.
-    $('#u1h').attr('value', '');
-    $('#u1t').text('');
-    console.log("clear");
-    $('#u2h').attr('value', pHead1);
-    $('#u2t').text(pText1);
-    $('#u3h').attr('value', pHead2);
-    $('#u3t').text(pu2t);
+    // blank), then shift the existing text fields down one.  
+    $('#u1h').val('');
+    $('#u1t').val('');
+    $('#u2h').val(pHead1);
+    $('#u2t').val(pText1);
+    $('#u3h').val(pHead2);
+    $('#u3t').val(pText2);
+    console.log("ready for new update");
 
     // Hide the fields for the second and third updates
     $('#u2h').hide();
@@ -58,12 +57,12 @@ function doSingleUpdate() {
 function doExistingUpdates() {
     all = true;
     // Restore the fields to the original provided data
-    $('#u1h').attr('value', pHead1);
-    $('#u1t').text(pText1);
-    $('#u2h').attr('value', pHead2);
-    $('#u2t').text(pu2t);
-    $('#u3h').attr('value', pHead3);
-    $('#u3t').text(pu3t);
+    $('#u1h').val(pHead1);
+    $('#u1t').val(pText1);
+    $('#u2h').val(pHead2);
+    $('#u2t').val(pText2);
+    $('#u3h').val(pHead3);
+    $('#u3t').val(pText3);
 
     // Fade in the other 2 update fields
     $('#u2h').fadeIn('slow');
