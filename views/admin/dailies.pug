@@ -29,15 +29,10 @@ block content
             ol
                 li
                     p Create the assignment in Canvas like any other assignment, and take note of the assignment ID, which can be found in the URL when editing it.
-                    br
-                    small(style="color:red;")
-                        p For daily tasks which are Canvas Quizzes, you should use the Quiz ID instead.
-                        a(href="https://'+heroku_app+'.herokuapp.com/images/misc/dailytask_id_examples.png", target="_blank")
-                            p See here for an example.
                 li
-                    p For each daily task, in your course, enter the assignment or quiz ID on this page. The system will automatically determine which type of ID you have entered and convert it to the corresponding assignment ID, if necessary.
+                    p For each daily task in your course, enter the assignment ID on this page. Note that the system will not recognize Quiz IDs (usually five digits). If your assignment is classified as a quiz by Canvas, click the "Assignments" tab to see its assignment ID (generally six digits).
                 li
-                    p Watch the homepage as the next available daily task is linked to in the top left! If no daily task is found, the generic 404 / Missing resource page will be linked on the homepage. In the case that the next daily task is not open yet, the generic not-open page is displayed.
+                    p Every weekday at midnight your course's homepage will update with that day's Daily Task. If there are no daily tasks left in the system, or if a student logs in on a Saturday or Sunday, a Missing Assignment resource page will be linked on the homepage.
             hr
         div.row
             table#dailyTable.admin_table(style="margin-bottom:100px;")
@@ -45,4 +40,3 @@ block content
                     th Row
                     th Assignment ID
                     th Edit Item
-
