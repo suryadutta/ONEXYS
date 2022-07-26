@@ -253,6 +253,11 @@ cron.schedule("*/5 * * * *", async () => {
       });
       badges.value.map((badge) => (badgeIdToPoints[badge._id] = parseInt(badge.Points)));
 
+      const sections = await canvas.getSections(
+        courseID,
+        "include[]=students"
+      );
+
       // Iterate through each user
       for (const user of userSubmissions.value) {
         if (user.submissions.length <= 0) continue;
@@ -283,7 +288,36 @@ cron.schedule("*/5 * * * *", async () => {
         await updateBadgeProgress(courseID, userProgress, completed, logs);
 
         await updateUserScore(courseID, userProgress.user, completed, badgeIdToPoints);
+
+        const userSection = sections.find(
+          (section) =>
+            section.students &&
+            section.students.find((student) => student.id.toString() === user.user_id.toString())
+        );
+        const mongoUser = await mongo.findUser(courseID, user.user_id);
+        if (typeof userSection !== "undefined") {
+          await mongo.updateUserProgressField(
+            courseID,
+            user.user_id,
+            "$set",
+            "team",
+            userSection.name
+          );
+        } else console.log(`User ${user.user_id} is not in a section`);
+        if (typeof userSection !== "undefined" && userSection.name != mongoUser.team) {
+          await mongo.updateUserProgressField(
+            courseID,
+            user.user_id,
+            "$set",
+            "team",
+            userSection.name
+          );
+          console.log(
+            `User ${user.user_id} changed team to ${userSection.name} in ${courseID}`
+          );
+        }
       }
+
       console.log(`Finished updating ${config.mongoDBs[courseID]}`, JSON.stringify(logs));
     } catch (e) {
       console.error(e);
