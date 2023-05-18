@@ -67,6 +67,10 @@ config.mongoDBs = {
   '13372': "conexOrange22",
   '13373': "smithBlue22",
   '13374': "smithBlue22Coach",
+  '14821': "AscendBlue23",
+  '14822': "AscendWhite23",
+  '14823': "AscendGreen23",
+  '14824': "AscendBlue23Coach",
   
 };
 
