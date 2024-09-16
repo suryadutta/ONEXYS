@@ -2,17 +2,33 @@ extends ../layout
 
 block content
 
-    a(href='/admin/lucky') Back to Lucky Page
+    script.
+       const herokuAPI = "/api",
+      courseID = "#{courseID}",
+      luckyID = "#{id}",
+      needs = ["courseTitle", "luckyAdd"];
+    script(src="/js/middleman_admin.js")
+    br
+    .container
+        .row
+            .form.form-inline
+                a.btn.btn-lg(href=`/admin/luckyBonuses`)
+                    i.fa.fa-chevron-left
+                h3.mb-4 Adding Lucky Bonus #{id}
+    hr
 
-    h1='Add Lucky Bulldog Time'
-    h3=course
+    div.container
+        div.row
+            div.form-group.form-inline
+                label(for='date_time') Date and Time of Lucky Bonus:
+                input#date_time.form-control(type='datetime-local', name='date_time')
+            div.form-group.form-inline
+                label(for='point_value') Point value of Lucky Bulldog:
+                input#point_value.form-control(type='numeric', name='point_value')
+            div.form-group.form-inline
+                label(for='image_name') Image to display:
+                input#image_name.form-control(type='numeric', name='image_name')
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to add this time?');")
+            hr
 
-        div.form-group
-            label(for='badge_points') Date and Time of Lucky Bulldog: 
-            input#badge_points.form-control(type='datetime-local', name='date_time')
-            br
-            br
-
-        button.btn.btn-primary(type='submit') Save Changes
+            button.btn.btn-success(onClick="addLucky($('#date_time').val(), $('#point_value').val(), $('#image_name').val());") Add Lucky Bonus

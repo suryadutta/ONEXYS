@@ -1,18 +1,43 @@
 extends ../layout
 
 block content
+  script.
+    const herokuAPI = "/api",
+      luckyID = "#{id}",
+      edit = true,
+      courseID = "#{courseID}",
+      needs = ["courseTitle", "lucky"];  
+  
+  script(src="/js/middleman_admin.js")
+  br
+  #fullscr-loading
+      div
+      img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+  .container(style="margin-top: 25px;")
+      .row
+          .col-md-1
+          .col.form-inline
+              a.btn.btn-lg(href='/admin/luckyBonuses')
+                  i.fa.fa-chevron-left
+              h2#adminPanelTitle='Loading title...'
+          .col-md-1
+  hr
 
-    a(href='/admin/lucky') Back to Lucky Page
+  main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
+    h3 Editing lucky #{id}
 
-    h1='Edit Lucky Bulldog '+lucky_bulldog._id
-    h3=course
+    div.container
+        div.row
+                div.form-group.form-inline
+                    label(for='date_time') Date and Time of Lucky Bonus:
+                    input#date_time.form-control(type='datetime-local', value='')
+                div.form-group.form-inline
+                    label(for='point_value') Point value of Lucky Bulldog:
+                    input#point_value.form-control(type='numeric', value='')
+                div.form-group.form-inline
+                    label(for='image_name') Image to display:
+                    input#image_name.form-control(type='numeric', value='')
 
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
+                hr
 
-        div.form-group
-            label(for='badge_points') Date and Time of Lucky Bulldog: 
-            input#badge_points.form-control(type='datetime-local', value=lucky_bulldog.time, name='date_time')
-            br
-            br
-
-        button.btn.btn-primary(type='submit') Save Changes
+                button.btn.btn-success(onClick = "updateLucky(luckyID, $('#date_time').val(), $('#point_value').val(), $('#image_name').val()); alert('Lucky updated')") Update

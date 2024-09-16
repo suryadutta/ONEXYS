@@ -1,164 +1,237 @@
 extends ../layout
 
 block content
-
-    //script(type='text/javascript', src='/javascript/nic-edit.js')
-    //script(type='text/javascript').
-    //    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-
-    a(href='/admin/modules') Back to Modules
-
-    h1='Edit ONEXYS Module '+module._id
-    h3=course
-
-    form(method='POST' action='preview')
-
-        div.form-group
-        label(for='primary_title') Primary Title: 
-        input#primary_title.form-control(type='text', value=module.primary_title, name='primary_title')
-        br
-        br
-        
-        div.form-group
-        label(for='secondary_title') Secondary Title: 
-        input#secondary_title.form-control(type='text', value=module.secondary_title, name='secondary_title')
-        br
-        br
-
-        div.form-group
-        label Practice Assignment ID or URL to custom page for multiple practice assignments?
-        br
-        label(for='practice_id_bool_true') Practice Assignment ID  
-        input#practice_id_bool.form-control(type='radio', value='true', checked=module.practice_id_bool=='true', name='practice_id_bool')
-        br
-        div.form-group
-        label(for='practice_link') Practice Assignment ID: 
-        input#practice_link.form-control(type='text', value=module.practice_link, name='practice_link')
-        br
-        label(for='practice_id_bool_false') Practice URL  
-        input#practice_id_bool.form-control(type='radio', value='false', checked=module.practice_id_bool=='false', name='practice_id_bool')
-        br
-        div.form-group
-        label(for='practice_url_redirect') Practice URL: 
-        input#practice_url_redirect.form-control(type='text', value=module.practice_url_redirect, name='practice_url_redirect')
-        br
-        br
-
-        //- new practice cutoff form
-        div.form-group
-        label(for='multiple_practice_cutoff') Practice Assignment Cutoff Scores Formatted in id_cutoff separated by commas (e.g., "73230_90", "73230_90,73231_100,73232_95"): 
-        input#multiple_practice_cutoff.form-control(type='text', value=module.multiple_practice_cutoff, name='multiple_practice_cutoff')
-        br
-
-        div.form-group
-        label(for='quiz_link') Quiz Assignment ID: 
-        input#quiz_link.form-control(type='text', value=module.quiz_link, name='quiz_link')
-        br
-        br
-
-        div.form-group
-        label(for='quiz_cutoff') Quiz Assignment Cutoff Score (out of 100): 
-        input#quiz_cutoff.form-control(type='numeric', value=module.quiz_cutoff, name='quiz_cutoff')
-        br
-        br
-
-        div.form-group
-        label(for='reflection_link') Reflections Assignment ID: 
-        input#reflection_link.form-control(type='text', value=module.reflection_link, name='reflection_link')
-        br
-        br
-        
-        div.form-group
-        label Module Open?
-        br
-        label(for='open_true') Yes  
-        input#open_true.form-control(type='radio', value='true', checked=module.open=='true', name='open')
-        br
-        label(for='open_false') No  
-        input#open_false.form-control(type='radio', value='false', checked=module.open=='false', name='open')
-        br
-        br
-
-        div.form-group
-        label(for='background_image') Background Image Path: 
-        input#background_image.form-control(type='text', value=module.background_image, name='background_image')
-        br
-        br
-
-        div.form-group
-        label(for='button_background_image') Button Background Image (e.g., button_background_battel, button_background_sterling): 
-        input#button_background_image.form-control(type='text', value=module.button_background_image, name='button_background_image')
-        br
-        br
-
-        div.form-group
-        label(for='background_name') Background Name: 
-        input#background_name.form-control(type='text', value=module.background_name, name='background_name')
-        br
-        br
-
-        div.form-group
-        label(for='background_desc') Background Description: 
-        br
-        textarea#background_desc.form-control(rows=3, name='background_desc',style="width: 750px;")=module.background_desc
-        br
-        br
-
-        div.form-group
-        label(for='module_overview') Overview: 
-        br
-        textarea#module_overview.form-control(rows=3, name='overview',style="width: 750px;")=module.overview
-        br
-        br
-
-        div.form-group
-        label(for='apply_description') Apply Description: 
-        br
-        textarea#apply_description.form-control(rows=3, name='apply_description',style="width: 750px;")=module.apply_description
-        br
-        br
-
-        div.form-group
-        label(for='apply_read_src') Apply Read Source: 
-        input#apply_read_src.form-control(type='text', value=module.apply_read_src, name='apply_read_src')
-        br
-        br
-        div.form-group
-        label(for='module_explore') Explore Text: 
-        br
-        textarea#module_explore.form-control(rows=3, name='explore',style="width: 750px;")=module.explore
-        br
-        br
-
-        button.btn.btn-primary(type='submit') Preview Changes
-    br
-    hr
-    br
-    
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to save your changes?');")
-
-    h2='Edit ONEXYS Module '+module._id+' Videos'
-
-
-    form(method='GET',action='videos/add')
-                        button(type='submit') Add Video
-
-    table
-        for video in module.videos
-            tr 
-                td
-                    div.watch_video.left
-                        div.onexys_video
-                            a.colorbox.cboxElement(href=video.video_src)
-                            img.onexys_thumbnail(src='/images/video/'+video.video_image_src)
-                            img.onexys_playbutton(src="/images/icons/playbutton.png", alt="")
-                        p
-                            span(style='font-size: 12pt;')
-                            strong!=video.video_desc
-                            span!=video.video_desc_helper
+  script.
+    const herokuAPI = "/api",
+      moduleID = "#{id}",
+      edit = true,
+      courseID = "#{courseID}",
+      needs = ["courseTitle", "modules"];  
+  
+  script(src="/js/middleman_admin.js")
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+  
+  br
+  #fullscr-loading
+      div
+      img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+  .container(style="margin-top: 25px;")
+      .row
+          .col-md-1
+          .col.form-inline
+              a.btn.btn-lg(href='/admin/modules')
+                  i.fa.fa-chevron-left
+              h2#adminPanelTitle='Loading title...'
+          .col-md-1
+  hr
+ 
+  #previewModal.modal.fade(role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true")
+    .modal-dialog.modal-xl
+      .modal-content
+          .modal-header
+              h4.modal-title Module Preview
+              button.close(type="button" data-dismiss="modal") &times;
+          .modal-body.p-0
+            div
+              div.onexys_styling(style="min-width:initial;")
+                img#preview_background_building.w-100.position-absolute(style="z-index: 0;left:0;")
+                div#background_building_outline
+                  div#bbo_white
+                div#background_building_outline2
+                div.title_mod.standard_title_box.left.position-relative
+                  p#preview_primary_text
+                  h1#preview_secondary_text
+                div.quicklinks.standard_title_box.left.position-relative
+                  a(href="#watch") Watch
+                  br
+                  a(href="#practice") Practice
+                  br
+                  a(href="#apply") Apply
+                  br
+                  a(href="#explore") Explore
+                div.building_descriptor.standard_title_box.right
+                  h2#preview_background_name
+                  p#preview_background_desc
+                div.clear
+                div#overview.module_box.standard_box.left
+                  div.title_box.standard_box
+                    h2 Overview
+                  span#preview_overview
                     br
-                td 
-                    form(method='GET' action='videos/edit/'+video._id)
-                        button(type='submit') Edit
-                    form(method='POST' action='videos/delete/'+video._id, onsubmit="return confirm('Do you really want to delete this video?');")
-                        button(type='submit') Delete
+                    br
+                div.left
+                  div#watch.module_box.standard_box
+                    div.title_box.standard_box
+                      h2 1. Watch
+                    div.clear
+                  div#practice.module_box.standard_box
+                    div.title_box.standard_box
+                      h2 2. Practice
+                    p Practice, practice, practice! We would like you to keep working until you reach 90% proficiency for this module in ALEKS.
+                    a#preview_practice_location(src="", target="_blank")
+                      div.onexys_button Practice Now
+                  div#apply.module_box.standard_box
+                    div.title_box.standard_box
+                      h2 3. Apply
+                    span#preview_apply_description
+                    a#preview_read(href='', target="_blank")
+                      div.onexys_button.apply_button.left
+                        img(src="/images/icons/Read.png", alt="Read.png")
+                        | 1. Read
+                    p.apply_description.left
+                      em Before
+                      |  your team meeting read the scenario and questions.
+                    div.clear
+                    a#preview_reflect(href='', data-api-endpoint= "https://yale.instructure.com/api/v1/", data-api-returntype="Discussion", target="_blank")
+                      div.onexys_button.apply_button.left
+                        img(src="/images/icons/Reflect.png", alt="Reflect.png")
+                        | 2. Reflect
+                    p.apply_description.left
+                      em Before
+                      |  your team meeting, complete the reflection
+                    div.clear
+                    div#meet-button.onexys_button.apply_button.left
+                      img(src="/images/icons/Meet.png", alt="Meet.png")
+                      | 3. Meet
+                    p.apply_description.left
+                      em Meet with your team!
+                      |  We'll unlock the questions afterwards.
+                    div.clear
+                    a#preview_quiz_link(href="", target="_blank")
+                      div.onexys_button.apply_button.left
+                        img(src="/images/icons/Answer.png", alt="Answer.png")
+                        | 4. Answer
+                    p.apply_description.left
+                      em After
+                      |  your team meeting, the application quiz will be unlocked.
+                    div.clear
+                  div#explore.module_box.standard_box.left
+                    div.title_box.standard_box
+                      h2 4. Explore
+                    div#preview_explore_content.explore_content
+          div.modal-footer
+            button.btn.btn-info(type="button" data-dismiss="modal") Close Preview
+            button.btn.btn-danger(onClick="updateModule();") Go live
+
+  main.d-flex.flex-column.w-50(style="margin-left: auto; margin-right: auto;")
+    h3.mb-4 Editing module #{id}
+
+    div.mb-4
+      button.btn.btn-info.mr-2(type="button" data-toggle="modal" data-target="#previewModal" onClick="copyToModulePreview();") Open Preview
+      button.btn.btn-danger(onClick="updateModule();") Go live
+
+    div.d-flex.flex-column.mb-4
+      label(for="primary_title") Primary Title:
+      input#primary_title.form-control(type='text', value="")
+
+    div.d-flex.flex-column.mb-4
+      label(for="secondary_title") Secondary Title:
+      input#secondary_title.form-control(type='text', value="")
+    
+    div.d-flex.flex-column.mb-4
+      label(for="subject") Subject(eg. "bio", "econ", "physics", "chem", "engineering" or blank):
+      input#subject.form-control(type='text', value="")
+        
+    
+    hr.w-100
+  
+    div.mb-4
+      label Open?
+      div.custom-control.custom-radio
+        input#open_yes.custom-control-input(type='radio', name="open_radio")
+        label.custom-control-label(for="open_yes") Yes
+      div.custom-control.custom-radio
+        input#open_no.custom-control-input(type='radio', name="open_radio")
+        label.custom-control-label(for="open_no") No
+
+    div.mb-4
+      label Due? 
+      div.custom-control.custom-radio
+        input#due_yes.custom-control-input(type="radio" name="due_radio")
+        label.custom-control-label(for="due_yes") Yes
+      div.custom-control.custom-radio
+        input#due_no.custom-control-input(type="radio" name="due_radio")
+        label.custom-control-label(for="due_no") No
+
+    hr.w-100
+
+    div.mb-4
+      label(for="background_image") Background Image Path:
+      input#background_image.form-control(type='text', value="")
+
+    div.mb-4
+      label(for="button_background_image") Button Background Image (e.g., battel, alderman):
+      input#button_background_image.form-control(type='text', value="")
+
+    div.mb-4
+      label(for="background_name") Background Name
+      input#background_name.form-control(type='text', value="")
+
+    div.form-floating.mb-4
+      label(for="background_desc") Background Description
+      textarea#background_desc.form-control(style="height: 10rem")
+
+    hr.w-100.mb-4
+
+    div.form-floating.mb-4
+      label(for="overview_text") Overview
+      textarea#overview_text.form-control(style="height: 10rem")
+
+    div.form-floating.mb-4
+      label(for="apply_description") Apply Description
+      textarea#apply_description.form-control(style="height: 10rem")
+
+    div.mb-4
+      label(for="apply_read_src") Apply Reading Source
+      input#apply_read_src.form-control(type='text', value="")
+
+    hr.w-100.mb-4
+
+    h4 ALEKS Practice 
+    div.d-flex.flex-column
+      label(for="multiple_practice_cutoff") Practice Assignment ID and Grade Cutoff out of 100 (formatted as id_cutoff e.g "73230_90", "73230_90, 73231_100")
+      input#multiple_practice_cutoff.mb-4.form-control(type='text', value="")
+
+      label Practice Assignment ID or URL to custom page for multiple practice assignments?
+      div.d-flex.flex-row.custom-control.custom-radio
+        input#practice_id_bool_true.custom-control-input(type="radio" name="practice_bool")
+        label.custom-control-label(for="practice_id_bool_true") Practice Assignment ID
+        input#practice_link.ml-3.form-control(type='text', value="")
+
+      div.d-flex.flex-row.custom-control.custom-radio
+        input#practice_id_bool_false.custom-control-input(type="radio" name="practice_bool")
+        label.custom-control-label(for="practice_id_bool_false") Practice URL to Custom Page
+        input#practice_url_redirect.ml-3.form-control(type='text', value="")
+
+    hr.w-100
+
+    div.d-flex.flex-column.mb-4
+      label(for="reflection_link") Reflection Link:
+      input#reflection_link.form-control(type='text', value="")
+
+    hr.w-100 
+
+    h4 WIRIS Apply Quiz
+    div.d-flex.flex-column.mb-4
+      label(for="quiz_link") Quiz ID:
+      input#quiz_link.form-control(type='text', value="")
+    
+    div.d-flex.flex-column.mb-4
+      label(for="quiz_cutoff") Quiz Cutoff:
+      input#quiz_cutoff.form-control(type='text', value="")
+
+    hr.w-100.mb-4  
+    
+    div.form-floating.mb-4
+      label(for="explore_text") Explore Text (embed videos for explore here)
+      textarea#explore_text.form-control( style="height: 10rem")
+
+    div.mb-4
+      button.btn.btn-info.mr-2(type="button" data-toggle="modal" data-target="#previewModal" onclick="") Open Preview
+      button.btn.btn-danger(onClick="updateModule();") Go live
+
+    hr.w-100.mb-4
+    div.mb-2
+      a(class="btn btn-dark text-white" href=`/admin/modules/videoAdd/${id}`) Add Video
+    h4 Videos for Module #{id}
+    div#module_vid_container.d-flex.flex-column

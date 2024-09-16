@@ -57,6 +57,17 @@ tmp/
 ._*
 .Spotlight-V100
 .Trashes
-Icon?
+#Icon?
 ehthumbs.db
 Thumbs.db
+
+# VSCode
+*.rest
+
+# Cypress videos
+videos
+screenshots
+*.rdb
+
+#Jest
+coverage

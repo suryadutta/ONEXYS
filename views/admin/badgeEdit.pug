@@ -1,44 +1,115 @@
 extends ../layout
 
 block content
-
-    a(href='/admin/badges') Back to Badges
-
-    h1='Edit ONEXYS Badge '+badge._id
-    h3=course
-
-    form(method='POST' action='' onsubmit="return confirm('Do you really want to submit your changes?');")
-
-        div.form-group
-        label(for='title') Title: 
-        input#title.form-control(type='text', value=badge.Title, name='title')
-        br
-        br
-
-        div.form-group
-        label(for='description') Description: 
-        br
-        textarea(rows=3)#description.form-control(name='description')=badge.Description
-        br
-        br
-        
-        div.form-group
-        label(for='badge_points') Points: 
-        input#badge_points.form-control(type='numeric', value=badge.Points, name='badge_points')
-        br
-        br
-
-        div.form-group
-        label(for='portrait') Portrait: 
-        input#portrait.form-control(type='text', value=badge.Portrait, name='portrait')
-        br
-        br
-
-        div.form-group
-        label(for='portraitdescription') Portrait Description: 
-        br
-        textarea(rows=3)#portraitdescription.form-control(name='portraitdescription')=badge.PortraitDescription
-        br
-        br
-
-        button.btn.btn-primary(type='submit') Save Changes
+    script.
+        const herokuAPI = "/api",
+              badgeID = #{id},
+              edit = true,
+              courseID = "!{courseID}";
+        needs=["courseTitle", "badges"];
+    script(src="/js/courseIDGrabber.js")
+    script(src="/js/middleman_admin.js")
+    br
+    style.
+        .badgeInputRow {
+            padding-bottom: 8px;
+            /* border-bottom: 1px dotted #777777; */
+            margin-bottom: 10px;
+        }
+    #fullscr-loading
+        div
+        img(src="https://i.gyazo.com/c45fc9a6995912367a142ca33702366a.gif")
+    .container(style="margin-top: 25px;")
+        .row
+            .col-md-1
+            .col.form-inline
+                a.btn.btn-lg(href='/admin/badges')
+                    i.fa.fa-chevron-left
+                h2#adminPanelTitle='Loading title...'
+            .col-md-1
+    hr
+    .container
+        .row(style="border-bottom:1px solid black;")
+            .col-md-6
+                h5 HTML tags are supported in all fields unless otherwise specified next to the field.
+            .col
+                h5 Previews of this badge are updates when fields are deselected.
+            .col-md-2
+                button.btn.btn-success(onClick="updateBadge();") Go Live
+        .row(style="padding-top:10px;")
+            .col-md-8(style="border-right:1px solid black;")
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Title:
+                    .col
+                        input#title.form-control(type='text', value="", name='Title')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Description:
+                    .col
+                        textarea#description.form-control(rows=3 name='Description')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Points:
+                    .col
+                        small(style='color:blue') Do not use HTML tags in this field.
+                        input#badge_points.form-control(type='numeric', value="", name='Points')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Inspirer Assignment ID:
+                    .col
+                        input#assignment_id.form-control(type='numeric', value="", name='assignment_id')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Portrait:
+                    .col
+                        input#portrait.form-control(type='text', value="", name='Portrait')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Portrait Description:
+                    .col
+                        small(style='color:red') Long portrait descriptions may cause display issues on the badges page
+                        textarea#portraitdescription.form-control(rows=3 name='PortraitDescription')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Unearned URL:
+                    .col
+                        input#unearned_url.form-control(type='text', value="", name='UnearnedURL')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Earned URL:
+                    .col
+                        input#earned_url.form-control(type='text', value="", name='EarnedURL')
+                .row.badgeInputRow
+                    .col-md-2
+                        p.vertical Earned Hover URL:
+                    .col
+                        input#earned_hover_url.form-control(type='text', value="", name='EarnedHoverURL')
+            .col-md-4
+                .row
+                    .col
+                        p Preview of Unearned Badge
+                        .badge_container
+                            .badge_descriptor.badge_box
+                                h3.previewTitle
+                                p.previewDescription
+                            .badge_points.badge_box
+                                p.previewPoints
+                            .badge_portrait#previewUnearnedImage
+                            .badge_label.badge_box
+                                h3.previewName
+                                p.previewPortraitDescription
+                .row
+                    .col
+                        p Preview of Earned Badge
+                        .badge_container.completed
+                            .badge_descriptor.badge_box
+                                h3.previewTitle
+                                p.previewDescription
+                            .badge_points.badge_box
+                                p.previewPoints
+                            .badge_portrait#previewEarnedHoverImage
+                            .badge_portrait.front_portrait#previewEarnedImage
+                            .badge_label.badge_box
+                                h3.previewName
+                                p.previewPortraitDescription
